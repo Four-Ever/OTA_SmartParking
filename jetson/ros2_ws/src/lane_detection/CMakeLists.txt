@@ -19,27 +19,28 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
-find_package(image_transport REQUIRED)
-find_package(OpenCV 4.2 REQUIRED)
+find_package(OpenCV REQUIRED)
+
+# 헤더 파일 디렉토리 포함
+include_directories(include)
 
 # 실행 파일 생성
-add_executable(lane_detection_node
-  src/lane_detection_node.cpp
-  src/main.cpp)
-
-# 헤더 파일 경로 추가
-target_include_directories(lane_detection_node PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
+add_executable(lane_detection_node 
+  src/main.cpp
+  src/camera_node.cpp
+  src/vision_node.cpp
+)
 
 # 의존성 연결
 ament_target_dependencies(lane_detection_node
   rclcpp
   sensor_msgs
+  std_msgs
   cv_bridge
-  image_transport
-  OpenCV)
+  OpenCV
+)
 
 # 실행 파일 설치 규칙
 install(TARGETS lane_detection_node
@@ -47,7 +48,6 @@ install(TARGETS lane_detection_node
 
 install(DIRECTORY include/
   DESTINATION include/)
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
