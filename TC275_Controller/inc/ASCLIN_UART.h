@@ -27,13 +27,21 @@
 #ifndef ASCLIN_UART_H_
 #define ASCLIN_UART_H_
 
+#include "IfxAsclin_Asc.h"
+
 extern uint8 g_txData[];
 extern uint8 g_rxData[];
+
+extern uint8 g_ascTxBuffer[64 + sizeof(Ifx_Fifo) + 8];
+extern uint8 g_ascRxBuffer[64 + sizeof(Ifx_Fifo) + 8];
+extern uint8 receive_complete;
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
 void init_ASCLIN_UART(void);                 /* Initialization function   */
-void send_receive_ASCLIN_UART_message(void); /* Send and receive function */
+//void send_receive_ASCLIN_UART_message(void); /* Send and receive function */
+void Send_Message(uint8 *tx_Data, Ifx_SizeT size);
+void Get_Message(uint8 *tx_Data, Ifx_SizeT size);
 
 #endif /* ASCLIN_UART_H_ */

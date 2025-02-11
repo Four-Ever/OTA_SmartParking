@@ -38,6 +38,6 @@
 /*********************************************************************************************************************/
 void initShellInterface(void);
 void runShellInterface(void);
-void print_debug(char*);
+void print_debug(const char*);
 
 #endif /* ASCLIN_SHELL_UART_H_ */

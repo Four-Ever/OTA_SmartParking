@@ -94,8 +94,8 @@ void Show_Drive_State()
     LCD1602_clear();
     get_btn_data();
 
-    static DriveDir dir_state = DIR_D;
-    static DriveModeState ms_state = MS_DRIVE;
+    static DriveDir dir_state = DIR_P;
+    static DriveModeState ms_state = MS_AUTO_PARKING;
     static DriveMode prev_state = DRIVE_NOTHING;
     LCD1602_1stLine();
 
@@ -103,14 +103,26 @@ void Show_Drive_State()
     case (DRIVE_ACCEL):
     {
         sprintf(str, "GOGOGO");
-        //SPI송신
+
+        //명령송신
+        if(dir_state == DIR_D || dir_state == DIR_R){
+            msg.move_msg.signal.control_accel = 1;
+            msg.move_msg.signal.control_brake = 0;
+        }
+
         prev_state = DRIVE_ACCEL;
         break;
     }
     case (DRIVE_BRAKE):
     {
         sprintf(str, "SLOW SLOW");
-        //SPI송신
+
+        //명령송신
+        if(dir_state == DIR_D || dir_state == DIR_R){
+            msg.move_msg.signal.control_accel = 0;
+            msg.move_msg.signal.control_brake = 1;
+        }
+
         prev_state = DRIVE_BRAKE;
         break;
     }
@@ -123,9 +135,11 @@ void Show_Drive_State()
         LCD1602_loading();
         if(prev_state != DRIVE_POWEROFF){
             prev_state = DRIVE_POWEROFF;
-            //파워 off 동작 로직
+
             g_current_ctrl_state = CTRL_OFF;
-            //SPI송신
+            // 명령 송신
+            msg.engine_msg.signal.control_engine = g_current_ctrl_state;
+            Command[ORDER_ENGINE]();
 
         }
         break;
@@ -136,17 +150,23 @@ void Show_Drive_State()
 
         if(prev_state != DRIVE_MODE){
             prev_state = DRIVE_MODE;
-            //모드 변경 로직
-            //SPI송신
+
             if(dir_state == DIR_D)
             {
                 dir_state = DIR_R;
             }
             else if(dir_state == DIR_R)
             {
+
+                dir_state = DIR_D;
+
+            }
+            else if(dir_state == DIR_P)
+            {
                 dir_state = DIR_D;
             }
-
+            // 명령 송신
+            msg.move_msg.signal.control_transmission = dir_state;
         }
         break;
     }
@@ -156,14 +176,16 @@ void Show_Drive_State()
         LCD1602_clear();
         if(g_current_ota_update == OTA_UPDATED)
         {
-
-
             if(prev_state != DRIVE_SERVICE){
                 prev_state = DRIVE_SERVICE;
                 if(ms_state == MS_DRIVE)
                 {
                     ms_state = MS_AUTO_PARKING;
                     dir_state = DIR_P;
+
+                    //명령 송신 아래 로딩함수 때문에, 바로 전송
+                    msg.auto_park_req_msg.signal.auto_parking = DO_PARKING;
+                    Command[ORDER_AUTO_PRK_REQ]();
 
                     LCD1602_1stLine();
                     sprintf(str, "AUTO PARKING");
@@ -175,12 +197,17 @@ void Show_Drive_State()
                     ms_state = MS_DRIVE;
                     dir_state = DIR_D;
 
+                    //이벤트 함수라, 굳이 전송 x
+//                    msg.auto_park_req_msg.signal.auto_parking = 0;
+//                    Command[ORDER_AUTO_PRK_REQ]();
+
                     LCD1602_1stLine();
                     sprintf(str, "DRIVING MODE");
                     LCD1602_print(str);
                     LCD1602_loading();
                 }
-
+                //명령 송신
+                msg.move_msg.signal.control_transmission = dir_state;
 
             }
         }
@@ -205,6 +232,8 @@ void Show_Drive_State()
     {
         sprintf(str, "");
         prev_state = BS_NOTHING;
+        msg.move_msg.signal.control_accel = 0;
+        msg.move_msg.signal.control_brake = 0;
     }
     }
 
@@ -214,26 +243,26 @@ void Show_Drive_State()
     LCD1602_2ndLine();
     if(dir_state == DIR_D)
     {
-        sprintf(str, "D");
+        sprintf(str, "D     DRIVE MODE");
     }
     else if(dir_state == DIR_R)
     {
-        sprintf(str, "R");
+        sprintf(str, "R     DRIVE MODE");
     }
     else if(dir_state == DIR_P)
     {
-        sprintf(str, "P");
+        sprintf(str, "P   PARKING MODE");
     }
     LCD1602_print(str);
-    if(ms_state == MS_DRIVE)
-    {
-        sprintf(str, "     DRIVE MODE");
-    }
-    else if(ms_state == MS_AUTO_PARKING)
-    {
-        sprintf(str, "   PARKING MODE");
-    }
-    LCD1602_print(str);
+//    if(ms_state == MS_DRIVE)
+//    {
+//        sprintf(str, "     DRIVE MODE");
+//    }
+//    else if(ms_state == MS_AUTO_PARKING)
+//    {
+//        sprintf(str, "   PARKING MODE");
+//    }
+//    LCD1602_print(str);
 }
 
 void Show_Off_State()
@@ -281,9 +310,18 @@ void Show_Off_State()
         LCD1602_loading();
         if(prev_state != OFF_POWERON){
             prev_state = OFF_POWERON;
-            //SPI송신
             //화면전환
             g_current_ctrl_state = CTRL_ON;
+
+            //명령 송신
+            msg.engine_msg.signal.control_engine = g_current_ctrl_state;
+
+            Command[ORDER_ENGINE]();
+
+            //********* 시동키면 P로 수정해야할수도 *************
+            msg.move_msg.signal.control_transmission = DIR_P;
+
+
 
         }
         break;
@@ -298,9 +336,12 @@ void Show_Off_State()
         if(prev_state != OFF_FIND){
             prev_state = OFF_FIND;
             //SPI송신
-
+            msg.off_req_msg.signal.alert_request = 1;
+            Command[ORDER_OFF_REQ]();
+            // 1 신호만 보내고 기본신호 0으로 변경,
+            // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
+            msg.off_req_msg.signal.alert_request = 0;
         }
-        //SPI송신
         break;
     }
 
@@ -320,7 +361,11 @@ void Show_Off_State()
                 prev_state = OFF_AUTO_EXIT;
 
                 //SPI송신
-
+                msg.off_req_msg.signal.auto_exit_request = 1;
+                Command[ORDER_OFF_REQ]();
+                // 1 신호만 보내고 기본신호 0으로 변경,
+                // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
+                msg.off_req_msg.signal.auto_exit_request = 0;
             }
         }
         else

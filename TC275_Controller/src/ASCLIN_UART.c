@@ -28,8 +28,9 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
-#include "IfxAsclin_Asc.h"
+#include "ASCLIN_UART.h"
 #include "IfxCpu_Irq.h"
+#include <string.h>
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
@@ -37,7 +38,7 @@
 #define UART_BAUDRATE           115200                                  /* UART baud rate in bit/s                  */
 
 #define UART_PIN_RX             IfxAsclin0_RXB_P15_3_IN                 /* UART receive port pin                    */
-#define UART_PIN_TX             IfxAsclin0_TX_P15_3_OUT                 /* UART transmit port pin                   */
+#define UART_PIN_TX             IfxAsclin0_TX_P15_2_OUT                 /* UART transmit port pin                   */
 
 /* Definition of the interrupt priorities */
 #define INTPRIO_ASCLIN0_RX      18
@@ -54,8 +55,8 @@
 static IfxAsclin_Asc g_ascHandle;
 
 /* Declaration of the FIFOs parameters */
-static uint8 g_ascTxBuffer[UART_TX_BUFFER_SIZE + sizeof(Ifx_Fifo) + 8];
-static uint8 g_ascRxBuffer[UART_RX_BUFFER_SIZE + sizeof(Ifx_Fifo) + 8];
+uint8 g_ascTxBuffer[UART_TX_BUFFER_SIZE + sizeof(Ifx_Fifo) + 8];
+uint8 g_ascRxBuffer[UART_RX_BUFFER_SIZE + sizeof(Ifx_Fifo) + 8];
 
 /* Definition of txData and rxData */
 uint8 g_txData[] = "Hello World!";
@@ -63,6 +64,8 @@ uint8 g_rxData[SIZE] = {''};
 
 /* Size of the message */
 Ifx_SizeT g_count = sizeof(g_txData);
+
+uint8 receive_complete = 0;
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
@@ -78,6 +81,7 @@ IFX_INTERRUPT(asclin0RxISR, 0, INTPRIO_ASCLIN0_RX);
 void asclin0RxISR(void)
 {
     IfxAsclin_Asc_isrReceive(&g_ascHandle);
+    receive_complete = 1;
 }
 
 /* This function initializes the ASCLIN UART module */
@@ -116,9 +120,20 @@ void init_ASCLIN_UART(void)
 }
 
 /* This function sends and receives the string "Hello World!" */
-void send_receive_ASCLIN_UART_message(void)
+
+void Send_Message(uint8 *tx_Data, Ifx_SizeT size)
 {
-    process_send_datas(g_txData,g_rxData);
-    IfxAsclin_Asc_write(&g_ascHandle, g_txData, &g_count, TIME_INFINITE);   /* Transmit data via TX */
-//    IfxAsclin_Asc_read(&g_ascHandle, g_rxData, &g_count, TIME_INFINITE);    /* Receive data via RX  */
+    //for debug
+//    memcpy(g_txData, tx_Data, size);
+
+    IfxAsclin_Asc_write(&g_ascHandle, tx_Data, &size, TIME_INFINITE);
+//    process_send_datas(g_txData,NULL);
+//    IfxAsclin_Asc_write(&g_ascHandle, g_txData, &g_count, TIME_INFINITE);   /* Transmit data via TX */
+//    IfxAsclin_Asc_read(&g_ascHandle, g_rxData, &g_count, 10);    /* Receive data via RX  */
 }
+
+void Get_Message(uint8 *rx_Data, Ifx_SizeT size)
+{
+    IfxAsclin_Asc_read(&g_ascHandle, g_rxData, &size, 1);    /* Receive data via RX  */
+}
+

@@ -30,7 +30,7 @@
 
 #include "TC275_LCD_16x2.h"
 #include "Controller_Logic.h"
-#include "SPI_CPU.h"
+//#include "SPI_CPU.h"
 #include "Driver_Stm.h"
 #include "ASCLIN_Shell_UART.h"
 #include "ASCLIN_UART.h"
@@ -71,15 +71,21 @@ void core0_main(void)
     Driver_Stm_Init();
 
     init_LCD();
-    initPeripherals();
+//    initPeripherals();
 //    transferData();
-    initShellInterface();
+//    initShellInterface();
     init_ASCLIN_UART();
 
     while(1)
     {
-        runShellInterface();
+//        runShellInterface();
         AppScheduling();
+
+        if(receive_complete == 1)
+        {
+            receive_complete = 0;
+//            Test_Command();
+        }
 
     }
 }
@@ -97,7 +103,13 @@ void AppTask10ms(void)
     stTestCnt.u32nuCnt10ms++;
 
     {
-        send_receive_ASCLIN_UART_message();
+//        send_receive_ASCLIN_UART_message();
+
+        {
+            if(msg.engine_msg.signal.control_engine == 1)
+                Command[ORDER_MOVE]();
+//            Move_Command();
+        }
 //        send_receive_ASCLIN_UART_message(); // 10ms도 가능!
         //transferData(); // 2월 7일 데이터 설계 (SPI, WSC) 통일하면 좋음
     }

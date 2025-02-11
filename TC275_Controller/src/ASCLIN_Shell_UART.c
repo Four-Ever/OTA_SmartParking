@@ -28,6 +28,7 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
+#include <Data_process.h>
 #include "ASCLIN_Shell_UART.h"
 #include "Ifx_Types.h"
 #include "IfxAsclin_Asc.h"
@@ -36,7 +37,6 @@
 #include "IfxPort.h"
 #include "SPI_CPU.h"
 #include "ASCLIN_UART.h"
-#include "data_process.h"
 //#include "OurCan.h"
 
 /*********************************************************************************************************************/
@@ -546,7 +546,8 @@ boolean showMsgSignal(pchar args, void *data, IfxStdIf_DPipe *io)
 
     }
     else if(args[0] =='2'){
-        IfxStdIf_DPipe_print(io, "rx messages %s"ENDLINE,g_rxData);
+        for(int i=0;i<4;i++)
+        IfxStdIf_DPipe_print(io, "rx messages %c\n"ENDLINE,g_rxData[i]);
 //        IfxStdIf_DPipe_print(io, "all messages"ENDLINE);
     }
     else{
@@ -647,7 +648,7 @@ void runShellInterface(void)
     Ifx_Shell_process(&g_shellInterface);
 }
 
-void print_debug(char *buf){
+void print_debug(const char *buf){
 
     IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s",buf);
 }

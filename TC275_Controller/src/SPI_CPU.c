@@ -275,7 +275,7 @@ void SPIcommand()//uint8 *Txbuffer, uint8 *Rxbuffer)
 //    uint8 Rxbuffer[32];
     uint8 dlc = sizeof(msg.move_msg.signal);
 //    uint8 dlc =  getMoveSignalSize();
-    msg.move_msg.msgId = ID_CTRL_MOVE_MSG;
+    msg.move_msg.msgId = ID_MOVE_MSG;
     msg.move_msg.signal.control_accel = 1;
     msg.move_msg.signal.control_brake = 1;
     msg.move_msg.signal.control_steering_angle = -40;

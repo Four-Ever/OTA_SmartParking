@@ -35,7 +35,11 @@
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-#define ID_CTRL_MOVE_MSG 0x56
+#define ID_ENGINE_MSG         0x55
+#define ID_MOVE_MSG           0x56
+#define ID_AUTO_PARK_REQ_MSG  0x57
+#define ID_OTA_UDT_CFM        0x58
+#define ID_OFF_REQ            0x59
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -110,7 +114,7 @@ typedef struct
   CTRL_Engine engine_msg;
   CTRL_Move move_msg;
   CTRL_Auto_Parking_Request auto_park_req_msg;
-  CTRL_OTA_Update_Confirm ota_update_confirm_msg;
+  CTRL_OTA_Update_Confirm ota_udt_cfm_msg;
   CTRL_Off_Request off_req_msg;
 }Message;
 

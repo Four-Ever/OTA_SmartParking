@@ -28,8 +28,8 @@
 
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
-#include "data_process.h"
-
+#include "Data_process.h"
+#include "ASCLIN_Shell_UART.h"
 #include "Message.h"
 
 #include <string.h>
@@ -37,10 +37,18 @@
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
+#define BUF_SIZE 32
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
+Commandfp Command[] = {
+    Engine_Command,          // ORDER_ENGINE
+    Move_Command,  // ORDER_MOVE
+    APR_Command,          // ORDER_AUTO_PRK_REQ
+    OUC_Command,          // ORDER_OTA_UDT_CFM
+    OR_Command           // ORDER_OFF_REQ
+};
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -53,27 +61,76 @@
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
-void process_send_datas(uint8 *txbuf, uint8* rxbuf){
-    static sint8 data =-64;
-    static uint8 num = 0;
-    uint8 dlc = sizeof(msg.move_msg.signal);
-    //    uint8 dlc =  getMoveSignalSize();
-    msg.move_msg.msgId = ID_CTRL_MOVE_MSG;
-    msg.move_msg.signal.control_accel = num++;
-    msg.move_msg.signal.control_brake = num+1;
-    msg.move_msg.signal.control_steering_angle = data++;
-    msg.move_msg.signal.control_transmission = num;
+void Engine_Command(void)
+{
+    uint8 txData[BUF_SIZE];
+    sint16 dlc = sizeof(msg.engine_msg.signal);
+    msg.engine_msg.msgId = ID_ENGINE_MSG;
+    txData[0] = (uint8) dlc;
+    txData[1] = msg.engine_msg.msgId;
+    memcpy(&txData[2], &msg.engine_msg.signal, dlc);
 
-//    no_padding(msg.move_msg);
-
-     // 올바른 DLC 크기 계산
-
-
-    //    uint8 serialized_signal[3];
-    //    serializeMoveSignal(&msg.move_msg.signal, serialized_signal);
-    //    structToByteArray(&g_qspi.spiBuffers.spiMasterTxBuffer[1],&msg.move_msg,sizeof(msg.move_msg));
-    txbuf[0] = dlc;
-    txbuf[1] = msg.move_msg.msgId;
-    memcpy(&txbuf[2], &msg.move_msg.signal, dlc);
+    Send_Message(txData,dlc+2);
 }
+void Move_Command(void)
+{
+    uint8 txData[BUF_SIZE];
+    sint16 dlc = sizeof(msg.move_msg.signal);
+    msg.move_msg.msgId = ID_MOVE_MSG;
+    txData[0] = (uint8) dlc;
+    txData[1] = msg.move_msg.msgId;
+
+//    //test
+//    msg.move_msg.signal.control_accel = 1;
+//    msg.move_msg.signal.control_brake = 1;
+//    msg.move_msg.signal.control_steering_angle = -64;
+//    msg.move_msg.signal.control_transmission = 3;
+
+    memcpy(&txData[2], &msg.move_msg.signal, dlc);
+
+    Send_Message(txData,dlc+2);
+
+}
+
+void APR_Command(){
+    uint8 txData[BUF_SIZE];
+    sint16 dlc = sizeof(msg.auto_park_req_msg.signal);
+    msg.auto_park_req_msg.msgId = ID_AUTO_PARK_REQ_MSG;
+    txData[0] = (uint8) dlc;
+    txData[1] = msg.auto_park_req_msg.msgId;
+    memcpy(&txData[2], &msg.auto_park_req_msg.signal, dlc);
+
+    Send_Message(txData,dlc+2);
+}
+
+
+void OUC_Command(){
+    uint8 txData[BUF_SIZE];
+    sint16 dlc = sizeof(msg.ota_udt_cfm_msg.signal);
+    msg.ota_udt_cfm_msg.msgId = ID_OTA_UDT_CFM;
+    txData[0] = (uint8) dlc;
+    txData[1] = msg.ota_udt_cfm_msg.msgId;
+    memcpy(&txData[2], &msg.ota_udt_cfm_msg.signal, dlc);
+
+    Send_Message(txData,dlc+2);
+}
+
+void OR_Command(){
+    uint8 txData[BUF_SIZE];
+    sint16 dlc = sizeof(msg.off_req_msg.signal);
+    msg.off_req_msg.msgId = ID_OFF_REQ;
+    txData[0] = (uint8) dlc;
+    txData[1] = msg.off_req_msg.msgId;
+    memcpy(&txData[2], &msg.off_req_msg.signal, dlc);
+
+    Send_Message(txData,dlc+2);
+}
+
+void Test_Command(void)
+{
+    uint8 rxData[BUF_SIZE];
+    sint16 dlc =  5;
+    Get_Message(rxData,dlc);
+}
+
 /*********************************************************************************************************************/

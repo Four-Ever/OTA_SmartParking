@@ -81,9 +81,10 @@ typedef enum
 
 typedef enum
 {
+    DIR_P,
     DIR_D,
-    DIR_R,
-    DIR_P
+    DIR_R
+
 }DriveDir;
 
 typedef enum
@@ -122,6 +123,23 @@ typedef enum
     CTRL_ON,
     CTRL_OTA
 }ControllerState;
+
+typedef enum
+{
+    DO_PARKING
+
+}ParkingAction;
+
+
+typedef enum
+{
+    ORDER_ENGINE,
+    ORDER_MOVE,
+    ORDER_AUTO_PRK_REQ,
+    ORDER_OTA_UDT_CFM,
+    ORDER_OFF_REQ
+}MessageOrder;
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
