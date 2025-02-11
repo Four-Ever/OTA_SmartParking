@@ -31,7 +31,26 @@
 #include "TC275_LCD_16x2.h"
 #include "Controller_Logic.h"
 #include "SPI_CPU.h"
+#include "Driver_Stm.h"
+#include "ASCLIN_Shell_UART.h"
+#include "ASCLIN_UART.h"
 
+typedef struct
+{
+    uint32 u32nuCnt1ms;
+    uint32 u32nuCnt10ms;
+    uint32 u32nuCnt100ms;
+    uint32 u32nuCnt1000ms;
+
+} Taskcnt;
+
+void AppScheduling(void);
+void AppTask1ms(void);
+void AppTask10ms(void);
+void AppTask100ms(void);
+void AppTask1000ms(void);
+
+Taskcnt stTestCnt;
 
 IfxCpu_syncEvent g_cpuSyncEvent = 0;
 
@@ -48,14 +67,86 @@ void core0_main(void)
     /* Wait for CPU sync event */
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
+
+    Driver_Stm_Init();
+
     init_LCD();
     initPeripherals();
 //    transferData();
+    initShellInterface();
+    init_ASCLIN_UART();
 
     while(1)
     {
+        runShellInterface();
+        AppScheduling();
+
+    }
+}
+
+void AppTask1ms(void)
+{
+    stTestCnt.u32nuCnt1ms++;
+    {
+
+    }
+}
+
+void AppTask10ms(void)
+{
+    stTestCnt.u32nuCnt10ms++;
+
+    {
+        send_receive_ASCLIN_UART_message();
+//        send_receive_ASCLIN_UART_message(); // 10ms도 가능!
+        //transferData(); // 2월 7일 데이터 설계 (SPI, WSC) 통일하면 좋음
+    }
+}
+
+void AppTask100ms(void)
+{
+    stTestCnt.u32nuCnt100ms++;
+    {
+
         Control_Current_State();
-        transferData(); // 2월 7일 데이터 설계 (SPI, WSC) 통일하면 좋음
-        MilliSecDelay(10);
+
+    }
+}
+
+void AppTask1000ms(void)
+{
+
+    stTestCnt.u32nuCnt1000ms++;
+    {
+//        send_receive_ASCLIN_UART_message();
+//        send_receive_ASCLIN_UART_message();
+    }
+}
+
+void AppScheduling(void)
+{
+
+    if (stSchedulingInfo.u8nuScheduling1msFlag == 1u)
+    {
+        stSchedulingInfo.u8nuScheduling1msFlag = 0u;
+
+        AppTask1ms();
+
+        if (stSchedulingInfo.u8nuScheduling10msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling10msFlag = 0u;
+            AppTask10ms();
+        }
+
+        if (stSchedulingInfo.u8nuScheduling100msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling100msFlag = 0u;
+            AppTask100ms();
+        }
+        if (stSchedulingInfo.u8nuScheduling1000msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling1000msFlag = 0u;
+            AppTask1000ms();
+        }
     }
 }
