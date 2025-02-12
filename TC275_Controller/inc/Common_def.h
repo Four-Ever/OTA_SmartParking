@@ -121,7 +121,8 @@ typedef enum
 {
     CTRL_OFF,
     CTRL_ON,
-    CTRL_OTA
+    CTRL_OTA,
+    CTRL_TEST_LCD
 }ControllerState;
 
 typedef enum

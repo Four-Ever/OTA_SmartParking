@@ -40,16 +40,19 @@
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
-LCDButtonVadc g_LCD_Btn;
+Vadc_t g_LCD_Btn;
+Vadc_t g_Steering_Wheel;
+
 IfxVadc_Adc_ChannelConfig adc_channel_config_btn[8];
 IfxVadc_Adc_Channel   adc_channel_btn[8];
-uint32 adc_result_btn[8] = {0u,};
+uint32 adc_result_buffer[8] = {0u,};
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 char str[20];
 ButtonState g_btn_adc_result = BS_NOTHING;
+sint8 g_SH_adc_result = 0;
 ControllerState g_current_ctrl_state = CTRL_OFF;
 OTAUpdateState g_current_ota_update = OTA_UPDATED;
 
@@ -102,12 +105,17 @@ void Show_Drive_State()
     switch(g_btn_adc_result){
     case (DRIVE_ACCEL):
     {
-        sprintf(str, "GOGOGO");
+
 
         //명령송신
         if(dir_state == DIR_D || dir_state == DIR_R){
             msg.move_msg.signal.control_accel = 1;
             msg.move_msg.signal.control_brake = 0;
+            sprintf(str, "GOGOGO");
+        }
+        else if (dir_state == DIR_P)
+        {
+            sprintf(str, "CHANGE DR MODE!");
         }
 
         prev_state = DRIVE_ACCEL;
@@ -115,12 +123,17 @@ void Show_Drive_State()
     }
     case (DRIVE_BRAKE):
     {
-        sprintf(str, "SLOW SLOW");
+
 
         //명령송신
         if(dir_state == DIR_D || dir_state == DIR_R){
             msg.move_msg.signal.control_accel = 0;
             msg.move_msg.signal.control_brake = 1;
+            sprintf(str, "SLOW SLOW");
+        }
+        else if (dir_state == DIR_P)
+        {
+            sprintf(str, "CHANGE DR MODE!");
         }
 
         prev_state = DRIVE_BRAKE;
@@ -178,7 +191,7 @@ void Show_Drive_State()
         {
             if(prev_state != DRIVE_SERVICE){
                 prev_state = DRIVE_SERVICE;
-                if(ms_state == MS_DRIVE)
+                if(dir_state == DIR_D || dir_state == DIR_R)
                 {
                     ms_state = MS_AUTO_PARKING;
                     dir_state = DIR_P;
@@ -192,7 +205,7 @@ void Show_Drive_State()
                     LCD1602_print(str);
                     LCD1602_loading();
                 }
-                else if(ms_state == MS_AUTO_PARKING)
+                else if(dir_state == DIR_P)
                 {
                     ms_state = MS_DRIVE;
                     dir_state = DIR_D;
@@ -304,6 +317,8 @@ void Show_Off_State()
     case (OFF_POWERON):
     {
         LCD1602_clear();
+        get_btn_data();
+
         LCD1602_1stLine();
         sprintf(str, "POWER ON");
         LCD1602_print(str);
@@ -329,10 +344,7 @@ void Show_Off_State()
     case (OFF_FIND):
     {
         LCD1602_clear();
-        LCD1602_1stLine();
-        sprintf(str, "ALERT MY CAR");
-        LCD1602_print(str);
-        LCD1602_loading();
+        get_btn_data();
         if(prev_state != OFF_FIND){
             prev_state = OFF_FIND;
             //SPI송신
@@ -342,6 +354,11 @@ void Show_Off_State()
             // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
             msg.off_req_msg.signal.alert_request = 0;
         }
+        LCD1602_1stLine();
+        sprintf(str, "ALERT MY CAR");
+        LCD1602_print(str);
+        LCD1602_loading();
+
         break;
     }
 
@@ -349,14 +366,10 @@ void Show_Off_State()
     case (OFF_AUTO_EXIT):
     {
         LCD1602_clear();
+        get_btn_data();
+
         if(g_current_ota_update == OTA_UPDATED)
         {
-
-            LCD1602_1stLine();
-            sprintf(str, "LEAVING MY CAR");
-            LCD1602_print(str);
-            LCD1602_2ndLine();
-            LCD1602_loading();
             if(prev_state != OFF_AUTO_EXIT){
                 prev_state = OFF_AUTO_EXIT;
 
@@ -367,6 +380,11 @@ void Show_Off_State()
                 // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
                 msg.off_req_msg.signal.auto_exit_request = 0;
             }
+            LCD1602_1stLine();
+            sprintf(str, "LEAVING MY CAR");
+            LCD1602_print(str);
+            LCD1602_2ndLine();
+            LCD1602_loading();
         }
         else
         {
@@ -387,6 +405,7 @@ void Show_Off_State()
     default :
     {
 //        sprintf(str, "");
+
         prev_state = OFF_NOTHING;
     }
     }
@@ -411,20 +430,24 @@ void Control_Current_State()
         Show_OTA_State();
         break;
     }
+    default :
+    {
+        LCD1602_clear();
+        get_SH_data();
+    }
     }
 }
 
 void init_Controller()
 {
-    ControllerState g_current_ctrl_state = CTRL_OFF;
+    g_current_ctrl_state = CTRL_OFF;
 }
 
 /*
- * @brief  button 데이터(A8, SAR4.7)초기화 함수
+ * @brief  button 데이터(A8, SAR4.6)초기화 함수
  */
-void init_Btn_Adc(void)
-{
-    uint32    chnIx = 7;
+
+static void init_Vadc_Config(Vadc_t * Vadc_val){
 
     /* VADC Configuration */
 
@@ -433,14 +456,14 @@ void init_Btn_Adc(void)
     IfxVadc_Adc_initModuleConfig(&adcConfig, &MODULE_VADC);
 
     /* initialize module */
-    IfxVadc_Adc_initModule(&g_LCD_Btn.vadc, &adcConfig);
+    IfxVadc_Adc_initModule(&Vadc_val->vadc, &adcConfig);
 
     /* create group config */
     IfxVadc_Adc_GroupConfig adcGroupConfig;
-    IfxVadc_Adc_initGroupConfig(&adcGroupConfig, &g_LCD_Btn.vadc);
+    IfxVadc_Adc_initGroupConfig(&adcGroupConfig, &Vadc_val->vadc);
 
-    /* with group 0 */
-    adcGroupConfig.groupId = IfxVadc_GroupId_4;
+    /* with group  */
+    adcGroupConfig.groupId = Vadc_val->adcGroupId;
     adcGroupConfig.master  = adcGroupConfig.groupId;
 
     /* enable scan source */
@@ -455,26 +478,43 @@ void init_Btn_Adc(void)
 
     /* initialize the group */
     /*IfxVadc_Adc_Group adcGroup;*/    //declared globally
-    IfxVadc_Adc_initGroup(&g_LCD_Btn.adcGroup, &adcGroupConfig);
+    IfxVadc_Adc_initGroup(&Vadc_val->adcGroup, &adcGroupConfig);
 
     /*channel init*/
-    IfxVadc_Adc_initChannelConfig(&adc_channel_config_btn[chnIx],
-                                            &g_LCD_Btn.adcGroup);
+    IfxVadc_Adc_initChannelConfig(&adc_channel_config_btn[Vadc_val->chnIx],
+                                            &Vadc_val->adcGroup);
 
-    adc_channel_config_btn[chnIx].channelId      =
-            (IfxVadc_ChannelId)(chnIx);
-    adc_channel_config_btn[chnIx].resultRegister =
-            (IfxVadc_ChannelResult)(chnIx); /* use dedicated result register */
+    adc_channel_config_btn[Vadc_val->chnIx].channelId      =
+            (IfxVadc_ChannelId)(Vadc_val->chnIx);
+    adc_channel_config_btn[Vadc_val->chnIx].resultRegister =
+            (IfxVadc_ChannelResult)(Vadc_val->chnIx); /* use dedicated result register */
 
     /* initialize the channel */
-    IfxVadc_Adc_initChannel(&adc_channel_btn[chnIx],
-                    &adc_channel_config_btn[chnIx]);
+    IfxVadc_Adc_initChannel(&adc_channel_btn[Vadc_val->chnIx],
+                    &adc_channel_config_btn[Vadc_val->chnIx]);
 
     /* add to scan */
-    unsigned channels = (1 << adc_channel_config_btn[chnIx].channelId);
+    unsigned channels = (1 << adc_channel_config_btn[Vadc_val->chnIx].channelId);
     unsigned mask     = channels;
-    IfxVadc_Adc_setScan(&g_LCD_Btn.adcGroup, channels, mask);
+    IfxVadc_Adc_setScan(&Vadc_val->adcGroup, channels, mask);
+}
 
+void init_Steering_Wheel(){
+    // 4_6
+    g_Steering_Wheel.adcGroupId = IfxVadc_GroupId_4;
+    g_Steering_Wheel.chnIx = 6;
+    init_Vadc_Config(&g_Steering_Wheel);
+
+}
+/*
+ * @brief  button 데이터(A8, SAR4.7)초기화 함수
+ */
+void init_Btn_Adc(void)
+{
+    //4_7
+    g_LCD_Btn.adcGroupId = IfxVadc_GroupId_4;
+    g_LCD_Btn.chnIx = 7;
+    init_Vadc_Config(&g_LCD_Btn);
 }
 
 
@@ -488,13 +528,42 @@ void start_btn_conversion(void)
 }
 
 
+static sint8 mapValue(float input, float in_min, float in_max, float out_min, float out_max) {
+    return (sint8)((input - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+}
+
 /*
  * @brief  센서 데이터를 읽어오는 함수
  * @return uint32: adc 결과값
  */
-uint32 obtain_btn_data(void)
+static sint8 convert_SH_data(uint32 analogValue) {
+    float voltage = analogValue * (5.0 / 4095.0);
+
+    sint8 steeringAngle = mapValue(voltage, 0.0, 5.0, -45, 45);
+
+//    sprintf(str,"%d",steeringAngle);
+//    LCD1602_print(str);
+
+    return steeringAngle;
+}
+
+uint8 get_SH_data(void)
 {
-    uint32    chnIx =7;
+//    start_btn_conversion(); // 같은 채널임
+//    MicroSecDelay(200); // adc 변환 시간 확보
+    uint32 adc_result =  obtain_Vadc_data(g_Steering_Wheel.chnIx);
+
+    //디버깅을 위한 부분
+    g_SH_adc_result = convert_SH_data(adc_result);
+
+    msg.move_msg.signal.control_steering_angle = g_SH_adc_result;
+    return 1;
+}
+
+
+uint32 obtain_Vadc_data(uint32 chnIx)
+{
+
     Ifx_VADC_RES conversionResult; /* wait for valid result */
 
     /* check results */
@@ -503,19 +572,10 @@ uint32 obtain_btn_data(void)
         conversionResult = IfxVadc_Adc_getResult(&adc_channel_btn[chnIx]);
     } while (!conversionResult.B.VF);
 
-    adc_result_btn[chnIx] = conversionResult.B.RESULT;
-    return adc_result_btn[chnIx];
+    adc_result_buffer[chnIx] = conversionResult.B.RESULT;
+    return adc_result_buffer[chnIx];
 }
 
-
-/*
- * @brief  디버깅을 위해 adc 글로벌 결과값 출력하는 함수
- * @return uint32: adc 글로벌 결과값
- * @note   get_decibel 함수 동작 이후에 수행해야함
- */
-uint32 get_btn_analog_value(void) {
-    return g_btn_adc_result;
-}
 
 
 /*
@@ -524,7 +584,7 @@ uint32 get_btn_analog_value(void) {
  * @return
  * @note
  */
-ButtonState convert(uint32 analogValue) {
+static ButtonState convert_btn_data(uint32 analogValue) {
     float voltage = analogValue * (5.0 / 4095.0);
     ButtonState BS = BS_NOTHING;
     if(voltage < 0.5)
@@ -564,11 +624,13 @@ ButtonState convert(uint32 analogValue) {
 uint8 get_btn_data(void) {
     start_btn_conversion();
     MicroSecDelay(200); // adc 변환 시간 확보
-    uint32 adc_result = obtain_btn_data();
+    uint32 adc_result = obtain_Vadc_data(g_LCD_Btn.chnIx);
 
     //디버깅을 위한 부분
-    g_btn_adc_result = convert(adc_result);
+    g_btn_adc_result = convert_btn_data(adc_result);
 
+    //btn 인풋 받을때 같이 받기
+    get_SH_data();
     return 1;
 }
 /*********************************************************************************************************************/

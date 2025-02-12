@@ -71,8 +71,8 @@ void core0_main(void)
     Driver_Stm_Init();
 
     init_LCD();
+    init_Steering_Wheel();
 //    initPeripherals();
-//    transferData();
 //    initShellInterface();
     init_ASCLIN_UART();
 
@@ -84,7 +84,7 @@ void core0_main(void)
         if(receive_complete == 1)
         {
             receive_complete = 0;
-//            Test_Command();
+            Test_Command();
         }
 
     }
@@ -103,12 +103,11 @@ void AppTask10ms(void)
     stTestCnt.u32nuCnt10ms++;
 
     {
-//        send_receive_ASCLIN_UART_message();
-
         {
             if(msg.engine_msg.signal.control_engine == 1)
+            {
                 Command[ORDER_MOVE]();
-//            Move_Command();
+            }
         }
 //        send_receive_ASCLIN_UART_message(); // 10ms도 가능!
         //transferData(); // 2월 7일 데이터 설계 (SPI, WSC) 통일하면 좋음

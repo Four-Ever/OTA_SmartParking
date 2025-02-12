@@ -55,9 +55,12 @@ typedef struct
 {
     IfxVadc_Adc vadc; /* VADC handle */
     IfxVadc_Adc_Group adcGroup;
-} LCDButtonVadc;
+    IfxVadc_GroupId adcGroupId;
+    uint32 chnIx;
+} Vadc_t;
 
-IFX_EXTERN LCDButtonVadc g_LCD_Btn;
+IFX_EXTERN Vadc_t g_LCD_Btn;
+IFX_EXTERN Vadc_t g_Steering_Wheel;
 /*********************************************************************************************************************/
  
 /*********************************************************************************************************************/
@@ -73,12 +76,17 @@ void Show_Drive_State();
 void Show_Off_State();
 void Control_Current_State();
 
+
 void init_Btn_Adc(void);
+void init_Steering_Wheel();
+
 void init_Controller();
 void start_btn_conversion(void);
-uint32 obtain_btn_data(void);
-uint32 get_btn_analog_value(void);
-ButtonState convert(uint32 analogValue);
+
+uint32 obtain_SH_data(void);
+uint8 get_SH_data(void);
+
+uint32 obtain_Vadc_data(uint32 chnIx);
 uint8 get_btn_data(void);
 /*********************************************************************************************************************/
 

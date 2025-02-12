@@ -28,7 +28,9 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
-#include <Data_process.h>
+#include "Data_process.h"
+#include <stdarg.h>
+#include <stdio.h>
 #include "ASCLIN_Shell_UART.h"
 #include "Ifx_Types.h"
 #include "IfxAsclin_Asc.h"
@@ -50,6 +52,7 @@
 #define ASC_RX_BUFFER_SIZE          256                                     /* Define the RX buffer size in byte    */
 #define ASC_BAUDRATE                115200                                  /* Define the UART baud rate            */
 
+#define BUFFER_SIZE 1024
 
 /* LED */
 #define LED                         &MODULE_P10,2                           /* LED Port Pin                         */
@@ -647,9 +650,20 @@ void runShellInterface(void)
     /* Process the received data */
     Ifx_Shell_process(&g_shellInterface);
 }
+//
+//void print_debug(const char *buf){
+//
+//    IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s",buf);
+//}
 
-void print_debug(const char *buf){
+void myprintf(const char *format, ...) {
+    char buffer[BUFFER_SIZE];  // 출력할 문자열을 저장할 버퍼
+    char* args;
 
-    IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s",buf);
+    va_start(args, format);  // 가변 인자 초기화
+    vsprintf(buffer, format, args);  // 포맷된 문자열을 버퍼에 저장
+    va_end(args);  // 가변 인자 종료
+
+    // IfxStdIf_DPipe_print를 사용하여 UART로 출력
+    IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s", buffer);
 }
-

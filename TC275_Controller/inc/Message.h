@@ -35,11 +35,18 @@
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-#define ID_ENGINE_MSG         0x55
-#define ID_MOVE_MSG           0x56
-#define ID_AUTO_PARK_REQ_MSG  0x57
-#define ID_OTA_UDT_CFM        0x58
-#define ID_OFF_REQ            0x59
+#define ID_ENGINE_MSG               0xC9
+#define ID_MOVE_MSG                 0xCA
+#define ID_AUTO_PARK_REQ_MSG        0xD1
+#define ID_OTA_UDT_CFM_MSG          0xD9
+#define ID_OFF_REQ_MSG              0xCB
+#define ID_CGW_OTA_UDT_REQ_MSG      0x5A
+#define ID_CGW_OTA_UDT_STATE_MSG    0x5B
+#define ID_CGW_PRK_STATUS_MSG       0x52
+#define ID_CGW_VHC_STATUS_MSG       0x42
+
+
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
