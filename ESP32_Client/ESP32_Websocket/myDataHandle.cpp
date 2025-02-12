@@ -1,6 +1,7 @@
 #include "myDataHandle.h"
 
 // #define DEBUG_PRINT
+// #define SENT_DEBUG_PRINT
 // #define LOCKING
 
 //  구조체 → 바이트 배열 변환 함수
@@ -152,7 +153,7 @@ void send_datas_to_Nano()
     #endif
     
     webSocket.sendBIN((uint8_t*)&nano_msg.engine_msg, sizeof(nano_msg.engine_msg));
-    #ifdef DEBUG_PRINT
+    #ifdef SENT_DEBUG_PRINT
     Serial.printf("Sent - MsgID: 0x%02X, control_engine:  %u  \n", 
               nano_msg.engine_msg.msgId, nano_msg.engine_msg.signal.control_engine);  
     #endif
@@ -176,7 +177,7 @@ void send_datas_to_Nano()
     #endif
     
     webSocket.sendBIN((uint8_t*)&nano_msg.move_msg, sizeof(nano_msg.move_msg));
-    #ifdef DEBUG_PRINT
+    #ifdef SENT_DEBUG_PRINT
     Serial.printf("Sent - MsgID: 0x%02X, control_accel: %u, control_brake : %u, control_steering_angle : %d, control_transmission : %u nano-size: %u tc-size : %u   \n", 
               nano_msg.move_msg.msgId, nano_msg.move_msg.signal.control_accel, nano_msg.move_msg.signal.control_brake,
               nano_msg.move_msg.signal.control_steering_angle, nano_msg.move_msg.signal.control_transmission,sizeof(nano_msg.move_msg),sizeof(msg.move_msg)); 
@@ -199,7 +200,7 @@ void send_datas_to_Nano()
 
     
     webSocket.sendBIN((uint8_t*)&nano_msg.auto_park_req_msg, sizeof(nano_msg.auto_park_req_msg));
-    #ifdef DEBUG_PRINT
+    #ifdef SENT_DEBUG_PRINT
     Serial.printf("Sent - MsgID: 0x%02X, auto_parking: %u, \n", 
               nano_msg.auto_park_req_msg.msgId, nano_msg.auto_park_req_msg.signal.auto_parking);
     #endif  
@@ -220,7 +221,7 @@ void send_datas_to_Nano()
     #endif
     
     webSocket.sendBIN((uint8_t*)&nano_msg.ota_udt_cfm_msg, sizeof(nano_msg.ota_udt_cfm_msg));
-    #ifdef DEBUG_PRINT
+    #ifdef SENT_DEBUG_PRINT
     Serial.printf("Sent - MsgID: 0x%02X, ota_confirm: %u,   \n", 
               nano_msg.ota_udt_cfm_msg.msgId, nano_msg.ota_udt_cfm_msg.signal.ota_confirm); 
     #endif 
@@ -243,7 +244,7 @@ void send_datas_to_Nano()
     
     webSocket.sendBIN((uint8_t*)&nano_msg.off_req_msg, sizeof(nano_msg.off_req_msg));
 
-    #ifdef DEBUG_PRINT
+    #ifdef SENT_DEBUG_PRINT
     Serial.printf("Sent - MsgID: 0x%02X, alert_request: %u, auto_exit_request : %u, \n", 
               nano_msg.off_req_msg.msgId, nano_msg.off_req_msg.signal.alert_request, nano_msg.off_req_msg.signal.auto_exit_request);
     #endif
