@@ -94,7 +94,7 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 
-    // RCLCPP_INFO(this->get_logger(), "processFrontImage Processing Time: %ld ms", duration.count());
+    RCLCPP_INFO(this->get_logger(), "processFrontImage Processing Time: %ld ms", duration.count());
 }
 
 void VisionNode::processRearImage(const sensor_msgs::msg::Image::SharedPtr msg)
@@ -442,28 +442,28 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     for (const auto &point : raw_waypoints)
     {
         cv::circle(debug_img, cv::Point(point.x + 320, 480 - point.y),
-                3, cv::Scalar(0, 255, 0), -1);
+                   3, cv::Scalar(0, 255, 0), -1);
     }
     // regression된 곡선 그리기 (마젠타)
     if (!waypoints.empty())
     {
         // 부드러운 곡선을 위해 더 많은 점 생성
-        for (int y = 0; y < 480; y += 5)  // 5픽셀 간격
+        for (int y = 0; y < 480; y += 5) // 5픽셀 간격
         {
-            double x = coef.at<double>(0,0) * y * y +
-                    coef.at<double>(1,0) * y +
-                    coef.at<double>(2,0);
-                    
+            double x = coef.at<double>(0, 0) * y * y +
+                       coef.at<double>(1, 0) * y +
+                       coef.at<double>(2, 0);
+
             // 이전 점이 있으면 선으로 연결
             if (y > 0)
             {
-                double prev_x = coef.at<double>(0,0) * (y-5) * (y-5) +
-                            coef.at<double>(1,0) * (y-5) +
-                            coef.at<double>(2,0);
+                double prev_x = coef.at<double>(0, 0) * (y - 5) * (y - 5) +
+                                coef.at<double>(1, 0) * (y - 5) +
+                                coef.at<double>(2, 0);
                 cv::line(debug_img,
-                        cv::Point(prev_x + 320, 480 - (y-5)),
-                        cv::Point(x + 320, 480 - y),
-                        cv::Scalar(255, 0, 255), 2);
+                         cv::Point(prev_x + 320, 480 - (y - 5)),
+                         cv::Point(x + 320, 480 - y),
+                         cv::Scalar(255, 0, 255), 2);
             }
         }
 
@@ -471,7 +471,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
         for (const auto &point : waypoints)
         {
             cv::circle(debug_img, cv::Point(point.x + 320, 480 - point.y),
-                    5, cv::Scalar(255, 0, 255), -1);
+                       5, cv::Scalar(255, 0, 255), -1);
         }
     }
     sensor_msgs::msg::Image::SharedPtr lines_msg =
@@ -485,7 +485,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     // debug_edges_pub_->publish(*edges_msg);
     debug_lines_pub_->publish(*lines_msg);
 
-    // width_plot_pub_->publish(param_width_msg);
+    width_plot_pub_->publish(param_width_msg);
+    
     RCLCPP_INFO(this->get_logger(), "Expected Lane Width: %d", expected_lane_width_);
     RCLCPP_INFO(this->get_logger(), "Real Lane Width: %d", debug_tmp);
     // }
@@ -562,8 +563,8 @@ cv::Scalar VisionNode::getColorByConfidence(float confidence)
 }
 
 RegressionResult VisionNode::regressionWaypoints(const std::vector<cv::Point2i> &waypoints,
-                                                         const std::vector<float> &confidences,
-                                                         int num_points) // 원하는 웨이포인트 개수
+                                                 const std::vector<float> &confidences,
+                                                 int num_points)
 {
     if (waypoints.empty() || confidences.empty())
         return {waypoints, cv::Mat()};
@@ -572,12 +573,14 @@ RegressionResult VisionNode::regressionWaypoints(const std::vector<cv::Point2i> 
     std::vector<double> x_values, y_values, weights;
     for (size_t i = 0; i < waypoints.size(); i++)
     {
-        x_values.push_back(waypoints[i].y); // y좌표를 x축으로
-        y_values.push_back(waypoints[i].x); // x좌표를 y축으로 (차선의 좌우 위치)
+        x_values.push_back(waypoints[i].y);
+        y_values.push_back(waypoints[i].x);
         weights.push_back(confidences[i]);
     }
 
-    cv::Mat A(x_values.size(), 3, CV_64F);       // [x^2, x, 1]
+    // 2차 다항식: y = ax² + bx
+    // 중요: 상수항을 0으로 고정하여 (0,0)을 반드시 지나가도록 함
+    cv::Mat A(x_values.size(), 2, CV_64F);       // [x², x]
     cv::Mat b(x_values.size(), 1, CV_64F);       // y values
     cv::Mat W = cv::Mat::diag(cv::Mat(weights)); // 가중치 행렬
 
@@ -586,23 +589,24 @@ RegressionResult VisionNode::regressionWaypoints(const std::vector<cv::Point2i> 
     {
         A.at<double>(i, 0) = x_values[i] * x_values[i];
         A.at<double>(i, 1) = x_values[i];
-        A.at<double>(i, 2) = 1.0;
         b.at<double>(i, 0) = y_values[i];
     }
 
-    // 가중치 적용된 최소제곱법으로 계수 구하기: (A^T * W * A)^-1 * A^T * W * b
+    // 가중치 적용된 최소제곱법으로 계수 구하기
     cv::Mat coef = (A.t() * W * A).inv() * A.t() * W * b;
 
     // 2. 새로운 웨이포인트 생성
     std::vector<cv::Point2i> new_waypoints;
-    int y_step = 480 / (num_points + 1);
 
-    for (int i = 1; i <= num_points; i++)
+    // 시작점을 (0,0)으로, 마지막 점을 이미지 상단으로
+    new_waypoints.push_back(cv::Point2i(0, 0)); // 첫 번째 포인트는 항상 (0,0)
+
+    int y_step = 480 / num_points;
+    for (int i = 1; i < num_points; i++)
     {
         int y = i * y_step;
         double x = coef.at<double>(0, 0) * y * y +
-                   coef.at<double>(1, 0) * y +
-                   coef.at<double>(2, 0);
+                   coef.at<double>(1, 0) * y;
         new_waypoints.push_back(cv::Point2i(static_cast<int>(x), y));
     }
 
