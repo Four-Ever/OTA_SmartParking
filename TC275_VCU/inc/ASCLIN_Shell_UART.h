@@ -58,5 +58,7 @@ void initShellInterface(void);
 void runShellInterface(void);
 void print_debug(char*);
 void dpipeReceiveCallback(void);
+void print_dis(sint32* cur_count);
+void print_enc(sint32* cur_count);
 void myprintf(const char *format, ...);
 #endif /* ASCLIN_SHELL_UART_H_ */

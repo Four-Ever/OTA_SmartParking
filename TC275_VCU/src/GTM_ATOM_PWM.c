@@ -37,7 +37,7 @@
 /*********************************************************************************************************************/
 #define ISR_PRIORITY_ATOM  20                                   /* Interrupt priority number                        */
 #define LED                IfxGtm_ATOM1_1_TOUT1_P02_1_OUT      /* LED which will be driven by the PWM              */
-#define PWM_PERIOD         5000                                 /* PWM period for the ATOM                          */
+#define PWM_PERIOD         10000                                 /* PWM period for the ATOM                          */
 #define CLK_FREQ           1000000.0f                           /* CMU clock frequency, in Hertz                    */
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/

@@ -44,6 +44,27 @@
 IfxStm_CompareConfig g_STMConf;                                 /* STM configuration structure                      */
 Ifx_TickTime g_ticksFor1ms;                                   /* Variable to store the number of ticks to wait    */
 
+extern IfxGpt12_IncrEnc_Config gpt12Config;
+extern uint8 CPR;
+sint32 Enc_count_new = 0;
+sint32 Enc_count_old = 0;
+float32 Enc_count_diff = 0;
+float32 motor_speed_rpm=0;
+
+sint32 s32_motor_speed_rpm=0;
+sint32 s32_DisSum = 0;
+sint32 i1 = 0;
+
+PIDREG3 speed_pid = PIDREG3_DEFAULTS;
+
+float32 s_T_samp= 0.001*TIMER_INT_TIME;
+float32 RPM_max = 5000, RPM_min=-5000;
+
+extern float32 Kp_s,Ki_s,Kd_s;
+extern float32 RPM_CMD1;
+
+
+sint32 Enc_count;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -67,26 +88,6 @@ void move_to_tardis(void);
  */
 IFX_INTERRUPT(isrSTM, 0, ISR_PRIORITY_STM);
 
-extern IfxGpt12_IncrEnc_Config gpt12Config;
-extern uint8 CPR;
-sint32 Enc_count_new = 0;
-sint32 Enc_count_old = 0;
-float32 Enc_count_diff = 0;
-float32 motor_speed_rpm=0;
-
-sint32 s32_motor_speed_rpm=0;
-sint32 s32_DisSum = 0;
-sint32 i1 = 0;
-
-PIDREG3 speed_pid = PIDREG3_DEFAULTS;
-extern float32 Kp_s,Ki_s,Kd_s;
-float32 s_T_samp= 0.001*TIMER_INT_TIME;
-float32 RPM_max = 5000, RPM_min=-5000;
-extern float32 RPM_CMD1;
-
-
-sint32 Enc_count;
-
 //void pid_reset(PIDREG3 *v);
 
 void RPM_cal(void)
@@ -107,8 +108,6 @@ void RPM_cal(void)
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
     Enc_count_old = Enc_count_new;
 }
-
-
 
 
 void PI_const_update(void)

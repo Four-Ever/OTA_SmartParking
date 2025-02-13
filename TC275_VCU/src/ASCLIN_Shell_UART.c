@@ -177,11 +177,9 @@ void asc0ErrISR(void)
 
 void dpipeReceiveCallback(void)
 {
-    volatile uint8 receivedByte;
+    uint8 receivedByte;
     Ifx_SizeT readCount = 1;
     Ifx_TickTime timeout = 0;
-
-
 
     // 데이터가 있는 동안 읽기
     while(IfxStdIf_DPipe_getReadCount(&g_ascStandardInterface) > 0)
