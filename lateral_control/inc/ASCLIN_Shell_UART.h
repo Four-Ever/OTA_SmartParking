@@ -28,23 +28,26 @@
 #ifndef ASCLIN_SHELL_UART_H_
 #define ASCLIN_SHELL_UART_H_
 
+//#include <stdio.h>
 #include "Ifx_Types.h"
 #include "IfxAsclin_Asc.h"
 #include "Ifx_Shell.h"
 #include "Ifx_Console.h"
 #include "IfxPort.h"
+
 //#include "OurCan.h"
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 /*********************************************************************************************************************/
 #define ENDLINE     "\n\r"
-#define RX_BUFFER_SIZE 8
+#define RX_BUFFER_SIZE 9
 
 extern float32 p_gain;
 extern float32 i_gain;
 extern float32 d_gain;
 
-extern sint16 pwm_speed;
+extern sint16 rpm_speed;
+extern sint8 servo_angle;
 
 extern IfxStdIf_DPipe  g_ascStandardInterface;
 
@@ -55,5 +58,5 @@ void initShellInterface(void);
 void runShellInterface(void);
 void print_debug(char*);
 void dpipeReceiveCallback(void);
-
+void myprintf(const char *format, ...);
 #endif /* ASCLIN_SHELL_UART_H_ */
