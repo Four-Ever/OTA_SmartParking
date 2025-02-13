@@ -17,6 +17,11 @@ function prototypes for the PIDREG3.
 
 //#include "PARAMETERS_PMSM_Control.h"
 
+typedef enum
+{
+    move_pwm_control = 0, // 목표 pwm (velocity)
+    move_distance_control = 1 // 목표 거리
+}drive_mode;
 
 typedef struct {  float32  Ref;           // Input: Reference input
                   float32  Fdb;           // Input: Feedback input
@@ -44,6 +49,12 @@ typedef struct {  float32  Ref;           // Input: Reference input
                   uint32    Current_mode; // PID mode for Current Control
                   void  (*calc)();      // Pointer to calculation function
                   void  (*reset)();     // Pointer to calculation function
+
+                  drive_mode DriveMode;
+
+                  float32 DisSum;       // sum of distance
+                  float32 TargetDis;    // target distance
+                  float32 TargetVel;    // target velocity
                  } PIDREG3;
 
 typedef PIDREG3 *PIDREG3_handle;
@@ -76,7 +87,11 @@ Default initalizer for the PIDREG3 object.
                            0, \
                            0, \
                           (void (*)(unsigned int))pid_reg3_calc, \
-                          (void (*)(unsigned int))pid_reset }
+                          (void (*)(unsigned int))pid_reset, \
+                           move_pwm_control, \
+                           0, \
+                           0, \
+                           0}
 
 /*------------------------------------------------------------------------------
 Prototypes for the functions in PIDREG3.C

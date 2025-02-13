@@ -139,7 +139,7 @@ void initServo(void)
 //    IfxGtm_Tom_Pwm_start(&g_tomDriver_servo, TRUE);                         /* Start the PWM                            */
 //}
 
-void setServoAngle(float angle)
+void setServoAngle(float32 angle)
 {
     // 서보 중간 위치 (unsigned int)(CLK_FREQ / 50 * 0.075);
 

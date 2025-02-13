@@ -50,7 +50,7 @@ Ifx_TickTime g_ticksFor1ms;                                   /* Variable to sto
 //void initLED(void);
 //void initSTM(void);
 extern void Encoder_update(void);
-
+void move_to_tardis(void);
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
 /*********************************************************************************************************************/
@@ -75,6 +75,7 @@ float32 Enc_count_diff = 0;
 float32 motor_speed_rpm=0;
 
 sint32 s32_motor_speed_rpm=0;
+sint32 s32_DisSum = 0;
 sint32 i1 = 0;
 
 PIDREG3 speed_pid = PIDREG3_DEFAULTS;
@@ -92,8 +93,16 @@ void RPM_cal(void)
 {
     Encoder_update();   //지워도 되는지 확인할것
     Enc_count_new = gpt12Config.module->T2.U;
-    Enc_count = Enc_count_new;
+
+    if (Enc_count_new > 32768)
+    {
+        Enc_count_new = Enc_count_new - 65535;
+    }
     Enc_count_diff = (float32)(Enc_count_new - Enc_count_old);
+
+    speed_pid.DisSum += Enc_count_diff * tick_dis;
+    s32_DisSum = (sint32)(speed_pid.DisSum * 10000);
+
     motor_speed_rpm = Enc_count_diff/(float32)CPR/(float32)(TIMER_INT_TIME*0.001)*60.0f;
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
     Enc_count_old = Enc_count_new;
@@ -145,16 +154,22 @@ void isrSTM(void)
 //    static sint32 ii =0;
 //    ii++;
     PI_Speed_con();
-    if (speed_pid.Out>=0){
+
+    if (speed_pid.Out>=0)
+    {
         setMotorControl(0,1);  //void setMotorControl(uint8 direction, uint8 enable)
 
         PWM_set(speed_pid.Out);      /* Change the intensity of the LED  */
-
     }
     else {
         setMotorControl(1,1);  //void setMotorControl(uint8 direction, uint8 enable)
 
         PWM_set(speed_pid.Out*-1);      /* Change the intensity of the LED  */
+    }
+
+    if (speed_pid.DriveMode == move_distance_control)
+    {
+        move_to_tardis();
     }
 
     IfxStm_increaseCompare(STM, g_STMConf.comparator, g_ticksFor1ms);
@@ -178,7 +193,50 @@ void initPeripherals(void)
 {
     /* Initialize time constant */
     g_ticksFor1ms = IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, TIMER_INT_TIME);
-
     initSTM();                                      /* Configure the STM module                               */
 
+}
+
+
+void init_move_distance_control(float32 tarDis, float32 tarVel)
+{
+    speed_pid.DriveMode = move_distance_control;
+
+    speed_pid.DisSum = 0;
+    speed_pid.TargetDis = tarDis;
+    speed_pid.TargetVel = tarVel;
+
+    RPM_CMD1 = speed_pid.TargetVel;
+}
+
+
+void move_to_tardis(void)
+{
+    if (speed_pid.TargetDis >= 0)
+    {
+        if (speed_pid.DisSum > speed_pid.TargetDis)
+        {
+            speed_pid.DriveMode = move_pwm_control;
+
+            RPM_CMD1 = 0;
+
+            speed_pid.DisSum = 0;
+            speed_pid.TargetDis = 0;
+            speed_pid.TargetVel = 0;
+        }
+    }
+
+    else if (speed_pid.TargetDis < 0)
+    {
+        if (speed_pid.DisSum < speed_pid.TargetDis)
+        {
+            speed_pid.DriveMode = move_pwm_control;
+
+            RPM_CMD1 = 0;
+
+            speed_pid.DisSum = 0;
+            speed_pid.TargetDis = 0;
+            speed_pid.TargetVel = 0;
+        }
+    }
 }

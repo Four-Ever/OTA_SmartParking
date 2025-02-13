@@ -29,6 +29,13 @@
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
 #include "ASCLIN_Shell_UART.h"
+#include "Ifx_Types.h"
+#include "IfxAsclin_Asc.h"
+#include "Ifx_Shell.h"
+#include "Ifx_Console.h"
+#include "IfxPort.h"
+#include <stdio.h>
+#include <stdarg.h>
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -99,7 +106,8 @@ float32 p_gain = 0.0f;
 float32 i_gain = 0.0f;
 float32 d_gain = 0.0f;
 
-sint16 pwm_speed = 0;
+sint16 rpm_speed = 0;
+sint8 servo_angle = 0;
 /* The transfer buffers allocate memory for the data itself and for FIFO runtime variables.
  * 8 more bytes have to be added to ensure a proper circular buffer handling independent from
  * the address to which the buffers have been located.
@@ -206,8 +214,9 @@ void dpipeReceiveCallback(void)
 
                 // PWM speed 복원
                 temp = (uint16)(rxBuffer[6] << 8) | rxBuffer[7];
-                pwm_speed = (sint16)temp - 5000;
+                rpm_speed = (sint16)temp - 5000;
 
+                servo_angle = (sint8)(rxBuffer[8] - 50);
                 // 버퍼 인덱스 초기화
                 rxIndex = 0;
             }
@@ -730,12 +739,48 @@ void runShellInterface(void)
     Ifx_Shell_process(&g_shellInterface);
 }
 
-
-void print_enc(sint32* cur_count)
+void print_dis(sint32* cur_count)
 {
     PRINT_ALL_SIGNAL(&g_ascStandardInterface, 1,
     "%d",
     *cur_count);
+}
+
+
+void print_enc(sint32* cur_count)
+{
+    char str[6];
+    sint32 value = *cur_count;
+    boolean sign = FALSE;
+
+    if (value < 0) {
+        value = -value;
+        sign = TRUE;
+    }
+
+    str[3] = '0' + (value % 10);
+    str[2] = '0' + ((value /10) % 10);
+    str[1] = '0' + ((value / 100) % 10);
+    str[0] = '0' + ((value / 1000) % 10);
+
+    if (sign == TRUE)
+    {
+        str[4] = 'm';
+    }
+    else
+    {
+        str[4] = 'p';
+    }
+
+    str[5] = '\0';
+
+    PRINT_ALL_SIGNAL(&g_ascStandardInterface, 1,
+        "%c%c%c%c%c",
+        str[0], str[1], str[2], str[3], str[4]);
+
+//    PRINT_ALL_SIGNAL(&g_ascStandardInterface, 1,
+//    "%d",
+//    *cur_count);
 }
 
 
@@ -744,3 +789,15 @@ void print_debug(char *buf){
     IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s",buf);
 }
 
+#define BUFFER_SIZE 1024
+void myprintf(const char *format, ...) {
+    char buffer[BUFFER_SIZE];  // 출력할 문자열을 저장할 버퍼
+    char* args;
+
+    va_start(args, format);  // 가변 인자 초기화
+    vsprintf(buffer, format, args);  // 포맷된 문자열을 버퍼에 저장
+    va_end(args);  // 가변 인자 종료
+
+    // IfxStdIf_DPipe_print를 사용하여 UART로 출력
+    IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s", buffer);
+}
