@@ -169,7 +169,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     int window_height = warped.rows / windows;
     const int window_width = 100;                // 윈도우 크기는 고정
     const int search_range = window_width * 2.5; // 탐색 범위는 더 넓게   Param Edit
-    size_t minpix = 80;                          // 최소 픽셀 수          Param Edit
+    size_t minpix = 50;                          // 최소 픽셀 수          Param Edit
 
     std::vector<cv::Point2i> left_points, right_points;
     std::vector<float> window_confidences;
@@ -320,7 +320,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                     }
                 }
             }
-            else // 정상적인 탐지 -> 차선 폭 학습
+            else // 정상적인 탐지 -> 차선 폭 학습 // 신뢰도 1
             {
                 // 가까운 윈도우(아래쪽)에서만 학습
                 if (window < windows / 2) // 아래쪽 절반의 윈도우만 사용
@@ -378,6 +378,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
             right_points.push_back(right_point);
 
         // 디버그용 윈도우 표시 DEBUG
+        leftx_current = left_point.x + 320;
+        rightx_current = right_point.x + 320;
         cv::rectangle(debug_img,
                       cv::Point(leftx_current - search_range / 2, win_y_low),
                       cv::Point(leftx_current + search_range / 2, win_y_high),
@@ -405,8 +407,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     // 이전 프레임 정보와 혼합 (프레임별로 급격한 변화 없애기)
     if (!first_frame_)
     {
-        smoothPoints(left_points, prev_left_points_);
-        smoothPoints(right_points, prev_right_points_);
+        smoothPoints(left_points, prev_left_points_, window_confidences);
+        smoothPoints(right_points, prev_right_points_, window_confidences);
     }
 
     // 웨이포인트 생성
@@ -434,12 +436,12 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     // 현재 프레임 정보 저장
     prev_left_points_ = left_points;
     prev_right_points_ = right_points;
-    prev_confidence_ = window_confidences; // 실제 사용하지는 않음 과거 윈도우별 신뢰도
+    prev_confidence_ = window_confidences;
     first_frame_ = false;
 
     // ----------------------------------------------------------
     // 디버그 발행 (DEBUG)
-    for (const auto &point : raw_waypoints)
+    for (const auto &point : raw_waypoints) // 8개의 점
     {
         cv::circle(debug_img, cv::Point(point.x + 320, 480 - point.y),
                    3, cv::Scalar(0, 255, 0), -1);
@@ -486,7 +488,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     debug_lines_pub_->publish(*lines_msg);
 
     width_plot_pub_->publish(param_width_msg);
-    
+
     RCLCPP_INFO(this->get_logger(), "Expected Lane Width: %d", expected_lane_width_);
     RCLCPP_INFO(this->get_logger(), "Real Lane Width: %d", debug_tmp);
     // }
@@ -512,20 +514,23 @@ cv::Point2i VisionNode::findNearestPoint(const std::vector<cv::Point2i> &points,
     return nearest;
 }
 
-void VisionNode::smoothPoints(std::vector<cv::Point2i> &current_points, const std::vector<cv::Point2i> &prev_points)
+void VisionNode::smoothPoints(std::vector<cv::Point2i> &current_points,
+                              const std::vector<cv::Point2i> &prev_points,
+                              const std::vector<float> &confidences)
 {
     if (prev_points.empty())
         return;
-    const float smooth_factor = 0.3; // 값이 클수록 이전 프레임의 영향이 커짐
-
     for (size_t i = 0; i < current_points.size(); i++)
     {
         cv::Point2i prev = findNearestPoint(prev_points, current_points[i].y);
-        current_points[i].x = static_cast<int>(
-            current_points[i].x * (1 - smooth_factor) + prev.x * smooth_factor);
+
+        // 신뢰도가 높을수록 현재 프레임에 더 높은 가중치
+        float smooth_factor = 0.3f * (1.0f - confidences[i]);
+        // 0.3는 최대 smoothing 정도
+
+        current_points[i].x = static_cast<int>(current_points[i].x * (1 - smooth_factor) + prev.x * smooth_factor);
     }
 }
-
 bool VisionNode::isValidLaneWidth(const cv::Point2i &left, const cv::Point2i &right)
 {
     int width = abs(right.x - left.x);
