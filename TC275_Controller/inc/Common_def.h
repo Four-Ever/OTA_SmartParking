@@ -66,8 +66,15 @@ typedef enum
 {
     OTA_LEFT,
     OTA_RIGHT=3,
-    OTA_SELECT=4
+    OTA_SELECT=4,
+    OTA_NOTHING
 }OtaMode;
+
+typedef enum
+{
+    OTA_CURSOR_LEFT =5,
+    OTA_CURSOR_RIGHT = 12
+}OtaCursor;
 
 typedef enum
 {
@@ -139,6 +146,7 @@ typedef enum
 {
     CTRL_OFF,
     CTRL_ON,
+    CTRL_OTA_CONFIRM,
     CTRL_OTA,
     CTRL_AUTO_PARKING,
     CTRL_TEST_LCD
@@ -151,6 +159,12 @@ typedef enum
 
 }ParkingAction;
 
+
+typedef enum
+{
+    UART_WAIT,
+    UART_PROCESSED
+}ProcessFlag;
 
 typedef enum
 {

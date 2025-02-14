@@ -29,17 +29,20 @@
 
 #include "IfxAsclin_Asc.h"
 
+
+//#define DEBUG_PRINT
+
 typedef enum
 {
     RECEIVE_WAIT,
     RECEIVE_COMPLETED
-}IsDataReceived;
+}DataReceivedFlag;
 
 
 extern uint8 g_txData[];
 extern uint8 g_rxData[];
 
-extern volatile uint8 receive_flag;
+extern volatile DataReceivedFlag receive_flag;
 
 extern uint8 g_rcv_size;
 

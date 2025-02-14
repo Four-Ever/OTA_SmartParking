@@ -66,7 +66,7 @@ uint8 g_rxData[SIZE] = {''};
 /* Size of the message */
 uint8 g_count = 0;
 Ifx_SizeT leng = 32;
-volatile uint8 receive_flag = RECEIVE_WAIT;
+volatile DataReceivedFlag receive_flag = RECEIVE_WAIT;
 
 uint8 g_rcv_size;
 

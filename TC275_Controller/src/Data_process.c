@@ -39,7 +39,6 @@
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 #define BUF_SIZE 32
-#define DEBUG_PRINT
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -139,6 +138,7 @@ void RCV_Command(void)
         {
             msg.cgw_ota_udt_req_msg.msgId = ID_CGW_OTA_UDT_REQ_MSG;
             memcpy(&msg.cgw_ota_udt_req_msg.signal, &g_rxData[1], g_rcv_size);
+            ready_flag.cgw_ota_udt_req_flag = RECEIVE_COMPLETED;
 #ifdef DEBUG_PRINT
             myprintf("ID : 0X%02X ota_update_request : %u\n\r",
                     msg.cgw_ota_udt_req_msg.msgId,
@@ -151,6 +151,7 @@ void RCV_Command(void)
         {
             msg.cgw_ota_udt_state_msg.msgId = ID_CGW_OTA_UDT_STATE_MSG;
             memcpy(&msg.cgw_ota_udt_state_msg.signal, &g_rxData[1], g_rcv_size);
+            ready_flag.cgw_ota_udt_state_flag = RECEIVE_COMPLETED;
 #ifdef DEBUG_PRINT
             myprintf("ID : 0X%02X ota_update_progress : %u\n\r",
                     msg.cgw_ota_udt_state_msg.msgId,
@@ -163,6 +164,7 @@ void RCV_Command(void)
         {
             msg.cgw_prk_status_msg.msgId = ID_CGW_PRK_STATUS_MSG;
             memcpy(&msg.cgw_prk_status_msg.signal, &g_rxData[1], g_rcv_size);
+            ready_flag.cgw_prk_status_flag = RECEIVE_COMPLETED;
 #ifdef DEBUG_PRINT
             myprintf("ID : 0X%02X parking_status : %u\n\r",
                     msg.cgw_prk_status_msg.msgId,
@@ -175,6 +177,7 @@ void RCV_Command(void)
         {
             msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
             memcpy(&msg.cgw_vhc_status_msg.signal, &g_rxData[1], g_rcv_size);
+            ready_flag.cgw_vhc_status_flag = RECEIVE_COMPLETED;
 #ifdef DEBUG_PRINT
             myprintf("ID : 0X%02X vehicle_velocity %u / vehicle_steering_angle : %d / vehicle_transmission %u  \n\r",
                     msg.cgw_vhc_status_msg.msgId,

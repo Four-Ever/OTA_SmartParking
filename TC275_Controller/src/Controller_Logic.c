@@ -42,7 +42,7 @@
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-
+#define RE_REQUEST_TIME 60 // (sec)
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -63,7 +63,11 @@ static char str[20];
 ButtonState g_btn_adc_result = BS_NOTHING;
 sint8 g_SH_adc_result = 0;
 ControllerState g_current_ctrl_state = CTRL_OFF;
-OTAUpdateState g_current_ota_update = OTA_UPDATED;
+OTAUpdateState g_current_ota_update = OTA_ORIGINAL;
+
+
+TruthState g_isreq_reject = false;
+uint32 g_reset_timer = 0;
 
 static DriveDir dir_state = DIR_P;
 
@@ -92,6 +96,79 @@ static void enableUartRxInterrupt() {
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
+void Show_OTA_Confirm_State()
+{
+    LCD1602_clear();
+    LCD1602_1stLine();
+    LCD1602_print(" SUBSCRIBE NOW? ");
+    LCD1602_2ndLine();
+    LCD1602_print("    Y      N    ");
+    static OtaCursor now_cursor = OTA_CURSOR_LEFT;
+    static OtaMode prev_state = OTA_NOTHING;
+    LCD1602_setCursor(2, now_cursor);
+    switch (g_btn_adc_result)
+    {
+        case (OTA_LEFT):
+        {
+            if(prev_state != OTA_LEFT)
+            {
+                prev_state = OTA_LEFT;
+                now_cursor = OTA_CURSOR_LEFT;
+
+                // 명령 송신
+                //msg.move_msg.signal.control_transmission = dir_state;
+            }
+            break;
+        }
+        case (OTA_RIGHT):
+        {
+            if(prev_state != OTA_RIGHT)
+            {
+                prev_state = OTA_RIGHT;
+                now_cursor = OTA_CURSOR_RIGHT;
+
+                // 명령 송신
+                //msg.move_msg.signal.control_transmission = dir_state;
+            }
+            break;
+        }
+        case (OTA_SELECT):
+        {
+            if(prev_state != OTA_SELECT)
+            {
+                prev_state = OTA_SELECT;
+                LCD1602_clear();
+                LCD1602_1stLine();
+                if(now_cursor == OTA_CURSOR_LEFT)
+                {
+                    //yes
+                    LCD1602_print("SERVICE LOADING");
+                    g_current_ctrl_state = CTRL_OTA;
+                    g_isreq_reject = false;
+                }
+                else
+                {
+                    //no
+
+                    LCD1602_print("CANCEL SUBSCRIBE");
+                    g_current_ctrl_state = CTRL_OFF;
+                    g_isreq_reject = true;
+                }
+                LCD1602_2ndLine();
+                LCD1602_loading();
+
+                // 명령 송신
+                //msg.move_msg.signal.control_transmission = dir_state;
+            }
+            break;
+        }
+        default :
+        {
+            prev_state = OTA_NOTHING;
+        }
+    }
+}
+
 void Show_OTA_State()
 {
     LCD1602_clear();
@@ -100,24 +177,39 @@ void Show_OTA_State()
     // 첫째 줄 - 코멘트
     LCD1602_1stLine();
 
-
-    sprintf(str, "SERVICE LOAD");
-
-    LCD1602_print(str);
-    LCD1602_loading();
+    LCD1602_print("OTA UPDATE");
+//    LCD1602_loading();
 
 
     // 둘째 줄
     LCD1602_2ndLine();
 
-    uint8 ota_pct = 50;
+//    uint8 ota_pct = 50;
 
 
-    sprintf(str, "OTA-%02d%%", ota_pct);
+    sprintf(str, "%02d%%[", local_udt_state_sig.ota_update_progress < 100 ?
+            local_udt_state_sig.ota_update_progress : 99);
 
     LCD1602_print(str);
 
-    LCD1602_print_percent_img(ota_pct);
+    LCD1602_print_percent_img(local_udt_state_sig.ota_update_progress);
+    LCD1602_print("]");
+    LCD1602_setCursor(1, 11);
+    LCD1602_loading_nodelay();
+
+    if(local_udt_state_sig.ota_update_progress ==  100 )
+    {
+        g_current_ota_update = OTA_UPDATED;
+
+        LCD1602_clear();
+        LCD1602_1stLine();
+        LCD1602_print("OTA UPDATE DONE!");
+        LCD1602_2ndLine();
+        LCD1602_print("REBOOT");
+        LCD1602_loading();
+
+        g_current_ctrl_state = CTRL_OFF;
+    }
 }
 
 void Show_Drive_State()
@@ -203,8 +295,6 @@ void Show_Drive_State()
                 sprintf(str, "PARKING");
                 LCD1602_print(str);
                 LCD1602_loading();
-
-
 
             }
 
@@ -361,6 +451,13 @@ void Show_Drive_State()
 
 void Show_Off_State()
 {
+    if(local_udt_req_sig.ota_update_request == 1 &&
+            g_current_ota_update == OTA_ORIGINAL &&
+            g_isreq_reject == false)
+    {
+        g_current_ctrl_state = CTRL_OTA_CONFIRM;
+    }
+
     LCD1602_clear();
 
 
@@ -651,18 +748,43 @@ void Control_Current_State()
     {
         // TASK마다 수신 값 최신화
         // 데이터 무결성을 위해, 값 최신화 중 uart수신 인터럽트 비활성화
-        disableUartRxInterrupt();
-        memcpy(&local_udt_req_sig, &msg.cgw_ota_udt_req_msg.signal,sizeof(local_udt_req_sig));
-        memcpy(&local_udt_state_sig, &msg.cgw_ota_udt_state_msg.signal,sizeof(local_udt_state_sig));
-        memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
-        memcpy(&local_vhc_status_sig, &msg.cgw_vhc_status_msg.signal,sizeof(local_vhc_status_sig));
-        enableUartRxInterrupt();
+//        disableUartRxInterrupt();
+        if(ready_flag.cgw_ota_udt_req_flag == RECEIVE_COMPLETED)
+        {
+            memcpy(&local_udt_req_sig, &msg.cgw_ota_udt_req_msg.signal,sizeof(local_udt_req_sig));
+            ready_flag.cgw_ota_udt_req_flag = RECEIVE_WAIT;
+        }
+
+        if(ready_flag.cgw_ota_udt_state_flag == RECEIVE_COMPLETED)
+        {
+            memcpy(&local_udt_state_sig, &msg.cgw_ota_udt_state_msg.signal,sizeof(local_udt_state_sig));
+            ready_flag.cgw_ota_udt_state_flag = RECEIVE_WAIT;
+        }
+
+        if(ready_flag.cgw_prk_status_flag == RECEIVE_COMPLETED)
+        {
+            memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
+            ready_flag.cgw_prk_status_flag = RECEIVE_WAIT;
+        }
+
+        if(ready_flag.cgw_vhc_status_flag == RECEIVE_COMPLETED)
+        {
+            memcpy(&local_vhc_status_sig, &msg.cgw_vhc_status_msg.signal,sizeof(local_vhc_status_sig));
+            ready_flag.cgw_vhc_status_flag = RECEIVE_WAIT;
+        }
+
+//        enableUartRxInterrupt();
     }
 
     {
         // 제어버튼, 조향 데이터 최신화
         get_btn_data();
     }
+
+
+    g_reset_timer++;
+    if(g_reset_timer % (RE_REQUEST_TIME * 10) ==0) // 60초
+        g_isreq_reject = false;
 
 
     switch(g_current_ctrl_state){
@@ -674,6 +796,11 @@ void Control_Current_State()
     case (CTRL_ON):
     {
         Show_Drive_State();
+        break;
+    }
+    case (CTRL_OTA_CONFIRM):
+    {
+        Show_OTA_Confirm_State();
         break;
     }
     case (CTRL_OTA):

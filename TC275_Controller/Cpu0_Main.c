@@ -88,8 +88,7 @@ void core0_main(void)
 
         if(receive_flag == RECEIVE_COMPLETED)
         {
-//            myprintf("HELLO!\n\r");
-//            if(g_rxData[0]!='\0')
+
             Command[ORDER_RECEIVE]();
             receive_flag = RECEIVE_WAIT;
         }
