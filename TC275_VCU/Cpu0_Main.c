@@ -7,8 +7,6 @@
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Ifx_Types.h"
 #include "IfxCpu.h"
-#include "IfxGpt12_IncrEnc.h"
-#include "IfxCpu.h"
 //#include "Cpu/Irq/IfxCpu_Irq.h"
 //#include "IfxCpu_Irq.h"
 
@@ -20,9 +18,6 @@
 #include "Ifx_DateTime.h"
 #include "SysSe/Bsp/Bsp.h"
 
-#include "IfxGtm_reg.h"
-#include "GTM_ATOM_PWM.h"
-
 #include "STM_Interrupt.h"
 
 #include "OurCan.h"
@@ -30,25 +25,13 @@
 #include "Driver_Stm.h"
 #include "ASCLIN_Shell_UART.h"
 #include "servo.h"
+#include "EncMotor.h"
 
 //#include "Ifx_IntPrioDef.h"
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-#define WAIT_TIME   10              /* Number of milliseconds to wait between each duty cycle change                */
-
-// Interrupt priority definitions
-#define ISR_PRIORITY_INCRENC_ZERO 6
-
-// 엔코더 설정
-#define PULSES_PER_REV 12     // 한 채널당 펄스 수
-
-// 핀 정의
-#define PWMA_PIN &MODULE_P02,1   // PWM 핀 (P2.1)
-#define BRAKEA_PIN &MODULE_P02,7 // 브레이크 핀 (P2.7)
-#define DIRA_PIN &MODULE_P10,1   // 방향 제어 핀 (P10.1)
-
 //#define motor_Test //엔코더 거리 확인
 //#define putty_Test //putty uart 메세지 확인
 //#define tuning_Test //시뮬링크에서 pid 계수 조정 및 스코프 확인
@@ -56,6 +39,7 @@
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -115,30 +99,16 @@ typedef struct
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 IfxCpu_syncEvent g_cpuSyncEvent = 0;
 
-IfxGpt12_IncrEnc_Config gpt12Config;
-IfxGpt12_IncrEnc gpt12;
-
-const uint8 CPR = (PULSES_PER_REV * 4);  // 4체배시 한바퀴 펄스 수
-
-volatile uint8 motor_speed = 0;    // 0~100
-volatile boolean motor_dir = 0;    // 0:정방향, 1:역방향
-volatile boolean motor_enable = 0;  // 0:제동, 1:해제
-
-volatile float32 Kp_s = 1.55f, Ki_s = 2.65f, Kd_s = 0.001f;
-volatile float32 RPM_CMD1=0;
-
 VehicleStatus vehicle_status = {system_mode, 0.0f, 0.0f, 0, 0,
                                     Parking, parked, engine_off};
 Taskcnt stTestCnt;
-char cEnc_count[16];
-char str[5];
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 void make_can_message(void);
-uint8 round_to_integer(float num);
-void update_vehicle_status(void);
+sint16 round_to_integer(float32 num);
+void update_vehicle_velocity(void);
 void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src);
 void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src);
 void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src);
@@ -160,107 +130,8 @@ void AppTask5000ms(void);
 //    IfxGpt12_IncrEnc_onZeroIrq(&gpt12Config);
 //}
 
-void initIncrEnc(void)
-{
-    // Initialize global clocks
-    IfxGpt12_enableModule(&MODULE_GPT120);
-    IfxGpt12_setGpt1BlockPrescaler(&MODULE_GPT120, IfxGpt12_Gpt1BlockPrescaler_8);
-    IfxGpt12_setGpt2BlockPrescaler(&MODULE_GPT120, IfxGpt12_Gpt2BlockPrescaler_4);
-
-    // Create module config
-//    IfxGpt12_IncrEnc_Config gpt12Config;
-    IfxGpt12_IncrEnc_initConfig(&gpt12Config, &MODULE_GPT120);
-
-    // Configure encoder parameters
-    gpt12Config.base.offset               = 100;                    // Initial position offset
-    gpt12Config.base.reversed             = FALSE;               // Count direction not reversed
-    gpt12Config.base.resolution           = PULSES_PER_REV;                // Encoder resolution
-    gpt12Config.base.periodPerRotation    = 1;                   // Number of periods per rotation
-    gpt12Config.base.resolutionFactor     = IfxStdIf_Pos_ResolutionFactor_fourFold;  // Quadrature mode
-    gpt12Config.base.updatePeriod         = 0.001;              // 1ms update period
-    gpt12Config.base.speedModeThreshold   = 100;                // Threshold for speed calculation mode
-    gpt12Config.base.minSpeed             = 10;                 // Minimum speed in rpm
-    gpt12Config.base.maxSpeed             = 5000;                // Maximum speed in rpm
-
-    // Configure pins
-    //gpt12Config.pinA = &IfxGpt120_T2INA_P00_7_IN;     // Encoder A signal -> T3IN
-    //gpt12Config.pinB = &IfxGpt120_T2EUDA_P00_8_IN;    // Encoder B signal -> T3EUD
-    gpt12Config.pinB = &IfxGpt120_T2INA_P00_7_IN;     // Encoder A signal -> T3IN
-    gpt12Config.pinA = &IfxGpt120_T2EUDA_P00_8_IN;    // Encoder B signal -> T3EUD
-
-    gpt12Config.pinZ = NULL;                          // No Z signal used
-    gpt12Config.pinMode = IfxPort_InputMode_pullDown;   // Use internal pullup
-
-    // Configure interrupts
-    gpt12Config.zeroIsrPriority = ISR_PRIORITY_INCRENC_ZERO;
-    gpt12Config.zeroIsrProvider = IfxSrc_Tos_cpu0;
-
-    // Enable speed filter
-    gpt12Config.base.speedFilterEnabled = TRUE;
-    gpt12Config.base.speedFilerCutOffFrequency = gpt12Config.base.maxSpeed / 2 * IFX_PI * 2;
-
-    // Initialize module
-    IfxGpt12_IncrEnc_init(&gpt12, &gpt12Config);
-
-}
-
-
-// 모터 제어 함수
-void setMotorControl(uint8 direction, uint8 enable)
-{
-    // 브레이크 설정
-    if (enable == 0)
-    {
-        IfxPort_setPinState(BRAKEA_PIN, IfxPort_State_high); // 브레이크 활성화
-        // PWM 출력 중지
-        GTM_TOM0_TGC0_GLB_CTRL.B.UPEN_CTRL1 = 0;
-        return;
-    }
-    else
-    {
-        IfxPort_setPinState(BRAKEA_PIN, IfxPort_State_low); // 브레이크 비활성화
-        GTM_TOM0_TGC0_GLB_CTRL.B.UPEN_CTRL1 = 2;
-    }
-
-    // 방향 설정
-    if (direction == 0)
-    {
-        IfxPort_setPinState(DIRA_PIN, IfxPort_State_low); // 정방향
-    }
-    else
-    {
-        IfxPort_setPinState(DIRA_PIN, IfxPort_State_high); // 역방향
-    }
-
-
-}
-
-// 핀 초기화
-void initPins(void)
-{
-    // 방향 핀 초기화
-    IfxPort_setPinMode(DIRA_PIN, IfxPort_Mode_outputPushPullGeneral);
-    IfxPort_setPinState(DIRA_PIN, IfxPort_State_low);
-
-    // 브레이크 핀 초기화
-    IfxPort_setPinMode(BRAKEA_PIN, IfxPort_Mode_outputPushPullGeneral);
-    IfxPort_setPinState(BRAKEA_PIN, IfxPort_State_low);
-}
-
-float32 speed;
-sint32 rawPosition;
-IfxStdIf_Pos_Dir direction;
-
 
 float g_angle;
-
-void Encoder_update(void)
-{
-    IfxGpt12_IncrEnc_update(&gpt12);
-    speed = IfxGpt12_IncrEnc_getSpeed(&gpt12);
-    rawPosition = IfxGpt12_IncrEnc_getRawPosition(&gpt12);
-    direction = IfxGpt12_IncrEnc_getDirection(&gpt12);
-}
 
 int core0_main(void)
 {
@@ -285,8 +156,7 @@ int core0_main(void)
 
     // Initialize peripherals
     initIncrEnc();
-//    initLED();
-//    initGpt12Timer();
+
     initGtmATomPwm();
     initPins();
     initPeripherals(); /* Initialize the STM module */
@@ -297,9 +167,7 @@ int core0_main(void)
     Driver_Stm_Init();
 
     initServo(); // D6
-    //setServoAngle(20.0f);
 
-    //motor_speed = 15;    // 0~100
     motor_dir = 0;    // 0:정방향, 1:역방향
     motor_enable = 0;  // 0:제동, 1:해제
 
@@ -350,7 +218,7 @@ int core0_main(void)
                 vehicle_status.user_mode = user_mode;
                 if (db_msg.CGW_Move.control_accel == 1) // accel
                 {
-                    vehicle_status.target_rpm += 100.0f; // period 10ms 기준 1초 동안 누르면, 1000rpm 목표
+                    vehicle_status.target_rpm += 100.0f; // period 100ms 기준 1초 동안 누르면, 1000rpm 목표
 
                     if (vehicle_status.target_rpm >= 3000.0f)
                     {
@@ -390,44 +258,69 @@ int core0_main(void)
 }
 
 
-//void make_can_message(void)
-//{
-//    update_vehicle_status();
-//
-//    update_message_vehicle_status(&db_msg.VCU_Vehicle_Status, &vehicle_status);
-//    output_message(&db_msg.VCU_Vehicle_Status, VCU_Vehicle_Status_ID);
-//
-//    update_message_parking_status(&db_msg.VCU_Parking_Status, &vehicle_status);
-//    output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
-//
-//    update_message_engine_status(&db_msg.VCU_Vehicle_Engine_Status, &vehicle_status);
-//    output_message(&db_msg.VCU_Vehicle_Engine_Status, VCU_Vehicle_Engine_Status_ID);
-//}
-//
-//uint8 round_to_integer(float num)
-//{
-//    if (num >= 0)
-//}
-//
-//void update_vehicle_status(void)
-//{
-//
-//    if (motor_speed_rpm >= 0)
-//    {
-//        vehicle_status.velocity =
-//    }
-//    else
-//    {
-//
-//    }
-//
-//    vehicle_status.velocity = motor_speed_rpm;
-//
-//    //vehicle_status.steering_angle -> 값에 따라 바로 바뀌므로 값을 받을 때마다 갱신
-//    vehicle_status.transmission =
-//    vehicle_status.parking_status =
-//    vehicle_status.engine_state =
-//}
+void make_can_message(void)
+{
+    update_vehicle_velocity();
+
+    update_message_vehicle_status(&db_msg.VCU_Vehicle_Status, &vehicle_status);
+    output_message(&db_msg.VCU_Vehicle_Status, VCU_Vehicle_Status_ID);
+
+    update_message_parking_status(&db_msg.VCU_Parking_Status, &vehicle_status);
+    output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
+
+    update_message_engine_status(&db_msg.VCU_Vehicle_Engine_Status, &vehicle_status);
+    output_message(&db_msg.VCU_Vehicle_Engine_Status, VCU_Vehicle_Engine_Status_ID);
+}
+
+
+void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src)
+{
+    dest->vehicle_velocity = vehicle_status.velocity;
+    dest->vehicle_steering_angle = (sint8)vehicle_status.servo_angle;
+    dest->vehicle_transmission = vehicle_status.transmission;
+}
+
+
+void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src)
+{
+    dest->parking_status = vehicle_status.parking_status;
+}
+
+
+void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src)
+{
+    dest->vehicle_engine_status = vehicle_status.engine_state;
+}
+
+
+sint16 round_to_integer(float32 num)
+{
+    sint16 res;
+    if (num >= 0)
+    {
+        res = (sint16)(num + 0.5f);
+    }
+    else
+    {
+        res = (sint16)(num - 0.5f);
+    }
+    return res;
+}
+
+void update_vehicle_velocity(void)
+{
+    float32 value = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
+    sint16 s16_velocity;
+    uint16 u16_velocity;
+
+    value /= 10; // 7bit로 보내주기 위함
+
+    s16_velocity = round_to_integer(value);
+    u16_velocity = s16_velocity >= 0  ? s16_velocity : (s16_velocity * -1);
+    u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
+
+    vehicle_status.velocity = (uint8)u16_velocity; // (실제 속도 / 10) [mm/0.1s]
+}
 
 
 void AppTask1ms(void)
@@ -461,11 +354,10 @@ void AppTask10ms(void)
     RPM_CMD1 = 1500.0f;
 
     myprintf("rpm : %d\r\n", s32_motor_speed_rpm);
-
 #endif
 
 #if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 주행 코드
-    //make_can_message();
+    make_can_message();
 #endif
 }
 
@@ -475,17 +367,20 @@ void AppTask100ms(void)
     stTestCnt.u32nuCnt100ms++;
 
 #if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 주행 코드
-    if (vehicle_status.user_mode == TRUE)
+    if (vehicle_status.engine_state == engine_on)
     {
-        if (vehicle_status.transmission == Driving)
+        if (vehicle_status.user_mode == TRUE)
         {
-            RPM_CMD1 = vehicle_status.target_rpm;
+            if (vehicle_status.transmission == Driving)
+            {
+                RPM_CMD1 = vehicle_status.target_rpm;
+            }
+            else if (vehicle_status.transmission == Reverse)
+            {
+                RPM_CMD1 = vehicle_status.target_rpm * -1;
+            }
+            setServoAngle(vehicle_status.servo_angle);
         }
-        else if (vehicle_status.transmission == Reverse)
-        {
-            RPM_CMD1 = vehicle_status.target_rpm * -1;
-        }
-        setServoAngle(vehicle_status.servo_angle);
     }
 #endif
 }
@@ -501,11 +396,8 @@ void AppTask5000ms(void)
     stTestCnt.u32nuCnt5000ms++;
 }
 
-
 void AppScheduling(void)
 {
-
-
     if (stSchedulingInfo.u8nuScheduling1msFlag == 1u)
     {
         stSchedulingInfo.u8nuScheduling1msFlag = 0u;

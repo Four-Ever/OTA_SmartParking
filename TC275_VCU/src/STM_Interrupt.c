@@ -44,6 +44,27 @@
 IfxStm_CompareConfig g_STMConf;                                 /* STM configuration structure                      */
 Ifx_TickTime g_ticksFor1ms;                                   /* Variable to store the number of ticks to wait    */
 
+extern IfxGpt12_IncrEnc_Config gpt12Config;
+extern uint8 CPR;
+sint32 Enc_count_new = 0;
+sint32 Enc_count_old = 0;
+float32 Enc_count_diff = 0;
+float32 motor_speed_rpm=0;
+
+sint32 s32_motor_speed_rpm=0;
+sint32 s32_DisSum = 0;
+sint32 i1 = 0;
+
+PIDREG3 speed_pid = PIDREG3_DEFAULTS;
+
+float32 s_T_samp= 0.001*TIMER_INT_TIME;
+float32 RPM_max = 5000, RPM_min=-5000;
+
+//float32 Kp_s,Ki_s,Kd_s;
+//float32 RPM_CMD1;
+
+
+sint32 Enc_count;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -67,26 +88,6 @@ void move_to_tardis(void);
  */
 IFX_INTERRUPT(isrSTM, 0, ISR_PRIORITY_STM);
 
-extern IfxGpt12_IncrEnc_Config gpt12Config;
-extern uint8 CPR;
-sint32 Enc_count_new = 0;
-sint32 Enc_count_old = 0;
-float32 Enc_count_diff = 0;
-float32 motor_speed_rpm=0;
-
-sint32 s32_motor_speed_rpm=0;
-sint32 s32_DisSum = 0;
-sint32 i1 = 0;
-
-PIDREG3 speed_pid = PIDREG3_DEFAULTS;
-extern float32 Kp_s,Ki_s,Kd_s;
-float32 s_T_samp= 0.001*TIMER_INT_TIME;
-float32 RPM_max = 5000, RPM_min=-5000;
-extern float32 RPM_CMD1;
-
-
-sint32 Enc_count;
-
 //void pid_reset(PIDREG3 *v);
 
 void RPM_cal(void)
@@ -94,21 +95,35 @@ void RPM_cal(void)
     Encoder_update();   //지워도 되는지 확인할것
     Enc_count_new = gpt12Config.module->T2.U;
 
-    if (Enc_count_new > 32768)
+    if (abs(Enc_count_new - Enc_count_old) > 32768)
     {
-        Enc_count_new = Enc_count_new - 65535;
+        // 오버, 언더플로우 발생
+        if (Enc_count_new > Enc_count_old)
+        {
+            // 언더플로우 (역방향)
+            Enc_count_diff = (float32)((Enc_count_new - 65535) - Enc_count_old);
+        }
+        else
+        {
+            // 오버플로우 (정방향)
+            Enc_count_diff = (float32)((65535 - Enc_count_old) + Enc_count_new + 1);
+        }
     }
-    Enc_count_diff = (float32)(Enc_count_new - Enc_count_old);
-
+    else
+    {
+        // 정상적일 때,
+        Enc_count_diff = (float32)(Enc_count_new - Enc_count_old);
+    }
     speed_pid.DisSum += Enc_count_diff * tick_dis;
     s32_DisSum = (sint32)(speed_pid.DisSum * 10000);
 
+    //s32_DisSum = (sint32)(Enc_count_new);
+
     motor_speed_rpm = Enc_count_diff/(float32)CPR/(float32)(TIMER_INT_TIME*0.001)*60.0f;
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
+
     Enc_count_old = Enc_count_new;
 }
-
-
 
 
 void PI_const_update(void)
