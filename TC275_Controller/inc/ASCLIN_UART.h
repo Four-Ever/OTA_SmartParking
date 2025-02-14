@@ -29,12 +29,19 @@
 
 #include "IfxAsclin_Asc.h"
 
+typedef enum
+{
+    RECEIVE_WAIT,
+    RECEIVE_COMPLETED
+}IsDataReceived;
+
+
 extern uint8 g_txData[];
 extern uint8 g_rxData[];
 
-extern uint8 g_ascTxBuffer[64 + sizeof(Ifx_Fifo) + 8];
-extern uint8 g_ascRxBuffer[64 + sizeof(Ifx_Fifo) + 8];
-extern uint8 receive_complete;
+extern volatile uint8 receive_flag;
+
+extern uint8 g_rcv_size;
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
@@ -42,6 +49,6 @@ extern uint8 receive_complete;
 void init_ASCLIN_UART(void);                 /* Initialization function   */
 //void send_receive_ASCLIN_UART_message(void); /* Send and receive function */
 void Send_Message(uint8 *tx_Data, Ifx_SizeT size);
-void Get_Message(uint8 *tx_Data, Ifx_SizeT size);
+
 
 #endif /* ASCLIN_UART_H_ */

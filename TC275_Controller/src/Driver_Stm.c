@@ -29,7 +29,8 @@ typedef struct
 /*Variable*/ 
 /***********************************************************************/
 App_Stm g_Stm; /**< \brief Stm global data */
-uint32 u32nuCounter1ms = 0u;
+//uint32 u32nuCounter1ms = 0u;
+uint32 u32nuCounter10ms = 0u;
 SchedulingFlag stSchedulingInfo;
 
 /***********************************************************************/
@@ -49,7 +50,7 @@ void Driver_Stm_Init(void)
 
     g_Stm.stmConfig.triggerPriority = 100u;
     g_Stm.stmConfig.typeOfService   = IfxSrc_Tos_cpu0;
-    g_Stm.stmConfig.ticks           = 100000u;
+    g_Stm.stmConfig.ticks           = 1000000u;
 
     IfxStm_initCompare(g_Stm.stmSfr, &g_Stm.stmConfig);
 
@@ -62,31 +63,49 @@ void STM_Int0Handler(void)
     IfxCpu_enableInterrupts();    
     
     IfxStm_clearCompareFlag(g_Stm.stmSfr, g_Stm.stmConfig.comparator);
-    IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, 100000u);
+    IfxStm_increaseCompare(g_Stm.stmSfr, g_Stm.stmConfig.comparator, 1000000u);
 
-    u32nuCounter1ms++;
+    u32nuCounter10ms++;
 
-    if((u32nuCounter1ms % 1) == 0u)
-    {
-        stSchedulingInfo.u8nuScheduling1msFlag = 1u;
-    }  
-
-    if((u32nuCounter1ms % 10) == 0u)
+//    if((u32nuCounter1ms % 1) == 0u)
+//    {
+//        stSchedulingInfo.u8nuScheduling1msFlag = 1u;
+//    }
+//
+//    if((u32nuCounter1ms % 10) == 0u)
+//    {
+//        stSchedulingInfo.u8nuScheduling10msFlag = 1u;
+//    }
+//
+//    if((u32nuCounter1ms % 100) == 0u)
+//    {
+//        stSchedulingInfo.u8nuScheduling100msFlag = 1u;
+//    }
+//    if((u32nuCounter1ms % 1000) == 0u)
+//    {
+//        stSchedulingInfo.u8nuScheduling1000msFlag = 1u;
+//    }
+//    if(u32nuCounter1ms >= 10000000 )
+//     {
+//            u32nuCounter1ms = 0;
+//     }
+    if((u32nuCounter10ms % 1) == 0u)
     {
         stSchedulingInfo.u8nuScheduling10msFlag = 1u;
     }
 
-    if((u32nuCounter1ms % 100) == 0u)
+    if((u32nuCounter10ms % 10) == 0u)
     {
         stSchedulingInfo.u8nuScheduling100msFlag = 1u;
-    }    
-    if((u32nuCounter1ms % 1000) == 0u)
+    }
+
+    if((u32nuCounter10ms % 100) == 0u)
     {
         stSchedulingInfo.u8nuScheduling1000msFlag = 1u;
     }
 
-    if(u32nuCounter1ms >= 10000000 ){
-        u32nuCounter1ms = 0;
+    if(u32nuCounter10ms >= 10000000 ){
+        u32nuCounter10ms = 0;
     }
 }
 

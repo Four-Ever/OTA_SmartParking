@@ -118,11 +118,63 @@ typedef struct
 
 typedef struct
 {
+    uint8 ota_update_request:1;
+
+}OUR_signal;
+typedef struct
+{
+    uint8 msgId;  // 메시지 ID (1바이트)
+    OUR_signal signal;
+
+}CGW_OTA_Update_Request;
+
+typedef struct
+{
+    uint8 ota_update_progress:8;
+}OUS_signal;
+typedef struct
+{
+    uint8 msgId;  // 메시지 ID (1바이트)
+    OUS_signal signal;
+
+}CGW_OTA_Update_State_Msg;
+
+typedef struct
+{
+    uint8 parking_status:2;
+
+}PS_signal;
+typedef struct
+{
+    uint8 msgId;  // 메시지 ID (1바이트)
+    PS_signal signal;
+
+}CGW_Parking_Status_Msg;
+
+typedef struct
+{
+    uint8 vehicle_velocity:7;
+    sint8 vehicle_steering_angle:7;
+    uint8 vehicle_transmission:2;
+}VS_signal;
+typedef struct
+{
+    uint8 msgId;  // 메시지 ID (1바이트)
+    VS_signal signal;
+
+}CGW_Vehicle_Status_Msg;
+
+typedef struct
+{
   CTRL_Engine engine_msg;
   CTRL_Move move_msg;
   CTRL_Auto_Parking_Request auto_park_req_msg;
   CTRL_OTA_Update_Confirm ota_udt_cfm_msg;
   CTRL_Off_Request off_req_msg;
+  CGW_OTA_Update_Request cgw_ota_udt_req_msg;
+  CGW_OTA_Update_State_Msg cgw_ota_udt_state_msg;
+  CGW_Parking_Status_Msg cgw_prk_status_msg;
+  CGW_Vehicle_Status_Msg cgw_vhc_status_msg;
 }Message;
 
 extern Message msg;

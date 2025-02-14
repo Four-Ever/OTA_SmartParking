@@ -64,64 +64,6 @@ void byteArrayToStruct(uint8 *buffer, void *certain_msg, unsigned long long size
 
 
 
-//// 패킹된 데이터를 저장할 구조체
-//typedef struct {
-//    uint8 bytes[4];  // 11비트 총 사용 (2바이트 필요)
-//} packed_data;
-//
-//// 원본 데이터 설정/가져오기 위한 매크로
-//#define GET_BIT(data, pos) (((data) >> (pos)) & 0x01)
-//#define SET_BIT(data, pos, val) ((data) = ((data) & ~(1UL << (pos))) | ((val) << (pos)))
-//
-//// 비트 패킹 함수
-//packed_data no_padding(const CTRL_Move *msg) {
-//    packed_data result = {0};
-//
-//    result[1] = msg->msgId;
-//
-//    // accel [0:0]
-//    SET_BIT(result.bytes[2], 0, msg->signal.control_accel);
-//
-//    // brake [1:1]
-//    SET_BIT(result.bytes[2], 1, msg->signal.control_brake);
-//
-//    // steering_angle [8:2] (7bits)
-//    uint8_t steering = (uint8_t)(msg->signal.control_steering_angle & 0x7F);
-//    result.bytes[2] |= (steering << 2);
-//    result.bytes[3] |= (steering >> 6);
-//
-//    // transmission [10:9] (2bits)
-//    result.bytes[3] |= ((msg->signal.control_transmission & 0x03) << 1);
-//
-//    return result;
-//}
-//
-//// 패킹된 데이터를 원래 구조체로 변환
-//CTRL_Move unpack_data(packed_data packed) {
-//    CTRL_Move msg = {0};
-//
-//    // accel [0:0]
-//    msg.signal.control_accel = GET_BIT(packed.bytes[2], 0);
-//
-//    // brake [1:1]
-//    msg.signal.control_brake = GET_BIT(packed.bytes[0], 1);
-//
-//    // steering_angle [8:2] (7bits)
-//    msg.signal.control_steering_angle = (sint8)(
-//        ((packed.bytes[0] >> 2) & 0x3F) |  // 하위 6비트
-//        ((packed.bytes[1] & 0x01) << 6)     // 최상위 1비트
-//    );
-//
-//    // transmission [10:9] (2bits)
-//    msg.signal.control_transmission = (packed.bytes[1] >> 1) & 0x03;
-//
-//    return msg;
-//}
-//
-//// 패킹된 데이터 전송을 위한 헬퍼 함수
-//void send_packed_data(packed_data data) {
-//    // 여기에 실제 전송 코드 구현
-//    // 예: UART나 CAN으로 data.bytes 전송
-//}
+
 
 /*********************************************************************************************************************/

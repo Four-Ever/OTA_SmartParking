@@ -33,13 +33,10 @@
 #include "IfxPort.h"
 #include "IfxPort_PinMap.h"
 #include "Ifx_Types.h"
-#include "IfxGtm_Tim.h"   // GTM 타이머 관련 라이브러리
-#include "IfxCpu.h"
-#include "IfxVadc.h"
-#include "IfxVadc_Adc.h"
-#include "Delay.h"
+
+//#include "IfxCpu.h"
 #include "Common_def.h"
-#include "Controller_Logic.h"
+
 
 /*********************************************************************************************************************/
 

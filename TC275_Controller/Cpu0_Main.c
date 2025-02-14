@@ -34,10 +34,14 @@
 #include "Driver_Stm.h"
 #include "ASCLIN_Shell_UART.h"
 #include "ASCLIN_UART.h"
+#include "Message.h"
+#include "Data_process.h"
+
+
 
 typedef struct
 {
-    uint32 u32nuCnt1ms;
+//    uint32 u32nuCnt1ms;
     uint32 u32nuCnt10ms;
     uint32 u32nuCnt100ms;
     uint32 u32nuCnt1000ms;
@@ -45,7 +49,7 @@ typedef struct
 } Taskcnt;
 
 void AppScheduling(void);
-void AppTask1ms(void);
+//void AppTask1ms(void);
 void AppTask10ms(void);
 void AppTask100ms(void);
 void AppTask1000ms(void);
@@ -71,44 +75,42 @@ void core0_main(void)
     Driver_Stm_Init();
 
     init_LCD();
-    init_Steering_Wheel();
-//    initPeripherals();
-//    initShellInterface();
-    init_ASCLIN_UART();
 
+//    initPeripherals();
+#ifdef DEBUG_PRINT
+    initShellInterface();
+#endif
+    init_ASCLIN_UART();
     while(1)
     {
 //        runShellInterface();
         AppScheduling();
 
-        if(receive_complete == 1)
+        if(receive_flag == RECEIVE_COMPLETED)
         {
-            receive_complete = 0;
-            Test_Command();
+//            myprintf("HELLO!\n\r");
+//            if(g_rxData[0]!='\0')
+            Command[ORDER_RECEIVE]();
+            receive_flag = RECEIVE_WAIT;
         }
 
     }
 }
 
-void AppTask1ms(void)
-{
-    stTestCnt.u32nuCnt1ms++;
-    {
-
-    }
-}
+//void AppTask1ms(void)
+//{
+//    stTestCnt.u32nuCnt1ms++;
+//    {
+//
+//    }
+//}
 
 void AppTask10ms(void)
 {
     stTestCnt.u32nuCnt10ms++;
 
     {
-        {
-            if(msg.engine_msg.signal.control_engine == 1)
-            {
-                Command[ORDER_MOVE]();
-            }
-        }
+
 //        send_receive_ASCLIN_UART_message(); // 10ms도 가능!
         //transferData(); // 2월 7일 데이터 설계 (SPI, WSC) 통일하면 좋음
     }
@@ -117,11 +119,31 @@ void AppTask10ms(void)
 void AppTask100ms(void)
 {
     stTestCnt.u32nuCnt100ms++;
+
     {
 
         Control_Current_State();
+#ifdef DEBUG_PRINT
+//        myprintf("%d\n\r",
+//                msg.move_msg.signal.control_transmission);
+//                msg.off_req_msg.signal.auto_exit_request);
+#endif
+#ifdef PERIOD_VER
+        Command[ORDER_ENGINE]();
+        Command[ORDER_MOVE]();
+        Command[ORDER_OFF_REQ]();
+        Command[ORDER_OTA_UDT_CFM]();
+        Command[ORDER_AUTO_PRK_REQ]();
+#endif
+#ifndef PERIOD_VER
+        if(msg.engine_msg.signal.control_engine == 1)
+        {
+            Command[ORDER_MOVE]();
+        }
+#endif
 
     }
+
 }
 
 void AppTask1000ms(void)
@@ -129,6 +151,7 @@ void AppTask1000ms(void)
 
     stTestCnt.u32nuCnt1000ms++;
     {
+
 //        send_receive_ASCLIN_UART_message();
 //        send_receive_ASCLIN_UART_message();
     }
@@ -137,17 +160,18 @@ void AppTask1000ms(void)
 void AppScheduling(void)
 {
 
-    if (stSchedulingInfo.u8nuScheduling1msFlag == 1u)
+//    if (stSchedulingInfo.u8nuScheduling1msFlag == 1u)
+//    {
+//        stSchedulingInfo.u8nuScheduling1msFlag = 0u;
+//
+//        AppTask1ms();
+//
+//        if (stSchedulingInfo.u8nuScheduling10msFlag == 1u)
+//        {
+    if (stSchedulingInfo.u8nuScheduling10msFlag == 1u)
     {
-        stSchedulingInfo.u8nuScheduling1msFlag = 0u;
-
-        AppTask1ms();
-
-        if (stSchedulingInfo.u8nuScheduling10msFlag == 1u)
-        {
-            stSchedulingInfo.u8nuScheduling10msFlag = 0u;
-            AppTask10ms();
-        }
+        stSchedulingInfo.u8nuScheduling10msFlag = 0u;
+        AppTask10ms();
 
         if (stSchedulingInfo.u8nuScheduling100msFlag == 1u)
         {

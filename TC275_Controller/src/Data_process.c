@@ -31,6 +31,7 @@
 #include "Data_process.h"
 #include "ASCLIN_Shell_UART.h"
 #include "Message.h"
+#include "ASCLIN_UART.h"
 
 #include <string.h>
 /*********************************************************************************************************************/
@@ -38,17 +39,21 @@
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 #define BUF_SIZE 32
+#define DEBUG_PRINT
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 Commandfp Command[] = {
     Engine_Command,          // ORDER_ENGINE
-    Move_Command,  // ORDER_MOVE
-    APR_Command,          // ORDER_AUTO_PRK_REQ
-    OUC_Command,          // ORDER_OTA_UDT_CFM
-    OR_Command           // ORDER_OFF_REQ
+    Move_Command,            // ORDER_MOVE
+    APR_Command,             // ORDER_AUTO_PRK_REQ
+    OUC_Command,             // ORDER_OTA_UDT_CFM
+    OR_Command,              // ORDER_OFF_REQ
+    RCV_Command,             //ORDER_RECEIVE
 };
+
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -80,11 +85,6 @@ void Move_Command(void)
     txData[0] = (uint8) dlc;
     txData[1] = msg.move_msg.msgId;
 
-//    //test
-//    msg.move_msg.signal.control_accel = 1;
-//    msg.move_msg.signal.control_brake = 1;
-//    msg.move_msg.signal.control_steering_angle = -64;
-//    msg.move_msg.signal.control_transmission = 3;
 
     memcpy(&txData[2], &msg.move_msg.signal, dlc);
 
@@ -126,11 +126,79 @@ void OR_Command(){
     Send_Message(txData,dlc+2);
 }
 
+void RCV_Command(void)
+{
+
+    uint8 id = g_rxData[0];
+//    for(int i =0; i< g_count-1;i++)
+//        myprintf("%d : 0X%02X\t",i, g_rxData[i]);
+//    myprintf("\n\r");
+    switch(id)
+    {
+        case (ID_CGW_OTA_UDT_REQ_MSG):
+        {
+            msg.cgw_ota_udt_req_msg.msgId = ID_CGW_OTA_UDT_REQ_MSG;
+            memcpy(&msg.cgw_ota_udt_req_msg.signal, &g_rxData[1], g_rcv_size);
+#ifdef DEBUG_PRINT
+            myprintf("ID : 0X%02X ota_update_request : %u\n\r",
+                    msg.cgw_ota_udt_req_msg.msgId,
+                    msg.cgw_ota_udt_req_msg.signal.ota_update_request);
+#endif
+            break;
+
+        }
+        case (ID_CGW_OTA_UDT_STATE_MSG):
+        {
+            msg.cgw_ota_udt_state_msg.msgId = ID_CGW_OTA_UDT_STATE_MSG;
+            memcpy(&msg.cgw_ota_udt_state_msg.signal, &g_rxData[1], g_rcv_size);
+#ifdef DEBUG_PRINT
+            myprintf("ID : 0X%02X ota_update_progress : %u\n\r",
+                    msg.cgw_ota_udt_state_msg.msgId,
+                    msg.cgw_ota_udt_state_msg.signal.ota_update_progress);
+#endif
+            break;
+
+        }
+        case (ID_CGW_PRK_STATUS_MSG):
+        {
+            msg.cgw_prk_status_msg.msgId = ID_CGW_PRK_STATUS_MSG;
+            memcpy(&msg.cgw_prk_status_msg.signal, &g_rxData[1], g_rcv_size);
+#ifdef DEBUG_PRINT
+            myprintf("ID : 0X%02X parking_status : %u\n\r",
+                    msg.cgw_prk_status_msg.msgId,
+                    msg.cgw_prk_status_msg.signal.parking_status);
+#endif
+            break;
+
+        }
+        case (ID_CGW_VHC_STATUS_MSG):
+        {
+            msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
+            memcpy(&msg.cgw_vhc_status_msg.signal, &g_rxData[1], g_rcv_size);
+#ifdef DEBUG_PRINT
+            myprintf("ID : 0X%02X vehicle_velocity %u / vehicle_steering_angle : %d / vehicle_transmission %u  \n\r",
+                    msg.cgw_vhc_status_msg.msgId,
+                    msg.cgw_vhc_status_msg.signal.vehicle_velocity,
+                    msg.cgw_vhc_status_msg.signal.vehicle_steering_angle,
+                    msg.cgw_vhc_status_msg.signal.vehicle_transmission
+                    );
+#endif
+            break;
+
+        }
+        default:
+        {
+            myprintf(" 수신 FAIL\n\r");
+        }
+    }
+
+
+
+}
+
 void Test_Command(void)
 {
-    uint8 rxData[BUF_SIZE];
-    sint16 dlc =  5;
-    Get_Message(rxData,dlc);
+
 }
 
 /*********************************************************************************************************************/

@@ -29,9 +29,13 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include <stdio.h>
-#include "Common_def.h"
-#include "Delay.h"
 #include "TC275_LCD_16x2.h"
+#include "IfxVadc.h"
+#include "IfxVadc_Adc.h"
+#include "Delay.h"
+#include "IfxGtm_Tim.h"   // GTM 타이머 관련 라이브러리
+//#include "Common_def.h"
+#include "Controller_Logic.h"
 
 /*********************************************************************************************************************/
 
@@ -458,6 +462,7 @@ void init_LCD()
     // FOR 103RB LCD!!!
     init_GPIO_LCD();
     init_Btn_Adc();
+    init_Steering_Wheel();
     init_Controller();
     LCD1602_Begin4BIT(&MODULE_P02, 6,7,&MODULE_P10, 4,3, 4, 5); // RS,E,D4,D5,D6,D7
     store_custom_img();

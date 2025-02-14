@@ -101,6 +101,24 @@ typedef enum
     OFF_NOTHING=6
 }OffMode;
 
+typedef enum
+{
+
+    PARK_BC_BRAKE=2,
+    PARK_BC_NOTHING=6
+
+}ParkingBrakeCheck;
+
+typedef enum
+{
+    PARK_SEARCHING=0,
+    PARK_ING_D,
+    PARK_ING_R,
+    PARK_FINISH,
+    PARK_NOTHING
+
+}ParkingMode;
+
 
 typedef enum
 {
@@ -122,12 +140,14 @@ typedef enum
     CTRL_OFF,
     CTRL_ON,
     CTRL_OTA,
+    CTRL_AUTO_PARKING,
     CTRL_TEST_LCD
 }ControllerState;
 
 typedef enum
 {
-    DO_PARKING
+    DO_NOT_AUTO_PARKING,
+    DO_AUTO_PARKING
 
 }ParkingAction;
 
@@ -138,7 +158,8 @@ typedef enum
     ORDER_MOVE,
     ORDER_AUTO_PRK_REQ,
     ORDER_OTA_UDT_CFM,
-    ORDER_OFF_REQ
+    ORDER_OFF_REQ,
+    ORDER_RECEIVE
 }MessageOrder;
 
 /*********************************************************************************************************************/

@@ -29,13 +29,20 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include <stdio.h>
-
+#include <string.h>
+#include <IfxSrc_reg.h>
+#include "Common_def.h"
+#include "Delay.h"
+#include "Message.h"
+#include "Data_process.h"
+#include "TC275_LCD_16x2.h"
 #include "Controller_Logic.h"
 #include "ASCLIN_UART.h"
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -46,20 +53,41 @@ Vadc_t g_Steering_Wheel;
 IfxVadc_Adc_ChannelConfig adc_channel_config_btn[8];
 IfxVadc_Adc_Channel   adc_channel_btn[8];
 uint32 adc_result_buffer[8] = {0u,};
+
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-char str[20];
+static char str[20];
 ButtonState g_btn_adc_result = BS_NOTHING;
 sint8 g_SH_adc_result = 0;
 ControllerState g_current_ctrl_state = CTRL_OFF;
 OTAUpdateState g_current_ota_update = OTA_UPDATED;
 
+static DriveDir dir_state = DIR_P;
+
+
+//데이터 무결성 보장을 위해, 통신데이터 저장후 사용
+
+
+
+static OUR_signal local_udt_req_sig;
+static OUS_signal local_udt_state_sig;
+static PS_signal local_prk_status_sig;
+static VS_signal local_vhc_status_sig;
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
+static void disableUartRxInterrupt() {
+    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
+}
+
+static void enableUartRxInterrupt() {
+    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
+}
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -67,7 +95,7 @@ OTAUpdateState g_current_ota_update = OTA_UPDATED;
 void Show_OTA_State()
 {
     LCD1602_clear();
-    get_btn_data();
+
 
     // 첫째 줄 - 코멘트
     LCD1602_1stLine();
@@ -95,9 +123,9 @@ void Show_OTA_State()
 void Show_Drive_State()
 {
     LCD1602_clear();
-    get_btn_data();
 
-    static DriveDir dir_state = DIR_P;
+
+
     static DriveModeState ms_state = MS_AUTO_PARKING;
     static DriveMode prev_state = DRIVE_NOTHING;
     LCD1602_1stLine();
@@ -105,13 +133,16 @@ void Show_Drive_State()
     switch(g_btn_adc_result){
     case (DRIVE_ACCEL):
     {
-
-
         //명령송신
         if(dir_state == DIR_D || dir_state == DIR_R){
             msg.move_msg.signal.control_accel = 1;
             msg.move_msg.signal.control_brake = 0;
             sprintf(str, "GOGOGO");
+
+            // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
+            #ifdef BEFORE_RECEIVE_TEST
+            msg.cgw_vhc_status_msg.signal.vehicle_velocity++;
+            #endif
         }
         else if (dir_state == DIR_P)
         {
@@ -123,13 +154,17 @@ void Show_Drive_State()
     }
     case (DRIVE_BRAKE):
     {
-
-
         //명령송신
         if(dir_state == DIR_D || dir_state == DIR_R){
             msg.move_msg.signal.control_accel = 0;
             msg.move_msg.signal.control_brake = 1;
             sprintf(str, "SLOW SLOW");
+            // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
+            #ifdef BEFORE_RECEIVE_TEST
+            if (msg.cgw_vhc_status_msg.signal.vehicle_velocity >0)
+                msg.cgw_vhc_status_msg.signal.vehicle_velocity--;
+            #endif
+
         }
         else if (dir_state == DIR_P)
         {
@@ -141,19 +176,45 @@ void Show_Drive_State()
     }
     case (DRIVE_POWEROFF):
     {
-        LCD1602_clear();
-        LCD1602_1stLine();
-        sprintf(str, "POWER OFF");
-        LCD1602_print(str);
-        LCD1602_loading();
         if(prev_state != DRIVE_POWEROFF){
             prev_state = DRIVE_POWEROFF;
+            //차량 모드가 Parking일때만 전원 종료 수행
+            if(dir_state == DIR_P)
+            {
+                g_current_ctrl_state = CTRL_OFF;
+                // 명령 송신
+                msg.engine_msg.signal.control_engine = g_current_ctrl_state;
+#ifndef PERIOD_VER
+                Command[ORDER_ENGINE]();
+#endif
+                LCD1602_clear();
+                LCD1602_1stLine();
+                sprintf(str, "POWER OFF");
+                LCD1602_print(str);
+                LCD1602_loading();
+            }
+            else if(local_vhc_status_sig.vehicle_velocity == 0)
+            {
+                dir_state = DIR_P;
+                //msg.move_msg.signal.control_transmission = dir_state;
 
-            g_current_ctrl_state = CTRL_OFF;
-            // 명령 송신
-            msg.engine_msg.signal.control_engine = g_current_ctrl_state;
-            Command[ORDER_ENGINE]();
+                LCD1602_clear();
+                LCD1602_1stLine();
+                sprintf(str, "PARKING");
+                LCD1602_print(str);
+                LCD1602_loading();
 
+
+
+            }
+
+        }
+        // 위 조건을 만족하지 못하고 나왔다면, 속도를 0으로 하라는 메시지 출력
+        if(local_vhc_status_sig.vehicle_velocity != 0){
+            LCD1602_clear();
+            LCD1602_1stLine();
+            sprintf(str, "SET SPEED TO 0!!");
+            LCD1602_print(str);
         }
         break;
     }
@@ -179,7 +240,7 @@ void Show_Drive_State()
                 dir_state = DIR_D;
             }
             // 명령 송신
-            msg.move_msg.signal.control_transmission = dir_state;
+            //msg.move_msg.signal.control_transmission = dir_state;
         }
         break;
     }
@@ -191,37 +252,57 @@ void Show_Drive_State()
         {
             if(prev_state != DRIVE_SERVICE){
                 prev_state = DRIVE_SERVICE;
-                if(dir_state == DIR_D || dir_state == DIR_R)
+                if((dir_state == DIR_D || dir_state == DIR_R) &&
+                        (local_vhc_status_sig.vehicle_velocity == 0))
                 {
+
                     ms_state = MS_AUTO_PARKING;
                     dir_state = DIR_P;
 
                     //명령 송신 아래 로딩함수 때문에, 바로 전송
-                    msg.auto_park_req_msg.signal.auto_parking = DO_PARKING;
+                    msg.auto_park_req_msg.signal.auto_parking = DO_AUTO_PARKING;
+#ifndef PERIOD_VER
                     Command[ORDER_AUTO_PRK_REQ]();
+#endif
 
                     LCD1602_1stLine();
                     sprintf(str, "AUTO PARKING");
                     LCD1602_print(str);
                     LCD1602_loading();
+
+
+                    //화면 전환
+                    g_current_ctrl_state = CTRL_AUTO_PARKING;
+
                 }
                 else if(dir_state == DIR_P)
                 {
                     ms_state = MS_DRIVE;
                     dir_state = DIR_D;
+#ifdef PERIOD_VER
+                    msg.auto_park_req_msg.signal.auto_parking = DO_NOT_AUTO_PARKING;
+#endif
 
+#ifndef PERIOD_VER
                     //이벤트 함수라, 굳이 전송 x
 //                    msg.auto_park_req_msg.signal.auto_parking = 0;
 //                    Command[ORDER_AUTO_PRK_REQ]();
-
+#endif
                     LCD1602_1stLine();
                     sprintf(str, "DRIVING MODE");
                     LCD1602_print(str);
                     LCD1602_loading();
                 }
                 //명령 송신
-                msg.move_msg.signal.control_transmission = dir_state;
+                //msg.move_msg.signal.control_transmission = dir_state;
 
+            }
+            // 위 조건을 만족하지 못하고 나왔다면, 속도를 0으로 하라는 메시지 출력
+            if(local_vhc_status_sig.vehicle_velocity != 0 && dir_state != DIR_P){
+                LCD1602_clear();
+                LCD1602_1stLine();
+                sprintf(str, "SET SPEED TO 0!!");
+                LCD1602_print(str);
             }
         }
         else
@@ -254,34 +335,34 @@ void Show_Drive_State()
 
 
     LCD1602_2ndLine();
-    if(dir_state == DIR_D)
+    if(dir_state == DIR_D || dir_state == DIR_R)
     {
-        sprintf(str, "D     DRIVE MODE");
-    }
-    else if(dir_state == DIR_R)
-    {
-        sprintf(str, "R     DRIVE MODE");
+        if(dir_state == DIR_D)
+        {
+            sprintf(str, "D %d",local_vhc_status_sig.vehicle_velocity);
+        }
+        else if(dir_state == DIR_R)
+        {
+            sprintf(str, "R %d",local_vhc_status_sig.vehicle_velocity);
+        }
+        LCD1602_print(str);
+
+        LCD1602_setCursor(2, 7);
+        LCD1602_print("DRIVE MODE");
+
     }
     else if(dir_state == DIR_P)
     {
-        sprintf(str, "P   PARKING MODE");
+        sprintf(str, "P %d PARKING MODE",local_vhc_status_sig.vehicle_velocity);
+        LCD1602_print(str);
     }
-    LCD1602_print(str);
-//    if(ms_state == MS_DRIVE)
-//    {
-//        sprintf(str, "     DRIVE MODE");
-//    }
-//    else if(ms_state == MS_AUTO_PARKING)
-//    {
-//        sprintf(str, "   PARKING MODE");
-//    }
-//    LCD1602_print(str);
+
 }
 
 void Show_Off_State()
 {
     LCD1602_clear();
-    get_btn_data();
+
 
     // 첫째 줄 - 코멘트
     LCD1602_1stLine();
@@ -308,7 +389,7 @@ void Show_Off_State()
 
 
 
-    get_btn_data();
+
 
     static OffMode prev_state = OFF_NOTHING;
 
@@ -317,7 +398,7 @@ void Show_Off_State()
     case (OFF_POWERON):
     {
         LCD1602_clear();
-        get_btn_data();
+
 
         LCD1602_1stLine();
         sprintf(str, "POWER ON");
@@ -331,8 +412,9 @@ void Show_Off_State()
             //명령 송신
             msg.engine_msg.signal.control_engine = g_current_ctrl_state;
 
+#ifndef PERIOD_VER
             Command[ORDER_ENGINE]();
-
+#endif
             //********* 시동키면 P로 수정해야할수도 *************
             msg.move_msg.signal.control_transmission = DIR_P;
 
@@ -344,15 +426,20 @@ void Show_Off_State()
     case (OFF_FIND):
     {
         LCD1602_clear();
-        get_btn_data();
+
         if(prev_state != OFF_FIND){
             prev_state = OFF_FIND;
             //SPI송신
             msg.off_req_msg.signal.alert_request = 1;
+#ifndef PERIOD_VER
             Command[ORDER_OFF_REQ]();
             // 1 신호만 보내고 기본신호 0으로 변경,
             // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
             msg.off_req_msg.signal.alert_request = 0;
+#endif
+
+
+
         }
         LCD1602_1stLine();
         sprintf(str, "ALERT MY CAR");
@@ -366,7 +453,7 @@ void Show_Off_State()
     case (OFF_AUTO_EXIT):
     {
         LCD1602_clear();
-        get_btn_data();
+
 
         if(g_current_ota_update == OTA_UPDATED)
         {
@@ -375,10 +462,13 @@ void Show_Off_State()
 
                 //SPI송신
                 msg.off_req_msg.signal.auto_exit_request = 1;
+#ifndef PERIOD_VER
                 Command[ORDER_OFF_REQ]();
                 // 1 신호만 보내고 기본신호 0으로 변경,
                 // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
                 msg.off_req_msg.signal.auto_exit_request = 0;
+#endif
+
             }
             LCD1602_1stLine();
             sprintf(str, "LEAVING MY CAR");
@@ -405,15 +495,176 @@ void Show_Off_State()
     default :
     {
 //        sprintf(str, "");
-
+#ifdef PERIOD_VER
+        //2턴 지나고 나서 0으로 바꿈
+        if(prev_state == OFF_NOTHING){
+            msg.off_req_msg.signal.alert_request = 0;
+            msg.off_req_msg.signal.auto_exit_request = 0;
+        }
+#endif
         prev_state = OFF_NOTHING;
     }
     }
 //    LCD1602_print(str);
 }
 
+void Show_Auto_Parking_State()
+{
+    LCD1602_clear();
+
+
+    // 첫째 줄 - 코멘트
+    LCD1602_1stLine();
+
+
+    static ParkingMode prev_state = PARK_NOTHING;
+
+
+    // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
+    #ifdef BEFORE_RECEIVE_TEST
+//    msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_D;
+    #endif
+
+    switch(g_btn_adc_result){
+    case (PARK_BC_BRAKE):
+    {
+        // parking중에도 Brake가 동작하도록
+        //명령송신
+        msg.move_msg.signal.control_accel = 0;
+        msg.move_msg.signal.control_brake = 1;
+        LCD1602_print("PAUSE PARKING");
+        LCD1602_2ndLine();
+        LCD1602_loading();
+        // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
+        #ifdef BEFORE_RECEIVE_TEST
+        if (msg.cgw_vhc_status_msg.signal.vehicle_velocity >0)
+            msg.cgw_vhc_status_msg.signal.vehicle_velocity--;
+        #endif
+
+//        dir_state = local_vhc_status_sig.vehicle_transmission;
+        g_current_ctrl_state = CTRL_ON;
+
+        break;
+    }
+
+    default :
+    {
+//        sprintf(str, "");
+//        LCD1602_print(str);
+    }
+    }
+
+    // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
+#ifdef BEFORE_RECEIVE_TEST
+    msg.cgw_prk_status_msg.signal.parking_status = ((uint8)msg.move_msg.signal.control_steering_angle)>=45 ? 3 : ((uint8)msg.move_msg.signal.control_steering_angle)%3;
+#endif
+
+    switch (local_prk_status_sig.parking_status)
+    {
+    case (PARK_SEARCHING) :
+    {
+
+        LCD1602_print("SEARCHING EMPTY");
+        LCD1602_2ndLine();
+        LCD1602_print("SPACE");
+        static int target = 0;
+        for(int i =0 ; i< target; i++)
+        {
+            LCD1602_print(".");
+        }
+        target++;
+        if(target == 16) target =0;
+        prev_state = PARK_SEARCHING;
+        break;
+
+    }
+    case (PARK_ING_D) :
+    {
+
+#ifdef BEFORE_RECEIVE_TEST
+        msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_D;
+#endif
+        LCD1602_print("PARKING IN DRIVE");
+        LCD1602_2ndLine();
+        static int target = 0;
+        for(int i =0 ; i< target; i++)
+        {
+            LCD1602_print(".");
+        }
+        target++;
+        if(target == 16) target =0;
+
+        prev_state = PARK_ING_D;
+        break;
+    }
+    case (PARK_ING_R) :
+    {
+#ifdef BEFORE_RECEIVE_TEST
+        msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_R;
+#endif
+        LCD1602_print("PARKING IN REVRS");
+        LCD1602_2ndLine();
+        static int target = 0;
+        for(int i =0 ; i< target; i++)
+        {
+            LCD1602_print(".");
+        }
+        target++;
+        if(target == 16) target =0;
+
+        prev_state = PARK_ING_R;
+        break;
+    }
+    case (PARK_FINISH) :
+    {
+#ifdef BEFORE_RECEIVE_TEST
+        msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_P;
+#endif
+        //msg.move_msg.signal.control_transmission = dir_state;
+
+        if(prev_state == PARK_FINISH){
+         // Parking 기어 반영을 위함, 한번 더 수행 후 화면전환
+            LCD1602_print("PARKING FINISHED");
+            LCD1602_2ndLine();
+            LCD1602_loading();
+            g_current_ctrl_state = CTRL_ON;
+
+        }
+        prev_state = PARK_FINISH;
+        break;
+    }
+    default :
+    {
+
+    }
+
+    }
+    dir_state = local_vhc_status_sig.vehicle_transmission;
+
+}
+
 void Control_Current_State()
 {
+    {
+        msg.move_msg.signal.control_transmission = dir_state;
+    }
+    {
+        // TASK마다 수신 값 최신화
+        // 데이터 무결성을 위해, 값 최신화 중 uart수신 인터럽트 비활성화
+        disableUartRxInterrupt();
+        memcpy(&local_udt_req_sig, &msg.cgw_ota_udt_req_msg.signal,sizeof(local_udt_req_sig));
+        memcpy(&local_udt_state_sig, &msg.cgw_ota_udt_state_msg.signal,sizeof(local_udt_state_sig));
+        memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
+        memcpy(&local_vhc_status_sig, &msg.cgw_vhc_status_msg.signal,sizeof(local_vhc_status_sig));
+        enableUartRxInterrupt();
+    }
+
+    {
+        // 제어버튼, 조향 데이터 최신화
+        get_btn_data();
+    }
+
+
     switch(g_current_ctrl_state){
     case (CTRL_OFF):
     {
@@ -430,8 +681,14 @@ void Control_Current_State()
         Show_OTA_State();
         break;
     }
+    case (CTRL_AUTO_PARKING):
+    {
+        Show_Auto_Parking_State();
+        break;
+    }
     default :
     {
+        //LCD 테스트 출력 공간
         LCD1602_clear();
         get_SH_data();
     }
@@ -440,6 +697,7 @@ void Control_Current_State()
 
 void init_Controller()
 {
+    //초기화면 설정칸
     g_current_ctrl_state = CTRL_OFF;
 }
 
@@ -541,7 +799,7 @@ static sint8 convert_SH_data(uint32 analogValue) {
 
     sint8 steeringAngle = mapValue(voltage, 0.0, 5.0, -45, 45);
 
-//    sprintf(str,"%d",steeringAngle);
+//    sprintf(str,"%d / %.2f",steeringAngle,voltage);
 //    LCD1602_print(str);
 
     return steeringAngle;
@@ -555,8 +813,8 @@ uint8 get_SH_data(void)
 
     //디버깅을 위한 부분
     g_SH_adc_result = convert_SH_data(adc_result);
-
-    msg.move_msg.signal.control_steering_angle = g_SH_adc_result;
+    if(g_SH_adc_result <= 45)
+        msg.move_msg.signal.control_steering_angle = g_SH_adc_result;
     return 1;
 }
 

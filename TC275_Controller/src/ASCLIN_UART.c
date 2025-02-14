@@ -41,12 +41,14 @@
 #define UART_PIN_TX             IfxAsclin0_TX_P15_2_OUT                 /* UART transmit port pin                   */
 
 /* Definition of the interrupt priorities */
-#define INTPRIO_ASCLIN0_RX      18
+#define INTPRIO_ASCLIN0_RX      20
 #define INTPRIO_ASCLIN0_TX      19
 
-#define UART_RX_BUFFER_SIZE     64                                      /* Definition of the receive buffer size    */
-#define UART_TX_BUFFER_SIZE     64                                      /* Definition of the transmit buffer size   */
+#define UART_RX_BUFFER_SIZE     1024                                      /* Definition of the receive buffer size    */
+#define UART_TX_BUFFER_SIZE     1024                                      /* Definition of the transmit buffer size   */
 #define SIZE                    32                                      /* Size of the string                       */
+
+
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
@@ -61,11 +63,12 @@ uint8 g_ascRxBuffer[UART_RX_BUFFER_SIZE + sizeof(Ifx_Fifo) + 8];
 /* Definition of txData and rxData */
 uint8 g_txData[] = "Hello World!";
 uint8 g_rxData[SIZE] = {''};
-
 /* Size of the message */
-Ifx_SizeT g_count = sizeof(g_txData);
+uint8 g_count = 0;
+Ifx_SizeT leng = 32;
+volatile uint8 receive_flag = RECEIVE_WAIT;
 
-uint8 receive_complete = 0;
+uint8 g_rcv_size;
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
@@ -80,8 +83,18 @@ void asclin0TxISR(void)
 IFX_INTERRUPT(asclin0RxISR, 0, INTPRIO_ASCLIN0_RX);
 void asclin0RxISR(void)
 {
+//    myprintf("I'm in RxISR\n\r");
     IfxAsclin_Asc_isrReceive(&g_ascHandle);
-    receive_complete = 1;
+
+
+    g_count += IfxAsclin_Asc_read(&g_ascHandle, g_rxData + g_count, &leng, 0);
+    if (g_rxData[g_count - 1] == 0xFF)  // 종료 문자 감지
+    {
+        g_rcv_size = g_count - 1;
+        g_count = 0;
+        receive_flag = RECEIVE_COMPLETED;
+    }
+
 }
 
 /* This function initializes the ASCLIN UART module */
@@ -123,17 +136,9 @@ void init_ASCLIN_UART(void)
 
 void Send_Message(uint8 *tx_Data, Ifx_SizeT size)
 {
-    //for debug
-//    memcpy(g_txData, tx_Data, size);
 
     IfxAsclin_Asc_write(&g_ascHandle, tx_Data, &size, TIME_INFINITE);
-//    process_send_datas(g_txData,NULL);
-//    IfxAsclin_Asc_write(&g_ascHandle, g_txData, &g_count, TIME_INFINITE);   /* Transmit data via TX */
-//    IfxAsclin_Asc_read(&g_ascHandle, g_rxData, &g_count, 10);    /* Receive data via RX  */
 }
 
-void Get_Message(uint8 *rx_Data, Ifx_SizeT size)
-{
-    IfxAsclin_Asc_read(&g_ascHandle, g_rxData, &size, 1);    /* Receive data via RX  */
-}
+
 
