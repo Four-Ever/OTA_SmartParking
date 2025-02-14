@@ -58,6 +58,7 @@ extern volatile boolean motor_enable;  // 0:제동, 1:해제
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 void initIncrEnc(void);
 void initPins(void);
+void setMotorControl(uint8, uint8);
 /*********************************************************************************************************************/
 
 

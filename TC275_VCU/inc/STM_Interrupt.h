@@ -34,6 +34,7 @@
 #include "Ifx_Types.h"
 
 #include "IfxGpt12_IncrEnc.h"
+#include "EncMotor.h"
 
 #include "PID_CON.h"
 #include "GTM_ATOM_PWM.h"

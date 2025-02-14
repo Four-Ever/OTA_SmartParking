@@ -367,7 +367,7 @@ void AppTask100ms(void)
     stTestCnt.u32nuCnt100ms++;
 
 #if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 주행 코드
-    if (vehicle_status.engine_status == engine_on)
+    if (vehicle_status.engine_state == engine_on)
     {
         if (vehicle_status.user_mode == TRUE)
         {
