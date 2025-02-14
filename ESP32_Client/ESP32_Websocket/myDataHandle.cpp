@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "myDataHandle.h"
 #include "myMessage.h"
 #include "myWebsocket.h"
@@ -240,8 +241,48 @@ void sent_uart_well(void * msg, size_t size)
 }
 
 void dummy_send_datas_to_TC275(){
+  msg.cgw_odt_udt_req_msg.msgId = ID_CGW_OTA_UDT_REQ_MSG;
+  msg.cgw_odt_udt_req_msg.signal.ota_update_request = 1;
+
+  sent_uart_well(&msg.cgw_odt_udt_req_msg,sizeof(msg.cgw_odt_udt_req_msg));
+
+  #ifdef SENT_DEBUG_PRINT
+  Serial.printf("[Sent to TC275] - MsgID: 0x%02X, ota_update_request : %u \n", 
+            msg.cgw_odt_udt_req_msg.msgId,
+            msg.cgw_odt_udt_req_msg.signal.ota_update_request
+
+          );
+  #endif
+
+  static uint8_t i =0;
+  msg.cgw_odt_state_msg.msgId = ID_CGW_OTA_UDT_STATE_MSG;
+  msg.cgw_odt_state_msg.signal.ota_update_progress = (i++)%101;
+
+  sent_uart_well(&msg.cgw_odt_state_msg,sizeof(msg.cgw_odt_state_msg));
+
+  #ifdef SENT_DEBUG_PRINT
+  Serial.printf("[Sent to TC275] - MsgID: 0x%02X, ota_update_progress : %u \n", 
+            msg.cgw_odt_state_msg.msgId,
+            msg.cgw_odt_state_msg.signal.ota_update_progress
+
+          );
+  #endif
+
+  msg.cgw_park_status_msg.msgId = ID_CGW_PRK_STATUS_MSG;
+  msg.cgw_park_status_msg.signal.parking_status = 3;
+
+  sent_uart_well(&msg.cgw_park_status_msg,sizeof(msg.cgw_park_status_msg));
+
+  #ifdef SENT_DEBUG_PRINT
+  Serial.printf("[Sent to TC275] - MsgID: 0x%02X, parking_status : %u \n", 
+            msg.cgw_park_status_msg.msgId,
+            msg.cgw_park_status_msg.signal.parking_status
+
+          );
+  #endif
+
   msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
-  msg.cgw_vhc_status_msg.signal.vehicle_velocity = 100;
+  msg.cgw_vhc_status_msg.signal.vehicle_velocity = 0;
   msg.cgw_vhc_status_msg.signal.vehicle_steering_angle = -44;
   msg.cgw_vhc_status_msg.signal.vehicle_transmission = 3;
 
@@ -258,18 +299,7 @@ void dummy_send_datas_to_TC275(){
   #endif
 
 
-    msg.cgw_park_status_msg.msgId = ID_CGW_PRK_STATUS_MSG;
-    msg.cgw_park_status_msg.signal.parking_status = 3;
 
-    sent_uart_well(&msg.cgw_park_status_msg,sizeof(msg.cgw_park_status_msg));
-
-    #ifdef SENT_DEBUG_PRINT
-    Serial.printf("[Sent to TC275] - MsgID: 0x%02X, parking_status : %u \n", 
-              msg.cgw_park_status_msg.msgId,
-              msg.cgw_park_status_msg.signal.parking_status
-
-            );
-    #endif
 }
 
 void send_datas_to_TC275(){
