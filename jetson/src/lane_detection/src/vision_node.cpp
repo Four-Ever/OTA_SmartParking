@@ -1,6 +1,7 @@
 // src/vision_node.cpp
 #include "lane_detection/vision_node.hpp"
-
+#include "lane_detection/CentralGateway.h"
+#include "lane_detection/Protocol.h"
 std::shared_ptr<VisionNode> vision_node = nullptr;
 
 VisionNode::VisionNode(const rclcpp::NodeOptions &options)
@@ -34,13 +35,13 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     // 변수 모니터링
     width_plot_pub_ = this->create_publisher<std_msgs::msg::Int32>("param/lane_width_plot", 10);
 
-    // IPM 변환 행렬 초기화
+    // IPM 변환 행렬 파라미터 초기화
     std::vector<cv::Point2f> src_points = {
         cv::Point2f(0, 390), cv::Point2f(640, 390),
         cv::Point2f(110, 200), cv::Point2f(530, 200)};
     std::vector<cv::Point2f> dst_points = {
-        cv::Point2f(0, 480), cv::Point2f(640, 480),
-        cv::Point2f(0, 0), cv::Point2f(640, 0)};
+        cv::Point2f(0, IMG_HEIGHT), cv::Point2f(IMG_WIDTH, IMG_HEIGHT),
+        cv::Point2f(0, 0), cv::Point2f(IMG_WIDTH, 0)};
     front_M_ = cv::getPerspectiveTransform(src_points, dst_points);
     rear_M_ = front_M_.clone();
 
@@ -75,16 +76,25 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
 
 void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
 {
+
     auto start_time = std::chrono::high_resolution_clock::now();
 
     cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, "bgr8");
-
     std::vector<cv::Point2i> waypoints;
     if (mode_ == Mode::DRIVING)
     {
         waypoints = detectDrivingLanes(cv_ptr->image);
+
+#ifndef DEBUG_CGW
+        auto msg = std::make_shared<CCU_Cordi_data1_Msg>();
+        msg->SetCordiY1();
+        msg->SetCordiX1();
+        msg->SetCordiY2();
+        msg->SetCordiX2();
+        CGW->can_socket_->async_send(msg);
+#endif
     }
-    else
+    else // 주차 모드
     {
         waypoints = detectFrontParkingLanes(cv_ptr->image);
     }
@@ -114,13 +124,12 @@ void VisionNode::processRearImage(const sensor_msgs::msg::Image::SharedPtr msg)
 
 std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
 {
-    int debug_tmp = 0;
     static int frame_counter = 0;
     frame_counter++;
 
     // 1. 이미지 전처리
     cv::Mat warped;
-    cv::warpPerspective(img, warped, front_M_, cv::Size(640, 480));
+    cv::warpPerspective(img, warped, front_M_, cv::Size(IMG_WIDTH, 480));
 
     // HSV 색상 공간으로 변환
     cv::Mat hsv;
@@ -141,16 +150,11 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     // 가우시안 블러로 노이즈 제거
     cv::GaussianBlur(masked_gray, masked_gray, cv::Size(5, 5), 0);
 
-    // 이진화
-    cv::Mat binary;
-    cv::threshold(masked_gray, binary, 160, 255, cv::THRESH_BINARY);
     // 모폴로지 연산
-    if (!binary.empty())
-    {
-        cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); // 작은 커널 사용
-        cv::morphologyEx(binary, binary, cv::MORPH_OPEN, kernel);
-        cv::morphologyEx(binary, binary, cv::MORPH_CLOSE, kernel);
-    }
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); // 작은 커널 사용
+    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_OPEN, kernel);
+    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel);
+
     // Canny 엣지 검출
     cv::Mat edges;
     cv::Canny(masked_gray, edges, 50, 150);
@@ -165,6 +169,65 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
         cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", edges_color).toImageMsg();
 
     cv::Mat debug_img = warped.clone();
+
+    // 가로선(주차선) 검출 ------------------------------------------------------------------------
+    // std::vector<cv::Vec4i> horizontal_lines;
+    // cv::HoughLinesP(edges, horizontal_lines, 1, CV_PI / 180, 50, 50, 10);
+
+    // bool parking_line_detected = false;
+    // float parking_line_angle = 0.0f;
+
+    // // 가로선 필터링 및 처리
+    // for (const auto &line : horizontal_lines)
+    // {
+    //     float dx = line[2] - line[0];
+    //     float dy = line[3] - line[1];
+    //     float angle = std::atan2(dy, dx) * 180 / CV_PI;
+    //     float length = std::sqrt(dx * dx + dy * dy);
+
+    //     // 수평에 가까운 선(-20도 ~ 20도)이고 충분히 긴 경우
+    //     if (std::abs(angle) < 20 && length > IMG_WIDTH / 3)
+    //     {
+    //         // 주차선 발견
+    //         parking_line_detected = true;
+    //         parking_line_angle = angle;
+
+    //         // 디버그 이미지에 주차선 표시
+    //         cv::line(debug_img,
+    //                  cv::Point(line[0], line[1]),
+    //                  cv::Point(line[2], line[3]),
+    //                  cv::Scalar(0, 0, 255), 3); // 빨간색으로 표시
+
+    //         // 주차선 정보 발행
+    //         // std_msgs::msg::Float32 angle_msg;
+    //         // angle_msg.data = parking_line_angle;
+    //         // parking_angle_pub_->publish(angle_msg);
+
+    //         RCLCPP_INFO(this->get_logger(), "Parking line detected! Angle: %.2f", parking_line_angle);
+    //         break;
+    //     }
+    // }
+    // CUDA 사용 버전
+    cv::cuda::GpuMat d_white_mask(white_mask);  // GPU로 데이터 전송
+    cv::cuda::GpuMat d_lines;  // GPU 메모리에 lines 할당
+
+    // GPU에서 HoughLinesP 실행
+    cv::Ptr<cv::cuda::HoughSegmentDetector> hough = cv::cuda::createHoughSegmentDetector(1, CV_PI/180.0f, 50, 100);
+    hough->detect(d_white_mask, d_lines);
+
+    // GPU에서 결과 가져오기
+    std::vector<cv::Vec4i> horizontal_lines;
+    if (!d_lines.empty()) {
+        cv::Mat h_lines(d_lines);
+        horizontal_lines.resize(h_lines.cols);
+        for(int i = 0; i < h_lines.cols; i++) {
+            cv::Vec4f line = h_lines.at<cv::Vec4f>(0, i);
+            horizontal_lines[i] = cv::Vec4i(line[0], line[1], line[2], line[3]);
+        }
+    }
+
+
+    // ----------------------------------------------
 
     // 2. ROI 기반 차선 검출
     const int windows = 8;
@@ -196,15 +259,15 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                                       histogram.end()) -
                      histogram.begin();
 
-    if (!isValidLaneWidth(cv::Point2i(leftx_current - 320, 0), cv::Point2i(rightx_current - 320, 0))) // 비정상적인 차선일때,
+    if (!isValidLaneWidth(cv::Point2i(leftx_current - IMG_WIDTH / 2, 0), cv::Point2i(rightx_current - IMG_WIDTH / 2, 0))) // 비정상적인 차선일때,
     {
         // 이전 프레임의 가장 아래 포인트를 시작점으로 사용
         if (!prev_left_points_.empty() && !prev_right_points_.empty())
         {
             cv::Point2i prev_left = findNearestPoint(prev_left_points_, window_height / 2);
             cv::Point2i prev_right = findNearestPoint(prev_right_points_, window_height / 2);
-            leftx_current = prev_left.x + 320; // 이미지 좌표계로 변환
-            rightx_current = prev_right.x + 320;
+            leftx_current = prev_left.x + IMG_WIDTH / 2; // 이미지 좌표계로 변환
+            rightx_current = prev_right.x + IMG_WIDTH / 2;
         }
         else
         {
@@ -251,7 +314,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                     mean_x += point.x;
                 }
                 leftx_current = left_roi.x + mean_x / left_nonzero.size();
-                left_point = cv::Point2i(leftx_current - 320, 480 - center_y); // 차량 중심 좌표계 변환
+                left_point = cv::Point2i(leftx_current - IMG_WIDTH / 2, IMG_HEIGHT - center_y); // 차량 중심 좌표계 변환
                 found_left = true;
             }
         }
@@ -270,7 +333,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                     mean_x += point.x;
                 }
                 rightx_current = right_roi.x + mean_x / right_nonzero.size();
-                right_point = cv::Point2i(rightx_current - 320, 480 - center_y); // 차량 중심 좌표계 변환
+                right_point = cv::Point2i(rightx_current - IMG_WIDTH / 2, IMG_HEIGHT - center_y); // 차량 중심 좌표계 변환
                 found_right = true;
             }
         }
@@ -280,14 +343,11 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
             int width = std::abs(right_point.x - left_point.x);
             float width_change_rate = 0.0f; // 차선 변화폭 변화량
 
-            // 디버그용
-            debug_tmp = width;
-
             // 이전 프레임과의 변화율 계산
             if (!first_frame_ && !prev_left_points_.empty() && !prev_right_points_.empty())
             {
-                cv::Point2i prev_left = findNearestPoint(prev_left_points_, 480 - center_y);
-                cv::Point2i prev_right = findNearestPoint(prev_right_points_, 480 - center_y);
+                cv::Point2i prev_left = findNearestPoint(prev_left_points_, IMG_HEIGHT - center_y);
+                cv::Point2i prev_right = findNearestPoint(prev_right_points_, IMG_HEIGHT - center_y);
                 int prev_width = std::abs(prev_right.x - prev_left.x);
                 width_change_rate = std::abs(width - prev_width) / static_cast<float>(prev_width);
             }
@@ -306,8 +366,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                     // 이전 프레임 정보 활용
                     if (!first_frame_ && !prev_left_points_.empty() && !prev_right_points_.empty())
                     {
-                        cv::Point2i prev_left = findNearestPoint(prev_left_points_, 480 - center_y);
-                        cv::Point2i prev_right = findNearestPoint(prev_right_points_, 480 - center_y);
+                        cv::Point2i prev_left = findNearestPoint(prev_left_points_, IMG_HEIGHT - center_y);
+                        cv::Point2i prev_right = findNearestPoint(prev_right_points_, IMG_HEIGHT - center_y);
 
                         // 이전 프레임과 현재 프레임의 중간값 사용
                         left_point.x = (left_point.x + prev_left.x) / 2;
@@ -335,6 +395,11 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                         expected_lane_width_ = static_cast<int>(
                             expected_lane_width_ * (1.0f - learning_rate) +
                             width * learning_rate);
+                        if (frame_counter % 10 == 0)
+                        {
+                            RCLCPP_INFO(this->get_logger(), "Expected Lane Width: %d", expected_lane_width_);
+                            RCLCPP_INFO(this->get_logger(), "Real Lane Width: %d", width);
+                        }
                     }
                 }
             }
@@ -360,16 +425,16 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
             if (!first_frame_ && !prev_left_points_.empty() && !prev_right_points_.empty())
             {
                 // 이전 프레임의 해당 높이의 포인트 찾기
-                left_point = findNearestPoint(prev_left_points_, 480 - center_y);
-                right_point = findNearestPoint(prev_right_points_, 480 - center_y);
+                left_point = findNearestPoint(prev_left_points_, IMG_HEIGHT - center_y);
+                right_point = findNearestPoint(prev_right_points_, IMG_HEIGHT - center_y);
                 found_left = found_right = true;
                 now_window_confidence *= 0.6;
             }
             else
             {
                 // 기본값 사용
-                left_point = cv::Point2i(-expected_lane_width_ / 2, 480 - center_y);
-                right_point = cv::Point2i(expected_lane_width_ / 2, 480 - center_y);
+                left_point = cv::Point2i(-expected_lane_width_ / 2, IMG_HEIGHT - center_y);
+                right_point = cv::Point2i(expected_lane_width_ / 2, IMG_HEIGHT - center_y);
                 now_window_confidence *= 0.4;
             }
         }
@@ -380,8 +445,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
             right_points.push_back(right_point);
 
         // 디버그용 윈도우 표시 DEBUG
-        leftx_current = left_point.x + 320;
-        rightx_current = right_point.x + 320;
+        leftx_current = left_point.x + IMG_WIDTH / 2;
+        rightx_current = right_point.x + IMG_WIDTH / 2;
         cv::rectangle(debug_img,
                       cv::Point(leftx_current - search_range / 2, win_y_low),
                       cv::Point(leftx_current + search_range / 2, win_y_high),
@@ -423,7 +488,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     {
         for (int i = 0; i < windows; i++)
         {
-            int target_y = 480 - window_height / 2 - i * window_height;
+            int target_y = IMG_HEIGHT - window_height / 2 - i * window_height;
             cv::Point2i left = findNearestPoint(left_points, target_y);
             cv::Point2i right = findNearestPoint(right_points, target_y);
             raw_waypoints.push_back(cv::Point2i((left.x + right.x) / 2, target_y));
@@ -445,14 +510,14 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     // 디버그 발행 (DEBUG)
     for (const auto &point : raw_waypoints) // 8개의 점
     {
-        cv::circle(debug_img, cv::Point(point.x + 320, 480 - point.y),
+        cv::circle(debug_img, cv::Point(point.x + IMG_WIDTH / 2, IMG_HEIGHT - point.y),
                    3, cv::Scalar(0, 255, 0), -1);
     }
     // regression된 곡선 그리기 (마젠타)
     if (!waypoints.empty())
     {
         // 부드러운 곡선을 위해 더 많은 점 생성
-        for (int y = 0; y < 480; y += 5) // 5픽셀 간격
+        for (int y = 0; y < IMG_HEIGHT; y += 5) // 5픽셀 간격
         {
             double x = coef.at<double>(0, 0) * y * y +
                        coef.at<double>(1, 0) * y +
@@ -465,8 +530,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
                                 coef.at<double>(1, 0) * (y - 5) +
                                 coef.at<double>(2, 0);
                 cv::line(debug_img,
-                         cv::Point(prev_x + 320, 480 - (y - 5)),
-                         cv::Point(x + 320, 480 - y),
+                         cv::Point(prev_x + IMG_WIDTH / 2, IMG_HEIGHT - (y - 5)),
+                         cv::Point(x + IMG_WIDTH / 2, IMG_HEIGHT - y),
                          cv::Scalar(255, 0, 255), 2);
             }
         }
@@ -474,7 +539,7 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
         // regression된 waypoints (큰 마젠타 점)
         for (const auto &point : waypoints)
         {
-            cv::circle(debug_img, cv::Point(point.x + 320, 480 - point.y),
+            cv::circle(debug_img, cv::Point(point.x + IMG_WIDTH / 2, IMG_HEIGHT - point.y),
                        5, cv::Scalar(255, 0, 255), -1);
         }
     }
@@ -490,9 +555,6 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
     debug_lines_pub_->publish(*lines_msg);
 
     width_plot_pub_->publish(param_width_msg);
-
-    // RCLCPP_INFO(this->get_logger(), "Expected Lane Width: %d", expected_lane_width_);
-    // RCLCPP_INFO(this->get_logger(), "Real Lane Width: %d", debug_tmp);
     // }
 
     return waypoints;
@@ -608,7 +670,7 @@ RegressionResult VisionNode::regressionWaypoints(const std::vector<cv::Point2i> 
     // 시작점을 (0,0)으로, 마지막 점을 이미지 상단으로
     new_waypoints.push_back(cv::Point2i(0, 0)); // 첫 번째 포인트는 항상 (0,0)
 
-    int y_step = 480 / num_points;
+    int y_step = IMG_HEIGHT / num_points;
     for (int i = 1; i < num_points; i++)
     {
         int y = i * y_step;
@@ -620,11 +682,12 @@ RegressionResult VisionNode::regressionWaypoints(const std::vector<cv::Point2i> 
     return {new_waypoints, coef};
 }
 
+// 전방카메라 주차선 탐지
 std::vector<cv::Point2i> VisionNode::detectFrontParkingLanes(const cv::Mat &img)
 {
     // 1. IPM 변환
     cv::Mat warped;
-    cv::warpPerspective(img, warped, front_M_, cv::Size(640, 480));
+    cv::warpPerspective(img, warped, front_M_, cv::Size(IMG_WIDTH, IMG_HEIGHT));
 
     // 2. 이미지 처리
     cv::Mat gray, edges;
@@ -653,7 +716,7 @@ std::vector<cv::Point2i> VisionNode::detectFrontParkingLanes(const cv::Mat &img)
     if (x_coords.size() >= 2)
     {
         std::sort(x_coords.begin(), x_coords.end());
-        int center_x = (x_coords.front() + x_coords.back()) / 2 - 320;
+        int center_x = (x_coords.front() + x_coords.back()) / 2 - IMG_WIDTH / 2;
 
         // 4개의 웨이포인트 생성
         for (int i = 0; i < 4; i++)
@@ -671,7 +734,7 @@ std::vector<cv::Point2i> VisionNode::detectRearParkingLanes(const cv::Mat &img)
 {
     // 1. IPM 변환
     cv::Mat warped;
-    cv::warpPerspective(img, warped, rear_M_, cv::Size(640, 480));
+    cv::warpPerspective(img, warped, rear_M_, cv::Size(IMG_WIDTH, IMG_HEIGHT));
 
     // 2. 이미지 처리
     cv::Mat gray, edges;
@@ -722,7 +785,7 @@ void VisionNode::drawDebugImage(cv::Mat &img, const std::vector<cv::Point2i> &po
 {
     for (const auto &point : points)
     {
-        cv::circle(img, cv::Point(point.x + 320, 480 - point.y),
+        cv::circle(img, cv::Point(point.x + IMG_WIDTH / 2, IMG_HEIGHT - point.y),
                    5, cv::Scalar(0, 255, 0), -1);
     }
     auto debug_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", img).toImageMsg();

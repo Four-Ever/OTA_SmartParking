@@ -1,19 +1,20 @@
 // src/camera_node.cpp
 #include "lane_detection/camera_node.hpp"
-#define DEBUG
-
+// #include <iostream>
+// #include <unistd.h>
+// #include <limits.h>
 std::shared_ptr<CameraNode> camera_node = nullptr;
 
 CameraNode::CameraNode(const rclcpp::NodeOptions &options)
     : Node("camera_node", options)
 {
-    // 파라미터 선언    
+    // 파라미터 선언
     this->declare_parameter("front_camera_id", 0);
     this->declare_parameter("rear_camera_id", 1);
     this->declare_parameter("image_width", 640);
     this->declare_parameter("image_height", 480);
     this->declare_parameter("fps", 20.0);
-    this->declare_parameter("use_calibration", false);
+    this->declare_parameter("use_calibration", true);
 
     // 파라미터 가져오기
     front_cam_id_ = this->get_parameter("front_camera_id").as_int();
@@ -120,10 +121,23 @@ void CameraNode::loadCalibrationParams()
     try
     {
         // 전방 카메라 파라미터
-        cv::FileStorage front_fs("front_calibration.yaml", cv::FileStorage::READ);
+
+        // 경로 찾기
+        // char buffer[PATH_MAX];
+        // if (getcwd(buffer, sizeof(buffer)) != nullptr) {
+        //     std::cout << "Current path: " << buffer << std::endl;
+        // }
+
+        // ROS2 패키지 경로 얻기
+        std::string package_path = ament_index_cpp::get_package_share_directory("lane_detection");
+        std::string front_calib_path = package_path + "/config/front_calibration.yaml";
+        std::string rear_calib_path = package_path + "/config/rear_calibration.yaml";
+
+        // 전방 카메라 파라미터
+        cv::FileStorage front_fs(front_calib_path, cv::FileStorage::READ);
         if (!front_fs.isOpened())
         {
-            RCLCPP_ERROR(this->get_logger(), "Failed to open front camera calibration file");
+            RCLCPP_ERROR(this->get_logger(), "Failed to open front camera calibration file: %s", front_calib_path.c_str());
             return;
         }
         front_fs["camera_matrix"] >> front_camera_matrix_;
@@ -131,10 +145,10 @@ void CameraNode::loadCalibrationParams()
         front_fs.release();
 
         // 후방 카메라 파라미터
-        cv::FileStorage rear_fs("rear_calibration.yaml", cv::FileStorage::READ);
+        cv::FileStorage rear_fs(rear_calib_path, cv::FileStorage::READ);
         if (!rear_fs.isOpened())
         {
-            RCLCPP_ERROR(this->get_logger(), "Failed to open rear camera calibration file");
+            RCLCPP_ERROR(this->get_logger(), "Failed to open rear camera calibration file: %s", rear_calib_path.c_str());
             return;
         }
         rear_fs["camera_matrix"] >> rear_camera_matrix_;

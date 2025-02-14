@@ -1,0 +1,9 @@
+#ifndef LANE_DETECTION_CAMERA_DEV_HPP_
+#define LANE_DETECTION_CAMERA_DEV_HPP_
+
+#define DEBUG
+#define DEBUG_CGW // CGW 사용 x
+#define IMG_WIDTH  640
+#define IMG_HEIGHT 480
+
+#endif  // LANE_DETECTION_CAMERA_DEV_HPP

@@ -24,6 +24,10 @@ find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(ament_index_cpp REQUIRED)
+find_package(CUDA REQUIRED)
+
+# CUDA 컴파일러 플래그 설정
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_53")  # Jetson Nano용
 
 # 헤더 파일 디렉토리 포함
 include_directories(include)
