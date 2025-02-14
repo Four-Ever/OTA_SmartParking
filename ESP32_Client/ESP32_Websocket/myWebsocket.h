@@ -2,7 +2,6 @@
 #define __MY_WEBSOCKET_H__
 
 #include <Arduino.h>
-#include <WiFi.h>
 #include <WebSocketsClient.h>
 
 #define PORT 8080
