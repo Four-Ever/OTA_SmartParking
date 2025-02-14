@@ -1,5 +1,6 @@
+#include <WiFi.h>
 #include "myWebsocket.h"
-
+#include "myDataHandle.h"
 
 const char* ssid = "rapa_meetingroom-1";
 const char* password = "rapa6074";
@@ -40,12 +41,12 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
     case WStype_CONNECTED:
       Serial.printf("[WSc] Connected to URL: %s\n", payload);
       // 서버에 메시지 전송
-      webSocket.sendTXT("Hello from ESP32!");
+      // webSocket.sendTXT("Hello from ESP32!");
       break;
     case WStype_TEXT:
-      Serial.printf("[WSc] Received text: %s\n", payload);
+      // Serial.printf("[WSc] Received text: %s\n", payload);
       //서버에서 메시지 수신
-      // receive_send_spi(payload,length);
+      read_datas_from_Nano(payload,length);
       break;
     case WStype_ERROR:
       Serial.printf("[WSc] Error occurred\n");
