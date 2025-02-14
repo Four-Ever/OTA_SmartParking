@@ -22,6 +22,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
+find_package(ament_index_cpp REQUIRED)
 
 # 헤더 파일 디렉토리 포함
 include_directories(include)
@@ -31,6 +33,13 @@ add_executable(lane_detection_node
   src/main.cpp
   src/camera_node.cpp
   src/vision_node.cpp
+  src/CentralGateway.cpp 
+  src/LockBasedQueue.cpp 
+  src/MySocketCAN.cpp 
+  src/MyWebSocketSession.cpp 
+  src/Protocol.cpp 
+  src/SocketCAN.cpp 
+  src/WebSocketServer.cpp
 )
 
 # 의존성 연결
@@ -40,6 +49,8 @@ ament_target_dependencies(lane_detection_node
   std_msgs
   cv_bridge
   OpenCV
+  Boost
+  ament_index_cpp
 )
 
 # 실행 파일 설치 규칙
@@ -48,6 +59,13 @@ install(TARGETS lane_detection_node
 
 install(DIRECTORY include/
   DESTINATION include/)
+
+install(
+  FILES 
+  config/front_calibration.yaml
+  config/rear_calibration.yaml
+  DESTINATION config/
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

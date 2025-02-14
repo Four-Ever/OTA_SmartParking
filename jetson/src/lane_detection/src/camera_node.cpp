@@ -2,10 +2,12 @@
 #include "lane_detection/camera_node.hpp"
 #define DEBUG
 
+std::shared_ptr<CameraNode> camera_node = nullptr;
+
 CameraNode::CameraNode(const rclcpp::NodeOptions &options)
     : Node("camera_node", options)
 {
-    // 파라미터 선언
+    // 파라미터 선언    
     this->declare_parameter("front_camera_id", 0);
     this->declare_parameter("rear_camera_id", 1);
     this->declare_parameter("image_width", 640);

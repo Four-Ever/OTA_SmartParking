@@ -1,6 +1,8 @@
 // src/vision_node.cpp
 #include "lane_detection/vision_node.hpp"
 
+std::shared_ptr<VisionNode> vision_node = nullptr;
+
 VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     : Node("vision_node", options)
 {
@@ -94,7 +96,7 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 
-    RCLCPP_INFO(this->get_logger(), "processFrontImage Processing Time: %ld ms", duration.count());
+    // RCLCPP_INFO(this->get_logger(), "processFrontImage Processing Time: %ld ms", duration.count());
 }
 
 void VisionNode::processRearImage(const sensor_msgs::msg::Image::SharedPtr msg)
@@ -489,8 +491,8 @@ std::vector<cv::Point2i> VisionNode::detectDrivingLanes(const cv::Mat &img)
 
     width_plot_pub_->publish(param_width_msg);
 
-    RCLCPP_INFO(this->get_logger(), "Expected Lane Width: %d", expected_lane_width_);
-    RCLCPP_INFO(this->get_logger(), "Real Lane Width: %d", debug_tmp);
+    // RCLCPP_INFO(this->get_logger(), "Expected Lane Width: %d", expected_lane_width_);
+    // RCLCPP_INFO(this->get_logger(), "Real Lane Width: %d", debug_tmp);
     // }
 
     return waypoints;

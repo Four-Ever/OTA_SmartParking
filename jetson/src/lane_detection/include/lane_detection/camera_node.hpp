@@ -5,6 +5,7 @@
 #include <sensor_msgs/msg/image.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 class CameraNode : public rclcpp::Node 
 {
@@ -35,5 +36,7 @@ private:
    cv::Mat rear_camera_matrix_;
    cv::Mat rear_dist_coeffs_;   
 };
+
+extern std::shared_ptr<CameraNode> camera_node;
 
 #endif  // LANE_DETECTION_CAMERA_NODE_HPP_
