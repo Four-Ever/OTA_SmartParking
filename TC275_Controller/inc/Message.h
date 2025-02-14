@@ -31,6 +31,7 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Platform_Types.h"
+#include "ASCLIN_UART.h"
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -166,18 +167,29 @@ typedef struct
 
 typedef struct
 {
-  CTRL_Engine engine_msg;
-  CTRL_Move move_msg;
-  CTRL_Auto_Parking_Request auto_park_req_msg;
-  CTRL_OTA_Update_Confirm ota_udt_cfm_msg;
-  CTRL_Off_Request off_req_msg;
-  CGW_OTA_Update_Request cgw_ota_udt_req_msg;
-  CGW_OTA_Update_State_Msg cgw_ota_udt_state_msg;
-  CGW_Parking_Status_Msg cgw_prk_status_msg;
-  CGW_Vehicle_Status_Msg cgw_vhc_status_msg;
+    CTRL_Engine engine_msg;
+    CTRL_Move move_msg;
+    CTRL_Auto_Parking_Request auto_park_req_msg;
+    CTRL_OTA_Update_Confirm ota_udt_cfm_msg;
+    CTRL_Off_Request off_req_msg;
+    CGW_OTA_Update_Request cgw_ota_udt_req_msg;
+    CGW_OTA_Update_State_Msg cgw_ota_udt_state_msg;
+    CGW_Parking_Status_Msg cgw_prk_status_msg;
+    CGW_Vehicle_Status_Msg cgw_vhc_status_msg;
 }Message;
 
 extern Message msg;
+
+
+typedef struct
+{
+    DataReceivedFlag cgw_ota_udt_req_flag:1;
+    DataReceivedFlag cgw_ota_udt_state_flag:1;
+    DataReceivedFlag cgw_prk_status_flag:1;
+    DataReceivedFlag cgw_vhc_status_flag:1;
+}CGWGetReady;
+
+extern CGWGetReady ready_flag;
 
 //typedef struct
 //{

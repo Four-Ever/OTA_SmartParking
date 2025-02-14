@@ -489,11 +489,11 @@ void init_GPIO_LCD(){
     IfxPort_setPinLow(&MODULE_P10, 4);
 }
 
-void LCD1602_print_percent_img(int bat_val)
+void LCD1602_print_percent_img(int val)
 {
 
-    int bars = (int)((bat_val) / 11); // 100을 9로 나눈 값
-    for (int i = 0; i < 9; i++)
+    int bars = (int)((val) / 9); // 100을 9로 나눈 값
+    for (int i = 0; i < 11; i++)
     {
 
         if (i < bars)
@@ -508,13 +508,24 @@ void LCD1602_print_percent_img(int bat_val)
 
 }
 void LCD1602_loading(){ // 주행중일땐 사용 금지, 딜레이 발생
-    int dot = 0;
+//    int dot = 0;
     for (int i = 0; i < 10; i++)
     {
         LCD1602_print("."); // 빈 칸
         MilliSecDelay(150);
 
     }
-    dot++;
+//    dot++;
+}
+
+void LCD1602_loading_nodelay(){
+    int dot = (g_reset_timer / 4)%7 ;
+    for (int i = 0; i < dot; i++)
+    {
+        LCD1602_print("."); // 빈 칸
+//        MilliSecDelay(150);
+
+    }
+
 }
 
