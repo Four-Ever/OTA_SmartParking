@@ -68,8 +68,8 @@ typedef enum
 
 typedef enum
 {
-    system_mode = 0,
-    user_mode = 1
+    system_drive_mode = 0,
+    user_drive_mode = 1
 }Mode;
 
 typedef enum
@@ -99,7 +99,7 @@ typedef struct
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 IfxCpu_syncEvent g_cpuSyncEvent = 0;
 
-VehicleStatus vehicle_status = {system_mode, 0.0f, 0.0f, 0, 0,
+VehicleStatus vehicle_status = {system_drive_mode, 0.0f, 0.0f, 0, 0,
                                     Parking, parked, engine_off};
 Taskcnt stTestCnt;
 /*********************************************************************************************************************/
@@ -181,7 +181,7 @@ int core0_main(void)
     vehicle_status.engine_state = engine_on;
 
     waitTime(300000000); // 3초
-    init_move_distance_control(500.0f, 1000.0f); // 1000mm, 1000rpm
+    init_move_distance_control(1000.0f, 500.0f); // 1000mm, 1000rpm
 #endif
 
     while(1)
@@ -215,7 +215,7 @@ int core0_main(void)
                 db_flag.CGW_Move_Flag = 0;
 
                 // 수동 조작 모드로 전환
-                vehicle_status.user_mode = user_mode;
+                vehicle_status.user_mode = user_drive_mode;
                 if (db_msg.CGW_Move.control_accel == 1) // accel
                 {
                     vehicle_status.target_rpm += 100.0f; // period 100ms 기준 1초 동안 누르면, 1000rpm 목표
@@ -334,6 +334,7 @@ void AppTask10ms(void)
     stTestCnt.u32nuCnt10ms++;
 
 #ifdef motor_Test
+    setServoAngle(-50.0f);
     print_dis(&s32_DisSum);
 #endif
 
@@ -369,7 +370,7 @@ void AppTask100ms(void)
 #if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 주행 코드
     if (vehicle_status.engine_state == engine_on)
     {
-        if (vehicle_status.user_mode == TRUE)
+        if (vehicle_status.user_mode == user_drive_mode)
         {
             if (vehicle_status.transmission == Driving)
             {

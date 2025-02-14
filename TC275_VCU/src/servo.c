@@ -152,7 +152,16 @@ void setServoAngle(float32 angle)
         angle = MAX_ANGLE;
     }
 
-    float pulseWidth = SERVO_CENTER_MS + (angle / MAX_ANGLE) * (SERVO_RANGE_MS / 2.0f);
+    float pulseWidth;
+    if (angle >= 0)
+    {
+        pulseWidth = SERVO_CENTER_MS + (angle / MAX_ANGLE) * (RIGHT_SERVO_RANGE_MS / 2.0f);
+    }
+
+    else
+    {
+        pulseWidth = SERVO_CENTER_MS + (angle / MAX_ANGLE) * (LEFT_SERVO_RANGE_MS / 2.0f);
+    }
 
     float dutyCycle = pulseWidth / SERVO_PERIOD_MS;
     //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
