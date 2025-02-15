@@ -44,6 +44,7 @@
 #define decision_stateflow_IN_DRIVER_D    ((uint8_T)1U)
 #define decision_stateflow_IN_DRIVER_P    ((uint8_T)2U)
 #define decision_stateflow_IN_DRIVER_R    ((uint8_T)3U)
+
 #define decision_stateflow_IN_INIT_Mode   ((uint8_T)2U)
 
 #define decision_stateflow_IN_RSPA_Mode        ((uint8_T)3U)
@@ -65,6 +66,8 @@
 #define decision_stateflow_IN_RCA_DECEL          ((uint8_T)2U)
 #define decision_stateflow_IN_RCA_EXIT           ((uint8_T)3U)
 
+#define decision_stateflow_IN_FIND_CAR             ((uint8_T)6U)
+
 
 
 /* Block states (default storage) for system '<Root>' */
@@ -75,6 +78,7 @@ typedef struct {
   uint8_T is_RSPA_Mode;                /* '<Root>/decision' */
   uint8_T is_SAFE_RCA;
   uint8_T is_SAFE_FCA;
+  uint8_T is_FIND_CAR;
 } DW_decision_stateflow_T;
 
 /* Real-time Model Data Structure */
@@ -112,6 +116,10 @@ extern double DObs_dis_D; //전방 장애물 상대거리
 extern double DObs_dis_R; //후방 장애물 상대거리
 extern double DSteeringinput;
 extern int calDis;
+extern int U8PrkFinished;
+extern int ExitCAR_request;
+extern double D_Ref_vel;
+
 
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);

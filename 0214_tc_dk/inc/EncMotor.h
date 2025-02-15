@@ -44,7 +44,7 @@ extern volatile float32 RPM_CMD1;
 extern volatile uint8 motor_speed;    // 0~100
 extern volatile boolean motor_dir;    // 0:정방향, 1:역방향
 extern volatile boolean motor_enable;  // 0:제동, 1:해제
-extern volatile uint8 D_RefRPM;
+extern volatile float32 D_RefRPM;
 extern volatile sint8 D_steering;
 extern volatile uint8 D_trans;
 /*********************************************************************************************************************/

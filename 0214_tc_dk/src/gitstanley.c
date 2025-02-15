@@ -10,7 +10,6 @@
 
 /* Include Files */
 #include "gitstanley.h"
-#include "atan2.h"
 #include "norm.h"
 #include "rt_nonfinite.h"
 #include "wrapToPi.h"

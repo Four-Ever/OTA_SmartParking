@@ -62,6 +62,7 @@ float32 s_T_samp= 0.001*TIMER_INT_TIME;
 float32 RPM_max = 5000, RPM_min = -5000;
 
 sint32 Enc_count;
+float32 value;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -120,13 +121,12 @@ void RPM_cal(void)
     motor_speed_rpm = Enc_count_diff/(float32)CPR/(float32)(TIMER_INT_TIME*0.001)*60.0f;
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
 
-    float32 value = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
+    value = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
     sint16 s16_velocity;
     uint16 u16_velocity;
 
-    value /= 10; // 7bit로 보내주기 위함
 
-    s16_velocity = round_to_integer(value);
+    s16_velocity = round_to_integer(value/10); //7bit로 보내주기 위함
     u16_velocity = s16_velocity >= 0  ? s16_velocity : (s16_velocity * -1);
     u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
 

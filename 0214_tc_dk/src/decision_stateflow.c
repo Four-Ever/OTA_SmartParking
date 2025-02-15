@@ -46,15 +46,20 @@ int U8IsWp_R = 0;
 int U8IsStopline = 0;
 int U8IsPrkFinished = 0;
 int U8IsOb_R = 0;
+int U8IsOb_D=0;
 char U8DriverState = '0';
 char U8RSPAState = '0';
 int U8Driver = 0;
 int U8RSPA = 0;
 int U8Engine = 0;
 int U8Parkingfail=0;
+int U8PrkFinished=0;
+int ExitCAR_request=0;
+double D_Ref_vel=0;
+
 
 int Isprkslot; //초음파 헤더파일에서 값 받아와야 함
-int movedDistance;  //stanely 헤더파일에서
+int movedDistance;  //stanely 헤더파일에서 계산?
 int U8Isprkslot=0;
 double DSteeringinput=0.0;
 double DMoveDis=0;
@@ -63,11 +68,11 @@ int calDis=0;  //1일때 이동거리 계산 시작 요청 전달
 //안전
 char U8FCAState='0';
 char U8RCAState='0';
-double DTTC_D=0.0; // 후방 장애물 ttc
-double DTTC_R=0.0; // 전방 장애물 ttc
+double DTTC_D=0.0; // 전방 장애물 ttc
+double DTTC_R=0.0; // 후방 장애물 ttc
 double DObs_dis_D=0.0; //전방 장애물 상대거리
 double DObs_dis_R=0.0; //후방 장애물 상대거리
-double gainTTC=0.0;
+double gainTTC=0.0; //튜닝 파라미터
 
 
 
@@ -93,15 +98,38 @@ void decision_stateflow_step(void)
                 U8DriverState=initState;
                 U8RSPAState=initState;
 
-                if (motor_enable == 1)
+                if (motor_enable == 1 && ExitCAR_request==0 )   //시동 켜지면 운전자모드로 전환
                 {
                     U8Engine=ModeOn;
                     if (vehicle_status.user_mode == USER_DRIVE_MODE){
                         decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
                         decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
                     }
+
                 }
+
+                if (ExitCAR_request==1){   //출차요청
+                    decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_FIND_CAR;
+                }
+
                 break;
+
+            case decision_stateflow_IN_FIND_CAR:
+
+                if (ExitCAR_request==1){
+                    U8Ref_vel = DInputVD;
+                    if (calDis==0.2){ //20cm 정도 출차했으면
+                        U8Ref_vel=0;
+                        ExitCAR_request=0;
+                        U8PrkFinished=0;
+                        U8Parkingfail=0;
+
+                        decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_INIT_Mode;
+
+                    }
+                }
+               break;
+
 
             case decision_stateflow_IN_SAFE_FCA:
 
@@ -126,7 +154,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
                         break;
-                    case decision_stateflow_IN_FCA_EXIT:
+                    case decision_stateflow_IN_FCA_EXIT:   //긴급제동 하기 전의 MODE 로 복귀
                         U8FCAState = initState;
 
                         if (U8DriverState == 'D')
@@ -137,6 +165,10 @@ void decision_stateflow_step(void)
                         else if(U8RSPAState == 'D'){
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+                        }
+                        else if(U8RSPAState == 'J'){
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_D;
                         }
                         break;
                 }
@@ -164,7 +196,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
                         break;
-                    case decision_stateflow_IN_RCA_EXIT:
+                    case decision_stateflow_IN_RCA_EXIT:   //긴급제동 하기 전의 MODE 로 복귀
                         U8RCAState = initState;
 
                         if (U8DriverState == 'R')
@@ -175,6 +207,10 @@ void decision_stateflow_step(void)
                         else if(U8RSPAState == 'R'){
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
+                        }
+                        else if(U8RSPAState == 'K'){
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_R;
                         }
                         break;
                 }
@@ -199,6 +235,7 @@ void decision_stateflow_step(void)
                         }
                         else if(motor_enable==0){  //시동 off
                             if (U8Curr_vel==0){
+                                U8Ref_vel=(0);
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_INIT_Mode;
                             }
                         }
@@ -206,8 +243,22 @@ void decision_stateflow_step(void)
 
                     case decision_stateflow_IN_DRIVER_D:
                         U8DriverState = 'D';
-                        U8Ref_vel = DInputVD;
+                        U8Ref_vel = D_Ref_vel;
 
+                        //긴급제동
+                        if(DTTC_D <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+
+                        }
+                        else if(DTTC_D < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+
+                        }
+                        //기어변경
                         if (U8IsTrButton == 0)
                         {
                             U8Ref_vel = 0;
@@ -230,14 +281,29 @@ void decision_stateflow_step(void)
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                                 U8DriverState=initState;
+                                IsRSPAButton=0;
                             }
                         }
                         break;
 
                     case decision_stateflow_IN_DRIVER_R:
                         U8DriverState = 'R';
-                        U8Ref_vel = DInputVR;
+                        U8Ref_vel = D_Ref_vel;
 
+                        //긴급제동
+                        if(DTTC_R <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
+
+                        }
+                        else if(DTTC_R < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
+
+                        }
+                        //기어변경
                         if (U8IsTrButton == 1)
                         {
                             U8Ref_vel=0;
@@ -257,7 +323,7 @@ void decision_stateflow_step(void)
                             U8Ref_vel=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
-                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
                                 U8DriverState=initState;
                             }
                         }
@@ -274,13 +340,25 @@ void decision_stateflow_step(void)
 
                 switch (decision_stateflow_DW.is_RSPA_Mode)
                 {
-                    default:
-                        decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
-                        break;
+
 
                     case decision_stateflow_IN_RSPA_IS_SLOT:
                         U8RSPAState='S';
                         U8Ref_vel=DInputVD;
+
+                        //긴급제동
+                        if(DTTC_D <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+
+                        }
+                        else if(DTTC_D < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+
+                        }
 
                         if (U8Isprkslot == 1)   // 빈주차칸 찾으면 STATE 변경
                         {
@@ -298,6 +376,21 @@ void decision_stateflow_step(void)
                         U8RSPAState='D';
                         U8Ref_vel=DInputVD;
 
+                        //긴급제동
+                        if(DTTC_D <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+
+                        }
+                        else if(DTTC_D < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+
+                        }
+
+
                         if (DMoveDis == 0.10)  // 10CM 좌측으로 이동했으면
                         {
                             U8Ref_vel= 0;
@@ -312,6 +405,19 @@ void decision_stateflow_step(void)
                     case decision_stateflow_IN_RSPA_LANE_D:
                         U8RSPAState='J';
                         U8Ref_vel=DInputVD;
+                        //긴급제동
+                        if(DTTC_D <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+
+                        }
+                        else if(DTTC_D < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+
+                        }
 
                         if (U8Parkingfail==1 )  //한번에 주차 못해서 삐까삐까, STEERING 은 이전 조향반대로 * (-1)
                         {
@@ -332,6 +438,19 @@ void decision_stateflow_step(void)
                     case decision_stateflow_IN_RSPA_R:  //steering 은 -10씩 감소
                         U8RSPAState='R';
                         U8Ref_vel=DInputVR;
+                        //긴급제동
+                        if(DTTC_R <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
+
+                        }
+                        else if(DTTC_R < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
+
+                        }
 
                         if (U8IsWp_R == 1)  // 후방카메라 차선 인지했으면 WP 받았으면
                         {
@@ -346,7 +465,20 @@ void decision_stateflow_step(void)
                         U8RSPAState='K';
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
+                        //긴급제동
+                        if(DTTC_R <= 1.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
+                        }
+                        else if(DTTC_R < 3.0)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
+
+                        }
+                        //
                         if (U8IsStopline == 1 && U8IsPrkFinished == 1) //주차 완료
                         {
                             U8Ref_vel = 0;
@@ -378,7 +510,9 @@ void decision_stateflow_step(void)
 
                         if (motor_enable==0){
                             if (U8Curr_vel==0){
+                                U8PrkFinished=1;
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_INIT_Mode;
+
                             }
                         }
 

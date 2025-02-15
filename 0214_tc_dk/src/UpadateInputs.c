@@ -3,20 +3,21 @@
 
 float stanelyAngle=0.0;
 float pre_stanelyAngle=0.0;
-
- int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
+float RefRPM=0;
+int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
-
+    RefRPM= ((float)U8Ref_vel)*(60*gear_ratio) / circumference;
     if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_SAFE_RCA ){
+
         switch (U8RCAState) {
             case 'E':
                 vehicle_status.servo_angle = 0;
-                vehicle_status.target_rpm = U8Ref_vel;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             case 'D':
                 vehicle_status.servo_angle = 0;  //
-                vehicle_status.target_rpm = U8Ref_vel;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             default:
                 vehicle_status.servo_angle = 0;
@@ -25,15 +26,21 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
         }
     }
 
+    //출차 요청
+    if (decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_FIND_CAR){
+        vehicle_status.servo_angle = 0;
+        vehicle_status.target_rpm = RefRPM;
+    }
+
     if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_SAFE_FCA){
         switch (U8FCAState) {
             case 'E':
                 vehicle_status.servo_angle = 0;
-                vehicle_status.target_rpm = U8Ref_vel;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             case 'D':
                 vehicle_status.servo_angle = 0;  //
-                vehicle_status.target_rpm = U8Ref_vel;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             default:
                 vehicle_status.servo_angle = 0;
@@ -74,11 +81,11 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
             case 'D':  //하드코딩 전진
                 if (IsPrk_LR==1) {// 왼쪽이 빈 주차칸
                     vehicle_status.servo_angle = 30.0;
-                    vehicle_status.target_rpm = DInputVD;
+                    vehicle_status.target_rpm = RefRPM;
                 }
                 else if (IsPrk_LR==2) {  //오른쪽이 빈 주차칸
                     vehicle_status.servo_angle = -30.0;
-                    vehicle_status.target_rpm = DInputVD;
+                    vehicle_status.target_rpm = RefRPM;
                 }
 
                 break;
@@ -89,32 +96,32 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
                 else if (IsPrk_LR==2){
                     vehicle_status.servo_angle = -10;
                 }
-                vehicle_status.target_rpm = DInputVD;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             case 'R':
                 if (IsPrk_LR==1) {// 왼쪽이 빈 주차칸
                     vehicle_status.servo_angle = -40.0;
-                    vehicle_status.target_rpm = DInputVD;
+                    vehicle_status.target_rpm = RefRPM;
                 }
                 else if (IsPrk_LR==2) {  //오른쪽이 빈 주차칸
                     vehicle_status.servo_angle = 40.0;
-                    vehicle_status.target_rpm = DInputVD;
+                    vehicle_status.target_rpm = RefRPM;
                 }
                 break;
             case 'S':  //차선인식 주차공간 탐색
                 stanelyAngle=gitstanley();
                 vehicle_status.servo_angle = stanelyAngle;  //
-                vehicle_status.target_rpm = DInputVD;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             case 'K':  //차선인식 후진 RA
                 stanelyAngle=gitstanley();
                 vehicle_status.servo_angle = stanelyAngle;  //
-                vehicle_status.target_rpm = DInputVR;
+                vehicle_status.target_rpm = RefRPM;
                 break;
             default:
                 stanelyAngle=gitstanley();
                 vehicle_status.servo_angle = stanelyAngle;
-                vehicle_status.target_rpm = DInputVD;
+                vehicle_status.target_rpm = RefRPM;
                 break;
         }
     }

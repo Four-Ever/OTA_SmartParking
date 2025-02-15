@@ -71,7 +71,7 @@ volatile boolean motor_enable = 0;  // 0:제동, 1:해제
 
 volatile float32 Kp_s = 1.55f, Ki_s = 2.65f, Kd_s = 0.001f;
 volatile float32 RPM_CMD1=0;
-volatile uint8 D_RefRPM=0;
+volatile float32 D_RefRPM=0;
 volatile sint8 D_steering=0;
 volatile uint8 D_trans=0;
 /*********************************************************************************************************************/
