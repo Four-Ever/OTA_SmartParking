@@ -56,9 +56,13 @@ void MySocketCAN::on_receive_can(const can_frame& frame) {
         if (vision_node) {
             if(camera_num == 0)
             {
+                vision_node->set_parameter(rclcpp::Parameter("mode", "offstate"));
+            }
+            if(camera_num == 1)
+            {
                 vision_node->set_parameter(rclcpp::Parameter("mode", "driving"));
             }
-            else if(camera_num == 1)
+            else if(camera_num == 2)
             {
                 vision_node->set_parameter(rclcpp::Parameter("mode", "parking"));
             }
