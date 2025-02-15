@@ -37,7 +37,7 @@
 #include "Message.h"
 #include "Data_process.h"
 
-
+//#define DEBUG_PRINT
 
 typedef struct
 {
@@ -68,6 +68,8 @@ void core0_main(void)
     IfxScuWdt_disableCpuWatchdog(IfxScuWdt_getCpuWatchdogPassword());
     IfxScuWdt_disableSafetyWatchdog(IfxScuWdt_getSafetyWatchdogPassword());
     
+    IfxCpu_setCoreMode(&MODULE_CPU1, IfxCpu_CoreMode_run);
+
     /* Wait for CPU sync event */
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
@@ -75,23 +77,23 @@ void core0_main(void)
     Driver_Stm_Init();
 
     init_LCD();
-
+    init_Controller();
 //    initPeripherals();
 #ifdef DEBUG_PRINT
     initShellInterface();
 #endif
-    init_ASCLIN_UART();
+//    init_ASCLIN_UART();
     while(1)
     {
 //        runShellInterface();
         AppScheduling();
 
-        if(receive_flag == RECEIVE_COMPLETED)
-        {
-
-            Command[ORDER_RECEIVE]();
-            receive_flag = RECEIVE_WAIT;
-        }
+//        if(receive_flag == RECEIVE_COMPLETED)
+//        {
+//
+//            Command[ORDER_RECEIVE]();
+//            receive_flag = RECEIVE_WAIT;
+//        }
 
     }
 }
@@ -110,8 +112,6 @@ void AppTask10ms(void)
 
     {
 
-//        send_receive_ASCLIN_UART_message(); // 10ms도 가능!
-        //transferData(); // 2월 7일 데이터 설계 (SPI, WSC) 통일하면 좋음
     }
 }
 
@@ -123,8 +123,8 @@ void AppTask100ms(void)
 
         Control_Current_State();
 #ifdef DEBUG_PRINT
-//        myprintf("%d\n\r",
-//                msg.move_msg.signal.control_transmission);
+        myprintf("%d\n\r",
+                msg.move_msg.signal.control_steering_angle);
 //                msg.off_req_msg.signal.auto_exit_request);
 #endif
 #ifdef PERIOD_VER
