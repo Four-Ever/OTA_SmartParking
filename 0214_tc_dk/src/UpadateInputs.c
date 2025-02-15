@@ -89,7 +89,7 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
                 }
 
                 break;
-            case 'J':  //주차중 전진
+            case 'J':  //주차중 전진, 이때는 그냥 임의의 조향값 넣기, 튜닝안되면 차선기반
                 if (IsPrk_LR==1){
                     vehicle_status.servo_angle = 10;  // 예: 조향값
                 }
@@ -116,11 +116,6 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
             case 'K':  //차선인식 후진 RA
                 stanelyAngle=gitstanley();
                 vehicle_status.servo_angle = stanelyAngle;  //
-                vehicle_status.target_rpm = RefRPM;
-                break;
-            default:
-                stanelyAngle=gitstanley();
-                vehicle_status.servo_angle = stanelyAngle;
                 vehicle_status.target_rpm = RefRPM;
                 break;
         }

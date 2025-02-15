@@ -58,12 +58,14 @@ int ExitCAR_request=0;
 double D_Ref_vel=0;
 
 
+int CameraSwitchRequest=0;
 int Isprkslot; //초음파 헤더파일에서 값 받아와야 함
 int movedDistance;  //stanely 헤더파일에서 계산?
 int U8Isprkslot=0;
 double DSteeringinput=0.0;
 double DMoveDis=0;
 int calDis=0;  //1일때 이동거리 계산 시작 요청 전달
+int First_Set = 1; //차선인식 시작
 
 //안전
 char U8FCAState='0';
@@ -80,7 +82,10 @@ double gainTTC=0.0; //튜닝 파라미터
 /* Model step function */
 void decision_stateflow_step(void)
 {
+
+
     /* Chart: '<Root>/decision' */
+
     if (decision_stateflow_DW.is_active_c3_decision_stateflow == 0)
     {
 
@@ -118,7 +123,7 @@ void decision_stateflow_step(void)
 
                 if (ExitCAR_request==1){
                     U8Ref_vel = DInputVD;
-                    if (calDis==0.2){ //20cm 정도 출차했으면
+                    if (calDis==0.2){ //20cm 정도 출차했으면    calDis 계산하는 로직 아직 안짬
                         U8Ref_vel=0;
                         ExitCAR_request=0;
                         U8PrkFinished=0;
@@ -170,6 +175,12 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_D;
                         }
+                        else if(U8RSPAState == 'S'){
+                            First_Set=1;
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
+                            CameraSwitchRequest=1;
+                        }
                         break;
                 }
                 break;
@@ -209,8 +220,10 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
                         }
                         else if(U8RSPAState == 'K'){
+                            First_Set=1;
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_R;
+                            CameraSwitchRequest=2;
                         }
                         break;
                 }
@@ -325,6 +338,11 @@ void decision_stateflow_step(void)
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
                                 U8DriverState=initState;
+                                First_Set=1;
+                                //VCU 에서 젯슨나노한테 전방카메라 on 해서 waypoint 보내달라고 해야함 (msg 송신)
+                                {
+                                    CameraSwitchRequest = 1;  // 카메라 전환 요청 플래그(전방카메라 on)
+                                }
                             }
                         }
                         break;
@@ -347,7 +365,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel=DInputVD;
 
                         //긴급제동
-                        if(DTTC_D <= 1.0)
+                        if(DTTC_D <= 1.0)    //ttc 계산하는 로직 아직 안짬
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
@@ -523,7 +541,6 @@ void decision_stateflow_step(void)
         }
     }
 }
-
 
 
 /* Model initialize function */

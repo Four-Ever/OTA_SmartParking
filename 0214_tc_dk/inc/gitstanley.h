@@ -22,6 +22,11 @@
 #include "Ifx_Shell.h"
 #include "Ifx_Console.h"
 #include "IfxPort.h"
+#include "decision_stateflow.h"
+#include "STM_interrupt.h"
+
+extern int IsWPTrackingFinish;
+extern int Update_finished;
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,6 +35,7 @@ extern "C" {
 /* Function Declarations */
 float gitstanley(void);
 void initStanley(void);
+void updateWaypoints(float new_waypoints[][2]);
 
 #ifdef __cplusplus
 }

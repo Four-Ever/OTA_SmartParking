@@ -88,9 +88,6 @@ struct tag_RTM_decision_stateflow_T {
 
 /* Block states (default storage) */
 extern DW_decision_stateflow_T decision_stateflow_DW;
-extern int ModeOff;
-extern int ModeOn;
-extern char initState;
 extern double initVel;
 extern int U8IsTrButton;
 extern double U8Curr_vel;
@@ -119,7 +116,8 @@ extern int calDis;
 extern int U8PrkFinished;
 extern int ExitCAR_request;
 extern double D_Ref_vel;
-
+extern int CameraSwitchRequest;
+extern int First_Set;
 
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
