@@ -7,9 +7,6 @@
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Ifx_Types.h"
 #include "IfxCpu.h"
-//#include "Cpu/Irq/IfxCpu_Irq.h"
-//#include "IfxCpu_Irq.h"
-
 #include "IfxScuWdt.h"
 #include "IfxPort.h"
 #include "IfxStm.h"
@@ -17,15 +14,15 @@
 
 #include "Ifx_DateTime.h"
 #include "SysSe/Bsp/Bsp.h"
-
 #include "STM_Interrupt.h"
-
 #include "OurCan.h"
 
 #include "Driver_Stm.h"
 #include "ASCLIN_Shell_UART.h"
 #include "servo.h"
 #include "EncMotor.h"
+#include "decision_stateflow.h"
+#include "UpdateInputs.h"
 
 //#include "Ifx_IntPrioDef.h"
 /*********************************************************************************************************************/
@@ -48,6 +45,7 @@ typedef struct
 {
     uint32 u32nuCnt1ms;
     uint32 u32nuCnt10ms;
+    uint32 u32nuCnt50ms;
     uint32 u32nuCnt100ms;
     uint32 u32nuCnt1000ms;
     uint32 u32nuCnt5000ms;
@@ -72,6 +70,7 @@ void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const Veh
 void AppScheduling(void);
 void AppTask1ms(void);
 void AppTask10ms(void);
+void AppTask50ms(void);
 void AppTask100ms(void);
 void AppTask1000ms(void);
 void AppTask5000ms(void);
@@ -193,13 +192,35 @@ int core0_main(void)
                         D_RefRPM = 0.0f;
                     }
                 }
+                D_Ref_vel = (double)((D_RefRPM * circumference) / (60 * gear_ratio));
             }
 
             // 자동 주차 요청
+            if (db_flag.CGW_Auto_Parking_Request_Flag==1){
+                db_flag.CGW_Auto_Parking_Request_Flag=0;
 
+                IsRSPAButton=1;
+            }
             // OTA 업데이트 확인
 
             // 차량 찾기 요청
+            if (db_flag.CGW_Off_Request_Flag==1){
+                db_flag.CGW_Auto_Parking_Request_Flag=0;
+
+                if (db_msg.CTRL_Off_Request.alert_request==1){
+                    //주차한 차량이 있으면 LED 혹은 부저 삐용삐용
+                    if (U8PrkFinished==1){
+
+
+                    }
+                }
+                if (db_msg.CGW_Off_Request.auto_exit_request==1){
+                    //주차한 차량이 있을 때 출차 요청// 딱 한번만 주차-출차
+                    if (U8PrkFinished==1 ){
+                        ExitCAR_request=1;
+                    }
+                }
+            }
 
             // 출차 요청
         }
@@ -284,10 +305,15 @@ void AppTask10ms(void)
 #endif
 }
 
+void AppTask50ms(void){
+    stTestCnt.u32nuCnt50ms++;
+    decision_stateflow_step();  //주행모드에 따른 종횡 input 결정
+}
 
 void AppTask100ms(void)
 {
     stTestCnt.u32nuCnt100ms++;
+    update_VCU_inputs();  //모터에 제어input 을 넣어줌
 
 #if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 주행 코드
     if (vehicle_status.engine_state == ENGINE_ON)
@@ -331,6 +357,11 @@ void AppScheduling(void)
         {
             stSchedulingInfo.u8nuScheduling10msFlag = 0u;
             AppTask10ms();
+        }
+        if (stSchedulingInfo.u8nuScheduling50msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling50msFlag = 0u;
+            AppTask50ms();
         }
 
         if (stSchedulingInfo.u8nuScheduling100msFlag == 1u)
