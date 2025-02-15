@@ -1,16 +1,13 @@
 #include "UpdateInputs.h"
-#include "gitstanley.h"
 #include "rtwtypes.h"
 
 float stanelyAngle=0.0;
 float pre_stanelyAngle=0.0;
 
- int IsPrk_LR;
-
+ int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
-    //stanelyAngle=gitstanely();
-    stanelyAngle=0;
+
     if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_SAFE_RCA ){
         switch (U8RCAState) {
             case 'E':
@@ -44,8 +41,6 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
                 break;
         }
     }
-
-
 
 
     if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
@@ -107,25 +102,26 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
                 }
                 break;
             case 'S':  //차선인식 주차공간 탐색
-                vehicle_status.servo_angle = stanelyAngle;  // 예: 조향값
+                stanelyAngle=gitstanley();
+                vehicle_status.servo_angle = stanelyAngle;  //
                 vehicle_status.target_rpm = DInputVD;
                 break;
             case 'K':  //차선인식 후진 RA
-                vehicle_status.servo_angle = stanelyAngle;  // 예: 조향 반전
+                stanelyAngle=gitstanley();
+                vehicle_status.servo_angle = stanelyAngle;  //
                 vehicle_status.target_rpm = DInputVR;
                 break;
             default:
+                stanelyAngle=gitstanley();
                 vehicle_status.servo_angle = stanelyAngle;
                 vehicle_status.target_rpm = DInputVD;
                 break;
         }
     }
-    pre_stanelyAngle=stanelyAngle;
 
     //모터 input
     setServoAngle(vehicle_status.servo_angle);
-    (vehicle_status.target_rpm);
+    RPM_CMD1=vehicle_status.target_rpm;
 
-    //dc input 주면 됨
 
 }

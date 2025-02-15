@@ -50,6 +50,7 @@ static const double waypoint_tolerance = 0.015; // Waypoint 도달 허용 오차
 static const double max_error = 7.0; // 경로 이탈 허용 범위
 static const double Kstanley = 0.6; // Stanley Controller 이득 값
 static const double PI = 3.14159265358979323846; // 🚀 M_PI 대신 사용
+double steering_output=0;
 
 /* 초기화 함수 */
 void initStanley(void) {
@@ -70,9 +71,13 @@ float gitstanley(void)
         return 0.0f;
     }
 
+    if (num_waypoints==0){
+        steering_output=0;
+    }
+
     double target_x = waypoints[current_wp_idx][0];
     double target_y = waypoints[current_wp_idx][1];
-    double steering_output=0;
+
    /* 현재 목표 Waypoint와의 거리 계산 */
     double dx = target_x - x;
     double dy = target_y - y;
