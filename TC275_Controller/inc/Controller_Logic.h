@@ -33,6 +33,8 @@
 #include "Ifx_Types.h"
 #include "IfxVadc.h"
 #include "IfxVadc_Adc.h"
+#include "Common_def.h"
+#include "Message.h"
 
 
 
@@ -50,7 +52,26 @@
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
+
+//ADC.c
+extern ButtonState g_btn_adc_result;
+extern sint8 g_SH_adc_result;
+
+//Logic.c//Logic.c
+extern DriveDir dir_state;
+extern ControllerState g_current_ctrl_state;
+extern OUR_signal local_udt_req_sig;
+extern OUS_signal local_udt_state_sig;
+extern PS_signal local_prk_status_sig;
+extern VS_signal local_vhc_status_sig;
+extern TruthState g_isreq_reject ;
 extern uint32 g_reset_timer;
+
+//OTA_state.c
+extern OTAUpdateState g_current_ota_update;
+
+
+extern uint8 here;
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -63,8 +84,6 @@ typedef struct
     uint32 chnIx;
 } Vadc_t;
 
-IFX_EXTERN Vadc_t g_LCD_Btn;
-IFX_EXTERN Vadc_t g_Steering_Wheel;
 /*********************************************************************************************************************/
  
 /*********************************************************************************************************************/
@@ -75,20 +94,30 @@ IFX_EXTERN Vadc_t g_Steering_Wheel;
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
-void Control_Current_State();
 
 
-void init_Btn_Adc(void);
+
+//ADC.c
+void init_Btn_Adc();
 void init_Steering_Wheel();
 
-void init_Controller();
-void start_btn_conversion(void);
-
-uint32 obtain_SH_data(void);
 uint8 get_SH_data(void);
-
-uint32 obtain_Vadc_data(uint32 chnIx);
 uint8 get_btn_data(void);
+
+//OTA_State.c
+void Show_OTA_Confirm_State();
+void Show_OTA_State();
+
+//OFF_State.c
+void Show_Off_State();
+
+//Drive_State.c
+void Show_Drive_State();
+void Show_Auto_Parking_State();
+
+//Logic.c
+void Control_Current_State();
+void init_Controller();
 /*********************************************************************************************************************/
 
 

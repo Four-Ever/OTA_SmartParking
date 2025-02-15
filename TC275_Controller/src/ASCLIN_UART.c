@@ -31,6 +31,9 @@
 #include "ASCLIN_UART.h"
 #include "IfxCpu_Irq.h"
 #include <string.h>
+#include "Message.h"
+#include "Data_process.h"
+#include "Common_def.h"
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
@@ -66,7 +69,7 @@ uint8 g_rxData[SIZE] = {''};
 /* Size of the message */
 uint8 g_count = 0;
 Ifx_SizeT leng = 32;
-volatile DataReceivedFlag receive_flag = RECEIVE_WAIT;
+DataReceivedFlag receive_flag = RECEIVE_WAIT;
 
 uint8 g_rcv_size;
 
@@ -74,13 +77,13 @@ uint8 g_rcv_size;
 /*---------------------------------------------Function Implementations----------------------------------------------*/
 /*********************************************************************************************************************/
 /* Adding of the interrupt service routines */
-IFX_INTERRUPT(asclin0TxISR, 0, INTPRIO_ASCLIN0_TX);
+IFX_INTERRUPT(asclin0TxISR, 1, INTPRIO_ASCLIN0_TX);
 void asclin0TxISR(void)
 {
     IfxAsclin_Asc_isrTransmit(&g_ascHandle);
 }
 
-IFX_INTERRUPT(asclin0RxISR, 0, INTPRIO_ASCLIN0_RX);
+IFX_INTERRUPT(asclin0RxISR, 1, INTPRIO_ASCLIN0_RX);
 void asclin0RxISR(void)
 {
 //    myprintf("I'm in RxISR\n\r");
@@ -90,6 +93,7 @@ void asclin0RxISR(void)
     g_count += IfxAsclin_Asc_read(&g_ascHandle, g_rxData + g_count, &leng, 0);
     if (g_rxData[g_count - 1] == 0xFF)  // 종료 문자 감지
     {
+
         g_rcv_size = g_count - 1;
         g_count = 0;
         receive_flag = RECEIVE_COMPLETED;
@@ -110,7 +114,7 @@ void init_ASCLIN_UART(void)
     /* ISR priorities and interrupt target */
     ascConfig.interrupt.txPriority = INTPRIO_ASCLIN0_TX;
     ascConfig.interrupt.rxPriority = INTPRIO_ASCLIN0_RX;
-    ascConfig.interrupt.typeOfService = IfxCpu_Irq_getTos(IfxCpu_getCoreIndex());
+    ascConfig.interrupt.typeOfService = IfxSrc_Tos_cpu1;//IfxCpu_Irq_getTos(IfxCpu_getCoreIndex());
 
     /* FIFO configuration */
     ascConfig.txBuffer = &g_ascTxBuffer;
@@ -142,3 +146,41 @@ void Send_Message(uint8 *tx_Data, Ifx_SizeT size)
 
 
 
+//uint8 Receive_Byte_Polling(void)
+//{
+//    uint8 data;
+//    Ifx_SizeT size = 1;
+////    msg.cgw_ota_udt_state_msg.signal.ota_update_progress++;
+//    /* RX FIFO에 데이터가 들어올 때까지 대기 (폴링) */
+//    while (IfxAsclin_getRxFifoFillLevel(g_ascHandle.asclin) == 0)
+//    {
+////
+//    };
+//
+//    IfxAsclin_Asc_read(&g_ascHandle, &data, &size, 0);
+//
+//    return data;
+//}
+//
+//void Receive_Message_Polling()
+//{
+//
+//    while(1)
+//    {
+//        g_rxData[g_count] = Receive_Byte_Polling(); // 바이트 단위로 폴링 수신
+//
+//        /* 종료 문자 (예: 0xFF) 감지 시 중단 */
+//        if (g_rxData[g_count] == 0xFF)
+//        {
+//            g_rcv_size = g_count - 1;
+//            g_count = 0;
+////            receive_flag = RECEIVE_COMPLETED;
+//            Command[ORDER_RECEIVE]();
+//            break;
+//        }
+//        else
+//        {
+//            g_count++;
+//        }
+//    }
+//}

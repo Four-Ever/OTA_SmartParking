@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
- * \file Controller_Logic.c
+ * \file Controller_OTA_State.c
  * \copyright Copyright (C) Infineon Technologies AG 2019
  * 
  * Use of this file is subject to the terms of use agreed between (i) you or the company in which ordinary course of 
@@ -27,186 +27,198 @@
 
 
 /*********************************************************************************************************************/
-
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Controller_Logic.h"
 #include "TC275_LCD_16x2.h"
-#include "Common_def.h"
-#include "Message.h"
-#include "Data_process.h"
-#include <stdio.h>
+#include "IfxFlash.h"
 #include <string.h>
-#include <IfxSrc_reg.h>
-
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-#define RE_REQUEST_TIME 60 // (sec)
+
+#define DFLASH_START_ADDR     0xAF000000  // 데이터 플래시 시작 주소
+#define TEST_DATA             0x00000002  // 쓸 테스트 데이터
+#define APPLICATION_A_ADDRESS 0x80064020 /Partition A address/
+#define APPLICATION_B_ADDRESS 0x8012C020 /Partition B address/
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
-uint8 here;
+OTAUpdateState g_current_ota_update = OTA_ORIGINAL;
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-
-
-ControllerState g_current_ctrl_state = CTRL_OFF;
-TruthState g_isreq_reject = false;
-uint32 g_reset_timer = 0;
-
-
-
-DriveDir dir_state = DIR_P;
-
-
-//데이터 무결성 보장을 위해, 통신데이터 저장후 사용
-
-
-OUR_signal local_udt_req_sig;
-OUS_signal local_udt_state_sig;
-PS_signal local_prk_status_sig;
-VS_signal local_vhc_status_sig;
-
+static char str[20];
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
-static void disableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
-}
-
-static void enableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
-}
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
-
-
-
-
-
-
-
-
-void Control_Current_State()
+void Show_OTA_Confirm_State()
 {
+    LCD1602_clear();
+    LCD1602_1stLine();
+    LCD1602_print(" SUBSCRIBE NOW? ");
+    LCD1602_2ndLine();
+    LCD1602_print("    Y      N    ");
+    static OtaCursor now_cursor = OTA_CURSOR_LEFT;
+    static OtaMode prev_state = OTA_NOTHING;
+    LCD1602_setCursor(2, now_cursor);
+    switch (g_btn_adc_result)
     {
-        msg.move_msg.signal.control_transmission = dir_state;
-    }
-    {
-        // TASK마다 수신 값 최신화
-        // 데이터 무결성을 위해, 값 최신화 중 uart수신 인터럽트 비활성화
-//        disableUartRxInterrupt();
-        if(ready_flag.cgw_ota_udt_req_flag == RECEIVE_COMPLETED)
+        case (OTA_LEFT):
         {
-//            disableUartRxInterrupt();
-            memcpy(&local_udt_req_sig, &msg.cgw_ota_udt_req_msg.signal,sizeof(local_udt_req_sig));
-            ready_flag.cgw_ota_udt_req_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
+            if(prev_state != OTA_LEFT)
+            {
+                prev_state = OTA_LEFT;
+                now_cursor = OTA_CURSOR_LEFT;
 
-        if(ready_flag.cgw_ota_udt_state_flag == RECEIVE_COMPLETED)
+                // 명령 송신
+                //msg.move_msg.signal.control_transmission = dir_state;
+            }
+            break;
+        }
+        case (OTA_RIGHT):
         {
-//            disableUartRxInterrupt();
-            memcpy(&local_udt_state_sig, &msg.cgw_ota_udt_state_msg.signal,sizeof(local_udt_state_sig));
-            ready_flag.cgw_ota_udt_state_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
+            if(prev_state != OTA_RIGHT)
+            {
+                prev_state = OTA_RIGHT;
+                now_cursor = OTA_CURSOR_RIGHT;
 
-        if(ready_flag.cgw_prk_status_flag == RECEIVE_COMPLETED)
+                // 명령 송신
+                //msg.move_msg.signal.control_transmission = dir_state;
+            }
+            break;
+        }
+        case (OTA_SELECT):
         {
-//            disableUartRxInterrupt();
-            memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
-            ready_flag.cgw_prk_status_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
+            if(prev_state != OTA_SELECT)
+            {
+                prev_state = OTA_SELECT;
+                LCD1602_clear();
+                LCD1602_1stLine();
+                if(now_cursor == OTA_CURSOR_LEFT)
+                {
+                    //yes
+                    LCD1602_print("SERVICE LOADING");
+                    g_current_ctrl_state = CTRL_OTA;
+                    g_isreq_reject = false;
+                }
+                else
+                {
+                    //no
 
-        if(ready_flag.cgw_vhc_status_flag == RECEIVE_COMPLETED)
+                    LCD1602_print("CANCEL SUBSCRIBE");
+                    g_current_ctrl_state = CTRL_OFF;
+                    g_isreq_reject = true;
+                }
+                LCD1602_2ndLine();
+                LCD1602_loading();
+
+                // 명령 송신
+                //msg.move_msg.signal.control_transmission = dir_state;
+            }
+            break;
+        }
+        default :
         {
-//            disableUartRxInterrupt();
-            memcpy(&local_vhc_status_sig, &msg.cgw_vhc_status_msg.signal,sizeof(local_vhc_status_sig));
-            ready_flag.cgw_vhc_status_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
+            prev_state = OTA_NOTHING;
         }
-
-//        enableUartRxInterrupt();
     }
+}
 
-    {
-        // 제어버튼, 조향 데이터 최신화
-        get_btn_data();
-    }
+void Show_OTA_State()
+{
+    LCD1602_clear();
 
 
-    g_reset_timer++;
-    if(g_reset_timer % (RE_REQUEST_TIME * 10) ==0) // 60초
-        g_isreq_reject = false;
+    // 첫째 줄 - 코멘트
+    LCD1602_1stLine();
+
+    LCD1602_print("OTA UPDATE");
+//    LCD1602_loading();
 
 
-    switch(g_current_ctrl_state){
-    case (CTRL_OFF):
+    // 둘째 줄
+    LCD1602_2ndLine();
+
+//    uint8 ota_pct = 50;
+
+
+    sprintf(str, "%02d%%[", local_udt_state_sig.ota_update_progress < 100 ?
+            local_udt_state_sig.ota_update_progress : 99);
+
+    LCD1602_print(str);
+
+    LCD1602_print_percent_img(local_udt_state_sig.ota_update_progress);
+    LCD1602_print("]");
+    LCD1602_setCursor(1, 11);
+    LCD1602_loading_nodelay();
+
+    if(local_udt_state_sig.ota_update_progress ==  100 )
     {
-        Show_Off_State();
-        break;
-    }
-    case (CTRL_ON):
-    {
-        Show_Drive_State();
-        break;
-    }
-    case (CTRL_OTA_CONFIRM):
-    {
-        Show_OTA_Confirm_State();
-        break;
-    }
-    case (CTRL_OTA):
-    {
-        Show_OTA_State();
-        break;
-    }
-    case (CTRL_AUTO_PARKING):
-    {
-        Show_Auto_Parking_State();
-        break;
-    }
-    default :
-    {
-        //LCD 테스트 출력 공간
+        g_current_ota_update = OTA_UPDATED;
+
         LCD1602_clear();
-        get_SH_data();
-        char str[20];
-//        sprintf(str,"%d %d ",local_udt_state_sig.ota_update_progress,msg.cgw_ota_udt_state_msg.signal.ota_update_progress);
-        sprintf(str,"%d %d %d %d",
-                local_vhc_status_sig.vehicle_velocity,
-                msg.cgw_vhc_status_msg.signal.vehicle_velocity,
-                g_rcv_size,
-                here);
-        LCD1602_print(str);
+        LCD1602_1stLine();
+        LCD1602_print("OTA UPDATE DONE!");
         LCD1602_2ndLine();
-        for(int i=0; i<g_rcv_size;i++)
-        {
-            sprintf(str,"%X ",g_rxData[i]);
-            LCD1602_print(str);
-        }
-    }
+        LCD1602_print("REBOOT");
+        LCD1602_loading();
+
+        g_current_ctrl_state = CTRL_OFF;
     }
 }
 
-void init_Controller()
-{
-    //초기화면 설정칸
-    init_Btn_Adc();
-    init_Steering_Wheel();
-    g_current_ctrl_state = CTRL_OFF;
-}
 
 
 
+ uint32 readData;
 
+
+ void writeFlash(void)
+ {
+     uint32 writeData = TEST_DATA;
+
+     uint16 password;
+
+     // 1. 섹터 지우기
+     password = IfxScuWdt_getSafetyWatchdogPassword();
+     IfxScuWdt_clearSafetyEndinit(password);
+     IfxFlash_eraseMultipleSectors(DFLASH_START_ADDR, 1);  // 1개 섹터 지우기
+     IfxScuWdt_setSafetyEndinit(password);
+
+     // 지우기 완료 대기
+     IfxFlash_waitUnbusy(0, IfxFlash_FlashType_D0);
+
+     // 2. 데이터 쓰기
+     // 페이지 모드 진입
+     IfxFlash_enterPageMode(DFLASH_START_ADDR);
+     IfxFlash_waitUnbusy(0, IfxFlash_FlashType_D0);
+
+     // 데이터 로드 (8바이트 단위로 로드해야 함)
+     IfxFlash_loadPage2X32(DFLASH_START_ADDR, writeData, 0);
+
+     // 페이지 쓰기
+     password = IfxScuWdt_getSafetyWatchdogPassword();
+     IfxScuWdt_clearSafetyEndinit(password);
+     IfxFlash_writePage(DFLASH_START_ADDR);
+     IfxScuWdt_setSafetyEndinit(password);
+
+     // 쓰기 완료 대기
+     IfxFlash_waitUnbusy(0, IfxFlash_FlashType_D0);
+
+     // 3. 데이터 읽기
+
+ }
 /*********************************************************************************************************************/
+
+ void readFlash(void)
+{
+     readData = (uint32)DFLASH_START_ADDR;
+}

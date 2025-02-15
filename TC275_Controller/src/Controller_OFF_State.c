@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
- * \file Data_process.c
+ * \file Controller_OFF_State.c
  * \copyright Copyright (C) Infineon Technologies AG 2019
  * 
  * Use of this file is subject to the terms of use agreed between (i) you or the company in which ordinary course of 
@@ -28,36 +28,24 @@
 
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
-#include "Data_process.h"
 #include "Controller_Logic.h"
-#include "ASCLIN_Shell_UART.h"
-#include "Message.h"
-#include "ASCLIN_UART.h"
+#include "TC275_LCD_16x2.h"
+#include "Data_process.h"
 
-#include <string.h>
+#include <stdio.h>
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-#define BUF_SIZE 32
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
-Commandfp Command[] = {
-    Engine_Command,          // ORDER_ENGINE
-    Move_Command,            // ORDER_MOVE
-    APR_Command,             // ORDER_AUTO_PRK_REQ
-    OUC_Command,             // ORDER_OTA_UDT_CFM
-    OR_Command,              // ORDER_OFF_REQ
-    RCV_Command,             //ORDER_RECEIVE
-};
-
-
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
+static char str[20];
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -66,141 +54,159 @@ Commandfp Command[] = {
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
-void Engine_Command(void)
+void Show_Off_State()
 {
-    uint8 txData[BUF_SIZE];
-    sint16 dlc = sizeof(msg.engine_msg.signal);
-    msg.engine_msg.msgId = ID_ENGINE_MSG;
-    txData[0] = (uint8) dlc;
-    txData[1] = msg.engine_msg.msgId;
-    memcpy(&txData[2], &msg.engine_msg.signal, dlc);
-
-    Send_Message(txData,dlc+2);
-}
-void Move_Command(void)
-{
-    uint8 txData[BUF_SIZE];
-    sint16 dlc = sizeof(msg.move_msg.signal);
-    msg.move_msg.msgId = ID_MOVE_MSG;
-    txData[0] = (uint8) dlc;
-    txData[1] = msg.move_msg.msgId;
-
-
-    memcpy(&txData[2], &msg.move_msg.signal, dlc);
-
-    Send_Message(txData,dlc+2);
-
-}
-
-void APR_Command(){
-    uint8 txData[BUF_SIZE];
-    sint16 dlc = sizeof(msg.auto_park_req_msg.signal);
-    msg.auto_park_req_msg.msgId = ID_AUTO_PARK_REQ_MSG;
-    txData[0] = (uint8) dlc;
-    txData[1] = msg.auto_park_req_msg.msgId;
-    memcpy(&txData[2], &msg.auto_park_req_msg.signal, dlc);
-
-    Send_Message(txData,dlc+2);
-}
-
-
-void OUC_Command(){
-    uint8 txData[BUF_SIZE];
-    sint16 dlc = sizeof(msg.ota_udt_cfm_msg.signal);
-    msg.ota_udt_cfm_msg.msgId = ID_OTA_UDT_CFM_MSG;
-    txData[0] = (uint8) dlc;
-    txData[1] = msg.ota_udt_cfm_msg.msgId;
-    memcpy(&txData[2], &msg.ota_udt_cfm_msg.signal, dlc);
-
-    Send_Message(txData,dlc+2);
-}
-
-void OR_Command(){
-    uint8 txData[BUF_SIZE];
-    sint16 dlc = sizeof(msg.off_req_msg.signal);
-    msg.off_req_msg.msgId = ID_OFF_REQ_MSG;
-    txData[0] = (uint8) dlc;
-    txData[1] = msg.off_req_msg.msgId;
-    memcpy(&txData[2], &msg.off_req_msg.signal, dlc);
-
-    Send_Message(txData,dlc+2);
-}
-
-void RCV_Command(void)
-{
-    uint8 id = g_rxData[0];
-
-    switch(id)
+    if(local_udt_req_sig.ota_update_request == 1 &&
+            g_current_ota_update == OTA_ORIGINAL &&
+            g_isreq_reject == false)
     {
-        case (ID_CGW_OTA_UDT_REQ_MSG):
-        {
+        g_current_ctrl_state = CTRL_OTA_CONFIRM;
+    }
 
-            msg.cgw_ota_udt_req_msg.msgId = ID_CGW_OTA_UDT_REQ_MSG;
-            memcpy(&msg.cgw_ota_udt_req_msg.signal, &g_rxData[1], g_rcv_size);
-            ready_flag.cgw_ota_udt_req_flag = RECEIVE_COMPLETED;
-#ifdef DEBUG_PRINT
-            myprintf("ID : 0X%02X ota_update_request : %u\n\r",
-                    msg.cgw_ota_udt_req_msg.msgId,
-                    msg.cgw_ota_udt_req_msg.signal.ota_update_request);
+    LCD1602_clear();
+
+
+    // 첫째 줄 - 코멘트
+    LCD1602_1stLine();
+
+
+
+    LCD1602_print("PWR");
+    LCD1602_print_picture(PIC_ROTATED_LINE);
+    LCD1602_print("VEHICLE FIND");
+
+
+    // 둘째 줄
+    LCD1602_2ndLine();
+
+    LCD1602_print_picture(PIC_LEFT_DOWN_ARROW);
+
+    LCD1602_print("ON");
+
+    LCD1602_print_picture(PIC_DOWN_ARROW);
+    LCD1602_print(" ");
+    LCD1602_print_picture(PIC_DOWN_ARROW);
+
+    LCD1602_print("AUTO LEAVE");
+
+
+
+
+
+    static OffMode prev_state = OFF_NOTHING;
+
+
+    switch(g_btn_adc_result){
+    case (OFF_POWERON):
+    {
+        LCD1602_clear();
+
+
+        LCD1602_1stLine();
+        sprintf(str, "POWER ON");
+        LCD1602_print(str);
+        LCD1602_loading();
+        if(prev_state != OFF_POWERON){
+            prev_state = OFF_POWERON;
+            //화면전환
+            g_current_ctrl_state = CTRL_ON;
+
+            //명령 송신
+            msg.engine_msg.signal.control_engine = g_current_ctrl_state;
+
+#ifndef PERIOD_VER
+            Command[ORDER_ENGINE]();
 #endif
-            break;
+            //********* 시동키면 P로 수정해야할수도 *************
+            msg.move_msg.signal.control_transmission = DIR_P;
+
+
 
         }
-        case (ID_CGW_OTA_UDT_STATE_MSG):
-        {
-            msg.cgw_ota_udt_state_msg.msgId = ID_CGW_OTA_UDT_STATE_MSG;
-            memcpy(&msg.cgw_ota_udt_state_msg.signal, &g_rxData[1], g_rcv_size);
-            ready_flag.cgw_ota_udt_state_flag = RECEIVE_COMPLETED;
-#ifdef DEBUG_PRINT
-            myprintf("ID : 0X%02X ota_update_progress : %u\n\r",
-                    msg.cgw_ota_udt_state_msg.msgId,
-                    msg.cgw_ota_udt_state_msg.signal.ota_update_progress);
+        break;
+    }
+    case (OFF_FIND):
+    {
+        LCD1602_clear();
+
+        if(prev_state != OFF_FIND){
+            prev_state = OFF_FIND;
+            //SPI송신
+            msg.off_req_msg.signal.alert_request = 1;
+#ifndef PERIOD_VER
+            Command[ORDER_OFF_REQ]();
+            // 1 신호만 보내고 기본신호 0으로 변경,
+            // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
+            msg.off_req_msg.signal.alert_request = 0;
 #endif
-            break;
+
+
 
         }
-        case (ID_CGW_PRK_STATUS_MSG):
+        LCD1602_1stLine();
+        sprintf(str, "ALERT MY CAR");
+        LCD1602_print(str);
+        LCD1602_loading();
+
+        break;
+    }
+
+    // **********OTA시 활성화*********************//
+    case (OFF_AUTO_EXIT):
+    {
+        LCD1602_clear();
+
+
+        if(g_current_ota_update == OTA_UPDATED)
         {
-            msg.cgw_prk_status_msg.msgId = ID_CGW_PRK_STATUS_MSG;
-            memcpy(&msg.cgw_prk_status_msg.signal, &g_rxData[1], g_rcv_size);
-            ready_flag.cgw_prk_status_flag = RECEIVE_COMPLETED;
-#ifdef DEBUG_PRINT
-            myprintf("ID : 0X%02X parking_status : %u\n\r",
-                    msg.cgw_prk_status_msg.msgId,
-                    msg.cgw_prk_status_msg.signal.parking_status);
+            if(prev_state != OFF_AUTO_EXIT){
+                prev_state = OFF_AUTO_EXIT;
+
+                //SPI송신
+                msg.off_req_msg.signal.auto_exit_request = 1;
+#ifndef PERIOD_VER
+                Command[ORDER_OFF_REQ]();
+                // 1 신호만 보내고 기본신호 0으로 변경,
+                // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
+                msg.off_req_msg.signal.auto_exit_request = 0;
 #endif
-            break;
 
+            }
+            LCD1602_1stLine();
+            sprintf(str, "LEAVING MY CAR");
+            LCD1602_print(str);
+            LCD1602_2ndLine();
+            LCD1602_loading();
         }
-        case (ID_CGW_VHC_STATUS_MSG):
+        else
         {
-            msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
-            memcpy(&msg.cgw_vhc_status_msg.signal, &g_rxData[1], g_rcv_size);
-            ready_flag.cgw_vhc_status_flag = RECEIVE_COMPLETED;
-#ifdef DEBUG_PRINT
-            myprintf("ID : 0X%02X vehicle_velocity %u / vehicle_steering_angle : %d / vehicle_transmission %u  \n\r",
-                    msg.cgw_vhc_status_msg.msgId,
-                    msg.cgw_vhc_status_msg.signal.vehicle_velocity,
-                    msg.cgw_vhc_status_msg.signal.vehicle_steering_angle,
-                    msg.cgw_vhc_status_msg.signal.vehicle_transmission
-                    );
-#endif
-            break;
+            LCD1602_1stLine();
+            sprintf(str, "DO SUBSCRIBE TO");
+            LCD1602_print(str);
+            LCD1602_2ndLine();
+            sprintf(str, "USE AUTO LEAVING");
+            LCD1602_print(str);
+            LCD1602_loading();
 
         }
-        default:
-        {
-
-        }
+        break;
     }
 
 
-
+    //******************************************//
+    default :
+    {
+//        sprintf(str, "");
+#ifdef PERIOD_VER
+        //2턴 지나고 나서 0으로 바꿈
+        if(prev_state == OFF_NOTHING){
+            msg.off_req_msg.signal.alert_request = 0;
+            msg.off_req_msg.signal.auto_exit_request = 0;
+        }
+#endif
+        prev_state = OFF_NOTHING;
+    }
+    }
+//    LCD1602_print(str);
 }
-
-void Test_Command(void)
-{
-
-}
-
 /*********************************************************************************************************************/

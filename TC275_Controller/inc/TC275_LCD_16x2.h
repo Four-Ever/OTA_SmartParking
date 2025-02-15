@@ -134,6 +134,7 @@ void init_LCD();
 void init_GPIO_LCD();
 void LCD1602_print_percent_img(int bat_val);
 void LCD1602_loading();
+void LCD1602_loading_nodelay();
 
 
 

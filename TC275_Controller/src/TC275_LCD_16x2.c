@@ -62,7 +62,6 @@ static uint8 D4_PIN, D5_PIN, D6_PIN, D7_PIN; // MSBs D5, D6, D7 and D8 pins
 static uint8 DisplayControl = 0x0F;
 static uint8 FunctionSet = 0x38;
 
-static char str[20];
 
 //adc를 위한 변수
 
@@ -452,23 +451,6 @@ void store_custom_img(){
 
 
 }
-
-void init_LCD()
-{
-
-    //  LCD1602_Begin4BIT(GPIOA, GPIO_PIN_8, GPIO_PIN_9, GPIOB, GPIO_PIN_3,
-    //      GPIO_PIN_5, GPIO_PIN_4, GPIO_PIN_10);
-
-    // FOR 103RB LCD!!!
-    init_GPIO_LCD();
-    init_Btn_Adc();
-    init_Steering_Wheel();
-    init_Controller();
-    LCD1602_Begin4BIT(&MODULE_P02, 6,7,&MODULE_P10, 4,3, 4, 5); // RS,E,D4,D5,D6,D7
-    store_custom_img();
-
-}
-
 void init_GPIO_LCD(){
     // P02 핀 설정 (OUTPUT)
     IfxPort_setPinModeOutput(&MODULE_P02, 6, IfxPort_OutputMode_pushPull, IfxPort_OutputIdx_general);
@@ -488,6 +470,23 @@ void init_GPIO_LCD(){
     IfxPort_setPinLow(&MODULE_P02, 5);
     IfxPort_setPinLow(&MODULE_P10, 4);
 }
+
+void init_LCD()
+{
+
+    //  LCD1602_Begin4BIT(GPIOA, GPIO_PIN_8, GPIO_PIN_9, GPIOB, GPIO_PIN_3,
+    //      GPIO_PIN_5, GPIO_PIN_4, GPIO_PIN_10);
+
+    // FOR 103RB LCD!!!
+    init_GPIO_LCD();
+
+
+    LCD1602_Begin4BIT(&MODULE_P02, 6,7,&MODULE_P10, 4,3, 4, 5); // RS,E,D4,D5,D6,D7
+    store_custom_img();
+
+}
+
+
 
 void LCD1602_print_percent_img(int val)
 {
