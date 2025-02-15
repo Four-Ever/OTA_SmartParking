@@ -253,7 +253,7 @@ void dummy_send_datas_to_TC275(){
 
           );
   #endif
-
+  delay(1);
   static uint8_t i =0;
   msg.cgw_odt_state_msg.msgId = ID_CGW_OTA_UDT_STATE_MSG;
   msg.cgw_odt_state_msg.signal.ota_update_progress = (i++)%101;
@@ -267,7 +267,7 @@ void dummy_send_datas_to_TC275(){
 
           );
   #endif
-
+delay(1);
   msg.cgw_park_status_msg.msgId = ID_CGW_PRK_STATUS_MSG;
   msg.cgw_park_status_msg.signal.parking_status = 3;
 
@@ -280,9 +280,10 @@ void dummy_send_datas_to_TC275(){
 
           );
   #endif
-
+delay(1);
+ static int speed =10;
   msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
-  msg.cgw_vhc_status_msg.signal.vehicle_velocity = 0;
+  msg.cgw_vhc_status_msg.signal.vehicle_velocity = speed++;
   msg.cgw_vhc_status_msg.signal.vehicle_steering_angle = -44;
   msg.cgw_vhc_status_msg.signal.vehicle_transmission = 3;
 
@@ -297,7 +298,7 @@ void dummy_send_datas_to_TC275(){
 
             );
   #endif
-
+delay(1);
 
 
 }
