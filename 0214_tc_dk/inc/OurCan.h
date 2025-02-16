@@ -34,6 +34,7 @@
 #include "IfxMultican_Can.h"
 #include "IfxPort_PinMap.h"
 #include "IfxPort.h"
+#include "Ifx_Types.h"
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -145,10 +146,13 @@ typedef enum
 typedef struct
 {
     Mode user_mode;
-    float32 target_rpm;
-    float32 servo_angle;
+    float32 ref_rpm;
+    float32 ref_vel;
 
-    uint8 velocity;
+    sint32 cur_rpm;
+    float32 cur_vel;
+
+    uint8 u8_velocity;
     sint8 steering_angle;
     Transmission transmission;
     ParkingStatus parking_status;

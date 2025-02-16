@@ -41,8 +41,11 @@
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 
-VehicleStatus vehicle_status = {SYSTEM_DRIVE_MODE, 0.0f, 0.0f, 0, 0,
-                                    PARKING, PARKED, ENGINE_OFF};
+//    user_mode, target_rpm , target_vel, cur_rpm, cur_vel,
+//    uint8 velocity, sint8 steering_angle, transmission, parking_status, engine_state
+
+VehicleStatus vehicle_status = {SYSTEM_DRIVE_MODE, 0.0f, 0.0f, 0, 0.0f,
+                                    0, 0, PARKING, PARKED, ENGINE_OFF};
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/

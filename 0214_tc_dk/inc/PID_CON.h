@@ -23,6 +23,13 @@ typedef enum
     move_distance_control = 1 // 목표 거리
 }drive_mode;
 
+typedef enum
+{
+    NO_TARGET_DIS = 0,
+    MOVING_TO_TARGET_DIS,
+    REACHED_TARGET_DIS
+}TargetDistanceStatus;
+
 typedef struct {  float32  Ref;           // Input: Reference input
                   float32  Fdb;           // Input: Feedback input
                   float32  Err;           // Variable: Error (k)
@@ -51,10 +58,12 @@ typedef struct {  float32  Ref;           // Input: Reference input
                   void  (*reset)();     // Pointer to calculation function
 
                   drive_mode DriveMode;
+                  TargetDistanceStatus TargetDis_state;
 
                   float32 DisSum;       // sum of distance
                   float32 TargetDis;    // target distance
                   float32 TargetVel;    // target velocity
+                  
                  } PIDREG3;
 
 typedef PIDREG3 *PIDREG3_handle;
@@ -89,6 +98,7 @@ Default initalizer for the PIDREG3 object.
                           (void (*)(unsigned int))pid_reg3_calc, \
                           (void (*)(unsigned int))pid_reset, \
                            move_pwm_control, \
+                           NO_TARGET_DIS, \
                            0, \
                            0, \
                            0}
