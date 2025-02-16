@@ -47,8 +47,8 @@ int U8IsStopline = 0;
 int U8IsPrkFinished = 0;
 int U8IsOb_R = 0;
 int U8IsOb_D=0;
-DriverState U8DriverState = InitState;
-RSPAState U8RSPAState = InitState;
+DriverState U8DriverState = InitDriverState;
+RSPAState U8RSPAState = InitRSPAState;
 int U8Driver = 0;
 int U8RSPA = 0;
 int U8Engine = 0;
@@ -62,16 +62,16 @@ int CameraSwitchRequest=0;
 int Isprkslot; //초음파 헤더파일에서 값 받아와야 함
 int movedDistance;  //stanely 헤더파일에서 계산?
 int U8Isprkslot=0;
-sint8 DSteeringinput=0.0;
+sint8 DSteeringinput=0;
 double DMoveDis=0;
 int calDis=0;  //1일때 이동거리 계산 시작 요청 전달
 int First_Set = 1; //차선인식 시작
 
-IsPrk IsPrk_LR = InitState;
+IsPrk IsPrk_LR = InitIsPrk;
 
 //안전
-CAState U8FCAState = InitState;
-CAState U8RCAState = InitState;
+CAState U8FCAState = InitCAState;
+CAState U8RCAState = InitCAState;
 double DTTC_D= 10.0; // 전방 장애물 ttc 센서 데이터가 들어오지 않을 때, state 영향 없는 값으로 초기화
 double DTTC_R= 10.0; // 후방 장애물 ttc 센서 데이터가 들어오지 않을 때, state 영향 없는 값으로 초기화
 double DObs_dis_D= 100.0; //전방 장애물 상대거리 센서 데이터가 들어오지 않을 때, state 영향 없는 값으로 초기화
@@ -102,8 +102,8 @@ void decision_stateflow_step(void)
                 U8Driver=ModeOff;
                 U8RSPA=ModeOff;
                 U8Engine=ModeOff;
-                U8DriverState = InitState;
-                U8RSPAState = InitState;
+                U8DriverState = InitDriverState;
+                U8RSPAState = InitRSPAState;
 
                 if (vehicle_status.engine_state == ENGINE_ON && ExitCAR_request == 0 )   //시동 켜지면 운전자모드로 전환
                 {
@@ -164,7 +164,7 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_FCA_EXIT:   //긴급제동 하기 전의 MODE 로 복귀
                                                            //탈출 조건 DObs_dis_D 만족하는지 확인
-                        U8FCAState = InitState;
+                        U8FCAState = InitCAState;
 
                         if (U8DriverState == Driving)
                         {
@@ -215,7 +215,7 @@ void decision_stateflow_step(void)
                         }
                         break;
                     case decision_stateflow_IN_RCA_EXIT:   //긴급제동 하기 전의 MODE 로 복귀
-                        U8RCAState = InitState;
+                        U8RCAState = InitCAState;
 
                         if (U8DriverState == Reversing)
                         {
@@ -240,8 +240,9 @@ void decision_stateflow_step(void)
                 U8Driver=ModeOn;
                 U8RSPA=ModeOff;
                 //U8Engine=ModeOff;
-                U8DriverState = InitState;
-                U8RSPAState = InitState;
+
+                U8DriverState = InitDriverState;
+                U8RSPAState = InitRSPAState;
 
                 switch (decision_stateflow_DW.is_DRIVER_Mode)
                 {
@@ -301,7 +302,8 @@ void decision_stateflow_step(void)
                                 
                                 //추가한 부분 시작
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
-                                U8DriverState = InitState;
+
+                                U8DriverState = InitDriverState;
                                 First_Set=1;
                                 IsRSPAButton = 0;
                                 //VCU 에서 젯슨나노한테 전방카메라 on 해서 waypoint 보내달라고 해야함 (msg 송신)
@@ -352,7 +354,9 @@ void decision_stateflow_step(void)
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
-                                U8DriverState = InitState;
+
+                                U8DriverState = InitDriverState;
+
                                 First_Set=1;
                                 IsRSPAButton = 0; // 추가
                                 //VCU 에서 젯슨나노한테 전방카메라 on 해서 waypoint 보내달라고 해야함 (msg 송신)
@@ -369,8 +373,9 @@ void decision_stateflow_step(void)
             case decision_stateflow_IN_RSPA_Mode:
                 U8Driver=ModeOff;
                 U8RSPA=ModeOn;
-                U8DriverState=InitState;
-                U8RSPAState=InitState;
+
+                U8DriverState=InitDriverState;
+                U8RSPAState=InitRSPAState;
 
                 switch (decision_stateflow_DW.is_RSPA_Mode)
                 {

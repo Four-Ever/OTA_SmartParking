@@ -377,7 +377,7 @@ void AppTask100ms(void)
             {
                 RPM_CMD1 = vehicle_status.ref_rpm * -1;
             }
-            setServoAngle(vehicle_status.servo_angle);
+            setServoAngle(vehicle_status.steering_angle);
         }
         //시동이 켜져있을 때, can message 출력
         make_can_message();

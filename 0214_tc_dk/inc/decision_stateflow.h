@@ -30,6 +30,8 @@
 #include "EncMotor.h"
 #include "PID_CON.h"
 
+#include "STM_Interrupt.h"
+
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
 #define rtmGetErrorStatus(rtm)         ((rtm)->errorStatus)
@@ -82,20 +84,20 @@ typedef struct {
 } DW_decision_stateflow_T;
 
 typedef enum{
-  InitState = 0,
+  InitDriverState = 0,
   Parking,    // 1
   Driving,    // 2
   Reversing   // 3
 }DriverState;
 
 typedef enum{
-  InitState = 0,
+  InitCAState = 0,
   Emergency,  // 1
   Decel       // 2
 }CAState;
 
 typedef enum{
-  InitState = 0,
+  InitRSPAState = 0,
   Searching,  // 1
   Forward, // 2
   Backward,  // 3
@@ -105,10 +107,10 @@ typedef enum{
 }RSPAState;
 
 typedef enum{
-  InitState = 0,
+  InitIsPrk = 0,
   LEFT,
   RIGHT
-}IsPrk
+}IsPrk;
 
 /* Real-time Model Data Structure */
 struct tag_RTM_decision_stateflow_T {
@@ -140,7 +142,7 @@ extern double DTTC_D; // 후방 장애물 ttc
 extern double DTTC_R; // 전방 장애물 ttc
 extern double DObs_dis_D; //전방 장애물 상대거리
 extern double DObs_dis_R; //후방 장애물 상대거리
-extern double DSteeringinput;
+extern sint8 DSteeringinput;
 extern int calDis;
 extern int U8PrkFinished;
 extern int ExitCAR_request;

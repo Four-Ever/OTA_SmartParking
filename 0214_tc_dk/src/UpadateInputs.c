@@ -122,6 +122,10 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;
                 break;
+
+            case InitRSPAState:
+                //초기상태
+                break;
         }
     }
 

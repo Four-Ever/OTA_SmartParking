@@ -130,7 +130,7 @@ void RPM_cal(void)
     u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
 
     vehicle_status.cur_rpm = s32_motor_speed_rpm;
-    vehicle_status.cur_vel = value;
+    vehicle_status.cur_vel = U8Curr_vel;
     vehicle_status.u8_velocity = (uint8)u16_velocity; // (실제 속도 / 10) [mm/0.1s]
     Enc_count_old = Enc_count_new;
 }
@@ -267,10 +267,7 @@ TargetDistanceStatus move_distance(float32 tarDis)
         return REACHED_TARGET_DIS;
     }
 
-    else
-    {
-        return speed_pid.TargetDis_state; // MOVING_TO_TARGET;
-    }
+    return speed_pid.TargetDis_state; // MOVING_TO_TARGET;
 }
 
 

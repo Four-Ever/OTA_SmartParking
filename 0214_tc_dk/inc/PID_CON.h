@@ -12,6 +12,9 @@ function prototypes for the PIDREG3.
 -------------------------------------------------------------------------------------
  04-15-2005 Version 3.20
 ------------------------------------------------------------------------------*/
+#ifndef PID_CON_H_
+#define PID_CON_H_
+
 #include "Ifx_Types.h"
 
 
@@ -108,3 +111,5 @@ Prototypes for the functions in PIDREG3.C
 ------------------------------------------------------------------------------*/
 void pid_reg3_calc(PIDREG3_handle);
 void pid_reset(PIDREG3_handle);
+
+#endif /* PID_CON_H_ */
