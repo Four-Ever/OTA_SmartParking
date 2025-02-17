@@ -42,7 +42,7 @@ Euler MadgwickAHRSupdate(IMU now_status) {
     now_time=MODULE_STM0.TIM0.U;
     if(prev_time>now_time)return noweuler;
     float deltaT = (float)(now_time-prev_time)/ (IfxStm_getFrequency(&MODULE_STM0) / 1000000);
-    deltaT=deltaT*0.001*0.001;///s´ÜÀ§
+    deltaT=deltaT*0.001*0.001;///së‹¨ìœ„
     float ax=now_status.accel_x;
     float ay=now_status.accel_y;
     float az=now_status.accel_z;
@@ -163,7 +163,7 @@ Euler MadgwickAHRSupdateIMU(IMU now_status) {
     now_time=MODULE_STM0.TIM0.U;
     if(prev_time>now_time)return noweuler;
     float deltaT = (float)(now_time-prev_time)/ (IfxStm_getFrequency(&MODULE_STM0) / 1000000);
-    deltaT=deltaT*0.001*0.001;///s´ÜÀ§
+    deltaT=deltaT*0.001*0.001;///së‹¨ìœ„
     float ax=now_status.accel_x;
     float ay=now_status.accel_y;
     float az=now_status.accel_z;

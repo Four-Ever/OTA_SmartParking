@@ -17,6 +17,7 @@
 #include "MadgwickAHRS.h"
 
 
+
 /***********************************************************************/
 /*Typedef*/
 /***********************************************************************/
@@ -63,31 +64,6 @@ typedef struct {
 #define M_PI 3.14159265358979323846f
 #endif
 
-
-
-//#define scale_x 0.8435654f
-//#define scale_y 1.0019939f
-//#define scale_z 1.2246717f
-//#define x_offset -24.517365f
-//#define y_offset 193.28069f
-//#define z_offset -20.312042f
-extern IfxI2c_I2c_Status first;
-extern IfxI2c_I2c_Status second;
-extern IfxI2c_I2c_Status third;
-extern IfxI2c_I2c_Status fourth;
-extern IfxI2c_I2c_Status test1;
-extern IfxI2c_I2c_Status test2;
-extern IfxI2c_I2c_Status test3;
-extern IfxI2c_I2c_Status test4;
-extern IfxI2c_I2c_Status test5;
-extern IfxI2c_I2c_Status test6;
-extern IfxI2c_I2c_Status test7;
-extern IfxI2c_I2c_Status test8;
-extern IfxI2c_I2c_Status test9;
-
-
-
-
 /***********************************************************************/
 /*Global Function Prototype*/
 /***********************************************************************/
@@ -103,6 +79,7 @@ void i2cStopCondition (void);
 void i2cStartCondition (void);
 void setDLPF(void);
 void checkoffset(void);
-
+int Touch(void);
+void initGPIO(void);
 
 #endif /* INC_IMU_DRIVER_H_ */
