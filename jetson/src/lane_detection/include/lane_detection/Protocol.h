@@ -689,6 +689,7 @@ public:
     void SetCordiY4(uint16_t y) { data_.data.cordi_data_y4 = y; }
     void SetCordiX4(int16_t x) { data_.data.cordi_data_x4 = x; }
     void SetUsingCamera(uint8_t camera) { data_.data.using_camera = camera; }
+    void SetTrustValue(uint8_t value) { data_.data.trust_value = value; };
 
 public:
     CCU_Cordi_data2_Data data_;
