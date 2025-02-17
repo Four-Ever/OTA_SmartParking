@@ -25,170 +25,192 @@
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
 
-#ifndef OURCAN_SIGNAL_H_
-#define OURCAN_SIGNAL_H_
+ #ifndef OURCAN_SIGNAL_H_
+ #define OURCAN_SIGNAL_H_
 
-/*********************************************************************************************************************/
-/*-----------------------------------------------------Includes------------------------------------------------------*/
-/*********************************************************************************************************************/
-# include "Platform_Types.h"
-/*********************************************************************************************************************/
-/*------------------------------------------------------Macros-------------------------------------------------------*/
-/*********************************************************************************************************************/
+ /*********************************************************************************************************************/
+ /*-----------------------------------------------------Includes------------------------------------------------------*/
+ /*********************************************************************************************************************/
+ # include "Platform_Types.h"
+ /*********************************************************************************************************************/
+ /*------------------------------------------------------Macros-------------------------------------------------------*/
+ /*********************************************************************************************************************/
 
-/*********************************************************************************************************************/
-/*-------------------------------------------------Global variables--------------------------------------------------*/
-/*********************************************************************************************************************/
+ /*********************************************************************************************************************/
+ /*-------------------------------------------------Global variables--------------------------------------------------*/
+ /*********************************************************************************************************************/
 
-/*********************************************************************************************************************/
-/*-------------------------------------------------Data Structures---------------------------------------------------*/
-// VCU TX
+ /*********************************************************************************************************************/
+ /*-------------------------------------------------Data Structures---------------------------------------------------*/
+ // VCU TX
 
-typedef struct //2
-{
-     uint8 vehicle_velocity : 7;
-     sint8 vehicle_steering_angle : 7;
-     uint8 vehicle_transmission : 2;
+ typedef struct //2
+ {
+      uint8 vehicle_velocity : 7;
+      sint8 vehicle_steering_angle : 7;
+      uint8 vehicle_transmission : 2;
 
-}VCU_Vehicle_Status_Msg;
+ }VCU_Vehicle_Status_Msg;
 
-typedef struct // 1
-{
-        uint8 parking_status : 2;
+ typedef struct // 1
+ {
+         uint8 parking_status : 2;
 
-} VCU_Parking_Status_Msg;
+ } VCU_Parking_Status_Msg;
 
-
-typedef struct // 1
-{
-        uint8 vehicle_engine_status : 1;
-
-} VCU_Vehicle_Engine_Status_Msg;
-
-typedef struct // 1
-{
-       uint8 camera_num : 2;
-
-} VCU_Camera_Msg;
-
-typedef struct // 1
-{
-        uint8 F_obstacle : 1;
-        uint8 B_obstacle : 1;
-        uint8 R_obstacle : 1;
-        uint8 L_obstacle : 1;
-
-} SCU_Obstacle_Detection_Msg;
+ typedef struct
+ {
+         uint8 exiting_status : 1;
+ }VCU_Exiting_Status_Msg;
 
 
+ typedef struct // 1
+ {
+         uint8 vehicle_engine_status : 1;
 
-// VCU RX CGW TX
-typedef struct  //4
-{
-        uint32 ota_file_size;
+ } VCU_Vehicle_Engine_Status_Msg;
 
-} CGW_OTA_File_Size_Msg;
+ typedef struct
+ {
+         uint8 Lane_Request : 1;
+ }VCU_ParkingLane_Request_Msg;
 
-typedef struct //8
-{
-        uint64 ota_file_data;
+ typedef struct // 1
+ {
+        uint8 camera_num : 2;
 
-} CGW_OTA_File_Data_Msg;
+ } VCU_Camera_Msg;
 
-typedef struct // 8
-{
-        uint64 ota_control;
+ typedef struct // 1
+ {
+         uint8 F_obstacle : 1;
+         uint8 B_obstacle : 1;
+         uint8 R_obstacle : 1;
+         uint8 L_obstacle : 1;
 
-} CGW_OTA_Control_Msg;
-
-typedef struct // 6
-{
-        uint16 cordi_data_y1 : 11;
-        sint16 cordi_data_x1 : 10;
-        uint16 cordi_data_y2 : 11;
-        sint16 cordi_data_x2 : 10;
-        uint8 using_camera : 2;
-
-} CCU_Cordi_data1_Msg;
-
-typedef struct // 6
-{
-        uint16 cordi_data_y3 : 11;
-        sint16 cordi_data_x3 : 10;
-        uint16 cordi_data_y4 : 11;
-        sint16 cordi_data_x4 : 10;
-        uint8 using_camera : 2;
-
-} CCU_Cordi_data2_Msg;
-
-typedef struct //1
-{
-        uint8 control_engine : 1;
-
-} CGW_Engine_Msg;
-
-typedef struct // 2
-{
-        uint8 control_accel : 1;
-        uint8 control_brake : 1;
-        sint8 control_steering_angle : 7;
-        uint8 control_transmission : 2;
-
-} CGW_Move_Msg;
-
-typedef struct // 1
-{
-        uint8 auto_parking : 1;
-
-} CGW_Auto_Parking_Request_Msg;
-
-typedef struct // 1
-{
-        uint8 alert_request : 1;
-        uint8 auto_exit_request : 1;
-
-} CGW_Off_Request_Msg;
+ } SCU_Obstacle_Detection_Msg;
 
 
 
-// VCU RX CTRL TX
-typedef struct //1
-{
-        uint8 control_engine : 1;
+ // VCU RX CGW TX
+ typedef struct  //4
+ {
+         uint32 ota_file_size;
 
-} CTRL_Engine_Msg;
+ } CGW_OTA_File_Size_Msg;
 
-typedef struct // 2
-{
-        uint8 control_accel : 1;
-        uint8 control_brake : 1;
-        sint8 control_steering_angle : 7;
-        uint8 control_transmission : 2;
+ typedef struct //8
+ {
+         uint64 ota_file_data;
 
-} CTRL_Move_Msg;
+ } CGW_OTA_File_Data_Msg;
 
-typedef struct // 1
-{
-        uint8 auto_parking : 1;
+ typedef struct // 8
+ {
+         uint64 ota_control;
 
-} CTRL_Auto_Parking_Request_Msg;
+ } CGW_OTA_Control_Msg;
 
-typedef struct // 1
-{
-        uint8 alert_request : 1;
-        uint8 auto_exit_request : 1;
+ typedef struct // 6
+ {
+         uint16 cordi_data_y1 : 11;
+         sint16 cordi_data_x1 : 10;
+         uint16 cordi_data_y2 : 11;
+         sint16 cordi_data_x2 : 10;
 
-} CTRL_Off_Request_Msg;
+ } CCU_Cordi_data1_Msg;
+
+ typedef struct // 6
+ {
+         uint16 cordi_data_y3 : 11;
+         sint16 cordi_data_x3 : 10;
+         uint16 cordi_data_y4 : 11;
+         sint16 cordi_data_x4 : 10;
+         uint8 using_camera : 2;
+         uint8 trust_value : 6;
+
+ } CCU_Cordi_data2_Msg;
+
+ typedef struct
+ {
+         uint8 right_angle_lane_detected : 1;
+
+ } CCU_RightAngle_detect_Msg;
+
+ typedef struct
+ {
+         sint8 parkig_back_lane_detected;
+
+ } CCU_Parking_Complete_Msg;
+
+ typedef struct //1
+ {
+         uint8 control_engine : 1;
+
+ } CGW_Engine_Msg;
+
+ typedef struct // 2
+ {
+         uint8 control_accel : 1;
+         uint8 control_brake : 1;
+         sint8 control_steering_angle : 7;
+         uint8 control_transmission : 2;
+
+ } CGW_Move_Msg;
+
+ typedef struct // 1
+ {
+         uint8 auto_parking : 1;
+
+ } CGW_Auto_Parking_Request_Msg;
+
+ typedef struct // 1
+ {
+         uint8 alert_request : 1;
+         uint8 auto_exit_request : 1;
+
+ } CGW_Off_Request_Msg;
 
 
-/*********************************************************************************************************************/
 
-/*********************************************************************************************************************/
-/*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-/*********************************************************************************************************************/
+ // VCU RX CTRL TX
+ typedef struct //1
+ {
+         uint8 control_engine : 1;
 
-/*********************************************************************************************************************/
-/*------------------------------------------------Function Prototypes------------------------------------------------*/
-/*********************************************************************************************************************/
+ } CTRL_Engine_Msg;
 
-#endif /* OURCAN_SIGNAL_H_ */
+ typedef struct // 2
+ {
+         uint8 control_accel : 1;
+         uint8 control_brake : 1;
+         sint8 control_steering_angle : 7;
+         uint8 control_transmission : 2;
+
+ } CTRL_Move_Msg;
+
+ typedef struct // 1
+ {
+         uint8 auto_parking : 1;
+
+ } CTRL_Auto_Parking_Request_Msg;
+
+ typedef struct // 1
+ {
+         uint8 alert_request : 1;
+         uint8 auto_exit_request : 1;
+
+ } CTRL_Off_Request_Msg;
+
+
+ /*********************************************************************************************************************/
+
+ /*********************************************************************************************************************/
+ /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
+ /*********************************************************************************************************************/
+
+ /*********************************************************************************************************************/
+ /*------------------------------------------------Function Prototypes------------------------------------------------*/
+ /*********************************************************************************************************************/
+
+ #endif /* OURCAN_SIGNAL_H_ */

@@ -192,7 +192,12 @@ int core0_main(void)
         if (db_flag.CGW_Engine_Flag == 1)
         {
             db_flag.CGW_Engine_Flag = 0;
-            vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
+            //if (db_msg.CGW_Engine.control_engine==1){
+            //    vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
+            //}
+            if (U8DriverState == Parking || U8RSPAState==Parking_Complete || U8DriverState == InitDriverState ){
+                vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
+            }
 
         }
 
@@ -447,16 +452,6 @@ void AppTask100ms(void)
 #if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 주행 코드
     if (vehicle_status.engine_state == ENGINE_ON)
     {
-
-            if (vehicle_status.transmission == DRIVING)
-            {
-                RPM_CMD1 = vehicle_status.ref_rpm;
-            }
-            else if (vehicle_status.transmission == REVERSE)
-            {
-                RPM_CMD1 = vehicle_status.ref_rpm * -1;
-            }
-            setServoAngle(vehicle_status.steering_angle);
 
         //시동이 켜져있을 때, can message 출력
         make_can_message();

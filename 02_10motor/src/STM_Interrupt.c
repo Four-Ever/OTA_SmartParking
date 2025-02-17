@@ -194,11 +194,11 @@ void isrSTM(void)
 {
     /* Update the compare register value that will trigger the next interrupt and toggle the LED */
 //    IfxPort_setPinState(LED, IfxPort_State_toggled);
-
+    PI_Speed_con();
     RPM_cal();
 //    static sint32 ii =0;
 //    ii++;
-    PI_Speed_con();
+    //PI_Speed_con();
 
     if (speed_pid.Out>=0)
     {

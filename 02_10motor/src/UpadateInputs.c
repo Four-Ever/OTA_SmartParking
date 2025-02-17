@@ -52,8 +52,6 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INP
     }
 
 
-
-
 if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
 
         //vehicle_status.transmission = D_trans;
@@ -72,7 +70,7 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
             case Reversing:
                 //vehicle_status.ref_rpm = 0;
                 vehicle_status.steering_angle = D_steering;  //
-                vehicle_status.ref_rpm = D_RefRPM;
+                vehicle_status.ref_rpm = -D_RefRPM;
                 break;
             default:
                 vehicle_status.steering_angle = 0;
@@ -111,15 +109,14 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
                     DSteeringinput = steeringInputL - (int)((speed_pid.DisSum / 100)) * 3;
 
                     vehicle_status.steering_angle = DSteeringinput;
-                    vehicle_status.ref_rpm = RefRPM;
+                    vehicle_status.ref_rpm = -RefRPM;
                 }
 //
                 else if (IsPrk_LR==RIGHT) {  //오른쪽이 빈 주차칸
                     DSteeringinput = steeringInputR - (int)((speed_pid.DisSum / 100)) * 3;
 
                     vehicle_status.steering_angle = DSteeringinput;
-                    vehicle_status.ref_rpm = RefRPM;
-                    steeringInputR-=3;
+                    vehicle_status.ref_rpm = -RefRPM;
                 }
                 if(steeringInputR <= 19 || steeringInputL >= -19){
                     CameraSwitchRequest=2;
@@ -136,7 +133,7 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
             case Backward_Assist:  //차선인식 후진 RA
                 stanelyAngle=gitstanley();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
-                vehicle_status.ref_rpm = RefRPM;
+                vehicle_status.ref_rpm = -RefRPM;
                 break;
 
             case InitRSPAState:
@@ -147,5 +144,5 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
 
     //모터 input
     setServoAngle(vehicle_status.steering_angle);
-   // RPM_CMD1=vehicle_status.ref_rpm;
+    RPM_CMD1=vehicle_status.ref_rpm;
 }

@@ -65,8 +65,8 @@ int transform_finished=0;
 void transform_points(float32 H[3][3], float32 cam_points[4][2], float32 world_points[4][2]) {
     transform_finished=0;
     for (int i = 0; i < 4; i++) {
-        float32 x = cam_points[i][0];  // Ä«¸Þ¶ó ÇÈ¼¿ xÁÂÇ¥
-        float32 y = cam_points[i][1];  // Ä«¸Þ¶ó ÇÈ¼¿ yÁÂÇ¥
+        float32 x = cam_points[i][0]/100;  // Ä«¸Þ¶ó ÇÈ¼¿ xÁÂÇ¥
+        float32 y = cam_points[i][1]/100;  // Ä«¸Þ¶ó ÇÈ¼¿ yÁÂÇ¥
 
         // µ¿Â÷ÁÂÇ¥ º¯È¯
         float32 a = H[0][0] * x + H[0][1] * y + H[0][2];
