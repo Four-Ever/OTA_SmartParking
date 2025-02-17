@@ -69,6 +69,13 @@ void Serialize_VCU_Vehicle_Engine_Status_Msg(uint8* serialized, const VCU_Vehicl
     *serialized |= (data->vehicle_engine_status & 0x01);          // 1비트
 }
 
+void Serialize_VCU_Exiting_Status_Msg(uint8* serialized, const VCU_Exiting_Status_Msg *data) {
+    *serialized |= (data->exiting_status & 0x01);          // 1비트
+}
+void Serialize_VCU_ParkingLane_Request_Msg(uint8* serialized, const VCU_ParkingLane_Request_Msg *data) {
+    *serialized |= (data->Lane_Request & 0x01);
+}
+
 void Serialize_VCU_Camera_Msg(uint8* serialized, const VCU_Camera_Msg *data) {
     *serialized |= (data->camera_num & 0x03);                     // 2비트
 }
@@ -82,22 +89,22 @@ void Serialize_SCU_Obstacle_Detection_Msg(uint8* serialized, const SCU_Obstacle_
 
 
 ////
-void Serialize_CCU_Cordi_data1_Msg(uint64* serialized, const CCU_Cordi_data1_Msg *data) {
-    *serialized = 0;
-    *serialized |= (uint64)(data->cordi_data_y1 & 0x7FF);       // 11비트
-    *serialized |= (uint64)((sint64)data->cordi_data_x1 & 0x3FF) << 11; // 10비트
-    *serialized |= (uint64)(data->cordi_data_y2 & 0x7FF) << 21; // 11비트
-    *serialized |= (uint64)((sint64)data->cordi_data_x2 & 0x3FF) << 32; // 10비트
-    *serialized |= (uint64)(data->using_camera & 0x03) << 42;   // 2비트
-
+//void Serialize_CCU_Cordi_data1_Msg(uint64* serialized, const CCU_Cordi_data1_Msg *data) {
 //    *serialized = 0;
-//    *serialized |= (data->cordi_data_y1 & 0x7FF);       // 11비트
-//    *serialized |= (data->cordi_data_x1 & 0x3FF) << 11; // 10비트
-//    *serialized |= (data->cordi_data_y2 & 0x7FF) << 21; // 11비트
-//    *serialized |= (data->cordi_data_x2 & 0x3FF) << 32; // 10비트
-//    *serialized |= (data->using_camera & 0x03) << 42;   // 2비트
-
-}
+//    *serialized |= (uint64)(data->cordi_data_y1 & 0x7FF);       // 11비트
+//    *serialized |= (uint64)((sint64)data->cordi_data_x1 & 0x3FF) << 11; // 10비트
+//    *serialized |= (uint64)(data->cordi_data_y2 & 0x7FF) << 21; // 11비트
+//    *serialized |= (uint64)((sint64)data->cordi_data_x2 & 0x3FF) << 32; // 10비트
+//    *serialized |= (uint64)(data->using_camera & 0x03) << 42;   // 2비트
+//
+////    *serialized = 0;
+////    *serialized |= (data->cordi_data_y1 & 0x7FF);       // 11비트
+////    *serialized |= (data->cordi_data_x1 & 0x3FF) << 11; // 10비트
+////    *serialized |= (data->cordi_data_y2 & 0x7FF) << 21; // 11비트
+////    *serialized |= (data->cordi_data_x2 & 0x3FF) << 32; // 10비트
+////    *serialized |= (data->using_camera & 0x03) << 42;   // 2비트
+//
+//}
 
 
 //VCU RX
@@ -119,7 +126,7 @@ void Deserialize_CCU_Cordi_data1_Msg(uint64* serialized, CCU_Cordi_data1_Msg *da
     data->cordi_data_x1 = (*serialized >> 11) & 0x3FF;      // 10비트
     data->cordi_data_y2 = (*serialized >> 21) & 0x7FF;      // 11비트
     data->cordi_data_x2 = (*serialized >> 32) & 0x3FF;      // 10비트
-    data->using_camera = (*serialized >> 42) & 0x03;        // 2비트
+    //data->using_camera = (*serialized >> 42) & 0x03;        // 2비트
 //    data->cordi_data_y1 = (*serialized >> 0) & 0x7FF;       // 11비트 (부호 없음)
 //    data->cordi_data_x1 = (sint64)((*serialized >> 11) & 0x3FF); // 10비트 (부호 있음)
 //    if (data->cordi_data_x1 & 0x200) { // 부호 비트 확인
@@ -131,6 +138,16 @@ void Deserialize_CCU_Cordi_data1_Msg(uint64* serialized, CCU_Cordi_data1_Msg *da
 //        data->cordi_data_x2 |= ~0x3FF; // 부호 확장
 //    }
 //    data->using_camera = (*serialized >> 42) & 0x03;        // 2비트 (부호 없음)
+}
+
+void Deserialize_CCU_RightAngle_detect_Msg(uint8* serialized, CCU_RightAngle_detect_Msg* data) {
+    data->right_angle_lane_detected = (*serialized >> 0) & 0x01;
+
+}
+
+void Deserialize_CCU_Parking_Complete_Msg(uint8* serialized, CCU_Parking_Complete_Msg* data) {
+    //data->parkig_back_lane_detected = (*serialized >> 0) & 0x01;
+    data->parkig_back_lane_detected = *serialized;
 }
 
 void Deserialize_CGW_Engine_Msg(uint8* serialized, CGW_Engine_Msg *data) {
@@ -160,6 +177,7 @@ void Deserialize_CCU_Cordi_data2_Msg(uint64* serialized, CCU_Cordi_data2_Msg *da
     data->cordi_data_y4 = (*serialized >> 21) & 0x7FF;      // 11비트
     data->cordi_data_x4 = (*serialized >> 32) & 0x3FF;      // 10비트
     data->using_camera = (*serialized >> 42) & 0x03;        // 2비트
+    data->trust_value = (*serialized >> 44) & 0x3F;
 //    data->cordi_data_y3 = (*serialized >> 0) & 0x7FF;       // 11비트 (부호 없음)
 //    data->cordi_data_x3 = (sint64)((*serialized >> 11) & 0x3FF); // 10비트 (부호 있음)
 //    if (data->cordi_data_x3 & 0x200) { // 부호 비트 확인
