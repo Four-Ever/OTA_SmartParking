@@ -8,6 +8,7 @@
 #define VCU_Vehicle_Status_ID 0x01 
 #define VCU_Parking_Status_ID 0x12
 #define VCU_Vehicle_Engine_Status_ID 0x02
+#define VCU_ParkingLane_Request_ID 0x0C
 #define VCU_Camera_ID 0x0B
 #define VCU_Exiting_Status_ID 0x13
 #define SCU_Obstacle_Detection_ID 0x28
@@ -44,6 +45,7 @@
 #define VCU_Vehicle_Status_Size 2
 #define VCU_Parking_Status_Size 1
 #define VCU_Vehicle_Engine_Status_Size 1
+#define VCU_ParkingLane_Request_Size 1
 #define VCU_Camera_Size 1
 #define VCU_Exiting_Status_Size 1
 #define SCU_Obstacle_Detection_Size 1
@@ -102,6 +104,12 @@ struct VCU_Vehicle_Engine_Status_Data : public BaseMsg {
         uint8_t vehicle_engine_status : 1;
     } data;
 };
+
+struct VCU_ParkingLane_Request_Data : public BaseMsg {
+    struct {
+        uint8_t Lane_Request : 1;
+    } data;
+}
 
 struct VCU_Camera_Data : public BaseMsg {
     struct {
@@ -238,7 +246,7 @@ struct CCU_RightAngle_detect_Data : public BaseMsg {
 
 struct CCU_Parking_Complete_Data : public BaseMsg {
     struct {
-        uint8_t parkig_back_lane_detected : 1;
+        uint8_t parkig_back_lane_detected;
     } data;
 };
 
@@ -349,6 +357,24 @@ public:
 
 private:
     VCU_Vehicle_Engine_Status_Data data_;
+};
+
+class VCU_ParkingLane_Request_Msg : public IMessage {
+public:
+    VCU_ParkingLane_Request_Msg() {
+        data_.msg_id = VCU_ParkingLane_Request_ID;
+    }
+    
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(VCU_ParkingLane_Request_Data); }
+    size_t GetSizeCan() const override { return sizeof(VCU_ParkingLane_Request_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetLaneRequest(uint8_t request) { data_.data.Lane_Request = request; }
+
+private:
+    VCU_ParkingLane_Request_Data data_;
 };
 
 class VCU_Camera_Msg : public IMessage {

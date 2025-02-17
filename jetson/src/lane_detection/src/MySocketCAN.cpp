@@ -49,6 +49,12 @@ void MySocketCAN::on_receive_can(const can_frame& frame) {
         memcpy(msg->SerializeCan(), frame.data, msg->GetSizeCan());
         break;
     }
+    case VCU_ParkingLane_Request_ID:
+    {
+        msg = std::make_shared<VCU_ParkingLane_Request_Msg>();
+        memcpy(msg->SerializeCan(), frame.data, msg->GetSizeCan());
+        break;
+    }
     case VCU_Exiting_Status_ID:
     {
         msg = std::make_shared<CGW_Exiting_Status_Msg>();
