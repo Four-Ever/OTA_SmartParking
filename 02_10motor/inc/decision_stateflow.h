@@ -149,7 +149,7 @@ extern int ExitCAR_request;
 extern double D_Ref_vel;
 extern int CameraSwitchRequest;
 extern int First_Set;
-
+extern int lanecheck_request;
 extern IsPrk IsPrk_LR;
 
 /* Model entry point functions */

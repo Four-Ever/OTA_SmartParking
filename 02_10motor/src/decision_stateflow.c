@@ -56,7 +56,7 @@ int U8Parkingfail=0;
 int U8PrkFinished=0;
 int ExitCAR_request=0;
 double D_Ref_vel=0;
-
+int lanecheck_request=0;
 
 int CameraSwitchRequest=0;
 int Isprkslot; //초음파 헤더파일에서 값 받아와야 함
@@ -522,8 +522,6 @@ void decision_stateflow_step(void)
                         }
                         //
 
-
-
                         if (U8IsStopline == 1 && IsWPTrackingFinish == 1) //주차 완료
                         {
                             U8Ref_vel = 0;
@@ -540,19 +538,20 @@ void decision_stateflow_step(void)
                             }
                         }
 
-                        else if (U8IsOb_R == 0 ){ //경로대로 움직이다가 후방 충돌판단 감지시 정지하고 모드 변경
+                        /*else if (U8IsOb_R == 0 ){ //경로대로 움직이다가 후방 충돌판단 감지시 정지하고 모드 변경
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_D;
                             }
-                        }
+                        }*///이런상황 가정안하기로함!!
                         break;
 
                     case decision_stateflow_IN_RSPA_P:
                         U8RSPAState = Parking_Complete;
                         U8Ref_vel = initVel;
                         U8IsStopline=0;
+                        lanecheck_request=0;
 
                         if (vehicle_status.engine_state == ENGINE_OFF){
                             if (U8Curr_vel==0){

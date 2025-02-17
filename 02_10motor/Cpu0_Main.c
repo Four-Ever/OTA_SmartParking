@@ -225,7 +225,7 @@ int core0_main(void)
 
                     data_ready_flag = 1;
                 //}
-                if (U8RSPAState == 'S' || U8RSPAState == Backward_Assist) {  //차선기반 주행 모드는 두개밖에 없음
+                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //차선기반 주행 모드는 두개밖에 없음
                     if (data_ready_flag == 1){
                         InitWorldpoints();
 
@@ -236,6 +236,9 @@ int core0_main(void)
                                 updateWaypoints(world_points);  //stanely 의 묙표 waypoint 변경
                             }
                             First_Set=0;
+                            if (U8RSPAState==Searching){
+                                lanecheck_request=1;
+                            }
                         }
                         else if (IsWPTrackingFinish==1){ // 그 이후에는 이전 wp 모두 추종했을때 새로 갱신함.
                             initStanley();
@@ -250,7 +253,7 @@ int core0_main(void)
             }
 
 
-            //
+            //정지선 각도
             /*if (db_flag.CCU_RightAngle_detect_flag == 1)
             {
                 db_flag.CCU_RightAngle_detect_flag = 0;
@@ -313,6 +316,9 @@ void make_can_message(void)
         db_msg.VCU_Camera.camera_num = CameraSwitchRequest;
         output_message(&db_msg.VCU_Camera, VCU_Camera_ID);
         CameraSwitchRequest = 0;
+    }
+    if (lanecheck_request != 0) {
+        //젯슨에서 주차정지선확인 요청
     }
 }
 
