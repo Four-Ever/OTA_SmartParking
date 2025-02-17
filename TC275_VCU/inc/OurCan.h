@@ -25,103 +25,112 @@
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
 
-#ifndef OURCAN_H_
-#define OURCAN_H_
-
-/*********************************************************************************************************************/
-/*-----------------------------------------------------Includes------------------------------------------------------*/
-#include "OurCan_message.h"
-#include "IfxMultican_Can.h"
-#include "IfxPort_PinMap.h"
-#include "IfxPort.h"
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*------------------------------------------------------Macros-------------------------------------------------------*/
-
-// CAN 노드 및 메시지 핸들러 선언
-#define CAN_TX_MESSAGE_ID 0x100
-#define CAN_RX_MESSAGE_ID 0x123
-
-// CAN RXTX 정의
-#define TC275_CAN0 IfxMultican_SrcId_0
-#define CAN0_RX IfxMultican_RXD0B_P20_7_IN
-#define CAN0_TX IfxMultican_TXD0_P20_8_OUT
-
-#define EIGHTBYTE_F 0xFFFFFFFFFFFFFFFF
-#define FOURBYTE_F 0xFFFFFFFF
-
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*-------------------------------------------------Global variables--------------------------------------------------*/
-
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*-------------------------------------------------Data Structures---------------------------------------------------*/
-typedef struct
-{
-        VCU_Vehicle_Status_Msg VCU_Vehicle_Status;
-        VCU_Parking_Status_Msg VCU_Parking_Status;
-        VCU_Vehicle_Engine_Status_Msg VCU_Vehicle_Engine_Status;
-        VCU_Camera_Msg  VCU_Camera;
-        SCU_Obstacle_Detection_Msg SCU_Obstacle_Detection;
-        CGW_OTA_File_Size_Msg CGW_OTA_File_Size;
-        CGW_OTA_File_Data_Msg CGW_OTA_File_Data;
-        CGW_OTA_Control_Msg CGW_OTA_Control;
-        CCU_Cordi_data1_Msg CCU_Cordi_data1;
-        CCU_Cordi_data2_Msg CCU_Cordi_data2;
-        CGW_Engine_Msg CGW_Engine;
-        CGW_Move_Msg CGW_Move;
-        CGW_Auto_Parking_Request_Msg CGW_Auto_Parking_Request;
-        CGW_Off_Request_Msg CGW_Off_Request;
-        CTRL_Engine_Msg CTRL_Engine;
-        CTRL_Move_Msg CTRL_Move;
-        CTRL_Auto_Parking_Request_Msg CTRL_Auto_Parking_Request;
-        CTRL_Off_Request_Msg CTRL_Off_Request;
-
-} DBMessages;
-
-extern DBMessages db_msg;
-
-typedef struct
-{
-        uint8 VCU_Vehicle_Status_Flag : 1;
-        uint8 VCU_Parking_Status_Flag : 1;
-        uint8 VCU_Vehicle_Engine_Status_Flag : 1;
-        uint8  VCU_Camera_Flag : 1;
-        uint8 SCU_Obstacle_Detection_Flag : 1;
-        uint8 CGW_OTA_File_Size_Flag : 1;
-        uint8 CGW_OTA_File_Data_Flag : 1;
-        uint8 CGW_OTA_Control_Flag : 1;
-        uint8 CCU_Cordi_data1_Flag : 1;
-        uint8 CCU_Cordi_data2_Flag : 1;
-        uint8 CGW_Engine_Flag : 1;
-        uint8 CGW_Move_Flag : 1;
-        uint8 CGW_Auto_Parking_Request_Flag : 1;
-        uint8 CGW_Off_Request_Flag : 1;
-        uint8 CTRL_Engine_Flag : 1;
-        uint8 CTRL_Move_Flag : 1;
-        uint8 CTRL_Auto_Parking_Request_Flag : 1;
-        uint8 CTRL_Off_Request_Flag : 1;
-
-} DBFlag;
-
-extern DBFlag db_flag;
-
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*------------------------------------------------Function Prototypes------------------------------------------------*/
-void initCanDB(void);
-void output_message(void *msg, uint32 msgID);
-void output_message_test(int cnt);
-void initCan(void);
-/*********************************************************************************************************************/
-
-#endif /* OURCAN_H_ */
+ #ifndef OURCAN_H_
+ #define OURCAN_H_
+ 
+ /*********************************************************************************************************************/
+ /*-----------------------------------------------------Includes------------------------------------------------------*/
+ #include "OurCan_message.h"
+ #include "IfxMultican_Can.h"
+ #include "IfxPort_PinMap.h"
+ #include "IfxPort.h"
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*------------------------------------------------------Macros-------------------------------------------------------*/
+ 
+ // CAN 노드 및 메시지 핸들러 선언
+ #define CAN_TX_MESSAGE_ID 0x100
+ #define CAN_RX_MESSAGE_ID 0x123
+ 
+ // CAN RXTX 정의
+ #define TC275_CAN0 IfxMultican_SrcId_0
+ #define CAN0_RX IfxMultican_RXD0B_P20_7_IN
+ #define CAN0_TX IfxMultican_TXD0_P20_8_OUT
+ 
+ #define EIGHTBYTE_F 0xFFFFFFFFFFFFFFFF
+ #define FOURBYTE_F 0xFFFFFFFF
+ 
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*-------------------------------------------------Global variables--------------------------------------------------*/
+ 
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*-------------------------------------------------Data Structures---------------------------------------------------*/
+ typedef struct
+ {
+         VCU_Vehicle_Status_Msg VCU_Vehicle_Status;
+         VCU_Parking_Status_Msg VCU_Parking_Status;
+         VCU_Vehicle_Engine_Status_Msg VCU_Vehicle_Engine_Status;
+         VCU_Camera_Msg  VCU_Camera;
+         VCU_Exiting_Status_Msg VCU_Exiting_Status;
+         VCU_ParkingLane_Request_Msg VCU_ParkingLane_Request;
+         SCU_Obstacle_Detection_Msg SCU_Obstacle_Detection;
+         CGW_OTA_File_Size_Msg CGW_OTA_File_Size;
+         CGW_OTA_File_Data_Msg CGW_OTA_File_Data;
+         CGW_OTA_Control_Msg CGW_OTA_Control;
+         CCU_Cordi_data1_Msg CCU_Cordi_data1;
+         CCU_Cordi_data2_Msg CCU_Cordi_data2;
+         CCU_RightAngle_detect_Msg CCU_RightAngle_detect;
+         CCU_Parking_Complete_Msg CCU_Parking_Complete;
+         CGW_Engine_Msg CGW_Engine;
+         CGW_Move_Msg CGW_Move;
+         CGW_Auto_Parking_Request_Msg CGW_Auto_Parking_Request;
+         CGW_Off_Request_Msg CGW_Off_Request;
+         CTRL_Engine_Msg CTRL_Engine;
+         CTRL_Move_Msg CTRL_Move;
+         CTRL_Auto_Parking_Request_Msg CTRL_Auto_Parking_Request;
+         CTRL_Off_Request_Msg CTRL_Off_Request;
+ 
+ } DBMessages;
+ 
+ extern DBMessages db_msg;
+ 
+ typedef struct
+ {
+         uint8 VCU_Vehicle_Status_Flag : 1;
+         uint8 VCU_Parking_Status_Flag : 1;
+         uint8 VCU_Vehicle_Engine_Status_Flag : 1;
+         uint8 VCU_Camera_Flag : 1;
+         uint8 VCU_Exiting_Status_Flag : 1;
+         uint8 VCU_ParkingLane_Request_Flag : 1;
+         uint8 SCU_Obstacle_Detection_Flag : 1;
+         uint8 CGW_OTA_File_Size_Flag : 1;
+         uint8 CGW_OTA_File_Data_Flag : 1;
+         uint8 CGW_OTA_Control_Flag : 1;
+         uint8 CCU_Cordi_data1_Flag : 1;
+         uint8 CCU_Cordi_data2_Flag : 1;
+         uint8 CCU_RightAngle_detect_Flag : 1;
+         uint8 CCU_Parking_Complete_Flag : 1;
+         uint8 CGW_Engine_Flag : 1;
+         uint8 CGW_Move_Flag : 1;
+         uint8 CGW_Auto_Parking_Request_Flag : 1;
+         uint8 CGW_Off_Request_Flag : 1;
+         uint8 CTRL_Engine_Flag : 1;
+         uint8 CTRL_Move_Flag : 1;
+         uint8 CTRL_Auto_Parking_Request_Flag : 1;
+         uint8 CTRL_Off_Request_Flag : 1;
+ 
+ } DBFlag;
+ 
+ extern DBFlag db_flag;
+ 
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*------------------------------------------------Function Prototypes------------------------------------------------*/
+ void initCanDB(void);
+ void output_message(void *msg, uint32 msgID);
+ void output_message_test(int cnt);
+ void initCan(void);
+ /*********************************************************************************************************************/
+ 
+ #endif /* OURCAN_H_ */
+ 
