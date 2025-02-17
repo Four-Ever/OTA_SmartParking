@@ -168,6 +168,7 @@ int core0_main(void)
             if (db_flag.CGW_Move_Flag == 1)
             {
                 db_flag.CGW_Move_Flag = 0;
+
                 //D_trans = db_msg.CGW_Move.control_transmission;
                 U8IsTrButton = db_msg.CGW_Move.control_transmission;
                 //vehicle_status.transmission = db_msg.CGW_Move.control_transmission;
