@@ -8,14 +8,17 @@ namespace net = boost::asio;
 using tcp = boost::asio::ip::tcp;
 
 WebSocketSession::WebSocketSession(tcp::socket&& socket)
-    : ws_(std::move(socket)) {
+    : ws_(std::move(socket)), strand_(ws_.get_executor()) {
 }
 
 void WebSocketSession::start() {
-    ws_.async_accept(
-        beast::bind_front_handler(
-            &WebSocketSession::on_accept,
-            shared_from_this()));
+    auto self = shared_from_this();
+    boost::asio::post(strand_, [self]() {
+        self->ws_.async_accept(
+            boost::beast::bind_front_handler(
+                &WebSocketSession::on_accept,
+                self));
+    });
 }
 
 void WebSocketSession::on_accept(beast::error_code ec) {
@@ -41,7 +44,8 @@ void WebSocketSession::on_read(beast::error_code ec, std::size_t bytes_transferr
     do_read();
 }
 
-void WebSocketSession::on_write(beast::error_code ec, std::size_t bytes_transferred) {
+void WebSocketSession::on_write(boost::beast::error_code ec, std::size_t bytes_transferred) {
+    std::cout << "Write completed. Result: " << (ec ? ec.message() : "Success") << std::endl;
     if (ec) {
         std::cerr << "Write failed: " << ec.message() << std::endl;
         return;
@@ -49,24 +53,49 @@ void WebSocketSession::on_write(beast::error_code ec, std::size_t bytes_transfer
 }
 
 void WebSocketSession::do_read() {
-    ws_.async_read(
-        buffer_,
-        beast::bind_front_handler(
-            &WebSocketSession::on_read,
-            shared_from_this()));
+    auto self = shared_from_this();
+    boost::asio::post(strand_, [self]() {
+        self->ws_.async_read(
+            self->buffer_,
+            boost::beast::bind_front_handler(
+                &WebSocketSession::on_read,
+                self));
+    });
 }
 
-void WebSocketSession::send_message(const std::shared_ptr<IMessage>& message) {
+void WebSocketSession::do_write() {
+    if (is_writing_) return;
+
+    std::lock_guard<std::mutex> lock(queue_mutex_);
+    if (write_queue_.empty()) return;
+
+    is_writing_ = true;
+    auto msg = write_queue_.front();
+    write_queue_.pop();
+
+    auto self = shared_from_this();
     ws_.async_write(
-        net::buffer(message->SerializeHttp(),message->GetSizeHttp()),
-        beast::bind_front_handler(
-            &WebSocketSession::on_write,
-            shared_from_this()));
+        boost::asio::buffer(msg->SerializeHttp(), msg->GetSizeHttp()),
+        [this, self](boost::system::error_code ec, std::size_t) {
+            is_writing_ = false;
+            if (!ec) {
+                do_write();  // 다음 메시지 처리
+            }
+        });
+}
+
+void WebSocketSession::send_message(const std::shared_ptr<IMessage> message) {
+    {
+        std::lock_guard<std::mutex> lock(queue_mutex_);
+        write_queue_.push(message);
+    }
+    do_write();
 }
 
 WebSocketServer::WebSocketServer(net::io_context& ioc, unsigned short port)
     : ioc_(ioc),
-      acceptor_(ioc, {net::ip::make_address("0.0.0.0"), port}) {
+      acceptor_(ioc, {net::ip::make_address("0.0.0.0"), port}),
+      current_session_(nullptr) {
 }
 
 bool WebSocketServer::Init() {
@@ -79,21 +108,6 @@ bool WebSocketServer::Init() {
         return false;
     }
 }
-
-// void WebSocketServer::broadcast_message(const std::string& message) {
-//     std::lock_guard<std::mutex> lock(sessions_mutex_);
-//     auto it = sessions_.begin();
-//     while (it != sessions_.end()) {
-//         try {
-//             (*it)->send_message(message);
-//             ++it;
-//         }
-//         catch (const std::exception& e) {
-//             std::cerr << "Error broadcasting to session: " << e.what() << std::endl;
-//             it = sessions_.erase(it);
-//         }
-//     }
-// }
 
 std::shared_ptr<WebSocketSession> WebSocketServer::create_session(tcp::socket socket) {
     return std::make_shared<WebSocketSession>(std::move(socket));
@@ -110,14 +124,8 @@ void WebSocketServer::do_accept() {
                          << socket.remote_endpoint().address().to_string() 
                          << ":" << socket.remote_endpoint().port() << std::endl;
                 
-                auto session = create_session(std::move(socket));
-                // {
-                //     std::lock_guard<std::mutex> lock(sessions_mutex_);
-                //     sessions_.push_back(session);
-                //     std::cout << "Total sessions: " << sessions_.size() << std::endl;
-                // }
-                std::atomic_store(&current_session_, session);
-                session->start();
+                current_session_ = create_session(std::move(socket));
+                current_session_->start();
             }
             do_accept();
         });

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sstream>
 
-std::shared_ptr<CentralGateway> CGW = std::make_shared<CentralGateway>(3);
+std::shared_ptr<CentralGateway> CGW = std::make_shared<CentralGateway>(4);
 
 CentralGateway::CentralGateway(size_t thread_pool_size)
     : work_guard_(io_context_.get_executor())
