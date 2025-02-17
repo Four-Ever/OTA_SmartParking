@@ -123,11 +123,11 @@ int core0_main(void)
 
     initServo(); // D6
 
-    motor_dir = 0;    // 0:정방향, 1:역방향
-    motor_enable = 0;  // 0:제동, 1:해제
+    // motor_dir = 0;    // 0:정방향, 1:역방향
+    // motor_enable = 0;  // 0:제동, 1:해제
 
 #ifdef motor_Test
-    motor_enable = 1;  // 0:제동, 1:해제
+    // motor_enable = 1;  // 0:제동, 1:해제
 
     Kp_s = 1.55f;//1.75f;
     Ki_s = 2.65f;//0.198f;
@@ -151,14 +151,14 @@ int core0_main(void)
             db_flag.CGW_Engine_Flag = 0;
             vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
 
-            if (vehicle_status.engine_state == ENGINE_ON)
-            {
-                motor_enable = 1;
-            }
-            else if (vehicle_status.engine_state == ENGINE_OFF)
-            {
-                motor_enable = 0;
-            }
+            // if (vehicle_status.engine_state == ENGINE_ON)
+            // {
+            //     motor_enable = 1;
+            // }
+            // else if (vehicle_status.engine_state == ENGINE_OFF)
+            // {
+            //     motor_enable = 0;
+            // }
         }
 
         // 엔진이 켜져 있을 때,
@@ -168,15 +168,18 @@ int core0_main(void)
             if (db_flag.CGW_Move_Flag == 1)
             {
                 db_flag.CGW_Move_Flag = 0;
-                D_trans = db_msg.CGW_Move.control_transmission;
+                //D_trans = db_msg.CGW_Move.control_transmission;
+                U8IsTrButton = db_msg.CGW_Move.control_transmission;
+                //vehicle_status.transmission = db_msg.CGW_Move.control_transmission;
+                
                 D_steering = db_msg.CGW_Move.control_steering_angle;
+                //vehicle_status.steering_angle = db_msg.CGW_Move.control_steering_angle;
 
                 // 수동 조작 모드로 전환
-
+                vehicle_status.user_mode = USER_DRIVE_MODE;
                 if (db_msg.CGW_Move.control_accel == 1) // accel
                 {
-
-                    D_RefRPM += 100.0f; // period 100ms 기준 1초 동안 누르면, 1000rpm 목표
+                    D_RefRPM += 100.0f;
 
                     if (D_RefRPM >= 3000.0f)
                     {
@@ -196,33 +199,78 @@ int core0_main(void)
             }
 
             // 자동 주차 요청
-            if (db_flag.CGW_Auto_Parking_Request_Flag==1){
+
+            if (db_flag.CGW_Auto_Parking_Request_Flag==1)
+            {
                 db_flag.CGW_Auto_Parking_Request_Flag=0;
 
-                IsRSPAButton=1;
+                // 시스템 조작 모드로 전환
+                vehicle_status.user_mode = SYSTEM_DRIVE_MODE;
+
+                IsRSPAButton = 1;
             }
-            // OTA 업데이트 확인
 
-            // 차량 찾기 요청
-            if (db_flag.CGW_Off_Request_Flag==1){
-                db_flag.CGW_Auto_Parking_Request_Flag=0;
+            //
+            if (db_flag.CCU_Cordi_data1_Flag == 1)
+            {
+                db_flag.CCU_Cordi_data1_Flag = 0;
 
-                if (db_msg.CTRL_Off_Request.alert_request==1){
+                // wp 받기,
+                //db_msg.CCU_Cordi_data1;
+
+                //if(db_msg.CCU_Cordi_data1.using_camera == 2 && 의미있는 wp일 때)
+                if(db_msg.CCU_Cordi_data1.using_camera == 2)
+                {
+                    U8IsWp_R = 1;
+                }
+            }
+
+            //
+            if (db_flag.CCU_Cordi_data2_Flag == 1)
+            {
+                db_flag.CCU_Cordi_data2_Flag = 0;
+                // wp 받기,
+                //db_msg.CCU_Cordi_data2;
+            }
+
+            //
+            //if (db_flag.CCU_RightAngle_detect_flag == 1)
+            //{
+            //    db_flag.CCU_RightAngle_detect_flag = 0;
+            //    U8IsStopline = db_flag.CCU_RightAngle_detect.right_angle_lane_detected
+            //}
+        }
+
+        //엔진이 꺼져 있을 때,
+        else if (vehicle_status.engine_state == ENGINE_OFF)
+        {          
+            if (db_flag.CGW_Off_Request_Flag==1)
+            {
+                db_flag.CGW_Off_Request_Flag=0;
+
+                // 차량 찾기 요청
+                if (db_msg.CGW_Off_Request.alert_request==1)
+                {
                     //주차한 차량이 있으면 LED 혹은 부저 삐용삐용
-                    if (U8PrkFinished==1){
-
+                    if (U8PrkFinished==1)
+                    {
 
                     }
                 }
-                if (db_msg.CGW_Off_Request.auto_exit_request==1){
+
+                // 출차 요청
+                if (db_msg.CGW_Off_Request.auto_exit_request==1)
+                {
+                    // 시스템 조작 모드로 전환
+                    vehicle_status.user_mode = SYSTEM_DRIVE_MODE;
+
                     //주차한 차량이 있을 때 출차 요청// 딱 한번만 주차-출차
-                    if (U8PrkFinished==1 ){
+                    if (U8PrkFinished==1)
+                    {
                         ExitCAR_request=1;
                     }
                 }
             }
-
-            // 출차 요청
         }
 #endif
     }
@@ -233,8 +281,6 @@ int core0_main(void)
 
 void make_can_message(void)
 {
-
-
     update_message_vehicle_status(&db_msg.VCU_Vehicle_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Status, VCU_Vehicle_Status_ID);
 
@@ -243,13 +289,20 @@ void make_can_message(void)
 
     update_message_engine_status(&db_msg.VCU_Vehicle_Engine_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Engine_Status, VCU_Vehicle_Engine_Status_ID);
+
+    if (CameraSwitchRequest != 0) // 1 : 전방, 2 : 후방
+    {
+        db_msg.VCU_Camera.camera_num = CameraSwitchRequest;
+        output_message(&db_msg.VCU_Camera, VCU_Camera_ID);
+        CameraSwitchRequest = 0;
+    }
 }
 
 
 void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->vehicle_velocity = vehicle_status.velocity;
-    dest->vehicle_steering_angle = (sint8)vehicle_status.servo_angle;
+    dest->vehicle_velocity = vehicle_status.u8_velocity;
+    dest->vehicle_steering_angle = vehicle_status.steering_angle;
     dest->vehicle_transmission = vehicle_status.transmission;
 }
 
@@ -299,10 +352,6 @@ void AppTask10ms(void)
 
     myprintf("rpm : %d\r\n", s32_motor_speed_rpm);
 #endif
-
-#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 주행 코드
-    make_can_message();
-#endif
 }
 
 void AppTask50ms(void){
@@ -322,14 +371,16 @@ void AppTask100ms(void)
         {
             if (vehicle_status.transmission == DRIVING)
             {
-                RPM_CMD1 = vehicle_status.target_rpm;
+                RPM_CMD1 = vehicle_status.ref_rpm;
             }
             else if (vehicle_status.transmission == REVERSE)
             {
-                RPM_CMD1 = vehicle_status.target_rpm * -1;
+                RPM_CMD1 = vehicle_status.ref_rpm * -1;
             }
-            setServoAngle(vehicle_status.servo_angle);
+            setServoAngle(vehicle_status.steering_angle);
         }
+        //시동이 켜져있을 때, can message 출력
+        make_can_message();
     }
 #endif
 }

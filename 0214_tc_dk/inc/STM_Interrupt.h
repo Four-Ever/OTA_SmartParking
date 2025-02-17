@@ -40,6 +40,8 @@
 #include "GTM_ATOM_PWM.h"
 #include "OurCan.h"
 
+#include "decision_stateflow.h"
+
 #define tick_dis                0.219911486f                    //엔코더 한 틱당 거리 (mm)
 #define circumference           197.9203372f                    //원 둘레(mm)
 #define gear_ratio              18.75f                          //기어비
@@ -48,7 +50,6 @@
 extern sint32 Enc_count;
 extern sint32 s32_motor_speed_rpm;
 extern sint32 s32_DisSum;
-extern float32 value;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -56,5 +57,6 @@ void initPeripherals(void);
 void initSTM(void);
 
 void init_move_distance_control(float32 tarDis, float32 tarVel);
+TargetDistanceStatus move_distance(float32 tarDis);
 
 #endif /* STM_INTERRUPT_H_ */
