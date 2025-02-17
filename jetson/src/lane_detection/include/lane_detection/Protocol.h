@@ -226,6 +226,7 @@ struct CCU_Cordi_data2_Data : public BaseMsg {
         uint16_t cordi_data_y4 : 11;
         int16_t cordi_data_x4 : 10;
         uint8_t using_camera : 2;
+        uint8_t trust_value : 6;
     } data;
 };
 
