@@ -4,6 +4,8 @@
 float stanelyAngle=0.0;
 float pre_stanelyAngle=0.0;
 float RefRPM=0;
+int steeringInputL=-40;
+int steeringInputR=40;
 //int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
@@ -102,20 +104,32 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INP
                 }
                 vehicle_status.ref_rpm = RefRPM;
                 break;
-            case Reversing:
+            case Backward:
                 if (IsPrk_LR==LEFT) {// 왼쪽이 빈 주차칸
-                    vehicle_status.steering_angle = -40;
+                    DSteeringinput = steeringInputL - (int)((speed_pid.DisSum / 100)) * 3;
+
+                    vehicle_status.steering_angle = DSteeringinput;
                     vehicle_status.ref_rpm = RefRPM;
                 }
+//
                 else if (IsPrk_LR==RIGHT) {  //오른쪽이 빈 주차칸
-                    vehicle_status.steering_angle = 40;
+                    DSteeringinput = steeringInputR - (int)((speed_pid.DisSum / 100)) * 3;
+
+                    vehicle_status.steering_angle = DSteeringinput;
                     vehicle_status.ref_rpm = RefRPM;
+                    steeringInputR-=3;
+                }
+                if(steeringInputR <= 19 || steeringInputL >= -19){
+                    CameraSwitchRequest=2;
+
+
                 }
                 break;
             case Searching:  //차선인식 주차공간 탐색
                 stanelyAngle=gitstanley();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;
+
                 break;
             case Backward_Assist:  //차선인식 후진 RA
                 stanelyAngle=gitstanley();

@@ -400,16 +400,7 @@ void decision_stateflow_step(void)
                         {
                             U8Ref_vel = 0;
                             if (U8Curr_vel==0){
-                                if(IsPrk_LR == LEFT)
-                                {
-                                    DSteeringinput = 20;
-                                }
-                                if(IsPrk_LR == RIGHT)
-                                {
-                                    DSteeringinput = -20;
-                                }
-                                //calDis=1; //거리 계산 요청
-                                move_distance(100);
+
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                             }
                         }
@@ -439,16 +430,6 @@ void decision_stateflow_step(void)
                         {
                             U8Ref_vel= 0;
                             
-                            if(IsPrk_LR == LEFT)
-                            {
-                                DSteeringinput = -20;
-                            }
-                            if(IsPrk_LR == RIGHT)
-                            {
-                                DSteeringinput = 20;
-                            }
-
-                            //calDis=0;
                             if (U8Curr_vel==0){
                                 // 서보모터 변경 완료되는 여유 시간 추가??
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
@@ -492,24 +473,11 @@ void decision_stateflow_step(void)
                         }
                         break;
 
-                    case decision_stateflow_IN_RSPA_R:  //steering 은 -10씩 감소
+                    case decision_stateflow_IN_RSPA_R:  //steering 은 3씩 감소
                         U8RSPAState=Backward;
                         U8Ref_vel=DInputVR;
 
-                        if(IsPrk_LR == LEFT && DSteeringinput < 0)
-                        {
-                            DSteeringinput += 1; // 초기 DSteeringinput -20
-                                                 // 움직이면서 servo 조정이 항상 같은 곳으로 갈 것 같지 않음
-                                                 // 조향도 그렇고, 모터가 일정하지 않아서..
-                        }
-                        else if(IsPrk_LR == RIGHT && DSteeringinput > 0)
-                        {
-                            DSteeringinput -= 1; // 초기 DSteeringinput +20
-                                                 // 움직이면서 servo 조정이 항상 같은 곳으로 갈 것 같지 않음
-                                                 // 조향도 그렇고, 모터가 일정하지 않아서..
-                        }
-
-                        // DSteeringinput 하나로 고정
+                        move_distance(700);
 
                         //긴급제동
                         if(DTTC_R <= 1.0)
@@ -525,7 +493,7 @@ void decision_stateflow_step(void)
 
                         }
 
-                        if (U8IsWp_R == 2)  // 후방카메라 차선 인지했으면 WP 받았으면
+                        if (CameraSwitchRequest == 2)  // 후방카메라 차선 인지했으면 WP 받았으면
                         {
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
