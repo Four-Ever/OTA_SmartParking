@@ -9,6 +9,7 @@
 #define VCU_Parking_Status_ID 0x12
 #define VCU_Vehicle_Engine_Status_ID 0x02
 #define VCU_Camera_ID 0x0B
+#define VCU_Exiting_Status_ID 0x13
 #define SCU_Obstacle_Detection_ID 0x28
 #define CGW_OTA_File_Size_ID 0x5C
 #define CGW_OTA_File_Data_ID 0x5D
@@ -18,6 +19,7 @@
 #define CGW_OTA_Update_State_ID 0x5B
 #define CGW_Vehicle_Status_ID 0x42
 #define CGW_Parking_Status_ID 0x52
+#define CGW_Exiting_Status_ID 0x53
 
 #define CGW_Engine_ID 0x49
 #define CGW_Move_ID 0x4A
@@ -28,6 +30,8 @@
 
 #define CCU_Cordi_data1_ID 0xA1
 #define CCU_Cordi_data2_ID 0xA2
+#define CCU_RightAngle_detect_ID 0xA0
+#define CCU_Parking_Complete_ID 0xA3
 #define CTRL_Engine_ID 0xC9
 #define CTRL_Move_ID 0xCA
 #define CTRL_Auto_Parking_Request_ID 0xD1
@@ -41,6 +45,7 @@
 #define VCU_Parking_Status_Size 1
 #define VCU_Vehicle_Engine_Status_Size 1
 #define VCU_Camera_Size 1
+#define VCU_Exiting_Status_Size 1
 #define SCU_Obstacle_Detection_Size 1
 #define CGW_OTA_File_Size_Size 4
 #define CGW_OTA_File_Data_Size 8
@@ -49,6 +54,8 @@
 #define CGW_OTA_Update_Request_Size 1
 #define CGW_OTA_Update_State_Size 1
 #define CGW_Vehicle_Status_Size 2
+#define CGW_Parking_Status_Size 1
+#define CGW_Exiting_Status_Size 1
 
 #define CGW_Engine_Size 1
 #define CGW_Move_Size 2
@@ -57,6 +64,8 @@
 
 #define CCU_Cordi_data1_Size 6
 #define CCU_Cordi_data2_Size 6
+#define CCU_RightAngle_detect_Size 1
+#define CCU_Parking_Complete_Size 1
 #define CTRL_Engine_Size 1
 #define CTRL_Move_Size 2
 #define CTRL_Auto_Parking_Request_Size 1
@@ -97,6 +106,12 @@ struct VCU_Vehicle_Engine_Status_Data : public BaseMsg {
 struct VCU_Camera_Data : public BaseMsg {
     struct {
         uint8_t camera_num : 2;
+    } data;
+};
+
+struct VCU_Exiting_Status_Data : public BaseMsg{
+    struct {
+        uint8_t exiting_status : 1;
     } data;
 };
 
@@ -154,6 +169,12 @@ struct CGW_Parking_Status_Data : public BaseMsg {
     } data;
 };
 
+struct CGW_Exiting_Status_Data : public BaseMsg {
+    struct {
+        uint8_t exiting_status : 1;
+    } data;
+};
+
 struct CGW_Engine_Data : public BaseMsg {
     struct {
         uint8_t control_engine : 1;
@@ -205,6 +226,18 @@ struct CCU_Cordi_data2_Data : public BaseMsg {
         uint16_t cordi_data_y4 : 11;
         int16_t cordi_data_x4 : 10;
         uint8_t using_camera : 2;
+    } data;
+};
+
+struct CCU_RightAngle_detect_Data : public BaseMsg {
+    struct {
+        uint8_t right_angle_lane_detected : 1;
+    } data;
+};
+
+struct CCU_Parking_Complete_Data : public BaseMsg {
+    struct {
+        uint8_t parkig_back_lane_detected : 1;
     } data;
 };
 
@@ -333,6 +366,24 @@ public:
 
 public:
     VCU_Camera_Data data_;
+};
+
+class VCU_Exiting_Status_Msg : public IMessage {
+public:
+    VCU_Exiting_Status_Msg() {
+        data_.msg_id = VCU_Exiting_Status_ID;
+    }
+    
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(VCU_Exiting_Status_Data); }
+    size_t GetSizeCan() const override { return sizeof(VCU_Exiting_Status_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetExitingStatus(uint8_t status) { data_.data.exiting_status = status; }
+
+public:
+    VCU_Exiting_Status_Data data_;
 };
 
 class SCU_Obstacle_Detection_Msg : public IMessage {
@@ -468,22 +519,40 @@ public:
 };
 
 class CGW_Parking_Status_Msg : public IMessage {
-    public:
-        CGW_Parking_Status_Msg() {
-            data_.msg_id = CGW_Parking_Status_ID;
-        }
-        
-        uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
-        uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
-        size_t GetSizeHttp() const override { return sizeof(CGW_Parking_Status_Data); }
-        size_t GetSizeCan() const override { return sizeof(CGW_Parking_Status_Data) - sizeof(BaseMsg); }
-        uint8_t GetMsgId() const override { return data_.msg_id; }
-        
-        void SetParkingStatus(uint8_t status) { data_.data.parking_status = status; }
+public:
+    CGW_Parking_Status_Msg() {
+        data_.msg_id = CGW_Parking_Status_ID;
+    }
     
-    public:
-        CGW_Parking_Status_Data data_;
-    };
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(CGW_Parking_Status_Data); }
+    size_t GetSizeCan() const override { return sizeof(CGW_Parking_Status_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetParkingStatus(uint8_t status) { data_.data.parking_status = status; }
+
+public:
+    CGW_Parking_Status_Data data_;
+};
+
+class CGW_Exiting_Status_Msg : public IMessage {
+public:
+    CGW_Exiting_Status_Msg() {
+        data_.msg_id = CGW_Exiting_Status_ID;
+    }
+    
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(CGW_Exiting_Status_Data); }
+    size_t GetSizeCan() const override { return sizeof(CGW_Exiting_Status_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetExitingStatus(uint8_t status) { data_.data.exiting_status = status; }
+
+public:
+    CGW_Exiting_Status_Data data_;
+};
 
 class CGW_Engine_Msg : public IMessage {
 public:
@@ -623,6 +692,43 @@ public:
 public:
     CCU_Cordi_data2_Data data_;
 };
+
+class CCU_RightAngle_detect_Msg : public IMessage {
+public:
+    CCU_RightAngle_detect_Msg() {
+        data_.msg_id = CCU_RightAngle_detect_ID;
+    }
+    
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(CCU_RightAngle_detect_Data); }
+    size_t GetSizeCan() const override { return sizeof(CCU_RightAngle_detect_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetRightAngleLaneDetected(uint8_t detected) { data_.data.right_angle_lane_detected = detected; }
+
+public:
+    CCU_RightAngle_detect_Data data_;
+};
+
+class CCU_Parking_Complete_Msg : public IMessage {
+public:
+    CCU_Parking_Complete_Msg() {
+        data_.msg_id = CCU_Parking_Complete_ID;
+    }
+    
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(CCU_Parking_Complete_Data); }
+    size_t GetSizeCan() const override { return sizeof(CCU_Parking_Complete_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetRightAngleLaneDetected(uint8_t detected) { data_.data.parkig_back_lane_detected = detected; }
+
+public:
+    CCU_Parking_Complete_Data data_;
+};
+
 
 // CTRL Messages
 class CTRL_Engine_Msg : public IMessage {
