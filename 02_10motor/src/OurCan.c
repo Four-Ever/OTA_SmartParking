@@ -79,12 +79,13 @@ void RX_Int0Handler(void)
                 memcpy(&serialized,&readmsg.data[0],CGW_OTA_File_Size_Size);
                 Deserialize_CGW_OTA_File_Size_Msg(&serialized,&db_msg.CGW_OTA_File_Size);
                 //db_flag.CGW_OTA_File_Size_Flag = 1;
-                fwUpdateRequested = 1;
+                
+                // fwUpdateRequested = 1;
 
-                if (fwUpdateRequested == 1 && readmsg.lengthCode == 4) {
-                    if (fwUpdateSize == 0)
-                        fwUpdateSize = db_msg.CGW_OTA_File_Size.ota_file_size;
-                }
+                // if (fwUpdateRequested == 1 && readmsg.lengthCode == 4) {
+                //     if (fwUpdateSize == 0)
+                //         fwUpdateSize = db_msg.CGW_OTA_File_Size.ota_file_size;
+                // }
                 break;
             }
             case CGW_OTA_File_Data_ID:
@@ -94,11 +95,12 @@ void RX_Int0Handler(void)
 //                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_File_Data_Size-4);
 //                Deserialize_CGW_OTA_File_Data_Msg(&serialized,&db_msg.CGW_OTA_File_Data);
 //                db_flag.CGW_OTA_File_Data_Flag = 1;
-                if (!MessageBufferIsFull())
-                {
-                    messageBuffer[messageBufferHead] = readmsg;
-                    messageBufferHead = (messageBufferHead + 1) % MESSAGE_BUFFER_SIZE;
-                }
+
+                // if (!MessageBufferIsFull())
+                // {
+                //     messageBuffer[messageBufferHead] = readmsg;
+                //     messageBufferHead = (messageBufferHead + 1) % MESSAGE_BUFFER_SIZE;
+                // }
 
 
 
