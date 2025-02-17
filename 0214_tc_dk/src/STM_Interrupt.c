@@ -62,7 +62,6 @@ float32 s_T_samp= 0.001*TIMER_INT_TIME;
 float32 RPM_max = 5000, RPM_min = -5000;
 
 sint32 Enc_count;
-float32 value;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -121,17 +120,18 @@ void RPM_cal(void)
     motor_speed_rpm = Enc_count_diff/(float32)CPR/(float32)(TIMER_INT_TIME*0.001)*60.0f;
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
 
-    value = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
+    U8Curr_vel = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
+
     sint16 s16_velocity;
     uint16 u16_velocity;
 
-
-    s16_velocity = round_to_integer(value/10); //7bit로 보내주기 위함
+    s16_velocity = round_to_integer(U8Curr_vel/10); //7bit로 보내주기 위함
     u16_velocity = s16_velocity >= 0  ? s16_velocity : (s16_velocity * -1);
     u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
 
-    vehicle_status.velocity = (uint8)u16_velocity; // (실제 속도 / 10) [mm/0.1s]
-
+    vehicle_status.cur_rpm = s32_motor_speed_rpm;
+    vehicle_status.cur_vel = U8Curr_vel;
+    vehicle_status.u8_velocity = (uint8)u16_velocity; // (실제 속도 / 10) [mm/0.1s]
     Enc_count_old = Enc_count_new;
 }
 
@@ -249,6 +249,28 @@ void init_move_distance_control(float32 tarDis, float32 tarVel)
 }
 
 
+TargetDistanceStatus move_distance(float32 tarDis)
+{
+    if (speed_pid.TargetDis_state == NO_TARGET_DIS)
+    {
+        speed_pid.DriveMode = move_distance_control;
+
+        speed_pid.DisSum = 0;
+        speed_pid.TargetDis = tarDis;
+
+        speed_pid.TargetDis_state = MOVING_TO_TARGET_DIS;
+    }
+
+    else if (speed_pid.TargetDis_state == REACHED_TARGET_DIS)
+    {
+        speed_pid.TargetDis_state = NO_TARGET_DIS; // 초기화
+        return REACHED_TARGET_DIS;
+    }
+
+    return speed_pid.TargetDis_state; // MOVING_TO_TARGET;
+}
+
+
 void move_to_tardis(void)
 {
     if (speed_pid.TargetDis >= 0)
@@ -262,6 +284,8 @@ void move_to_tardis(void)
             speed_pid.DisSum = 0;
             speed_pid.TargetDis = 0;
             speed_pid.TargetVel = 0;
+
+            speed_pid.TargetDis_state = REACHED_TARGET_DIS;
         }
     }
 
@@ -276,6 +300,8 @@ void move_to_tardis(void)
             speed_pid.DisSum = 0;
             speed_pid.TargetDis = 0;
             speed_pid.TargetVel = 0;
+
+            speed_pid.TargetDis_state = REACHED_TARGET_DIS;
         }
     }
 }

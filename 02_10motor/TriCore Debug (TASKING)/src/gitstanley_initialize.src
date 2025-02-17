@@ -1,0 +1,176 @@
+	; Module start
+	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
+	.compiler_invocation	"ctc -f C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\cc9384a --dep-file=src/gitstanley_initialize.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc27xd -D__CPU_TC27XD__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc27xd -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Configurations -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D\\\\_Reg -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Comm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Time -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Asc -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\CStart -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Irq -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Trap -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12 -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12\\\\IncrEnc -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Atom -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican\\\\Can -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Impl -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib\\\\DataHandling -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_PinMap -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\inc -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o src/gitstanley_initialize.src ../src/gitstanley_initialize.c"
+	.compiler_name		"ctc"
+	;source	'../src/gitstanley_initialize.c'
+
+	
+$TC16X
+	
+	.sdecl	'.text.gitstanley_initialize.gitstanley_initialize',code,cluster('gitstanley_initialize')
+	.sect	'.text.gitstanley_initialize.gitstanley_initialize'
+	.align	2
+	
+	.global	gitstanley_initialize
+; Function gitstanley_initialize
+.L3:
+gitstanley_initialize:	.type	func
+	ret
+.L13:
+	
+__gitstanley_initialize_function_end:
+	.size	gitstanley_initialize,__gitstanley_initialize_function_end-gitstanley_initialize
+.L12:
+	; End of function
+	
+	.calls	'gitstanley_initialize','',0
+	.sdecl	'.debug_info',debug
+	.sect	'.debug_info'
+.L5:
+	.word	545
+	.half	3
+	.word	.L6
+	.byte	4
+.L4:
+	.byte	1
+	.byte	'../src/gitstanley_initialize.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L7
+	.byte	2
+	.byte	'short int',0,2,5,3
+	.byte	'__wchar_t',0,1,1,1
+	.word	207
+	.byte	2
+	.byte	'unsigned int',0,4,7,3
+	.byte	'__size_t',0,1,1,1
+	.word	238
+	.byte	2
+	.byte	'int',0,4,5,3
+	.byte	'__ptrdiff_t',0,1,1,1
+	.word	271
+	.byte	4,1,5
+	.word	298
+	.byte	3
+	.byte	'__codeptr',0,1,1,1
+	.word	300
+	.byte	2
+	.byte	'char',0,1,6,3
+	.byte	'int8_T',0,2,41,21
+	.word	323
+	.byte	2
+	.byte	'unsigned char',0,1,8,3
+	.byte	'uint8_T',0,2,42,23
+	.word	346
+	.byte	3
+	.byte	'int16_T',0,2,43,15
+	.word	207
+	.byte	2
+	.byte	'unsigned short int',0,2,7,3
+	.byte	'uint16_T',0,2,44,24
+	.word	395
+	.byte	3
+	.byte	'int32_T',0,2,45,13
+	.word	271
+	.byte	3
+	.byte	'uint32_T',0,2,46,22
+	.word	238
+	.byte	2
+	.byte	'float',0,4,4,3
+	.byte	'real32_T',0,2,47,15
+	.word	467
+	.byte	3
+	.byte	'real64_T',0,2,48,16
+	.word	467
+	.byte	3
+	.byte	'real_T',0,2,55,16
+	.word	467
+	.byte	2
+	.byte	'char',0,1,6,3
+	.byte	'char_T',0,2,61,14
+	.word	525
+	.byte	0
+	.sdecl	'.debug_abbrev',debug
+	.sect	'.debug_abbrev'
+.L6:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,36,0,3,8,11,15,62,15,0,0,3,22,0,3,8,58,15,59,15,57,15
+	.byte	73,19,0,0,4,21,0,54,15,0,0,5,15,0,73,19,0,0,0
+	.sdecl	'.debug_line',debug
+	.sect	'.debug_line'
+.L7:
+	.word	.L15-.L14
+.L14:
+	.half	3
+	.word	.L17-.L16
+.L16:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
+	.byte	'C:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\inc',0,0
+	.byte	'../src/gitstanley_initialize.c',0,0,0,0
+	.byte	'rtwtypes.h',0,1,0,0,0
+.L17:
+.L15:
+	.sdecl	'.debug_info',debug,cluster('gitstanley_initialize')
+	.sect	'.debug_info'
+.L8:
+	.word	264
+	.half	3
+	.word	.L9
+	.byte	4,1
+	.byte	'../src/gitstanley_initialize.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L11,.L10
+	.byte	2
+	.word	.L4
+	.byte	3
+	.byte	'gitstanley_initialize',0,1,20,6,1,1,1
+	.word	.L3,.L13,.L2
+	.byte	4
+	.word	.L3,.L13
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('gitstanley_initialize')
+	.sect	'.debug_abbrev'
+.L9:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
+	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('gitstanley_initialize')
+	.sect	'.debug_line'
+.L10:
+	.word	.L19-.L18
+.L18:
+	.half	3
+	.word	.L21-.L20
+.L20:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/gitstanley_initialize.c',0,0,0,0,0
+.L21:
+	.byte	5,1,7,0,5,2
+	.word	.L3
+	.byte	3,21,1,7,9
+	.half	.L12-.L3
+	.byte	0,1,1
+.L19:
+	.sdecl	'.debug_ranges',debug,cluster('gitstanley_initialize')
+	.sect	'.debug_ranges'
+.L11:
+	.word	-1,.L3,0,.L12-.L3,0,0
+	.sdecl	'.debug_loc',debug,cluster('gitstanley_initialize')
+	.sect	'.debug_loc'
+.L2:
+	.word	-1,.L3,0,.L13-.L3
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_frame',debug
+	.sect	'.debug_frame'
+.L22:
+	.word	48
+	.word	-1
+	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
+	.byte	8,39
+	.sdecl	'.debug_frame',debug,cluster('gitstanley_initialize')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L22,.L3,.L13-.L3
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	; Module end

@@ -28,7 +28,9 @@
 #include "decision_stateflow_types.h"
 #include "Ourcan.h"
 #include "EncMotor.h"
+#include "PID_CON.h"
 
+#include "STM_Interrupt.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
@@ -81,6 +83,35 @@ typedef struct {
   uint8_T is_FIND_CAR;
 } DW_decision_stateflow_T;
 
+typedef enum{
+  InitDriverState = 0,
+  Parking,    // 1
+  Driving,    // 2
+  Reversing   // 3
+}DriverState;
+
+typedef enum{
+  InitCAState = 0,
+  Emergency,  // 1
+  Decel       // 2
+}CAState;
+
+typedef enum{
+  InitRSPAState = 0,
+  Searching,  // 1
+  Forward, // 2
+  Backward,  // 3
+  Backward_Assist, // 4
+  Forward_Assist, // 5
+  Parking_Complete // 6  
+}RSPAState;
+
+typedef enum{
+  InitIsPrk = 0,
+  LEFT,
+  RIGHT
+}IsPrk;
+
 /* Real-time Model Data Structure */
 struct tag_RTM_decision_stateflow_T {
   const char_T * volatile errorStatus;
@@ -89,7 +120,7 @@ struct tag_RTM_decision_stateflow_T {
 /* Block states (default storage) */
 extern DW_decision_stateflow_T decision_stateflow_DW;
 extern double initVel;
-extern int U8IsTrButton;
+extern Transmission U8IsTrButton;
 extern double U8Curr_vel;
 extern double U8Ref_vel;
 extern double DInputVD;
@@ -100,24 +131,26 @@ extern int U8IsWp_R;
 extern int U8IsStopline;
 extern int U8IsPrkFinished;
 extern int U8IsOb_R;
-extern char U8DriverState;
-extern char U8RSPAState;
+extern DriverState U8DriverState;
+extern RSPAState U8RSPAState;
 extern int U8Driver;
 extern int U8RSPA;
 extern int U8Engine;
-extern char U8FCAState;
-extern char U8RCAState;
+extern CAState U8FCAState;
+extern CAState U8RCAState;
 extern double DTTC_D; // 후방 장애물 ttc
 extern double DTTC_R; // 전방 장애물 ttc
 extern double DObs_dis_D; //전방 장애물 상대거리
 extern double DObs_dis_R; //후방 장애물 상대거리
-extern double DSteeringinput;
+extern sint8 DSteeringinput;
 extern int calDis;
 extern int U8PrkFinished;
 extern int ExitCAR_request;
 extern double D_Ref_vel;
 extern int CameraSwitchRequest;
 extern int First_Set;
+
+extern IsPrk IsPrk_LR;
 
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);

@@ -82,7 +82,7 @@ void updateWaypoints(float new_waypoints[][2]) {
 float gitstanley(void)
 {
     if (Update_finished==1) {
-    v=(double)value*1000; //현재 차속 m/s
+    v=(double)U8Curr_vel*1000; //현재 차속 m/s
 
     /* 🚨 종료 조건: 경로 이탈 또는 모든 Waypoint 도달 */
     if (exitg1) {

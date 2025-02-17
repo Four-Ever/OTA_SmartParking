@@ -1,0 +1,455 @@
+	; Module start
+	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
+	.compiler_invocation	"ctc -f C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\cc17608a --dep-file=src/rtGetInf.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc27xd -D__CPU_TC27XD__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc27xd -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Configurations -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D\\\\_Reg -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Comm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Time -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Asc -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\CStart -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Irq -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Trap -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12 -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12\\\\IncrEnc -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Atom -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican\\\\Can -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Impl -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib\\\\DataHandling -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_PinMap -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\inc -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o src/rtGetInf.src ../src/rtGetInf.c"
+	.compiler_name		"ctc"
+	;source	'../src/rtGetInf.c'
+
+	
+$TC16X
+	
+	.sdecl	'.text.rtGetInf.rtGetInf',code,cluster('rtGetInf')
+	.sect	'.text.rtGetInf.rtGetInf'
+	.align	2
+	
+	.global	rtGetInf
+; Function rtGetInf
+.L7:
+rtGetInf:	.type	func
+	movh.a	a15,#@his(rtInf)
+	lea	a15,[a15]@los(rtInf)
+	ld.w	d2,[a15]
+.L51:
+	j	.L2
+.L2:
+	ret
+.L39:
+	
+__rtGetInf_function_end:
+	.size	rtGetInf,__rtGetInf_function_end-rtGetInf
+.L22:
+	; End of function
+	
+	.sdecl	'.text.rtGetInf.rtGetInfF',code,cluster('rtGetInfF')
+	.sect	'.text.rtGetInf.rtGetInfF'
+	.align	2
+	
+	.global	rtGetInfF
+; Function rtGetInfF
+.L9:
+rtGetInfF:	.type	func
+	movh.a	a15,#@his(rtInfF)
+	lea	a15,[a15]@los(rtInfF)
+	ld.w	d2,[a15]
+.L56:
+	j	.L3
+.L3:
+	ret
+.L40:
+	
+__rtGetInfF_function_end:
+	.size	rtGetInfF,__rtGetInfF_function_end-rtGetInfF
+.L27:
+	; End of function
+	
+	.sdecl	'.text.rtGetInf.rtGetMinusInf',code,cluster('rtGetMinusInf')
+	.sect	'.text.rtGetInf.rtGetMinusInf'
+	.align	2
+	
+	.global	rtGetMinusInf
+; Function rtGetMinusInf
+.L11:
+rtGetMinusInf:	.type	func
+	movh.a	a15,#@his(rtMinusInf)
+	lea	a15,[a15]@los(rtMinusInf)
+	ld.w	d2,[a15]
+.L61:
+	j	.L4
+.L4:
+	ret
+.L41:
+	
+__rtGetMinusInf_function_end:
+	.size	rtGetMinusInf,__rtGetMinusInf_function_end-rtGetMinusInf
+.L32:
+	; End of function
+	
+	.sdecl	'.text.rtGetInf.rtGetMinusInfF',code,cluster('rtGetMinusInfF')
+	.sect	'.text.rtGetInf.rtGetMinusInfF'
+	.align	2
+	
+	.global	rtGetMinusInfF
+; Function rtGetMinusInfF
+.L13:
+rtGetMinusInfF:	.type	func
+	movh.a	a15,#@his(rtMinusInfF)
+	lea	a15,[a15]@los(rtMinusInfF)
+	ld.w	d2,[a15]
+.L66:
+	j	.L5
+.L5:
+	ret
+.L42:
+	
+__rtGetMinusInfF_function_end:
+	.size	rtGetMinusInfF,__rtGetMinusInfF_function_end-rtGetMinusInfF
+.L37:
+	; End of function
+	
+	.calls	'rtGetInf','',0
+	.calls	'rtGetInfF','',0
+	.calls	'rtGetMinusInf','',0
+	.extern	rtInf
+	.extern	rtMinusInf
+	.extern	rtInfF
+	.extern	rtMinusInfF
+	.calls	'rtGetMinusInfF','',0
+	.sdecl	'.debug_info',debug
+	.sect	'.debug_info'
+.L15:
+	.word	553
+	.half	3
+	.word	.L16
+	.byte	4
+.L14:
+	.byte	1
+	.byte	'../src/rtGetInf.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L17
+.L38:
+	.byte	2
+	.byte	'float',0,4,4,3,1,4
+	.word	203
+	.byte	5
+	.byte	'__codeptr',0,1,1,1
+	.word	205
+	.byte	2
+	.byte	'char',0,1,6,5
+	.byte	'int8_T',0,2,41,21
+	.word	228
+	.byte	2
+	.byte	'unsigned char',0,1,8,5
+	.byte	'uint8_T',0,2,42,23
+	.word	251
+	.byte	2
+	.byte	'short int',0,2,5,5
+	.byte	'int16_T',0,2,43,15
+	.word	284
+	.byte	2
+	.byte	'unsigned short int',0,2,7,5
+	.byte	'uint16_T',0,2,44,24
+	.word	313
+	.byte	2
+	.byte	'int',0,4,5,5
+	.byte	'int32_T',0,2,45,13
+	.word	352
+	.byte	2
+	.byte	'unsigned int',0,4,7,5
+	.byte	'uint32_T',0,2,46,22
+	.word	375
+	.byte	5
+	.byte	'real32_T',0,2,47,15
+	.word	194
+	.byte	5
+	.byte	'real64_T',0,2,48,16
+	.word	194
+	.byte	5
+	.byte	'real_T',0,2,55,16
+	.word	194
+	.byte	2
+	.byte	'char',0,1,6,5
+	.byte	'char_T',0,2,61,14
+	.word	457
+	.byte	6
+	.byte	'rtInf',0,3,21,15
+	.word	194
+	.byte	1,1,6
+	.byte	'rtMinusInf',0,3,22,15
+	.word	194
+	.byte	1,1,6
+	.byte	'rtInfF',0,3,24,17
+	.word	194
+	.byte	1,1,6
+	.byte	'rtMinusInfF',0,3,25,17
+	.word	194
+	.byte	1,1,0
+	.sdecl	'.debug_abbrev',debug
+	.sect	'.debug_abbrev'
+.L16:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,36,0,3,8,11,15,62,15,0,0,3,21,0,54,15,0,0,4,15,0,73,19
+	.byte	0,0,5,22,0,3,8,58,15,59,15,57,15,73,19,0,0,6,52,0,3,8,58,15,59,15,57,15,73,19,63,12,60,12,0,0,0
+	.sdecl	'.debug_line',debug
+	.sect	'.debug_line'
+.L17:
+	.word	.L44-.L43
+.L43:
+	.half	3
+	.word	.L46-.L45
+.L45:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
+	.byte	'C:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\inc',0,0
+	.byte	'../src/rtGetInf.c',0,0,0,0
+	.byte	'rtwtypes.h',0,1,0,0
+	.byte	'rt_nonfinite.h',0,1,0,0,0
+.L46:
+.L44:
+	.sdecl	'.debug_info',debug,cluster('rtGetInf')
+	.sect	'.debug_info'
+.L18:
+	.word	242
+	.half	3
+	.word	.L19
+	.byte	4,1
+	.byte	'../src/rtGetInf.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L21,.L20
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtGetInf',0,1,25,8
+	.word	.L38
+	.byte	1,1,1
+	.word	.L7,.L39,.L6
+	.byte	4
+	.word	.L7,.L39
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtGetInf')
+	.sect	'.debug_abbrev'
+.L19:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtGetInf')
+	.sect	'.debug_line'
+.L20:
+	.word	.L48-.L47
+.L47:
+	.half	3
+	.word	.L50-.L49
+.L49:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rtGetInf.c',0,0,0,0,0
+.L50:
+	.byte	5,10,7,0,5,2
+	.word	.L7
+	.byte	3,26,1,5,3,9
+	.half	.L51-.L7
+	.byte	1,5,1,9
+	.half	.L2-.L51
+	.byte	3,1,1,7,9
+	.half	.L22-.L2
+	.byte	0,1,1
+.L48:
+	.sdecl	'.debug_ranges',debug,cluster('rtGetInf')
+	.sect	'.debug_ranges'
+.L21:
+	.word	-1,.L7,0,.L22-.L7,0,0
+	.sdecl	'.debug_info',debug,cluster('rtGetInfF')
+	.sect	'.debug_info'
+.L23:
+	.word	243
+	.half	3
+	.word	.L24
+	.byte	4,1
+	.byte	'../src/rtGetInf.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L26,.L25
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtGetInfF',0,1,35,10
+	.word	.L38
+	.byte	1,1,1
+	.word	.L9,.L40,.L8
+	.byte	4
+	.word	.L9,.L40
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtGetInfF')
+	.sect	'.debug_abbrev'
+.L24:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtGetInfF')
+	.sect	'.debug_line'
+.L25:
+	.word	.L53-.L52
+.L52:
+	.half	3
+	.word	.L55-.L54
+.L54:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rtGetInf.c',0,0,0,0,0
+.L55:
+	.byte	5,10,7,0,5,2
+	.word	.L9
+	.byte	3,36,1,5,3,9
+	.half	.L56-.L9
+	.byte	1,5,1,9
+	.half	.L3-.L56
+	.byte	3,1,1,7,9
+	.half	.L27-.L3
+	.byte	0,1,1
+.L53:
+	.sdecl	'.debug_ranges',debug,cluster('rtGetInfF')
+	.sect	'.debug_ranges'
+.L26:
+	.word	-1,.L9,0,.L27-.L9,0,0
+	.sdecl	'.debug_info',debug,cluster('rtGetMinusInf')
+	.sect	'.debug_info'
+.L28:
+	.word	247
+	.half	3
+	.word	.L29
+	.byte	4,1
+	.byte	'../src/rtGetInf.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L31,.L30
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtGetMinusInf',0,1,45,8
+	.word	.L38
+	.byte	1,1,1
+	.word	.L11,.L41,.L10
+	.byte	4
+	.word	.L11,.L41
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtGetMinusInf')
+	.sect	'.debug_abbrev'
+.L29:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtGetMinusInf')
+	.sect	'.debug_line'
+.L30:
+	.word	.L58-.L57
+.L57:
+	.half	3
+	.word	.L60-.L59
+.L59:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rtGetInf.c',0,0,0,0,0
+.L60:
+	.byte	5,10,7,0,5,2
+	.word	.L11
+	.byte	3,46,1,5,3,9
+	.half	.L61-.L11
+	.byte	1,5,1,9
+	.half	.L4-.L61
+	.byte	3,1,1,7,9
+	.half	.L32-.L4
+	.byte	0,1,1
+.L58:
+	.sdecl	'.debug_ranges',debug,cluster('rtGetMinusInf')
+	.sect	'.debug_ranges'
+.L31:
+	.word	-1,.L11,0,.L32-.L11,0,0
+	.sdecl	'.debug_info',debug,cluster('rtGetMinusInfF')
+	.sect	'.debug_info'
+.L33:
+	.word	248
+	.half	3
+	.word	.L34
+	.byte	4,1
+	.byte	'../src/rtGetInf.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L36,.L35
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtGetMinusInfF',0,1,55,10
+	.word	.L38
+	.byte	1,1,1
+	.word	.L13,.L42,.L12
+	.byte	4
+	.word	.L13,.L42
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtGetMinusInfF')
+	.sect	'.debug_abbrev'
+.L34:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtGetMinusInfF')
+	.sect	'.debug_line'
+.L35:
+	.word	.L63-.L62
+.L62:
+	.half	3
+	.word	.L65-.L64
+.L64:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rtGetInf.c',0,0,0,0,0
+.L65:
+	.byte	5,10,7,0,5,2
+	.word	.L13
+	.byte	3,56,1,5,3,9
+	.half	.L66-.L13
+	.byte	1,5,1,9
+	.half	.L5-.L66
+	.byte	3,1,1,7,9
+	.half	.L37-.L5
+	.byte	0,1,1
+.L63:
+	.sdecl	'.debug_ranges',debug,cluster('rtGetMinusInfF')
+	.sect	'.debug_ranges'
+.L36:
+	.word	-1,.L13,0,.L37-.L13,0,0
+	.sdecl	'.debug_loc',debug,cluster('rtGetInf')
+	.sect	'.debug_loc'
+.L6:
+	.word	-1,.L7,0,.L39-.L7
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('rtGetInfF')
+	.sect	'.debug_loc'
+.L8:
+	.word	-1,.L9,0,.L40-.L9
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('rtGetMinusInf')
+	.sect	'.debug_loc'
+.L10:
+	.word	-1,.L11,0,.L41-.L11
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('rtGetMinusInfF')
+	.sect	'.debug_loc'
+.L12:
+	.word	-1,.L13,0,.L42-.L13
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_frame',debug
+	.sect	'.debug_frame'
+.L67:
+	.word	48
+	.word	-1
+	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
+	.byte	8,39
+	.sdecl	'.debug_frame',debug,cluster('rtGetInf')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L67,.L7,.L39-.L7
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	.sdecl	'.debug_frame',debug,cluster('rtGetInfF')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L67,.L9,.L40-.L9
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	.sdecl	'.debug_frame',debug,cluster('rtGetMinusInf')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L67,.L11,.L41-.L11
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	.sdecl	'.debug_frame',debug,cluster('rtGetMinusInfF')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L67,.L13,.L42-.L13
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	; Module end

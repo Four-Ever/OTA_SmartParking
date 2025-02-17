@@ -1,0 +1,12 @@
+{
+	"group"					: "project-initializer",
+	"name"					: "tricore-tc2xx",
+	"releaseTimestamp"		: 1719911887,
+	"version"				: 10,
+	"versionName"			: "1.9",
+	"versionCompatibility"	: [],
+	"info"					: {
+		"illd_version"		: "1.0.1.17.0",
+		"release_reason"	: "Added folder Code_Example that contains images, README and changelog files."
+	}
+}
