@@ -100,10 +100,10 @@ void RPM_cal(void)
 
     if (abs(Enc_count_new - Enc_count_old) > 32768)
     {
-        // ����, ����÷ο� �߻�
+        // ����, ����÷ο�  �߻�
         if (Enc_count_new > Enc_count_old)
         {
-            // ����÷ο� (������)
+            // ����÷ο�  (������)
             Enc_count_diff = (float32)((Enc_count_new - 65535) - Enc_count_old);
         }
         else
@@ -178,6 +178,10 @@ void PI_Speed_con(void)
     {
         speed_pid.reset((void *)&speed_pid);
         setMotorControl(0,0);
+
+        speed_pid.Ref=0;
+        speed_pid.Fdb=0;
+        speed_pid.calc((void*)&speed_pid);
 
     }
     else

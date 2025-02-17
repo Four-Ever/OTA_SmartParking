@@ -18,7 +18,6 @@
  */
 
 #include "decision_stateflow.h"
-
 #include "rtwtypes.h"
 #include "IfxGpt12_IncrEnc.h"
 
@@ -65,6 +64,7 @@ sint8 DSteeringinput=0;
 double DMoveDis=0;
 int calDis=0;  //1일때 이동거리 계산 시작 요청 전달
 int First_Set = 1; //차선인식 시작
+int U8IsConerline=0;
 
 IsPrk IsPrk_LR = InitIsPrk;
 
@@ -403,8 +403,11 @@ void decision_stateflow_step(void)
                             if (U8Curr_vel==0){
 
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+
                             }
                         }
+
+
 
                         break;
 
