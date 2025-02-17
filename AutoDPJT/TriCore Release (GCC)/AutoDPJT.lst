@@ -1,0 +1,3710 @@
+
+AutoDPJT.elf:     file format elf32-tricore
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .bmhd_0       00000020  80000000  80000000  00000234  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .bmhd_1       00000020  80020000  80020000  000028e0  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  2 .startup      0000000c  80000020  80000020  00000254  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .interface_const 00000000  80000040  80000040  00002b04  2**0
+                  CONTENTS
+  4 .traptab_tc0  00000100  80000100  80000100  00000260  2**5
+                  CONTENTS, ALLOC, LOAD, CODE
+  5 .rodata       000001d0  80000200  80000200  00000360  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  6 .CPU2.zbss    00000000  50000000  50000000  00002b04  2**0
+                  CONTENTS
+  7 .CPU2.bss     00000000  50000000  50000000  00002b04  2**0
+                  CONTENTS
+  8 .CPU1.zbss    00000000  60000000  60000000  00002b04  2**0
+                  CONTENTS
+  9 .CPU1.bss     00000000  60001014  60001014  00002b04  2**0
+                  CONTENTS
+ 10 .CPU0.zbss    00000000  70000000  70000000  00002b04  2**0
+                  CONTENTS
+ 11 .CPU0.bss     00000000  70000000  70000000  00002b04  2**0
+                  CONTENTS
+ 12 .zbss         00000000  60000000  801f6300  00000000  2**0
+                  ALLOC
+ 13 .sbss         00000000  60000000  801f6300  00000000  2**0
+                  ALLOC, SMALL_DATA
+ 14 .bss          0000000c  60000008  801f6304  00002b08  2**3
+                  ALLOC
+ 15 .CPU2.zdata   00000000  50000000  50000000  00002b04  2**0
+                  CONTENTS
+ 16 .CPU2.data    00000000  50000000  50000000  00002b04  2**0
+                  CONTENTS
+ 17 .CPU1.zdata   00000000  60000000  60000000  00002b04  2**0
+                  CONTENTS
+ 18 .CPU1.data    00000000  60001014  60001014  00002b04  2**0
+                  CONTENTS
+ 19 .CPU0.zdata   00000000  70000000  70000000  00002b04  2**0
+                  CONTENTS
+ 20 .CPU0.data    00000000  70000000  70000000  00002b04  2**0
+                  CONTENTS
+ 21 .zdata        00000000  60000000  801f6304  00002b04  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+ 22 .sdata        00000000  60000000  801f6304  00002b04  2**0
+                  CONTENTS, ALLOC, LOAD, DATA, SMALL_DATA
+ 23 .data         00000004  60000000  801f6300  00002b00  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 24 .lmu_zdata    00000000  90000000  90000000  00002b04  2**0
+                  CONTENTS
+ 25 .lmu_sdata    00000000  90000000  90000000  00002b04  2**0
+                  CONTENTS
+ 26 .lmu_data     00000000  90000000  90000000  00002b04  2**0
+                  CONTENTS
+ 27 .CPU0.psram_text 00000000  70100000  70100000  00002b04  2**0
+                  CONTENTS
+ 28 .CPU1.psram_text 00000000  60100000  60100000  00002b04  2**0
+                  CONTENTS
+ 29 .CPU2.psram_text 00000000  50100000  50100000  00002b04  2**0
+                  CONTENTS
+ 30 .text         00002378  800003d0  800003d0  00000530  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 31 .init         00000010  80002748  80002748  000028a8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 32 .fini         00000008  80002758  80002758  000028b8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 33 .eh_frame     00000000  80002760  80002760  00002b04  2**0
+                  CONTENTS
+ 34 .gcc_except_table 00000000  80002760  80002760  00002b04  2**0
+                  CONTENTS
+ 35 .ctors        00000010  80002760  80002760  000028c0  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 36 .dtors        00000010  80002770  80002770  000028d0  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+ 37 .traptab_tc2  00000100  801f6100  801f6100  00002900  2**5
+                  CONTENTS, ALLOC, LOAD, CODE
+ 38 .traptab_tc1  00000100  801f6200  801f6200  00002a00  2**5
+                  CONTENTS, ALLOC, LOAD, CODE
+ 39 .heap         00001000  60000014  801f6304  00002b04  2**0
+                  ALLOC
+ 40 .CPU2.ustack  00000800  5001ae00  5001ae00  00000234  2**0
+                  ALLOC
+ 41 .CPU2.istack  00000400  5001b700  5001b700  00000234  2**0
+                  ALLOC
+ 42 .CPU2.csa     00002000  5001bc00  5001bc00  00000234  2**0
+                  ALLOC
+ 43 .CPU1.ustack  00000800  6001ae00  6001ae00  00000234  2**0
+                  ALLOC
+ 44 .CPU1.istack  00000400  6001b700  6001b700  00000234  2**0
+                  ALLOC
+ 45 .CPU1.csa     00002000  6001bc00  6001bc00  00000234  2**0
+                  ALLOC
+ 46 .CPU0.ustack  00000800  70018e00  70018e00  00000234  2**0
+                  ALLOC
+ 47 .CPU0.istack  00000400  70019700  70019700  00000234  2**0
+                  ALLOC
+ 48 .CPU0.csa     00002000  70019c00  70019c00  00000234  2**0
+                  ALLOC
+ 49 .inttab_tc0_000 00000000  801f4000  801f4000  00002b04  2**0
+                  CONTENTS
+ 50 .inttab_tc0_001 00000000  801f4020  801f4020  00002b04  2**0
+                  CONTENTS
+ 51 .inttab_tc0_002 00000000  801f4040  801f4040  00002b04  2**0
+                  CONTENTS
+ 52 .inttab_tc0_003 00000000  801f4060  801f4060  00002b04  2**0
+                  CONTENTS
+ 53 .inttab_tc0_004 00000000  801f4080  801f4080  00002b04  2**0
+                  CONTENTS
+ 54 .inttab_tc0_005 00000000  801f40a0  801f40a0  00002b04  2**0
+                  CONTENTS
+ 55 .inttab_tc0_006 00000000  801f40c0  801f40c0  00002b04  2**0
+                  CONTENTS
+ 56 .inttab_tc0_007 00000000  801f40e0  801f40e0  00002b04  2**0
+                  CONTENTS
+ 57 .inttab_tc0_008 00000000  801f4100  801f4100  00002b04  2**0
+                  CONTENTS
+ 58 .inttab_tc0_009 00000000  801f4120  801f4120  00002b04  2**0
+                  CONTENTS
+ 59 .inttab_tc0_00A 00000000  801f4140  801f4140  00002b04  2**0
+                  CONTENTS
+ 60 .inttab_tc0_00B 00000000  801f4160  801f4160  00002b04  2**0
+                  CONTENTS
+ 61 .inttab_tc0_00C 00000000  801f4180  801f4180  00002b04  2**0
+                  CONTENTS
+ 62 .inttab_tc0_00D 00000000  801f41a0  801f41a0  00002b04  2**0
+                  CONTENTS
+ 63 .inttab_tc0_00E 00000000  801f41c0  801f41c0  00002b04  2**0
+                  CONTENTS
+ 64 .inttab_tc0_00F 00000000  801f41e0  801f41e0  00002b04  2**0
+                  CONTENTS
+ 65 .inttab_tc0_010 00000000  801f4200  801f4200  00002b04  2**0
+                  CONTENTS
+ 66 .inttab_tc0_011 00000000  801f4220  801f4220  00002b04  2**0
+                  CONTENTS
+ 67 .inttab_tc0_012 00000000  801f4240  801f4240  00002b04  2**0
+                  CONTENTS
+ 68 .inttab_tc0_013 00000000  801f4260  801f4260  00002b04  2**0
+                  CONTENTS
+ 69 .inttab_tc0_014 00000000  801f4280  801f4280  00002b04  2**0
+                  CONTENTS
+ 70 .inttab_tc0_015 00000000  801f42a0  801f42a0  00002b04  2**0
+                  CONTENTS
+ 71 .inttab_tc0_016 00000000  801f42c0  801f42c0  00002b04  2**0
+                  CONTENTS
+ 72 .inttab_tc0_017 00000000  801f42e0  801f42e0  00002b04  2**0
+                  CONTENTS
+ 73 .inttab_tc0_018 00000000  801f4300  801f4300  00002b04  2**0
+                  CONTENTS
+ 74 .inttab_tc0_019 00000000  801f4320  801f4320  00002b04  2**0
+                  CONTENTS
+ 75 .inttab_tc0_01A 00000000  801f4340  801f4340  00002b04  2**0
+                  CONTENTS
+ 76 .inttab_tc0_01B 00000000  801f4360  801f4360  00002b04  2**0
+                  CONTENTS
+ 77 .inttab_tc0_01C 00000000  801f4380  801f4380  00002b04  2**0
+                  CONTENTS
+ 78 .inttab_tc0_01D 00000000  801f43a0  801f43a0  00002b04  2**0
+                  CONTENTS
+ 79 .inttab_tc0_01E 00000000  801f43c0  801f43c0  00002b04  2**0
+                  CONTENTS
+ 80 .inttab_tc0_01F 00000000  801f43e0  801f43e0  00002b04  2**0
+                  CONTENTS
+ 81 .inttab_tc0_020 00000000  801f4400  801f4400  00002b04  2**0
+                  CONTENTS
+ 82 .inttab_tc0_021 00000000  801f4420  801f4420  00002b04  2**0
+                  CONTENTS
+ 83 .inttab_tc0_022 00000000  801f4440  801f4440  00002b04  2**0
+                  CONTENTS
+ 84 .inttab_tc0_023 00000000  801f4460  801f4460  00002b04  2**0
+                  CONTENTS
+ 85 .inttab_tc0_024 00000000  801f4480  801f4480  00002b04  2**0
+                  CONTENTS
+ 86 .inttab_tc0_025 00000000  801f44a0  801f44a0  00002b04  2**0
+                  CONTENTS
+ 87 .inttab_tc0_026 00000000  801f44c0  801f44c0  00002b04  2**0
+                  CONTENTS
+ 88 .inttab_tc0_027 00000000  801f44e0  801f44e0  00002b04  2**0
+                  CONTENTS
+ 89 .inttab_tc0_028 00000000  801f4500  801f4500  00002b04  2**0
+                  CONTENTS
+ 90 .inttab_tc0_029 00000000  801f4520  801f4520  00002b04  2**0
+                  CONTENTS
+ 91 .inttab_tc0_02A 00000000  801f4540  801f4540  00002b04  2**0
+                  CONTENTS
+ 92 .inttab_tc0_02B 00000000  801f4560  801f4560  00002b04  2**0
+                  CONTENTS
+ 93 .inttab_tc0_02C 00000000  801f4580  801f4580  00002b04  2**0
+                  CONTENTS
+ 94 .inttab_tc0_02D 00000000  801f45a0  801f45a0  00002b04  2**0
+                  CONTENTS
+ 95 .inttab_tc0_02E 00000000  801f45c0  801f45c0  00002b04  2**0
+                  CONTENTS
+ 96 .inttab_tc0_02F 00000000  801f45e0  801f45e0  00002b04  2**0
+                  CONTENTS
+ 97 .inttab_tc0_030 00000000  801f4600  801f4600  00002b04  2**0
+                  CONTENTS
+ 98 .inttab_tc0_031 00000000  801f4620  801f4620  00002b04  2**0
+                  CONTENTS
+ 99 .inttab_tc0_032 00000000  801f4640  801f4640  00002b04  2**0
+                  CONTENTS
+100 .inttab_tc0_033 00000000  801f4660  801f4660  00002b04  2**0
+                  CONTENTS
+101 .inttab_tc0_034 00000000  801f4680  801f4680  00002b04  2**0
+                  CONTENTS
+102 .inttab_tc0_035 00000000  801f46a0  801f46a0  00002b04  2**0
+                  CONTENTS
+103 .inttab_tc0_036 00000000  801f46c0  801f46c0  00002b04  2**0
+                  CONTENTS
+104 .inttab_tc0_037 00000000  801f46e0  801f46e0  00002b04  2**0
+                  CONTENTS
+105 .inttab_tc0_038 00000000  801f4700  801f4700  00002b04  2**0
+                  CONTENTS
+106 .inttab_tc0_039 00000000  801f4720  801f4720  00002b04  2**0
+                  CONTENTS
+107 .inttab_tc0_03A 00000000  801f4740  801f4740  00002b04  2**0
+                  CONTENTS
+108 .inttab_tc0_03B 00000000  801f4760  801f4760  00002b04  2**0
+                  CONTENTS
+109 .inttab_tc0_03C 00000000  801f4780  801f4780  00002b04  2**0
+                  CONTENTS
+110 .inttab_tc0_03D 00000000  801f47a0  801f47a0  00002b04  2**0
+                  CONTENTS
+111 .inttab_tc0_03E 00000000  801f47c0  801f47c0  00002b04  2**0
+                  CONTENTS
+112 .inttab_tc0_03F 00000000  801f47e0  801f47e0  00002b04  2**0
+                  CONTENTS
+113 .inttab_tc0_040 00000000  801f4800  801f4800  00002b04  2**0
+                  CONTENTS
+114 .inttab_tc0_041 00000000  801f4820  801f4820  00002b04  2**0
+                  CONTENTS
+115 .inttab_tc0_042 00000000  801f4840  801f4840  00002b04  2**0
+                  CONTENTS
+116 .inttab_tc0_043 00000000  801f4860  801f4860  00002b04  2**0
+                  CONTENTS
+117 .inttab_tc0_044 00000000  801f4880  801f4880  00002b04  2**0
+                  CONTENTS
+118 .inttab_tc0_045 00000000  801f48a0  801f48a0  00002b04  2**0
+                  CONTENTS
+119 .inttab_tc0_046 00000000  801f48c0  801f48c0  00002b04  2**0
+                  CONTENTS
+120 .inttab_tc0_047 00000000  801f48e0  801f48e0  00002b04  2**0
+                  CONTENTS
+121 .inttab_tc0_048 00000000  801f4900  801f4900  00002b04  2**0
+                  CONTENTS
+122 .inttab_tc0_049 00000000  801f4920  801f4920  00002b04  2**0
+                  CONTENTS
+123 .inttab_tc0_04A 00000000  801f4940  801f4940  00002b04  2**0
+                  CONTENTS
+124 .inttab_tc0_04B 00000000  801f4960  801f4960  00002b04  2**0
+                  CONTENTS
+125 .inttab_tc0_04C 00000000  801f4980  801f4980  00002b04  2**0
+                  CONTENTS
+126 .inttab_tc0_04D 00000000  801f49a0  801f49a0  00002b04  2**0
+                  CONTENTS
+127 .inttab_tc0_04E 00000000  801f49c0  801f49c0  00002b04  2**0
+                  CONTENTS
+128 .inttab_tc0_04F 00000000  801f49e0  801f49e0  00002b04  2**0
+                  CONTENTS
+129 .inttab_tc0_050 00000000  801f4a00  801f4a00  00002b04  2**0
+                  CONTENTS
+130 .inttab_tc0_051 00000000  801f4a20  801f4a20  00002b04  2**0
+                  CONTENTS
+131 .inttab_tc0_052 00000000  801f4a40  801f4a40  00002b04  2**0
+                  CONTENTS
+132 .inttab_tc0_053 00000000  801f4a60  801f4a60  00002b04  2**0
+                  CONTENTS
+133 .inttab_tc0_054 00000000  801f4a80  801f4a80  00002b04  2**0
+                  CONTENTS
+134 .inttab_tc0_055 00000000  801f4aa0  801f4aa0  00002b04  2**0
+                  CONTENTS
+135 .inttab_tc0_056 00000000  801f4ac0  801f4ac0  00002b04  2**0
+                  CONTENTS
+136 .inttab_tc0_057 00000000  801f4ae0  801f4ae0  00002b04  2**0
+                  CONTENTS
+137 .inttab_tc0_058 00000000  801f4b00  801f4b00  00002b04  2**0
+                  CONTENTS
+138 .inttab_tc0_059 00000000  801f4b20  801f4b20  00002b04  2**0
+                  CONTENTS
+139 .inttab_tc0_05A 00000000  801f4b40  801f4b40  00002b04  2**0
+                  CONTENTS
+140 .inttab_tc0_05B 00000000  801f4b60  801f4b60  00002b04  2**0
+                  CONTENTS
+141 .inttab_tc0_05C 00000000  801f4b80  801f4b80  00002b04  2**0
+                  CONTENTS
+142 .inttab_tc0_05D 00000000  801f4ba0  801f4ba0  00002b04  2**0
+                  CONTENTS
+143 .inttab_tc0_05E 00000000  801f4bc0  801f4bc0  00002b04  2**0
+                  CONTENTS
+144 .inttab_tc0_05F 00000000  801f4be0  801f4be0  00002b04  2**0
+                  CONTENTS
+145 .inttab_tc0_060 00000000  801f4c00  801f4c00  00002b04  2**0
+                  CONTENTS
+146 .inttab_tc0_061 00000000  801f4c20  801f4c20  00002b04  2**0
+                  CONTENTS
+147 .inttab_tc0_062 00000000  801f4c40  801f4c40  00002b04  2**0
+                  CONTENTS
+148 .inttab_tc0_063 00000000  801f4c60  801f4c60  00002b04  2**0
+                  CONTENTS
+149 .inttab_tc0_064 00000000  801f4c80  801f4c80  00002b04  2**0
+                  CONTENTS
+150 .inttab_tc0_065 00000000  801f4ca0  801f4ca0  00002b04  2**0
+                  CONTENTS
+151 .inttab_tc0_066 00000000  801f4cc0  801f4cc0  00002b04  2**0
+                  CONTENTS
+152 .inttab_tc0_067 00000000  801f4ce0  801f4ce0  00002b04  2**0
+                  CONTENTS
+153 .inttab_tc0_068 00000000  801f4d00  801f4d00  00002b04  2**0
+                  CONTENTS
+154 .inttab_tc0_069 00000000  801f4d20  801f4d20  00002b04  2**0
+                  CONTENTS
+155 .inttab_tc0_06A 00000000  801f4d40  801f4d40  00002b04  2**0
+                  CONTENTS
+156 .inttab_tc0_06B 00000000  801f4d60  801f4d60  00002b04  2**0
+                  CONTENTS
+157 .inttab_tc0_06C 00000000  801f4d80  801f4d80  00002b04  2**0
+                  CONTENTS
+158 .inttab_tc0_06D 00000000  801f4da0  801f4da0  00002b04  2**0
+                  CONTENTS
+159 .inttab_tc0_06E 00000000  801f4dc0  801f4dc0  00002b04  2**0
+                  CONTENTS
+160 .inttab_tc0_06F 00000000  801f4de0  801f4de0  00002b04  2**0
+                  CONTENTS
+161 .inttab_tc0_070 00000000  801f4e00  801f4e00  00002b04  2**0
+                  CONTENTS
+162 .inttab_tc0_071 00000000  801f4e20  801f4e20  00002b04  2**0
+                  CONTENTS
+163 .inttab_tc0_072 00000000  801f4e40  801f4e40  00002b04  2**0
+                  CONTENTS
+164 .inttab_tc0_073 00000000  801f4e60  801f4e60  00002b04  2**0
+                  CONTENTS
+165 .inttab_tc0_074 00000000  801f4e80  801f4e80  00002b04  2**0
+                  CONTENTS
+166 .inttab_tc0_075 00000000  801f4ea0  801f4ea0  00002b04  2**0
+                  CONTENTS
+167 .inttab_tc0_076 00000000  801f4ec0  801f4ec0  00002b04  2**0
+                  CONTENTS
+168 .inttab_tc0_077 00000000  801f4ee0  801f4ee0  00002b04  2**0
+                  CONTENTS
+169 .inttab_tc0_078 00000000  801f4f00  801f4f00  00002b04  2**0
+                  CONTENTS
+170 .inttab_tc0_079 00000000  801f4f20  801f4f20  00002b04  2**0
+                  CONTENTS
+171 .inttab_tc0_07A 00000000  801f4f40  801f4f40  00002b04  2**0
+                  CONTENTS
+172 .inttab_tc0_07B 00000000  801f4f60  801f4f60  00002b04  2**0
+                  CONTENTS
+173 .inttab_tc0_07C 00000000  801f4f80  801f4f80  00002b04  2**0
+                  CONTENTS
+174 .inttab_tc0_07D 00000000  801f4fa0  801f4fa0  00002b04  2**0
+                  CONTENTS
+175 .inttab_tc0_07E 00000000  801f4fc0  801f4fc0  00002b04  2**0
+                  CONTENTS
+176 .inttab_tc0_07F 00000000  801f4fe0  801f4fe0  00002b04  2**0
+                  CONTENTS
+177 .inttab_tc0_080 00000000  801f5000  801f5000  00002b04  2**0
+                  CONTENTS
+178 .inttab_tc0_081 00000000  801f5020  801f5020  00002b04  2**0
+                  CONTENTS
+179 .inttab_tc0_082 00000000  801f5040  801f5040  00002b04  2**0
+                  CONTENTS
+180 .inttab_tc0_083 00000000  801f5060  801f5060  00002b04  2**0
+                  CONTENTS
+181 .inttab_tc0_084 00000000  801f5080  801f5080  00002b04  2**0
+                  CONTENTS
+182 .inttab_tc0_085 00000000  801f50a0  801f50a0  00002b04  2**0
+                  CONTENTS
+183 .inttab_tc0_086 00000000  801f50c0  801f50c0  00002b04  2**0
+                  CONTENTS
+184 .inttab_tc0_087 00000000  801f50e0  801f50e0  00002b04  2**0
+                  CONTENTS
+185 .inttab_tc0_088 00000000  801f5100  801f5100  00002b04  2**0
+                  CONTENTS
+186 .inttab_tc0_089 00000000  801f5120  801f5120  00002b04  2**0
+                  CONTENTS
+187 .inttab_tc0_08A 00000000  801f5140  801f5140  00002b04  2**0
+                  CONTENTS
+188 .inttab_tc0_08B 00000000  801f5160  801f5160  00002b04  2**0
+                  CONTENTS
+189 .inttab_tc0_08C 00000000  801f5180  801f5180  00002b04  2**0
+                  CONTENTS
+190 .inttab_tc0_08D 00000000  801f51a0  801f51a0  00002b04  2**0
+                  CONTENTS
+191 .inttab_tc0_08E 00000000  801f51c0  801f51c0  00002b04  2**0
+                  CONTENTS
+192 .inttab_tc0_08F 00000000  801f51e0  801f51e0  00002b04  2**0
+                  CONTENTS
+193 .inttab_tc0_090 00000000  801f5200  801f5200  00002b04  2**0
+                  CONTENTS
+194 .inttab_tc0_091 00000000  801f5220  801f5220  00002b04  2**0
+                  CONTENTS
+195 .inttab_tc0_092 00000000  801f5240  801f5240  00002b04  2**0
+                  CONTENTS
+196 .inttab_tc0_093 00000000  801f5260  801f5260  00002b04  2**0
+                  CONTENTS
+197 .inttab_tc0_094 00000000  801f5280  801f5280  00002b04  2**0
+                  CONTENTS
+198 .inttab_tc0_095 00000000  801f52a0  801f52a0  00002b04  2**0
+                  CONTENTS
+199 .inttab_tc0_096 00000000  801f52c0  801f52c0  00002b04  2**0
+                  CONTENTS
+200 .inttab_tc0_097 00000000  801f52e0  801f52e0  00002b04  2**0
+                  CONTENTS
+201 .inttab_tc0_098 00000000  801f5300  801f5300  00002b04  2**0
+                  CONTENTS
+202 .inttab_tc0_099 00000000  801f5320  801f5320  00002b04  2**0
+                  CONTENTS
+203 .inttab_tc0_09A 00000000  801f5340  801f5340  00002b04  2**0
+                  CONTENTS
+204 .inttab_tc0_09B 00000000  801f5360  801f5360  00002b04  2**0
+                  CONTENTS
+205 .inttab_tc0_09C 00000000  801f5380  801f5380  00002b04  2**0
+                  CONTENTS
+206 .inttab_tc0_09D 00000000  801f53a0  801f53a0  00002b04  2**0
+                  CONTENTS
+207 .inttab_tc0_09E 00000000  801f53c0  801f53c0  00002b04  2**0
+                  CONTENTS
+208 .inttab_tc0_09F 00000000  801f53e0  801f53e0  00002b04  2**0
+                  CONTENTS
+209 .inttab_tc0_0A0 00000000  801f5400  801f5400  00002b04  2**0
+                  CONTENTS
+210 .inttab_tc0_0A1 00000000  801f5420  801f5420  00002b04  2**0
+                  CONTENTS
+211 .inttab_tc0_0A2 00000000  801f5440  801f5440  00002b04  2**0
+                  CONTENTS
+212 .inttab_tc0_0A3 00000000  801f5460  801f5460  00002b04  2**0
+                  CONTENTS
+213 .inttab_tc0_0A4 00000000  801f5480  801f5480  00002b04  2**0
+                  CONTENTS
+214 .inttab_tc0_0A5 00000000  801f54a0  801f54a0  00002b04  2**0
+                  CONTENTS
+215 .inttab_tc0_0A6 00000000  801f54c0  801f54c0  00002b04  2**0
+                  CONTENTS
+216 .inttab_tc0_0A7 00000000  801f54e0  801f54e0  00002b04  2**0
+                  CONTENTS
+217 .inttab_tc0_0A8 00000000  801f5500  801f5500  00002b04  2**0
+                  CONTENTS
+218 .inttab_tc0_0A9 00000000  801f5520  801f5520  00002b04  2**0
+                  CONTENTS
+219 .inttab_tc0_0AA 00000000  801f5540  801f5540  00002b04  2**0
+                  CONTENTS
+220 .inttab_tc0_0AB 00000000  801f5560  801f5560  00002b04  2**0
+                  CONTENTS
+221 .inttab_tc0_0AC 00000000  801f5580  801f5580  00002b04  2**0
+                  CONTENTS
+222 .inttab_tc0_0AD 00000000  801f55a0  801f55a0  00002b04  2**0
+                  CONTENTS
+223 .inttab_tc0_0AE 00000000  801f55c0  801f55c0  00002b04  2**0
+                  CONTENTS
+224 .inttab_tc0_0AF 00000000  801f55e0  801f55e0  00002b04  2**0
+                  CONTENTS
+225 .inttab_tc0_0B0 00000000  801f5600  801f5600  00002b04  2**0
+                  CONTENTS
+226 .inttab_tc0_0B1 00000000  801f5620  801f5620  00002b04  2**0
+                  CONTENTS
+227 .inttab_tc0_0B2 00000000  801f5640  801f5640  00002b04  2**0
+                  CONTENTS
+228 .inttab_tc0_0B3 00000000  801f5660  801f5660  00002b04  2**0
+                  CONTENTS
+229 .inttab_tc0_0B4 00000000  801f5680  801f5680  00002b04  2**0
+                  CONTENTS
+230 .inttab_tc0_0B5 00000000  801f56a0  801f56a0  00002b04  2**0
+                  CONTENTS
+231 .inttab_tc0_0B6 00000000  801f56c0  801f56c0  00002b04  2**0
+                  CONTENTS
+232 .inttab_tc0_0B7 00000000  801f56e0  801f56e0  00002b04  2**0
+                  CONTENTS
+233 .inttab_tc0_0B8 00000000  801f5700  801f5700  00002b04  2**0
+                  CONTENTS
+234 .inttab_tc0_0B9 00000000  801f5720  801f5720  00002b04  2**0
+                  CONTENTS
+235 .inttab_tc0_0BA 00000000  801f5740  801f5740  00002b04  2**0
+                  CONTENTS
+236 .inttab_tc0_0BB 00000000  801f5760  801f5760  00002b04  2**0
+                  CONTENTS
+237 .inttab_tc0_0BC 00000000  801f5780  801f5780  00002b04  2**0
+                  CONTENTS
+238 .inttab_tc0_0BD 00000000  801f57a0  801f57a0  00002b04  2**0
+                  CONTENTS
+239 .inttab_tc0_0BE 00000000  801f57c0  801f57c0  00002b04  2**0
+                  CONTENTS
+240 .inttab_tc0_0BF 00000000  801f57e0  801f57e0  00002b04  2**0
+                  CONTENTS
+241 .inttab_tc0_0C0 00000000  801f5800  801f5800  00002b04  2**0
+                  CONTENTS
+242 .inttab_tc0_0C1 00000000  801f5820  801f5820  00002b04  2**0
+                  CONTENTS
+243 .inttab_tc0_0C2 00000000  801f5840  801f5840  00002b04  2**0
+                  CONTENTS
+244 .inttab_tc0_0C3 00000000  801f5860  801f5860  00002b04  2**0
+                  CONTENTS
+245 .inttab_tc0_0C4 00000000  801f5880  801f5880  00002b04  2**0
+                  CONTENTS
+246 .inttab_tc0_0C5 00000000  801f58a0  801f58a0  00002b04  2**0
+                  CONTENTS
+247 .inttab_tc0_0C6 00000000  801f58c0  801f58c0  00002b04  2**0
+                  CONTENTS
+248 .inttab_tc0_0C7 00000000  801f58e0  801f58e0  00002b04  2**0
+                  CONTENTS
+249 .inttab_tc0_0C8 00000000  801f5900  801f5900  00002b04  2**0
+                  CONTENTS
+250 .inttab_tc0_0C9 00000000  801f5920  801f5920  00002b04  2**0
+                  CONTENTS
+251 .inttab_tc0_0CA 00000000  801f5940  801f5940  00002b04  2**0
+                  CONTENTS
+252 .inttab_tc0_0CB 00000000  801f5960  801f5960  00002b04  2**0
+                  CONTENTS
+253 .inttab_tc0_0CC 00000000  801f5980  801f5980  00002b04  2**0
+                  CONTENTS
+254 .inttab_tc0_0CD 00000000  801f59a0  801f59a0  00002b04  2**0
+                  CONTENTS
+255 .inttab_tc0_0CE 00000000  801f59c0  801f59c0  00002b04  2**0
+                  CONTENTS
+256 .inttab_tc0_0CF 00000000  801f59e0  801f59e0  00002b04  2**0
+                  CONTENTS
+257 .inttab_tc0_0D0 00000000  801f5a00  801f5a00  00002b04  2**0
+                  CONTENTS
+258 .inttab_tc0_0D1 00000000  801f5a20  801f5a20  00002b04  2**0
+                  CONTENTS
+259 .inttab_tc0_0D2 00000000  801f5a40  801f5a40  00002b04  2**0
+                  CONTENTS
+260 .inttab_tc0_0D3 00000000  801f5a60  801f5a60  00002b04  2**0
+                  CONTENTS
+261 .inttab_tc0_0D4 00000000  801f5a80  801f5a80  00002b04  2**0
+                  CONTENTS
+262 .inttab_tc0_0D5 00000000  801f5aa0  801f5aa0  00002b04  2**0
+                  CONTENTS
+263 .inttab_tc0_0D6 00000000  801f5ac0  801f5ac0  00002b04  2**0
+                  CONTENTS
+264 .inttab_tc0_0D7 00000000  801f5ae0  801f5ae0  00002b04  2**0
+                  CONTENTS
+265 .inttab_tc0_0D8 00000000  801f5b00  801f5b00  00002b04  2**0
+                  CONTENTS
+266 .inttab_tc0_0D9 00000000  801f5b20  801f5b20  00002b04  2**0
+                  CONTENTS
+267 .inttab_tc0_0DA 00000000  801f5b40  801f5b40  00002b04  2**0
+                  CONTENTS
+268 .inttab_tc0_0DB 00000000  801f5b60  801f5b60  00002b04  2**0
+                  CONTENTS
+269 .inttab_tc0_0DC 00000000  801f5b80  801f5b80  00002b04  2**0
+                  CONTENTS
+270 .inttab_tc0_0DD 00000000  801f5ba0  801f5ba0  00002b04  2**0
+                  CONTENTS
+271 .inttab_tc0_0DE 00000000  801f5bc0  801f5bc0  00002b04  2**0
+                  CONTENTS
+272 .inttab_tc0_0DF 00000000  801f5be0  801f5be0  00002b04  2**0
+                  CONTENTS
+273 .inttab_tc0_0E0 00000000  801f5c00  801f5c00  00002b04  2**0
+                  CONTENTS
+274 .inttab_tc0_0E1 00000000  801f5c20  801f5c20  00002b04  2**0
+                  CONTENTS
+275 .inttab_tc0_0E2 00000000  801f5c40  801f5c40  00002b04  2**0
+                  CONTENTS
+276 .inttab_tc0_0E3 00000000  801f5c60  801f5c60  00002b04  2**0
+                  CONTENTS
+277 .inttab_tc0_0E4 00000000  801f5c80  801f5c80  00002b04  2**0
+                  CONTENTS
+278 .inttab_tc0_0E5 00000000  801f5ca0  801f5ca0  00002b04  2**0
+                  CONTENTS
+279 .inttab_tc0_0E6 00000000  801f5cc0  801f5cc0  00002b04  2**0
+                  CONTENTS
+280 .inttab_tc0_0E7 00000000  801f5ce0  801f5ce0  00002b04  2**0
+                  CONTENTS
+281 .inttab_tc0_0E8 00000000  801f5d00  801f5d00  00002b04  2**0
+                  CONTENTS
+282 .inttab_tc0_0E9 00000000  801f5d20  801f5d20  00002b04  2**0
+                  CONTENTS
+283 .inttab_tc0_0EA 00000000  801f5d40  801f5d40  00002b04  2**0
+                  CONTENTS
+284 .inttab_tc0_0EB 00000000  801f5d60  801f5d60  00002b04  2**0
+                  CONTENTS
+285 .inttab_tc0_0EC 00000000  801f5d80  801f5d80  00002b04  2**0
+                  CONTENTS
+286 .inttab_tc0_0ED 00000000  801f5da0  801f5da0  00002b04  2**0
+                  CONTENTS
+287 .inttab_tc0_0EE 00000000  801f5dc0  801f5dc0  00002b04  2**0
+                  CONTENTS
+288 .inttab_tc0_0EF 00000000  801f5de0  801f5de0  00002b04  2**0
+                  CONTENTS
+289 .inttab_tc0_0F0 00000000  801f5e00  801f5e00  00002b04  2**0
+                  CONTENTS
+290 .inttab_tc0_0F1 00000000  801f5e20  801f5e20  00002b04  2**0
+                  CONTENTS
+291 .inttab_tc0_0F2 00000000  801f5e40  801f5e40  00002b04  2**0
+                  CONTENTS
+292 .inttab_tc0_0F3 00000000  801f5e60  801f5e60  00002b04  2**0
+                  CONTENTS
+293 .inttab_tc0_0F4 00000000  801f5e80  801f5e80  00002b04  2**0
+                  CONTENTS
+294 .inttab_tc0_0F5 00000000  801f5ea0  801f5ea0  00002b04  2**0
+                  CONTENTS
+295 .inttab_tc0_0F6 00000000  801f5ec0  801f5ec0  00002b04  2**0
+                  CONTENTS
+296 .inttab_tc0_0F7 00000000  801f5ee0  801f5ee0  00002b04  2**0
+                  CONTENTS
+297 .inttab_tc0_0F8 00000000  801f5f00  801f5f00  00002b04  2**0
+                  CONTENTS
+298 .inttab_tc0_0F9 00000000  801f5f20  801f5f20  00002b04  2**0
+                  CONTENTS
+299 .inttab_tc0_0FA 00000000  801f5f40  801f5f40  00002b04  2**0
+                  CONTENTS
+300 .inttab_tc0_0FB 00000000  801f5f60  801f5f60  00002b04  2**0
+                  CONTENTS
+301 .inttab_tc0_0FC 00000000  801f5f80  801f5f80  00002b04  2**0
+                  CONTENTS
+302 .inttab_tc0_0FD 00000000  801f5fa0  801f5fa0  00002b04  2**0
+                  CONTENTS
+303 .inttab_tc0_0FE 00000000  801f5fc0  801f5fc0  00002b04  2**0
+                  CONTENTS
+304 .inttab_tc0_0FF 00000000  801f5fe0  801f5fe0  00002b04  2**0
+                  CONTENTS
+305 .comment      00000082  00000000  00000000  00002b04  2**0
+                  CONTENTS, READONLY
+306 .debug_aranges 00000120  00000000  00000000  00002b88  2**3
+                  CONTENTS, READONLY, DEBUGGING
+307 .debug_info   00002956  00000000  00000000  00002ca8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+308 .debug_abbrev 00000b94  00000000  00000000  000055fe  2**0
+                  CONTENTS, READONLY, DEBUGGING
+309 .debug_line   00000c00  00000000  00000000  00006192  2**0
+                  CONTENTS, READONLY, DEBUGGING
+310 .debug_frame  00000100  00000000  00000000  00006d94  2**2
+                  CONTENTS, READONLY, DEBUGGING
+311 .debug_str    000000b1  00000000  00000000  00006e94  2**0
+                  CONTENTS, READONLY, DEBUGGING
+312 .debug_loc    00000860  00000000  00000000  00006f45  2**0
+                  CONTENTS, READONLY, DEBUGGING
+313 .debug_ranges 00000148  00000000  00000000  000077a8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .startup:
+
+80000020 <_START>:
+80000020:	91 00 00 28 	movh.a %a2,32768
+80000024:	d9 22 66 11 	lea %a2,[%a2]5222 <80001466 <_Core0_start>>
+80000028:	dc 02       	ji %a2
+8000002a:	00 90       	ret 
+
+Disassembly of section .traptab_tc0:
+
+80000100 <IfxCpu_Trap_vectorTable0>:
+80000100:	0d 00 00 02 	svlcx 
+80000104:	02 f4       	mov %d4,%d15
+80000106:	91 00 00 28 	movh.a %a2,32768
+8000010a:	d9 22 d0 f0 	lea %a2,[%a2]4048 <80000fd0 <IfxCpu_Trap_memoryManagementError>>
+8000010e:	dc 02       	ji %a2
+80000110:	00 80       	rfe 
+	...
+8000011e:	00 00       	nop 
+80000120:	0d 00 00 02 	svlcx 
+80000124:	02 f4       	mov %d4,%d15
+80000126:	91 00 00 28 	movh.a %a2,32768
+8000012a:	d9 22 04 01 	lea %a2,[%a2]4100 <80001004 <IfxCpu_Trap_internalProtectionError>>
+8000012e:	dc 02       	ji %a2
+80000130:	00 80       	rfe 
+	...
+8000013e:	00 00       	nop 
+80000140:	0d 00 00 02 	svlcx 
+80000144:	02 f4       	mov %d4,%d15
+80000146:	91 00 00 28 	movh.a %a2,32768
+8000014a:	d9 22 3c 01 	lea %a2,[%a2]4156 <8000103c <IfxCpu_Trap_instructionError>>
+8000014e:	dc 02       	ji %a2
+80000150:	00 80       	rfe 
+	...
+8000015e:	00 00       	nop 
+80000160:	02 f4       	mov %d4,%d15
+80000162:	91 00 00 28 	movh.a %a2,32768
+80000166:	d9 22 34 11 	lea %a2,[%a2]4212 <80001074 <IfxCpu_Trap_contextManagementError>>
+8000016a:	dc 02       	ji %a2
+8000016c:	00 80       	rfe 
+	...
+8000017e:	00 00       	nop 
+80000180:	0d 00 00 02 	svlcx 
+80000184:	02 f4       	mov %d4,%d15
+80000186:	91 00 00 28 	movh.a %a2,32768
+8000018a:	d9 22 2c 21 	lea %a2,[%a2]4268 <800010ac <IfxCpu_Trap_busError>>
+8000018e:	dc 02       	ji %a2
+80000190:	00 80       	rfe 
+	...
+8000019e:	00 00       	nop 
+800001a0:	0d 00 00 02 	svlcx 
+800001a4:	02 f4       	mov %d4,%d15
+800001a6:	91 00 00 28 	movh.a %a2,32768
+800001aa:	d9 22 24 31 	lea %a2,[%a2]4324 <800010e4 <IfxCpu_Trap_assertion>>
+800001ae:	dc 02       	ji %a2
+800001b0:	00 80       	rfe 
+	...
+800001be:	00 00       	nop 
+800001c0:	0d 00 00 02 	svlcx 
+800001c4:	02 f4       	mov %d4,%d15
+800001c6:	91 00 00 28 	movh.a %a2,32768
+800001ca:	d9 22 1e 41 	lea %a2,[%a2]4382 <8000111e <IfxCpu_Trap_systemCall_Cpu0>>
+800001ce:	dc 02       	ji %a2
+800001d0:	00 80       	rfe 
+	...
+800001de:	00 00       	nop 
+800001e0:	0d 00 00 02 	svlcx 
+800001e4:	02 f4       	mov %d4,%d15
+800001e6:	91 00 00 28 	movh.a %a2,32768
+800001ea:	d9 22 14 51 	lea %a2,[%a2]4436 <80001154 <IfxCpu_Trap_nonMaskableInterrupt>>
+800001ee:	dc 02       	ji %a2
+800001f0:	00 80       	rfe 
+800001f2:	00 90       	ret 
+
+800001f4 <IfxCpu_Trap_vectorTable0_end>:
+	...
+
+Disassembly of section .text:
+
+800003d0 <deregister_tm_clones>:
+800003d0:	7b 00 00 26 	movh %d2,24576
+800003d4:	1b 42 00 20 	addi %d2,%d2,4
+800003d8:	91 00 00 46 	movh.a %a4,24576
+800003dc:	60 22       	mov.a %a2,%d2
+800003de:	d9 44 04 00 	lea %a4,[%a4]4 <60000004 <__TMC_END__>>
+800003e2:	7d 42 0a 00 	jeq.a %a2,%a4,800003f6 <deregister_tm_clones+0x26>
+800003e6:	91 00 00 20 	movh.a %a2,0
+800003ea:	d9 22 00 00 	lea %a2,[%a2]0 <0 <__TRICORE_DERIVATE_MEMORY_MAP__-0x270>>
+800003ee:	bd 02 04 00 	jz.a %a2,800003f6 <deregister_tm_clones+0x26>
+800003f2:	2d 02 00 00 	calli %a2
+800003f6:	00 90       	ret 
+
+800003f8 <register_tm_clones>:
+800003f8:	7b 00 00 26 	movh %d2,24576
+800003fc:	1b 42 00 20 	addi %d2,%d2,4
+80000400:	91 00 00 46 	movh.a %a4,24576
+80000404:	60 22       	mov.a %a2,%d2
+80000406:	d9 44 04 00 	lea %a4,[%a4]4 <60000004 <__TMC_END__>>
+8000040a:	01 42 20 20 	sub.a %a2,%a2,%a4
+8000040e:	80 22       	mov.d %d2,%a2
+80000410:	8f e2 3f 30 	sha %d3,%d2,-2
+80000414:	8f 12 1e 20 	sh %d2,%d2,-31
+80000418:	42 32       	add %d2,%d3
+8000041a:	8f f2 3f 40 	sha %d4,%d2,-1
+8000041e:	df 04 0a 00 	jeq %d4,0,80000432 <register_tm_clones+0x3a>
+80000422:	91 00 00 20 	movh.a %a2,0
+80000426:	d9 22 00 00 	lea %a2,[%a2]0 <0 <__TRICORE_DERIVATE_MEMORY_MAP__-0x270>>
+8000042a:	bd 02 04 00 	jz.a %a2,80000432 <register_tm_clones+0x3a>
+8000042e:	2d 02 00 00 	calli %a2
+80000432:	00 90       	ret 
+
+80000434 <__do_global_dtors_aux>:
+80000434:	91 00 00 e6 	movh.a %a14,24576
+80000438:	39 e2 08 00 	ld.bu %d2,[%a14]8 <60000008 <completed.1>>
+8000043c:	df 02 2d 80 	jne %d2,0,80000496 <__do_global_dtors_aux+0x62>
+80000440:	91 00 00 38 	movh.a %a3,32768
+80000444:	91 00 00 28 	movh.a %a2,32768
+80000448:	d9 33 40 e2 	lea %a3,[%a3]10112 <80002780 <__DTOR_END__>>
+8000044c:	d9 22 74 d2 	lea %a2,[%a2]10100 <80002774 <__DTOR_LIST__>>
+80000450:	01 23 20 20 	sub.a %a2,%a3,%a2
+80000454:	80 22       	mov.d %d2,%a2
+80000456:	86 e2       	sha %d2,-2
+80000458:	1b f2 ff 8f 	addi %d8,%d2,-1
+8000045c:	91 00 00 c6 	movh.a %a12,24576
+80000460:	7b 00 00 28 	movh %d2,32768
+80000464:	1b 42 77 22 	addi %d2,%d2,10100
+80000468:	60 2d       	mov.a %a13,%d2
+8000046a:	19 c2 0c 00 	ld.w %d2,[%a12]12 <6000000c <dtor_idx.0>>
+8000046e:	7f 82 0f 80 	jge.u %d2,%d8,8000048c <__do_global_dtors_aux+0x58>
+80000472:	d9 cc 0c 00 	lea %a12,[%a12]12 <6000000c <dtor_idx.0>>
+80000476:	c2 12       	add %d2,1
+80000478:	74 c2       	st.w [%a12],%d2
+8000047a:	06 22       	sh %d2,2
+8000047c:	01 d2 00 26 	addsc.a %a2,%a13,%d2,0
+80000480:	d4 22       	ld.a %a2,[%a2]
+80000482:	2d 02 00 00 	calli %a2
+80000486:	54 c2       	ld.w %d2,[%a12]
+80000488:	3f 82 f7 ff 	jlt.u %d2,%d8,80000476 <__do_global_dtors_aux+0x42>
+8000048c:	6d ff a2 ff 	call 800003d0 <deregister_tm_clones>
+80000490:	82 12       	mov %d2,1
+80000492:	e9 e2 08 00 	st.b [%a14]8 <60000008 <completed.1>>,%d2
+80000496:	00 90       	ret 
+
+80000498 <frame_dummy>:
+80000498:	6d ff b0 ff 	call 800003f8 <register_tm_clones>
+8000049c:	00 90       	ret 
+
+8000049e <IfxScuCcu_getPllFrequency>:
+8000049e:	91 30 00 2f 	movh.a %a2,61443
+800004a2:	19 23 34 06 	ld.w %d3,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+800004a6:	7b f0 cb 24 	movh %d2,19647
+800004aa:	37 03 62 3e 	extr.u %d3,%d3,28,2
+800004ae:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+800004b2:	1b 02 c2 2b 	addi %d2,%d2,-17376
+800004b6:	df 03 08 00 	jeq %d3,0,800004c6 <IfxScuCcu_getPllFrequency+0x28>
+800004ba:	54 23       	ld.w %d3,[%a2]
+800004bc:	82 02       	mov %d2,0
+800004be:	37 03 62 3e 	extr.u %d3,%d3,28,2
+800004c2:	df 13 47 00 	jeq %d3,1,80000550 <IfxScuCcu_getPllFrequency+0xb2>
+800004c6:	91 30 00 2f 	movh.a %a2,61443
+800004ca:	19 23 14 06 	ld.w %d3,[%a2]24596 <f0036014 <_SMALL_DATA4_+0x6002e014>>
+800004ce:	d9 22 00 06 	lea %a2,[%a2]24576 <f0036000 <_SMALL_DATA4_+0x6002e000>>
+800004d2:	6f 03 35 80 	jnz.t %d3,0,8000053c <IfxScuCcu_getPllFrequency+0x9e>
+800004d6:	19 23 14 00 	ld.w %d3,[%a2]20 <f0030014 <_SMALL_DATA4_+0x60028014>>
+800004da:	6f 33 1c 80 	jnz.t %d3,3,80000512 <IfxScuCcu_getPllFrequency+0x74>
+800004de:	19 23 18 00 	ld.w %d3,[%a2]24 <f0030018 <_SMALL_DATA4_+0x60028018>>
+800004e2:	19 24 1c 00 	ld.w %d4,[%a2]28 <f003001c <_SMALL_DATA4_+0x6002801c>>
+800004e6:	37 03 e7 34 	extr.u %d3,%d3,9,7
+800004ea:	19 25 18 00 	ld.w %d5,[%a2]24 <f0030018 <_SMALL_DATA4_+0x60028018>>
+800004ee:	c2 13       	add %d3,1
+800004f0:	37 05 64 5c 	extr.u %d5,%d5,24,4
+800004f4:	4b 03 41 31 	itof %d3,%d3
+800004f8:	8f f4 07 41 	and %d4,%d4,127
+800004fc:	4b 23 41 30 	mul.f %d3,%d3,%d2
+80000500:	1b 15 00 20 	addi %d2,%d5,1
+80000504:	03 24 0a 22 	madd %d2,%d2,%d4,%d2
+80000508:	4b 02 41 21 	itof %d2,%d2
+8000050c:	4b 23 51 20 	div.f %d2,%d3,%d2
+80000510:	00 90       	ret 
+80000512:	19 24 1c 00 	ld.w %d4,[%a2]28
+80000516:	8f f4 07 41 	and %d4,%d4,127
+8000051a:	c2 14       	add %d4,1
+8000051c:	6d 00 e7 0e 	call 800022ea <__floatsidf>
+80000520:	0b 23 10 68 	mov %e6,%d3,%d2
+80000524:	7b 80 19 54 	movh %d5,16792
+80000528:	82 04       	mov %d4,0
+8000052a:	1b 45 78 5d 	addi %d5,%d5,-10364
+8000052e:	6d 00 36 0e 	call 8000219a <__divdf3>
+80000532:	0b 23 10 48 	mov %e4,%d3,%d2
+80000536:	6d 00 15 0f 	call 80002360 <__truncdfsf2>
+8000053a:	00 90       	ret 
+8000053c:	19 23 1c 00 	ld.w %d3,[%a2]28
+80000540:	37 03 67 38 	extr.u %d3,%d3,16,7
+80000544:	c2 13       	add %d3,1
+80000546:	4b 03 41 31 	itof %d3,%d3
+8000054a:	4b 32 51 20 	div.f %d2,%d2,%d3
+8000054e:	00 90       	ret 
+80000550:	91 00 00 26 	movh.a %a2,24576
+80000554:	19 22 00 00 	ld.w %d2,[%a2]0 <60000000 <IfxScuCcu_xtalFrequency>>
+80000558:	4b 02 61 21 	utof %d2,%d2
+8000055c:	1d ff b5 ff 	j 800004c6 <IfxScuCcu_getPllFrequency+0x28>
+
+80000560 <IfxScuCcu_getSourceFrequency>:
+80000560:	91 30 00 2f 	movh.a %a2,61443
+80000564:	19 23 30 06 	ld.w %d3,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+80000568:	7b f0 cb 24 	movh %d2,19647
+8000056c:	37 03 62 3e 	extr.u %d3,%d3,28,2
+80000570:	d9 22 30 06 	lea %a2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+80000574:	1b 02 c2 2b 	addi %d2,%d2,-17376
+80000578:	df 03 38 00 	jeq %d3,0,800005e8 <IfxScuCcu_getSourceFrequency+0x88>
+8000057c:	82 02       	mov %d2,0
+8000057e:	df 13 35 80 	jne %d3,1,800005e8 <IfxScuCcu_getSourceFrequency+0x88>
+80000582:	91 30 00 2f 	movh.a %a2,61443
+80000586:	19 24 34 06 	ld.w %d4,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+8000058a:	7b f0 cb 34 	movh %d3,19647
+8000058e:	37 04 62 4e 	extr.u %d4,%d4,28,2
+80000592:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+80000596:	1b 03 c2 3b 	addi %d3,%d3,-17376
+8000059a:	df 04 28 80 	jne %d4,0,800005ea <IfxScuCcu_getSourceFrequency+0x8a>
+8000059e:	91 30 00 2f 	movh.a %a2,61443
+800005a2:	19 22 14 06 	ld.w %d2,[%a2]24596 <f0036014 <_SMALL_DATA4_+0x6002e014>>
+800005a6:	d9 22 00 06 	lea %a2,[%a2]24576 <f0036000 <_SMALL_DATA4_+0x6002e000>>
+800005aa:	6f 02 43 80 	jnz.t %d2,0,80000630 <IfxScuCcu_getSourceFrequency+0xd0>
+800005ae:	19 22 14 00 	ld.w %d2,[%a2]20 <f0030014 <_SMALL_DATA4_+0x60028014>>
+800005b2:	6f 32 2a 80 	jnz.t %d2,3,80000606 <IfxScuCcu_getSourceFrequency+0xa6>
+800005b6:	19 22 18 00 	ld.w %d2,[%a2]24 <f0030018 <_SMALL_DATA4_+0x60028018>>
+800005ba:	19 24 1c 00 	ld.w %d4,[%a2]28 <f003001c <_SMALL_DATA4_+0x6002801c>>
+800005be:	37 02 e7 24 	extr.u %d2,%d2,9,7
+800005c2:	19 25 18 00 	ld.w %d5,[%a2]24 <f0030018 <_SMALL_DATA4_+0x60028018>>
+800005c6:	c2 12       	add %d2,1
+800005c8:	4b 02 41 21 	itof %d2,%d2
+800005cc:	37 05 64 5c 	extr.u %d5,%d5,24,4
+800005d0:	4b 32 41 30 	mul.f %d3,%d2,%d3
+800005d4:	8f f4 07 41 	and %d4,%d4,127
+800005d8:	1b 15 00 20 	addi %d2,%d5,1
+800005dc:	03 24 0a 22 	madd %d2,%d2,%d4,%d2
+800005e0:	4b 02 41 21 	itof %d2,%d2
+800005e4:	4b 23 51 20 	div.f %d2,%d3,%d2
+800005e8:	00 90       	ret 
+800005ea:	54 24       	ld.w %d4,[%a2]
+800005ec:	02 23       	mov %d3,%d2
+800005ee:	37 04 62 4e 	extr.u %d4,%d4,28,2
+800005f2:	df 14 d6 ff 	jne %d4,1,8000059e <IfxScuCcu_getSourceFrequency+0x3e>
+800005f6:	91 00 00 26 	movh.a %a2,24576
+800005fa:	19 23 00 00 	ld.w %d3,[%a2]0 <60000000 <IfxScuCcu_xtalFrequency>>
+800005fe:	4b 03 61 31 	utof %d3,%d3
+80000602:	1d ff ce ff 	j 8000059e <IfxScuCcu_getSourceFrequency+0x3e>
+80000606:	19 24 1c 00 	ld.w %d4,[%a2]28 <6000001c <__HEAP+0x8>>
+8000060a:	8f f4 07 41 	and %d4,%d4,127
+8000060e:	c2 14       	add %d4,1
+80000610:	6d 00 6d 0e 	call 800022ea <__floatsidf>
+80000614:	0b 23 10 68 	mov %e6,%d3,%d2
+80000618:	7b 80 19 54 	movh %d5,16792
+8000061c:	82 04       	mov %d4,0
+8000061e:	1b 45 78 5d 	addi %d5,%d5,-10364
+80000622:	6d 00 bc 0d 	call 8000219a <__divdf3>
+80000626:	0b 23 10 48 	mov %e4,%d3,%d2
+8000062a:	6d 00 9b 0e 	call 80002360 <__truncdfsf2>
+8000062e:	00 90       	ret 
+80000630:	19 22 1c 00 	ld.w %d2,[%a2]28
+80000634:	37 02 67 28 	extr.u %d2,%d2,16,7
+80000638:	c2 12       	add %d2,1
+8000063a:	4b 02 41 21 	itof %d2,%d2
+8000063e:	4b 23 51 20 	div.f %d2,%d3,%d2
+80000642:	00 90       	ret 
+
+80000644 <IfxScuCcu_init>:
+80000644:	19 42 10 10 	ld.w %d2,[%a4]80
+80000648:	91 00 00 d6 	movh.a %a13,24576
+8000064c:	40 4c       	mov.aa %a12,%a4
+8000064e:	59 d2 00 00 	st.w [%a13]0 <60000000 <IfxScuCcu_xtalFrequency>>,%d2
+80000652:	6d 00 e8 03 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+80000656:	02 29       	mov %d9,%d2
+80000658:	6d 00 f6 03 	call 80000e44 <IfxScuWdt_getSafetyWatchdogPassword>
+8000065c:	02 94       	mov %d4,%d9
+8000065e:	02 28       	mov %d8,%d2
+80000660:	6d 00 9a 02 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+80000664:	91 30 00 2f 	movh.a %a2,61443
+80000668:	19 2d 30 46 	ld.w %d13,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+8000066c:	19 22 30 46 	ld.w %d2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+80000670:	d9 22 30 46 	lea %a2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+80000674:	b7 12 81 21 	insert %d2,%d2,1,3,1
+80000678:	02 94       	mov %d4,%d9
+8000067a:	37 0d e1 d1 	extr.u %d13,%d13,3,1
+8000067e:	74 22       	st.w [%a2],%d2
+80000680:	6d 00 ed 03 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+80000684:	02 84       	mov %d4,%d8
+80000686:	6d 00 aa 02 	call 80000bda <IfxScuWdt_clearSafetyEndinit>
+8000068a:	91 30 00 2f 	movh.a %a2,61443
+8000068e:	d9 22 30 06 	lea %a2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+80000692:	54 22       	ld.w %d2,[%a2]
+80000694:	bf 02 ff 7f 	jlt %d2,0,80000692 <IfxScuCcu_init+0x4e>
+80000698:	54 22       	ld.w %d2,[%a2]
+8000069a:	b7 02 02 2e 	insert %d2,%d2,0,28,2
+8000069e:	74 22       	st.w [%a2],%d2
+800006a0:	54 22       	ld.w %d2,[%a2]
+800006a2:	b7 12 01 2f 	insert %d2,%d2,1,30,1
+800006a6:	74 22       	st.w [%a2],%d2
+800006a8:	91 30 00 2f 	movh.a %a2,61443
+800006ac:	19 22 18 06 	ld.w %d2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+800006b0:	d9 22 18 06 	lea %a2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+800006b4:	b7 12 01 22 	insert %d2,%d2,1,4,1
+800006b8:	74 22       	st.w [%a2],%d2
+800006ba:	91 30 00 2f 	movh.a %a2,61443
+800006be:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+800006c2:	54 22       	ld.w %d2,[%a2]
+800006c4:	bf 02 ff 7f 	jlt %d2,0,800006c2 <IfxScuCcu_init+0x7e>
+800006c8:	54 22       	ld.w %d2,[%a2]
+800006ca:	b7 12 02 2e 	insert %d2,%d2,1,28,2
+800006ce:	74 22       	st.w [%a2],%d2
+800006d0:	54 22       	ld.w %d2,[%a2]
+800006d2:	b7 12 01 2f 	insert %d2,%d2,1,30,1
+800006d6:	74 22       	st.w [%a2],%d2
+800006d8:	6d 00 a5 03 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+800006dc:	91 30 00 2f 	movh.a %a2,61443
+800006e0:	19 23 10 06 	ld.w %d3,[%a2]24592 <f0036010 <_SMALL_DATA4_+0x6002e010>>
+800006e4:	02 2a       	mov %d10,%d2
+800006e6:	8f 03 c6 31 	andn %d3,%d3,96
+800006ea:	d9 22 10 06 	lea %a2,[%a2]24592 <f0036010 <_SMALL_DATA4_+0x6002e010>>
+800006ee:	3b 00 28 40 	mov %d4,640
+800006f2:	74 23       	st.w [%a2],%d3
+800006f4:	19 d2 00 00 	ld.w %d2,[%a13]0 <60000000 <IfxScuCcu_xtalFrequency>>
+800006f8:	7b 00 b6 36 	movh %d3,27488
+800006fc:	1b b3 a6 3c 	addi %d3,%d3,-13717
+80000700:	73 32 68 20 	mul.u %e2,%d2,%d3
+80000704:	8f c3 1e 20 	sh %d2,%d3,-20
+80000708:	54 23       	ld.w %d3,[%a2]
+8000070a:	c2 f2       	add %d2,-1
+8000070c:	37 23 05 38 	insert %d3,%d3,%d2,16,5
+80000710:	74 23       	st.w [%a2],%d3
+80000712:	54 23       	ld.w %d3,[%a2]
+80000714:	b7 13 01 31 	insert %d3,%d3,1,2,1
+80000718:	74 23       	st.w [%a2],%d3
+8000071a:	54 23       	ld.w %d3,[%a2]
+8000071c:	6f 13 05 00 	jz.t %d3,1,80000726 <IfxScuCcu_init+0xe2>
+80000720:	54 23       	ld.w %d3,[%a2]
+80000722:	6f 83 77 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+80000726:	54 23       	ld.w %d3,[%a2]
+80000728:	1b f4 ff 2f 	addi %d2,%d4,-1
+8000072c:	6f 13 05 00 	jz.t %d3,1,80000736 <IfxScuCcu_init+0xf2>
+80000730:	54 23       	ld.w %d3,[%a2]
+80000732:	6f 83 6f 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+80000736:	54 23       	ld.w %d3,[%a2]
+80000738:	6f 13 05 00 	jz.t %d3,1,80000742 <IfxScuCcu_init+0xfe>
+8000073c:	54 23       	ld.w %d3,[%a2]
+8000073e:	6f 83 69 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+80000742:	54 23       	ld.w %d3,[%a2]
+80000744:	6f 13 05 00 	jz.t %d3,1,8000074e <IfxScuCcu_init+0x10a>
+80000748:	54 23       	ld.w %d3,[%a2]
+8000074a:	6f 83 63 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+8000074e:	54 23       	ld.w %d3,[%a2]
+80000750:	6f 13 05 00 	jz.t %d3,1,8000075a <IfxScuCcu_init+0x116>
+80000754:	54 23       	ld.w %d3,[%a2]
+80000756:	6f 83 5d 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+8000075a:	54 23       	ld.w %d3,[%a2]
+8000075c:	6f 13 05 00 	jz.t %d3,1,80000766 <IfxScuCcu_init+0x122>
+80000760:	54 23       	ld.w %d3,[%a2]
+80000762:	6f 83 57 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+80000766:	54 23       	ld.w %d3,[%a2]
+80000768:	6f 13 05 00 	jz.t %d3,1,80000772 <IfxScuCcu_init+0x12e>
+8000076c:	54 23       	ld.w %d3,[%a2]
+8000076e:	6f 83 51 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+80000772:	54 23       	ld.w %d3,[%a2]
+80000774:	6f 13 05 00 	jz.t %d3,1,8000077e <IfxScuCcu_init+0x13a>
+80000778:	54 23       	ld.w %d3,[%a2]
+8000077a:	6f 83 4b 80 	jnz.t %d3,8,80000810 <IfxScuCcu_init+0x1cc>
+8000077e:	1b 92 ff 4f 	addi %d4,%d2,-7
+80000782:	df 72 cc ff 	jne %d2,7,8000071a <IfxScuCcu_init+0xd6>
+80000786:	02 a4       	mov %d4,%d10
+80000788:	6d 00 06 02 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+8000078c:	91 30 00 2f 	movh.a %a2,61443
+80000790:	19 22 2c 46 	ld.w %d2,[%a2]24876 <f003612c <_SMALL_DATA4_+0x6002e12c>>
+80000794:	d9 22 2c 46 	lea %a2,[%a2]24876 <f003612c <_SMALL_DATA4_+0x6002e12c>>
+80000798:	b7 12 81 21 	insert %d2,%d2,1,3,1
+8000079c:	02 a4       	mov %d4,%d10
+8000079e:	82 1a       	mov %d10,1
+800007a0:	74 22       	st.w [%a2],%d2
+800007a2:	91 30 00 2f 	movh.a %a2,61443
+800007a6:	19 22 30 46 	ld.w %d2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+800007aa:	d9 22 30 46 	lea %a2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+800007ae:	b7 12 81 21 	insert %d2,%d2,1,3,1
+800007b2:	74 22       	st.w [%a2],%d2
+800007b4:	6d 00 53 03 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+800007b8:	02 84       	mov %d4,%d8
+800007ba:	6d 00 73 03 	call 80000ea0 <IfxScuWdt_setSafetyEndinit>
+800007be:	02 84       	mov %d4,%d8
+800007c0:	6d 00 0d 02 	call 80000bda <IfxScuWdt_clearSafetyEndinit>
+800007c4:	91 30 00 2f 	movh.a %a2,61443
+800007c8:	19 23 18 06 	ld.w %d3,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+800007cc:	d9 22 18 06 	lea %a2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+800007d0:	8f 03 c4 31 	andn %d3,%d3,64
+800007d4:	02 84       	mov %d4,%d8
+800007d6:	74 23       	st.w [%a2],%d3
+800007d8:	6d 00 64 03 	call 80000ea0 <IfxScuWdt_setSafetyEndinit>
+800007dc:	02 94       	mov %d4,%d9
+800007de:	6d 00 db 01 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+800007e2:	91 30 00 2f 	movh.a %a2,61443
+800007e6:	19 23 2c 46 	ld.w %d3,[%a2]24876 <f003612c <_SMALL_DATA4_+0x6002e12c>>
+800007ea:	d9 22 2c 46 	lea %a2,[%a2]24876 <f003612c <_SMALL_DATA4_+0x6002e12c>>
+800007ee:	b7 13 81 31 	insert %d3,%d3,1,3,1
+800007f2:	02 94       	mov %d4,%d9
+800007f4:	74 23       	st.w [%a2],%d3
+800007f6:	91 30 00 2f 	movh.a %a2,61443
+800007fa:	19 23 30 46 	ld.w %d3,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+800007fe:	d9 22 30 46 	lea %a2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+80000802:	67 d3 03 30 	ins.t %d3,%d3,3,%d13,0
+80000806:	74 23       	st.w [%a2],%d3
+80000808:	6d 00 29 03 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+8000080c:	02 a2       	mov %d2,%d10
+8000080e:	00 90       	ret 
+80000810:	02 a4       	mov %d4,%d10
+80000812:	6d 00 c1 01 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+80000816:	91 30 00 2f 	movh.a %a2,61443
+8000081a:	19 22 2c 46 	ld.w %d2,[%a2]24876 <f003612c <_SMALL_DATA4_+0x6002e12c>>
+8000081e:	d9 22 2c 46 	lea %a2,[%a2]24876 <f003612c <_SMALL_DATA4_+0x6002e12c>>
+80000822:	b7 12 81 21 	insert %d2,%d2,1,3,1
+80000826:	02 a4       	mov %d4,%d10
+80000828:	74 22       	st.w [%a2],%d2
+8000082a:	91 30 00 2f 	movh.a %a2,61443
+8000082e:	19 22 30 46 	ld.w %d2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+80000832:	d9 22 30 46 	lea %a2,[%a2]24880 <f0036130 <_SMALL_DATA4_+0x6002e130>>
+80000836:	b7 12 81 21 	insert %d2,%d2,1,3,1
+8000083a:	74 22       	st.w [%a2],%d2
+8000083c:	6d 00 0f 03 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+80000840:	02 84       	mov %d4,%d8
+80000842:	6d 00 2f 03 	call 80000ea0 <IfxScuWdt_setSafetyEndinit>
+80000846:	02 84       	mov %d4,%d8
+80000848:	6d 00 c9 01 	call 80000bda <IfxScuWdt_clearSafetyEndinit>
+8000084c:	91 30 00 2f 	movh.a %a2,61443
+80000850:	d9 22 14 06 	lea %a2,[%a2]24596 <f0036014 <_SMALL_DATA4_+0x6002e014>>
+80000854:	54 22       	ld.w %d2,[%a2]
+80000856:	6f 52 ff 7f 	jz.t %d2,5,80000854 <IfxScuCcu_init+0x210>
+8000085a:	91 30 00 2f 	movh.a %a2,61443
+8000085e:	19 22 1c 06 	ld.w %d2,[%a2]24604 <f003601c <_SMALL_DATA4_+0x6002e01c>>
+80000862:	39 c3 0a 00 	ld.bu %d3,[%a12]10 <f003601c <_SMALL_DATA4_+0x6002e01c>>
+80000866:	d9 22 1c 06 	lea %a2,[%a2]24604 <f003601c <_SMALL_DATA4_+0x6002e01c>>
+8000086a:	37 32 07 20 	insert %d2,%d2,%d3,0,7
+8000086e:	74 22       	st.w [%a2],%d2
+80000870:	91 30 00 2f 	movh.a %a2,61443
+80000874:	19 22 18 06 	ld.w %d2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+80000878:	39 c3 08 00 	ld.bu %d3,[%a12]8 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+8000087c:	d9 22 18 06 	lea %a2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+80000880:	37 32 04 2c 	insert %d2,%d2,%d3,24,4
+80000884:	74 22       	st.w [%a2],%d2
+80000886:	54 22       	ld.w %d2,[%a2]
+80000888:	39 c3 09 00 	ld.bu %d3,[%a12]9
+8000088c:	37 32 87 24 	insert %d2,%d2,%d3,9,7
+80000890:	74 22       	st.w [%a2],%d2
+80000892:	54 22       	ld.w %d2,[%a2]
+80000894:	b7 12 01 23 	insert %d2,%d2,1,6,1
+80000898:	74 22       	st.w [%a2],%d2
+8000089a:	54 22       	ld.w %d2,[%a2]
+8000089c:	b7 02 01 28 	insert %d2,%d2,0,16,1
+800008a0:	74 22       	st.w [%a2],%d2
+800008a2:	54 22       	ld.w %d2,[%a2]
+800008a4:	b7 12 81 22 	insert %d2,%d2,1,5,1
+800008a8:	74 22       	st.w [%a2],%d2
+800008aa:	54 22       	ld.w %d2,[%a2]
+800008ac:	b7 12 01 28 	insert %d2,%d2,1,16,1
+800008b0:	74 22       	st.w [%a2],%d2
+800008b2:	54 22       	ld.w %d2,[%a2]
+800008b4:	b7 12 01 29 	insert %d2,%d2,1,18,1
+800008b8:	74 22       	st.w [%a2],%d2
+800008ba:	91 30 00 2f 	movh.a %a2,61443
+800008be:	19 23 30 06 	ld.w %d3,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+800008c2:	7b f0 cb 24 	movh %d2,19647
+800008c6:	37 03 62 3e 	extr.u %d3,%d3,28,2
+800008ca:	d9 22 30 06 	lea %a2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+800008ce:	1b 02 c2 2b 	addi %d2,%d2,-17376
+800008d2:	df 03 05 00 	jeq %d3,0,800008dc <IfxScuCcu_init+0x298>
+800008d6:	82 02       	mov %d2,0
+800008d8:	df 13 5a 01 	jeq %d3,1,80000b8c <IfxScuCcu_init+0x548>
+800008dc:	91 30 00 2f 	movh.a %a2,61443
+800008e0:	19 23 34 06 	ld.w %d3,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+800008e4:	85 f4 10 00 	ld.w %d4,f0000010 <_SMALL_DATA4_+0x5fff8010>
+800008e8:	37 03 64 34 	extr.u %d3,%d3,8,4
+800008ec:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+800008f0:	4b 03 41 31 	itof %d3,%d3
+800008f4:	4b 32 51 30 	div.f %d3,%d2,%d3
+800008f8:	7b 20 85 23 	movh %d2,14418
+800008fc:	1b 72 71 2b 	addi %d2,%d2,-18665
+80000900:	4b 23 41 30 	mul.f %d3,%d3,%d2
+80000904:	4b 03 71 31 	ftouz %d3,%d3
+80000908:	85 f2 10 00 	ld.w %d2,f0000010 <_SMALL_DATA4_+0x5fff8010>
+8000090c:	a2 42       	sub %d2,%d4
+8000090e:	3f 32 fd ff 	jlt.u %d2,%d3,80000908 <IfxScuCcu_init+0x2c4>
+80000912:	91 30 00 2f 	movh.a %a2,61443
+80000916:	d9 22 14 06 	lea %a2,[%a2]24596 <f0036014 <_SMALL_DATA4_+0x6002e014>>
+8000091a:	54 22       	ld.w %d2,[%a2]
+8000091c:	6f 22 ff 7f 	jz.t %d2,2,8000091a <IfxScuCcu_init+0x2d6>
+80000920:	91 30 00 2f 	movh.a %a2,61443
+80000924:	19 22 18 06 	ld.w %d2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+80000928:	d9 22 18 06 	lea %a2,[%a2]24600 <f0036018 <_SMALL_DATA4_+0x6002e018>>
+8000092c:	8f 12 c0 21 	andn %d2,%d2,1
+80000930:	74 22       	st.w [%a2],%d2
+80000932:	91 30 00 2f 	movh.a %a2,61443
+80000936:	d9 22 30 06 	lea %a2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+8000093a:	54 22       	ld.w %d2,[%a2]
+8000093c:	bf 02 ff 7f 	jlt %d2,0,8000093a <IfxScuCcu_init+0x2f6>
+80000940:	54 22       	ld.w %d2,[%a2]
+80000942:	b7 12 02 2e 	insert %d2,%d2,1,28,2
+80000946:	74 22       	st.w [%a2],%d2
+80000948:	91 30 00 2f 	movh.a %a2,61443
+8000094c:	d9 22 30 06 	lea %a2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+80000950:	54 22       	ld.w %d2,[%a2]
+80000952:	bf 02 ff 7f 	jlt %d2,0,80000950 <IfxScuCcu_init+0x30c>
+80000956:	54 23       	ld.w %d3,[%a2]
+80000958:	7b f0 cb 24 	movh %d2,19647
+8000095c:	37 03 62 3e 	extr.u %d3,%d3,28,2
+80000960:	19 ca 0c 00 	ld.w %d10,[%a12]12
+80000964:	1b 02 c2 2b 	addi %d2,%d2,-17376
+80000968:	df 03 05 00 	jeq %d3,0,80000972 <IfxScuCcu_init+0x32e>
+8000096c:	82 02       	mov %d2,0
+8000096e:	df 13 0b 01 	jeq %d3,1,80000b84 <IfxScuCcu_init+0x540>
+80000972:	91 30 00 2f 	movh.a %a2,61443
+80000976:	19 23 34 06 	ld.w %d3,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+8000097a:	85 f4 10 00 	ld.w %d4,f0000010 <_SMALL_DATA4_+0x5fff8010>
+8000097e:	37 03 64 34 	extr.u %d3,%d3,8,4
+80000982:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+80000986:	4b 03 41 31 	itof %d3,%d3
+8000098a:	4b 32 51 20 	div.f %d2,%d2,%d3
+8000098e:	4b a2 41 20 	mul.f %d2,%d2,%d10
+80000992:	4b 02 71 31 	ftouz %d3,%d2
+80000996:	85 f2 10 00 	ld.w %d2,f0000010 <_SMALL_DATA4_+0x5fff8010>
+8000099a:	a2 42       	sub %d2,%d4
+8000099c:	3f 32 fd ff 	jlt.u %d2,%d3,80000996 <IfxScuCcu_init+0x352>
+800009a0:	91 30 00 2f 	movh.a %a2,61443
+800009a4:	19 22 30 06 	ld.w %d2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+800009a8:	19 c3 10 00 	ld.w %d3,[%a12]16 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+800009ac:	19 c4 14 00 	ld.w %d4,[%a12]20 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+800009b0:	c6 23       	xor %d3,%d2
+800009b2:	26 43       	and %d3,%d4
+800009b4:	c6 32       	xor %d2,%d3
+800009b6:	37 02 68 3c 	extr.u %d3,%d2,24,8
+800009ba:	d9 22 30 06 	lea %a2,[%a2]24624 <f0036030 <_SMALL_DATA4_+0x6002e030>>
+800009be:	b7 53 03 32 	insert %d3,%d3,5,4,3
+800009c2:	37 32 08 2c 	insert %d2,%d2,%d3,24,8
+800009c6:	74 22       	st.w [%a2],%d2
+800009c8:	91 30 00 2f 	movh.a %a2,61443
+800009cc:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+800009d0:	54 22       	ld.w %d2,[%a2]
+800009d2:	bf 02 ff 7f 	jlt %d2,0,800009d0 <IfxScuCcu_init+0x38c>
+800009d6:	54 22       	ld.w %d2,[%a2]
+800009d8:	19 c3 18 00 	ld.w %d3,[%a12]24
+800009dc:	19 c4 1c 00 	ld.w %d4,[%a12]28
+800009e0:	c6 23       	xor %d3,%d2
+800009e2:	26 43       	and %d3,%d4
+800009e4:	c6 32       	xor %d2,%d3
+800009e6:	37 02 68 3c 	extr.u %d3,%d2,24,8
+800009ea:	b7 53 03 32 	insert %d3,%d3,5,4,3
+800009ee:	37 32 08 2c 	insert %d2,%d2,%d3,24,8
+800009f2:	74 22       	st.w [%a2],%d2
+800009f4:	91 30 00 2f 	movh.a %a2,61443
+800009f8:	d9 22 00 16 	lea %a2,[%a2]24640 <f0036040 <_SMALL_DATA4_+0x6002e040>>
+800009fc:	54 22       	ld.w %d2,[%a2]
+800009fe:	bf 02 ff 7f 	jlt %d2,0,800009fc <IfxScuCcu_init+0x3b8>
+80000a02:	54 22       	ld.w %d2,[%a2]
+80000a04:	19 c3 20 00 	ld.w %d3,[%a12]32
+80000a08:	19 c4 24 00 	ld.w %d4,[%a12]36
+80000a0c:	c6 23       	xor %d3,%d2
+80000a0e:	26 43       	and %d3,%d4
+80000a10:	c6 32       	xor %d2,%d3
+80000a12:	b7 12 01 2f 	insert %d2,%d2,1,30,1
+80000a16:	74 22       	st.w [%a2],%d2
+80000a18:	91 30 00 2f 	movh.a %a2,61443
+80000a1c:	d9 22 0c 16 	lea %a2,[%a2]24652 <f003604c <_SMALL_DATA4_+0x6002e04c>>
+80000a20:	54 22       	ld.w %d2,[%a2]
+80000a22:	bf 02 ff 7f 	jlt %d2,0,80000a20 <IfxScuCcu_init+0x3dc>
+80000a26:	54 22       	ld.w %d2,[%a2]
+80000a28:	19 c3 28 00 	ld.w %d3,[%a12]40
+80000a2c:	19 c4 2c 00 	ld.w %d4,[%a12]44
+80000a30:	c6 23       	xor %d3,%d2
+80000a32:	26 43       	and %d3,%d4
+80000a34:	c6 32       	xor %d2,%d3
+80000a36:	b7 12 01 2f 	insert %d2,%d2,1,30,1
+80000a3a:	19 c3 30 00 	ld.w %d3,[%a12]48
+80000a3e:	19 c4 34 00 	ld.w %d4,[%a12]52
+80000a42:	91 00 80 df 	movh.a %a13,63488
+80000a46:	74 22       	st.w [%a2],%d2
+80000a48:	91 30 00 2f 	movh.a %a2,61443
+80000a4c:	19 22 00 26 	ld.w %d2,[%a2]24704 <f0036080 <_SMALL_DATA4_+0x6002e080>>
+80000a50:	d9 22 00 26 	lea %a2,[%a2]24704 <f0036080 <_SMALL_DATA4_+0x6002e080>>
+80000a54:	c6 23       	xor %d3,%d2
+80000a56:	26 43       	and %d3,%d4
+80000a58:	c6 32       	xor %d2,%d3
+80000a5a:	19 c3 38 00 	ld.w %d3,[%a12]56
+80000a5e:	19 c4 3c 00 	ld.w %d4,[%a12]60
+80000a62:	74 22       	st.w [%a2],%d2
+80000a64:	91 30 00 2f 	movh.a %a2,61443
+80000a68:	19 22 04 26 	ld.w %d2,[%a2]24708 <f0036084 <_SMALL_DATA4_+0x6002e084>>
+80000a6c:	d9 22 04 26 	lea %a2,[%a2]24708 <f0036084 <_SMALL_DATA4_+0x6002e084>>
+80000a70:	c6 23       	xor %d3,%d2
+80000a72:	26 43       	and %d3,%d4
+80000a74:	c6 32       	xor %d2,%d3
+80000a76:	19 c3 00 10 	ld.w %d3,[%a12]64
+80000a7a:	19 c4 04 10 	ld.w %d4,[%a12]68
+80000a7e:	74 22       	st.w [%a2],%d2
+80000a80:	91 30 00 2f 	movh.a %a2,61443
+80000a84:	19 22 08 26 	ld.w %d2,[%a2]24712 <f0036088 <_SMALL_DATA4_+0x6002e088>>
+80000a88:	d9 22 08 26 	lea %a2,[%a2]24712 <f0036088 <_SMALL_DATA4_+0x6002e088>>
+80000a8c:	c6 23       	xor %d3,%d2
+80000a8e:	26 43       	and %d3,%d4
+80000a90:	c6 32       	xor %d2,%d3
+80000a92:	02 84       	mov %d4,%d8
+80000a94:	d9 dd 14 02 	lea %a13,[%a13]8212 <f8002014 <_SMALL_DATA4_+0x67ffa014>>
+80000a98:	74 22       	st.w [%a2],%d2
+80000a9a:	6d 00 03 02 	call 80000ea0 <IfxScuWdt_setSafetyEndinit>
+80000a9e:	19 c3 08 10 	ld.w %d3,[%a12]72
+80000aa2:	54 da       	ld.w %d10,[%a13]
+80000aa4:	19 c4 0c 10 	ld.w %d4,[%a12]76
+80000aa8:	c6 a3       	xor %d3,%d10
+80000aaa:	26 43       	and %d3,%d4
+80000aac:	c6 3a       	xor %d10,%d3
+80000aae:	02 94       	mov %d4,%d9
+80000ab0:	6d 00 72 00 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+80000ab4:	02 94       	mov %d4,%d9
+80000ab6:	74 da       	st.w [%a13],%d10
+80000ab8:	6d 00 d1 01 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+80000abc:	14 c2       	ld.bu %d2,[%a12]
+80000abe:	91 30 00 df 	movh.a %a13,61443
+80000ac2:	91 30 00 ef 	movh.a %a14,61443
+80000ac6:	7b 30 00 cf 	movh %d12,61443
+80000aca:	91 30 00 ff 	movh.a %a15,61443
+80000ace:	82 0b       	mov %d11,0
+80000ad0:	d9 dd 14 06 	lea %a13,[%a13]24596 <f0036014 <_SMALL_DATA4_+0x6002e014>>
+80000ad4:	d9 ee 1c 06 	lea %a14,[%a14]24604 <f003601c <_SMALL_DATA4_+0x6002e01c>>
+80000ad8:	1b 0c 03 c6 	addi %d12,%d12,24624
+80000adc:	d9 ff 34 06 	lea %a15,[%a15]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+80000ae0:	df 02 4f 00 	jeq %d2,0,80000b7e <IfxScuCcu_init+0x53a>
+80000ae4:	02 84       	mov %d4,%d8
+80000ae6:	6d 00 7a 00 	call 80000bda <IfxScuWdt_clearSafetyEndinit>
+80000aea:	54 d3       	ld.w %d3,[%a13]
+80000aec:	6f 53 ff 7f 	jz.t %d3,5,80000aea <IfxScuCcu_init+0x4a6>
+80000af0:	8f fb 0f a1 	and %d10,%d11,255
+80000af4:	99 c2 04 00 	ld.a %a2,[%a12]4
+80000af8:	53 ca 20 a0 	mul %d10,%d10,12
+80000afc:	54 e2       	ld.w %d2,[%a14]
+80000afe:	02 84       	mov %d4,%d8
+80000b00:	01 2a 00 26 	addsc.a %a2,%a2,%d10,0
+80000b04:	14 23       	ld.bu %d3,[%a2]
+80000b06:	37 32 07 20 	insert %d2,%d2,%d3,0,7
+80000b0a:	74 e2       	st.w [%a14],%d2
+80000b0c:	6d 00 ca 01 	call 80000ea0 <IfxScuWdt_setSafetyEndinit>
+80000b10:	99 c2 04 00 	ld.a %a2,[%a12]4
+80000b14:	01 2a 00 26 	addsc.a %a2,%a2,%d10,0
+80000b18:	99 23 08 00 	ld.a %a3,[%a2]8
+80000b1c:	bd 03 08 00 	jz.a %a3,80000b2c <IfxScuCcu_init+0x4e8>
+80000b20:	2d 03 00 00 	calli %a3
+80000b24:	99 c2 04 00 	ld.a %a2,[%a12]4
+80000b28:	01 2a 00 26 	addsc.a %a2,%a2,%d10,0
+80000b2c:	19 2a 04 00 	ld.w %d10,[%a2]4
+80000b30:	60 c2       	mov.a %a2,%d12
+80000b32:	7b f0 cb 24 	movh %d2,19647
+80000b36:	54 23       	ld.w %d3,[%a2]
+80000b38:	1b 02 c2 2b 	addi %d2,%d2,-17376
+80000b3c:	37 03 62 3e 	extr.u %d3,%d3,28,2
+80000b40:	df 03 07 00 	jeq %d3,0,80000b4e <IfxScuCcu_init+0x50a>
+80000b44:	82 02       	mov %d2,0
+80000b46:	df 13 04 80 	jne %d3,1,80000b4e <IfxScuCcu_init+0x50a>
+80000b4a:	6d ff aa fc 	call 8000049e <IfxScuCcu_getPllFrequency>
+80000b4e:	48 03       	ld.w %d3,[%a15]0
+80000b50:	85 f6 10 00 	ld.w %d6,f0000010 <_SMALL_DATA4_+0x5fff8010>
+80000b54:	37 03 64 34 	extr.u %d3,%d3,8,4
+80000b58:	4b 03 41 31 	itof %d3,%d3
+80000b5c:	4b 32 51 20 	div.f %d2,%d2,%d3
+80000b60:	4b a2 41 20 	mul.f %d2,%d2,%d10
+80000b64:	4b 02 71 51 	ftouz %d5,%d2
+80000b68:	85 f2 10 00 	ld.w %d2,f0000010 <_SMALL_DATA4_+0x5fff8010>
+80000b6c:	a2 62       	sub %d2,%d6
+80000b6e:	3f 52 fd ff 	jlt.u %d2,%d5,80000b68 <IfxScuCcu_init+0x524>
+80000b72:	c2 1b       	add %d11,1
+80000b74:	14 c2       	ld.bu %d2,[%a12]
+80000b76:	8f fb 0f 31 	and %d3,%d11,255
+80000b7a:	3f 23 b5 ff 	jlt.u %d3,%d2,80000ae4 <IfxScuCcu_init+0x4a0>
+80000b7e:	82 0a       	mov %d10,0
+80000b80:	1d ff 1f fe 	j 800007be <IfxScuCcu_init+0x17a>
+80000b84:	6d ff 8d fc 	call 8000049e <IfxScuCcu_getPllFrequency>
+80000b88:	1d ff f5 fe 	j 80000972 <IfxScuCcu_init+0x32e>
+80000b8c:	6d ff 89 fc 	call 8000049e <IfxScuCcu_getPllFrequency>
+80000b90:	1d ff a6 fe 	j 800008dc <IfxScuCcu_init+0x298>
+
+80000b94 <IfxScuWdt_clearCpuEndinit>:
+80000b94:	37 04 70 20 	extr.u %d2,%d4,0,16
+80000b98:	4d c0 e1 3f 	mfcr %d3,$core_id
+80000b9c:	7b 30 00 4f 	movh %d4,61443
+80000ba0:	8f 73 00 31 	and %d3,%d3,7
+80000ba4:	1b 04 10 46 	addi %d4,%d4,24832
+80000ba8:	13 c3 20 34 	madd %d3,%d4,%d3,12
+80000bac:	06 22       	sh %d2,2
+80000bae:	60 32       	mov.a %a2,%d3
+80000bb0:	54 23       	ld.w %d3,[%a2]
+80000bb2:	6f 13 09 00 	jz.t %d3,1,80000bc4 <IfxScuWdt_clearCpuEndinit+0x30>
+80000bb6:	54 23       	ld.w %d3,[%a2]
+80000bb8:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000bbc:	a6 23       	or %d3,%d2
+80000bbe:	8f 13 40 31 	or %d3,%d3,1
+80000bc2:	74 23       	st.w [%a2],%d3
+80000bc4:	54 23       	ld.w %d3,[%a2]
+80000bc6:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000bca:	a6 32       	or %d2,%d3
+80000bcc:	8f 22 40 21 	or %d2,%d2,2
+80000bd0:	74 22       	st.w [%a2],%d2
+80000bd2:	54 22       	ld.w %d2,[%a2]
+80000bd4:	6f 02 ff ff 	jnz.t %d2,0,80000bd2 <IfxScuWdt_clearCpuEndinit+0x3e>
+80000bd8:	00 90       	ret 
+
+80000bda <IfxScuWdt_clearSafetyEndinit>:
+80000bda:	91 30 00 2f 	movh.a %a2,61443
+80000bde:	37 04 70 20 	extr.u %d2,%d4,0,16
+80000be2:	19 23 30 36 	ld.w %d3,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000be6:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000bea:	06 22       	sh %d2,2
+80000bec:	6f 13 09 00 	jz.t %d3,1,80000bfe <IfxScuWdt_clearSafetyEndinit+0x24>
+80000bf0:	54 23       	ld.w %d3,[%a2]
+80000bf2:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000bf6:	a6 23       	or %d3,%d2
+80000bf8:	8f 13 40 31 	or %d3,%d3,1
+80000bfc:	74 23       	st.w [%a2],%d3
+80000bfe:	91 30 00 2f 	movh.a %a2,61443
+80000c02:	19 23 30 36 	ld.w %d3,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000c06:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000c0a:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000c0e:	a6 32       	or %d2,%d3
+80000c10:	8f 22 40 21 	or %d2,%d2,2
+80000c14:	74 22       	st.w [%a2],%d2
+80000c16:	54 22       	ld.w %d2,[%a2]
+80000c18:	6f 02 ff ff 	jnz.t %d2,0,80000c16 <IfxScuWdt_clearSafetyEndinit+0x3c>
+80000c1c:	00 90       	ret 
+
+80000c1e <IfxScuWdt_disableCpuWatchdog>:
+80000c1e:	37 04 70 20 	extr.u %d2,%d4,0,16
+80000c22:	4d c0 e1 3f 	mfcr %d3,$core_id
+80000c26:	7b 30 00 4f 	movh %d4,61443
+80000c2a:	1b 04 10 46 	addi %d4,%d4,24832
+80000c2e:	8f 73 00 31 	and %d3,%d3,7
+80000c32:	13 c3 20 34 	madd %d3,%d4,%d3,12
+80000c36:	8f 22 00 40 	sh %d4,%d2,2
+80000c3a:	60 32       	mov.a %a2,%d3
+80000c3c:	54 23       	ld.w %d3,[%a2]
+80000c3e:	6f 13 09 00 	jz.t %d3,1,80000c50 <IfxScuWdt_disableCpuWatchdog+0x32>
+80000c42:	54 22       	ld.w %d2,[%a2]
+80000c44:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000c48:	a6 42       	or %d2,%d4
+80000c4a:	8f 12 40 21 	or %d2,%d2,1
+80000c4e:	74 22       	st.w [%a2],%d2
+80000c50:	54 22       	ld.w %d2,[%a2]
+80000c52:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000c56:	a6 42       	or %d2,%d4
+80000c58:	8f 22 40 21 	or %d2,%d2,2
+80000c5c:	74 22       	st.w [%a2],%d2
+80000c5e:	54 22       	ld.w %d2,[%a2]
+80000c60:	6f 02 ff ff 	jnz.t %d2,0,80000c5e <IfxScuWdt_disableCpuWatchdog+0x40>
+80000c64:	19 22 04 00 	ld.w %d2,[%a2]4
+80000c68:	d9 23 04 00 	lea %a3,[%a2]4
+80000c6c:	b7 12 81 21 	insert %d2,%d2,1,3,1
+80000c70:	74 32       	st.w [%a3],%d2
+80000c72:	54 22       	ld.w %d2,[%a2]
+80000c74:	6f 12 09 00 	jz.t %d2,1,80000c86 <IfxScuWdt_disableCpuWatchdog+0x68>
+80000c78:	54 22       	ld.w %d2,[%a2]
+80000c7a:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000c7e:	a6 42       	or %d2,%d4
+80000c80:	8f 12 40 21 	or %d2,%d2,1
+80000c84:	74 22       	st.w [%a2],%d2
+80000c86:	54 22       	ld.w %d2,[%a2]
+80000c88:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000c8c:	a6 42       	or %d2,%d4
+80000c8e:	8f 32 40 21 	or %d2,%d2,3
+80000c92:	74 22       	st.w [%a2],%d2
+80000c94:	54 22       	ld.w %d2,[%a2]
+80000c96:	6f 02 ff 7f 	jz.t %d2,0,80000c94 <IfxScuWdt_disableCpuWatchdog+0x76>
+80000c9a:	00 90       	ret 
+
+80000c9c <IfxScuWdt_disableSafetyWatchdog>:
+80000c9c:	91 30 00 2f 	movh.a %a2,61443
+80000ca0:	19 23 30 36 	ld.w %d3,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000ca4:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000ca8:	06 24       	sh %d4,2
+80000caa:	6f 13 09 00 	jz.t %d3,1,80000cbc <IfxScuWdt_disableSafetyWatchdog+0x20>
+80000cae:	54 22       	ld.w %d2,[%a2]
+80000cb0:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000cb4:	a6 42       	or %d2,%d4
+80000cb6:	8f 12 40 21 	or %d2,%d2,1
+80000cba:	74 22       	st.w [%a2],%d2
+80000cbc:	91 30 00 2f 	movh.a %a2,61443
+80000cc0:	19 22 30 36 	ld.w %d2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000cc4:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000cc8:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000ccc:	a6 42       	or %d2,%d4
+80000cce:	8f 22 40 21 	or %d2,%d2,2
+80000cd2:	74 22       	st.w [%a2],%d2
+80000cd4:	54 22       	ld.w %d2,[%a2]
+80000cd6:	6f 02 ff ff 	jnz.t %d2,0,80000cd4 <IfxScuWdt_disableSafetyWatchdog+0x38>
+80000cda:	91 30 00 3f 	movh.a %a3,61443
+80000cde:	19 32 34 36 	ld.w %d2,[%a3]24820 <f00360f4 <_SMALL_DATA4_+0x6002e0f4>>
+80000ce2:	d9 33 34 36 	lea %a3,[%a3]24820 <f00360f4 <_SMALL_DATA4_+0x6002e0f4>>
+80000ce6:	b7 12 81 21 	insert %d2,%d2,1,3,1
+80000cea:	74 32       	st.w [%a3],%d2
+80000cec:	54 22       	ld.w %d2,[%a2]
+80000cee:	6f 12 09 00 	jz.t %d2,1,80000d00 <IfxScuWdt_disableSafetyWatchdog+0x64>
+80000cf2:	54 22       	ld.w %d2,[%a2]
+80000cf4:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000cf8:	a6 42       	or %d2,%d4
+80000cfa:	8f 12 40 21 	or %d2,%d2,1
+80000cfe:	74 22       	st.w [%a2],%d2
+80000d00:	91 30 00 2f 	movh.a %a2,61443
+80000d04:	19 22 30 36 	ld.w %d2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000d08:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000d0c:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000d10:	a6 42       	or %d2,%d4
+80000d12:	8f 32 40 21 	or %d2,%d2,3
+80000d16:	74 22       	st.w [%a2],%d2
+80000d18:	54 22       	ld.w %d2,[%a2]
+80000d1a:	6f 02 ff 7f 	jz.t %d2,0,80000d18 <IfxScuWdt_disableSafetyWatchdog+0x7c>
+80000d1e:	00 90       	ret 
+
+80000d20 <IfxScuWdt_enableCpuWatchdog>:
+80000d20:	37 04 70 20 	extr.u %d2,%d4,0,16
+80000d24:	4d c0 e1 3f 	mfcr %d3,$core_id
+80000d28:	7b 30 00 4f 	movh %d4,61443
+80000d2c:	1b 04 10 46 	addi %d4,%d4,24832
+80000d30:	8f 73 00 31 	and %d3,%d3,7
+80000d34:	13 c3 20 34 	madd %d3,%d4,%d3,12
+80000d38:	8f 22 00 40 	sh %d4,%d2,2
+80000d3c:	60 32       	mov.a %a2,%d3
+80000d3e:	54 23       	ld.w %d3,[%a2]
+80000d40:	6f 13 09 00 	jz.t %d3,1,80000d52 <IfxScuWdt_enableCpuWatchdog+0x32>
+80000d44:	54 22       	ld.w %d2,[%a2]
+80000d46:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000d4a:	a6 42       	or %d2,%d4
+80000d4c:	8f 12 40 21 	or %d2,%d2,1
+80000d50:	74 22       	st.w [%a2],%d2
+80000d52:	54 22       	ld.w %d2,[%a2]
+80000d54:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000d58:	a6 42       	or %d2,%d4
+80000d5a:	8f 22 40 21 	or %d2,%d2,2
+80000d5e:	74 22       	st.w [%a2],%d2
+80000d60:	54 22       	ld.w %d2,[%a2]
+80000d62:	6f 02 ff ff 	jnz.t %d2,0,80000d60 <IfxScuWdt_enableCpuWatchdog+0x40>
+80000d66:	19 22 04 00 	ld.w %d2,[%a2]4
+80000d6a:	d9 23 04 00 	lea %a3,[%a2]4
+80000d6e:	8f 82 c0 21 	andn %d2,%d2,8
+80000d72:	74 32       	st.w [%a3],%d2
+80000d74:	54 22       	ld.w %d2,[%a2]
+80000d76:	6f 12 09 00 	jz.t %d2,1,80000d88 <IfxScuWdt_enableCpuWatchdog+0x68>
+80000d7a:	54 22       	ld.w %d2,[%a2]
+80000d7c:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000d80:	a6 42       	or %d2,%d4
+80000d82:	8f 12 40 21 	or %d2,%d2,1
+80000d86:	74 22       	st.w [%a2],%d2
+80000d88:	54 22       	ld.w %d2,[%a2]
+80000d8a:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000d8e:	a6 42       	or %d2,%d4
+80000d90:	8f 32 40 21 	or %d2,%d2,3
+80000d94:	74 22       	st.w [%a2],%d2
+80000d96:	54 22       	ld.w %d2,[%a2]
+80000d98:	6f 02 ff 7f 	jz.t %d2,0,80000d96 <IfxScuWdt_enableCpuWatchdog+0x76>
+80000d9c:	00 90       	ret 
+
+80000d9e <IfxScuWdt_enableSafetyWatchdog>:
+80000d9e:	91 30 00 2f 	movh.a %a2,61443
+80000da2:	19 23 30 36 	ld.w %d3,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000da6:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000daa:	06 24       	sh %d4,2
+80000dac:	6f 13 09 00 	jz.t %d3,1,80000dbe <IfxScuWdt_enableSafetyWatchdog+0x20>
+80000db0:	54 22       	ld.w %d2,[%a2]
+80000db2:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000db6:	a6 42       	or %d2,%d4
+80000db8:	8f 12 40 21 	or %d2,%d2,1
+80000dbc:	74 22       	st.w [%a2],%d2
+80000dbe:	91 30 00 2f 	movh.a %a2,61443
+80000dc2:	19 22 30 36 	ld.w %d2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000dc6:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000dca:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000dce:	a6 42       	or %d2,%d4
+80000dd0:	8f 22 40 21 	or %d2,%d2,2
+80000dd4:	74 22       	st.w [%a2],%d2
+80000dd6:	54 22       	ld.w %d2,[%a2]
+80000dd8:	6f 02 ff ff 	jnz.t %d2,0,80000dd6 <IfxScuWdt_enableSafetyWatchdog+0x38>
+80000ddc:	91 30 00 3f 	movh.a %a3,61443
+80000de0:	19 32 34 36 	ld.w %d2,[%a3]24820 <f00360f4 <_SMALL_DATA4_+0x6002e0f4>>
+80000de4:	d9 33 34 36 	lea %a3,[%a3]24820 <f00360f4 <_SMALL_DATA4_+0x6002e0f4>>
+80000de8:	8f 82 c0 21 	andn %d2,%d2,8
+80000dec:	74 32       	st.w [%a3],%d2
+80000dee:	54 22       	ld.w %d2,[%a2]
+80000df0:	6f 12 09 00 	jz.t %d2,1,80000e02 <IfxScuWdt_enableSafetyWatchdog+0x64>
+80000df4:	54 22       	ld.w %d2,[%a2]
+80000df6:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000dfa:	a6 42       	or %d2,%d4
+80000dfc:	8f 12 40 21 	or %d2,%d2,1
+80000e00:	74 22       	st.w [%a2],%d2
+80000e02:	91 30 00 2f 	movh.a %a2,61443
+80000e06:	19 22 30 36 	ld.w %d2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000e0a:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000e0e:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80000e12:	a6 42       	or %d2,%d4
+80000e14:	8f 32 40 21 	or %d2,%d2,3
+80000e18:	74 22       	st.w [%a2],%d2
+80000e1a:	54 22       	ld.w %d2,[%a2]
+80000e1c:	6f 02 ff 7f 	jz.t %d2,0,80000e1a <IfxScuWdt_enableSafetyWatchdog+0x7c>
+80000e20:	00 90       	ret 
+
+80000e22 <IfxScuWdt_getCpuWatchdogPassword>:
+80000e22:	4d c0 e1 2f 	mfcr %d2,$core_id
+80000e26:	7b 30 00 3f 	movh %d3,61443
+80000e2a:	1b 03 10 36 	addi %d3,%d3,24832
+80000e2e:	8f 72 00 21 	and %d2,%d2,7
+80000e32:	13 c2 20 23 	madd %d2,%d3,%d2,12
+80000e36:	60 22       	mov.a %a2,%d2
+80000e38:	54 22       	ld.w %d2,[%a2]
+80000e3a:	37 02 6e 21 	extr.u %d2,%d2,2,14
+80000e3e:	8f f2 83 21 	xor %d2,%d2,63
+80000e42:	00 90       	ret 
+
+80000e44 <IfxScuWdt_getSafetyWatchdogPassword>:
+80000e44:	91 30 00 2f 	movh.a %a2,61443
+80000e48:	19 22 30 36 	ld.w %d2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000e4c:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000e50:	37 02 6e 21 	extr.u %d2,%d2,2,14
+80000e54:	8f f2 83 21 	xor %d2,%d2,63
+80000e58:	00 90       	ret 
+
+80000e5a <IfxScuWdt_setCpuEndinit>:
+80000e5a:	37 04 70 20 	extr.u %d2,%d4,0,16
+80000e5e:	4d c0 e1 3f 	mfcr %d3,$core_id
+80000e62:	7b 30 00 4f 	movh %d4,61443
+80000e66:	8f 73 00 31 	and %d3,%d3,7
+80000e6a:	1b 04 10 46 	addi %d4,%d4,24832
+80000e6e:	13 c3 20 34 	madd %d3,%d4,%d3,12
+80000e72:	06 22       	sh %d2,2
+80000e74:	60 32       	mov.a %a2,%d3
+80000e76:	54 23       	ld.w %d3,[%a2]
+80000e78:	6f 13 09 00 	jz.t %d3,1,80000e8a <IfxScuWdt_setCpuEndinit+0x30>
+80000e7c:	54 23       	ld.w %d3,[%a2]
+80000e7e:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000e82:	a6 23       	or %d3,%d2
+80000e84:	8f 13 40 31 	or %d3,%d3,1
+80000e88:	74 23       	st.w [%a2],%d3
+80000e8a:	54 23       	ld.w %d3,[%a2]
+80000e8c:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000e90:	a6 32       	or %d2,%d3
+80000e92:	8f 32 40 21 	or %d2,%d2,3
+80000e96:	74 22       	st.w [%a2],%d2
+80000e98:	54 22       	ld.w %d2,[%a2]
+80000e9a:	6f 02 ff 7f 	jz.t %d2,0,80000e98 <IfxScuWdt_setCpuEndinit+0x3e>
+80000e9e:	00 90       	ret 
+
+80000ea0 <IfxScuWdt_setSafetyEndinit>:
+80000ea0:	91 30 00 2f 	movh.a %a2,61443
+80000ea4:	37 04 70 20 	extr.u %d2,%d4,0,16
+80000ea8:	19 23 30 36 	ld.w %d3,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000eac:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000eb0:	06 22       	sh %d2,2
+80000eb2:	6f 13 09 00 	jz.t %d3,1,80000ec4 <IfxScuWdt_setSafetyEndinit+0x24>
+80000eb6:	54 23       	ld.w %d3,[%a2]
+80000eb8:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000ebc:	a6 23       	or %d3,%d2
+80000ebe:	8f 13 40 31 	or %d3,%d3,1
+80000ec2:	74 23       	st.w [%a2],%d3
+80000ec4:	91 30 00 2f 	movh.a %a2,61443
+80000ec8:	19 23 30 36 	ld.w %d3,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000ecc:	d9 22 30 36 	lea %a2,[%a2]24816 <f00360f0 <_SMALL_DATA4_+0x6002e0f0>>
+80000ed0:	b7 03 10 30 	insert %d3,%d3,0,0,16
+80000ed4:	a6 32       	or %d2,%d3
+80000ed6:	8f 32 40 21 	or %d2,%d2,3
+80000eda:	74 22       	st.w [%a2],%d2
+80000edc:	54 22       	ld.w %d2,[%a2]
+80000ede:	6f 02 ff 7f 	jz.t %d2,0,80000edc <IfxScuWdt_setSafetyEndinit+0x3c>
+80000ee2:	00 90       	ret 
+
+80000ee4 <IfxPort_setPinMode>:
+80000ee4:	91 40 00 2f 	movh.a %a2,61444
+80000ee8:	37 04 66 a1 	extr.u %d10,%d4,2,6
+80000eec:	8f f4 0f c1 	and %d12,%d4,255
+80000ef0:	d9 22 00 0e 	lea %a2,[%a2]-8192 <f003e000 <_SMALL_DATA4_+0x60036000>>
+80000ef4:	8f 34 00 41 	and %d4,%d4,3
+80000ef8:	40 4c       	mov.aa %a12,%a4
+80000efa:	02 59       	mov %d9,%d5
+80000efc:	d9 4d 10 00 	lea %a13,[%a4]16
+80000f00:	8f 34 00 80 	sh %d8,%d4,3
+80000f04:	7d 24 10 00 	jeq.a %a4,%a2,80000f24 <IfxPort_setPinMode+0x40>
+80000f08:	06 2a       	sh %d10,2
+80000f0a:	3b f0 0f 40 	mov %d4,255
+80000f0e:	01 da 00 d6 	addsc.a %a13,%a13,%d10,0
+80000f12:	0f 84 00 40 	sh %d4,%d4,%d8
+80000f16:	0f 89 00 20 	sh %d2,%d9,%d8
+80000f1a:	82 03       	mov %d3,0
+80000f1c:	02 43       	mov %d3,%d4
+80000f1e:	49 d2 40 08 	ldmst [%a13]0,%e2
+80000f22:	00 90       	ret 
+80000f24:	6d ff 7f ff 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+80000f28:	02 24       	mov %d4,%d2
+80000f2a:	02 2b       	mov %d11,%d2
+80000f2c:	6d ff 34 fe 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+80000f30:	19 c2 20 10 	ld.w %d2,[%a12]96
+80000f34:	d9 c2 20 10 	lea %a2,[%a12]96
+80000f38:	d7 02 01 2c 	insert %d2,%d2,0,%d12,1
+80000f3c:	02 b4       	mov %d4,%d11
+80000f3e:	74 22       	st.w [%a2],%d2
+80000f40:	6d ff 8d ff 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+80000f44:	1d ff e2 ff 	j 80000f08 <IfxPort_setPinMode+0x24>
+
+80000f48 <delay>:
+80000f48:	91 30 00 cf 	movh.a %a12,61443
+80000f4c:	7b 40 97 84 	movh %d8,18804
+80000f50:	85 fa 10 00 	ld.w %d10,f0000010 <_SMALL_DATA4_+0x5fff8010>
+80000f54:	4b 04 61 91 	utof %d9,%d4
+80000f58:	d9 cc 34 06 	lea %a12,[%a12]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+80000f5c:	1b 08 40 82 	addi %d8,%d8,9216
+80000f60:	85 fb 10 00 	ld.w %d11,f0000010 <_SMALL_DATA4_+0x5fff8010>
+80000f64:	6d ff fe fa 	call 80000560 <IfxScuCcu_getSourceFrequency>
+80000f68:	54 c5       	ld.w %d5,[%a12]
+80000f6a:	0b ab 80 30 	sub %d3,%d11,%d10
+80000f6e:	37 05 64 54 	extr.u %d5,%d5,8,4
+80000f72:	4b 03 61 31 	utof %d3,%d3
+80000f76:	4b 05 41 51 	itof %d5,%d5
+80000f7a:	4b 52 51 20 	div.f %d2,%d2,%d5
+80000f7e:	4b 82 51 20 	div.f %d2,%d2,%d8
+80000f82:	4b 92 41 20 	mul.f %d2,%d2,%d9
+80000f86:	4b 23 01 20 	cmp.f %d2,%d3,%d2
+80000f8a:	6f 02 eb ff 	jnz.t %d2,0,80000f60 <delay+0x18>
+80000f8e:	00 90       	ret 
+
+80000f90 <IfxI2c_I2c_initConfig>:
+80000f90:	7b 30 8c 24 	movh %d2,18627
+80000f94:	1b 02 00 25 	addi %d2,%d2,20480
+80000f98:	82 13       	mov %d3,1
+80000f9a:	f4 45       	st.a [%a4],%a5
+80000f9c:	59 42 04 00 	st.w [%a4]4,%d2
+80000fa0:	82 02       	mov %d2,0
+80000fa2:	59 43 0c 00 	st.w [%a4]12,%d3
+80000fa6:	59 43 2c 00 	st.w [%a4]44,%d3
+80000faa:	59 42 08 00 	st.w [%a4]8,%d2
+80000fae:	59 42 10 00 	st.w [%a4]16,%d2
+80000fb2:	59 42 14 00 	st.w [%a4]20,%d2
+80000fb6:	59 42 18 00 	st.w [%a4]24,%d2
+80000fba:	59 42 1c 00 	st.w [%a4]28,%d2
+80000fbe:	59 42 20 00 	st.w [%a4]32,%d2
+80000fc2:	59 42 24 00 	st.w [%a4]36,%d2
+80000fc6:	59 42 28 00 	st.w [%a4]40,%d2
+80000fca:	59 43 30 00 	st.w [%a4]48,%d3
+80000fce:	00 90       	ret 
+
+80000fd0 <IfxCpu_Trap_memoryManagementError>:
+80000fd0:	20 08       	sub.a %sp,8
+80000fd2:	02 45       	mov %d5,%d4
+80000fd4:	40 b2       	mov.aa %a2,%a11
+80000fd6:	4d c0 e1 4f 	mfcr %d4,$core_id
+80000fda:	d2 02       	mov %e2,0
+80000fdc:	8f 74 00 41 	and %d4,%d4,7
+80000fe0:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+80000fe4:	8f 04 01 40 	sh %d4,%d4,16
+80000fe8:	b7 03 0b 54 	insert %d5,%d3,0,8,11
+80000fec:	80 22       	mov.d %d2,%a2
+80000fee:	0f 45 a0 30 	or %d3,%d5,%d4
+80000ff2:	89 a2 40 09 	st.d [%sp],%e2
+80000ff6:	09 a2 c0 09 	ld.da %a2,[%sp]
+80000ffa:	00 a0       	debug 
+80000ffc:	0d 00 40 02 	rslcx 
+80001000:	00 80       	rfe 
+80001002:	00 90       	ret 
+
+80001004 <IfxCpu_Trap_internalProtectionError>:
+80001004:	20 08       	sub.a %sp,8
+80001006:	02 45       	mov %d5,%d4
+80001008:	40 b2       	mov.aa %a2,%a11
+8000100a:	4d c0 e1 4f 	mfcr %d4,$core_id
+8000100e:	d2 02       	mov %e2,0
+80001010:	8f 74 00 41 	and %d4,%d4,7
+80001014:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+80001018:	8f 04 01 40 	sh %d4,%d4,16
+8000101c:	8f 04 50 51 	or %d5,%d4,256
+80001020:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+80001024:	80 22       	mov.d %d2,%a2
+80001026:	0f 45 a0 30 	or %d3,%d5,%d4
+8000102a:	89 a2 40 09 	st.d [%sp],%e2
+8000102e:	09 a2 c0 09 	ld.da %a2,[%sp]
+80001032:	00 a0       	debug 
+80001034:	0d 00 40 02 	rslcx 
+80001038:	00 80       	rfe 
+8000103a:	00 90       	ret 
+
+8000103c <IfxCpu_Trap_instructionError>:
+8000103c:	20 08       	sub.a %sp,8
+8000103e:	02 45       	mov %d5,%d4
+80001040:	40 b2       	mov.aa %a2,%a11
+80001042:	4d c0 e1 4f 	mfcr %d4,$core_id
+80001046:	d2 02       	mov %e2,0
+80001048:	8f 74 00 41 	and %d4,%d4,7
+8000104c:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+80001050:	8f 04 01 40 	sh %d4,%d4,16
+80001054:	b7 f4 81 54 	insert %d5,%d4,15,9,1
+80001058:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+8000105c:	80 22       	mov.d %d2,%a2
+8000105e:	0f 45 a0 30 	or %d3,%d5,%d4
+80001062:	89 a2 40 09 	st.d [%sp],%e2
+80001066:	09 a2 c0 09 	ld.da %a2,[%sp]
+8000106a:	00 a0       	debug 
+8000106c:	0d 00 40 02 	rslcx 
+80001070:	00 80       	rfe 
+80001072:	00 90       	ret 
+
+80001074 <IfxCpu_Trap_contextManagementError>:
+80001074:	20 08       	sub.a %sp,8
+80001076:	02 45       	mov %d5,%d4
+80001078:	40 b2       	mov.aa %a2,%a11
+8000107a:	4d c0 e1 4f 	mfcr %d4,$core_id
+8000107e:	d2 02       	mov %e2,0
+80001080:	8f 74 00 41 	and %d4,%d4,7
+80001084:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+80001088:	8f 04 01 40 	sh %d4,%d4,16
+8000108c:	b7 f4 02 54 	insert %d5,%d4,15,8,2
+80001090:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+80001094:	80 22       	mov.d %d2,%a2
+80001096:	0f 45 a0 30 	or %d3,%d5,%d4
+8000109a:	89 a2 40 09 	st.d [%sp],%e2
+8000109e:	09 a2 c0 09 	ld.da %a2,[%sp]
+800010a2:	00 a0       	debug 
+800010a4:	0d 00 40 02 	rslcx 
+800010a8:	00 80       	rfe 
+800010aa:	00 90       	ret 
+
+800010ac <IfxCpu_Trap_busError>:
+800010ac:	20 08       	sub.a %sp,8
+800010ae:	02 45       	mov %d5,%d4
+800010b0:	40 b2       	mov.aa %a2,%a11
+800010b2:	4d c0 e1 4f 	mfcr %d4,$core_id
+800010b6:	d2 02       	mov %e2,0
+800010b8:	8f 74 00 41 	and %d4,%d4,7
+800010bc:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+800010c0:	8f 04 01 40 	sh %d4,%d4,16
+800010c4:	b7 f4 01 55 	insert %d5,%d4,15,10,1
+800010c8:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+800010cc:	80 22       	mov.d %d2,%a2
+800010ce:	0f 45 a0 30 	or %d3,%d5,%d4
+800010d2:	89 a2 40 09 	st.d [%sp],%e2
+800010d6:	09 a2 c0 09 	ld.da %a2,[%sp]
+800010da:	00 a0       	debug 
+800010dc:	0d 00 40 02 	rslcx 
+800010e0:	00 80       	rfe 
+800010e2:	00 90       	ret 
+
+800010e4 <IfxCpu_Trap_assertion>:
+800010e4:	20 08       	sub.a %sp,8
+800010e6:	02 45       	mov %d5,%d4
+800010e8:	40 b2       	mov.aa %a2,%a11
+800010ea:	4d c0 e1 4f 	mfcr %d4,$core_id
+800010ee:	d2 02       	mov %e2,0
+800010f0:	8f 74 00 41 	and %d4,%d4,7
+800010f4:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+800010f8:	8f 04 01 40 	sh %d4,%d4,16
+800010fc:	3b 00 50 50 	mov %d5,1280
+80001100:	a6 45       	or %d5,%d4
+80001102:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+80001106:	80 22       	mov.d %d2,%a2
+80001108:	0f 45 a0 30 	or %d3,%d5,%d4
+8000110c:	89 a2 40 09 	st.d [%sp],%e2
+80001110:	09 a2 c0 09 	ld.da %a2,[%sp]
+80001114:	00 a0       	debug 
+80001116:	0d 00 40 02 	rslcx 
+8000111a:	00 80       	rfe 
+8000111c:	00 90       	ret 
+
+8000111e <IfxCpu_Trap_systemCall_Cpu0>:
+8000111e:	20 08       	sub.a %sp,8
+80001120:	02 45       	mov %d5,%d4
+80001122:	40 b2       	mov.aa %a2,%a11
+80001124:	4d c0 e1 4f 	mfcr %d4,$core_id
+80001128:	d2 02       	mov %e2,0
+8000112a:	8f 74 00 41 	and %d4,%d4,7
+8000112e:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+80001132:	8f 04 01 40 	sh %d4,%d4,16
+80001136:	b7 f4 82 54 	insert %d5,%d4,15,9,2
+8000113a:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+8000113e:	80 22       	mov.d %d2,%a2
+80001140:	0f 45 a0 30 	or %d3,%d5,%d4
+80001144:	89 a2 40 09 	st.d [%sp],%e2
+80001148:	09 a2 c0 09 	ld.da %a2,[%sp]
+8000114c:	0d 00 40 02 	rslcx 
+80001150:	00 80       	rfe 
+80001152:	00 90       	ret 
+
+80001154 <IfxCpu_Trap_nonMaskableInterrupt>:
+80001154:	20 08       	sub.a %sp,8
+80001156:	02 45       	mov %d5,%d4
+80001158:	40 b2       	mov.aa %a2,%a11
+8000115a:	4d c0 e1 4f 	mfcr %d4,$core_id
+8000115e:	d2 02       	mov %e2,0
+80001160:	8f 74 00 41 	and %d4,%d4,7
+80001164:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+80001168:	8f 04 01 40 	sh %d4,%d4,16
+8000116c:	b7 f4 03 54 	insert %d5,%d4,15,8,3
+80001170:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+80001174:	80 22       	mov.d %d2,%a2
+80001176:	0f 45 a0 30 	or %d3,%d5,%d4
+8000117a:	89 a2 40 09 	st.d [%sp],%e2
+8000117e:	09 a2 c0 09 	ld.da %a2,[%sp]
+80001182:	0d 00 40 02 	rslcx 
+80001186:	00 80       	rfe 
+80001188:	00 90       	ret 
+
+8000118a <IfxCpu_Trap_systemCall_Cpu2>:
+8000118a:	20 08       	sub.a %sp,8
+8000118c:	02 45       	mov %d5,%d4
+8000118e:	40 b2       	mov.aa %a2,%a11
+80001190:	4d c0 e1 4f 	mfcr %d4,$core_id
+80001194:	d2 02       	mov %e2,0
+80001196:	8f 74 00 41 	and %d4,%d4,7
+8000119a:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+8000119e:	8f 04 01 40 	sh %d4,%d4,16
+800011a2:	b7 f4 82 54 	insert %d5,%d4,15,9,2
+800011a6:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+800011aa:	80 22       	mov.d %d2,%a2
+800011ac:	0f 45 a0 30 	or %d3,%d5,%d4
+800011b0:	89 a2 40 09 	st.d [%sp],%e2
+800011b4:	09 a2 c0 09 	ld.da %a2,[%sp]
+800011b8:	0d 00 40 02 	rslcx 
+800011bc:	00 80       	rfe 
+800011be:	00 90       	ret 
+
+800011c0 <IfxCpu_Trap_systemCall_Cpu1>:
+800011c0:	20 08       	sub.a %sp,8
+800011c2:	02 45       	mov %d5,%d4
+800011c4:	40 b2       	mov.aa %a2,%a11
+800011c6:	4d c0 e1 4f 	mfcr %d4,$core_id
+800011ca:	d2 02       	mov %e2,0
+800011cc:	8f 74 00 41 	and %d4,%d4,7
+800011d0:	37 53 08 30 	insert %d3,%d3,%d5,0,8
+800011d4:	8f 04 01 40 	sh %d4,%d4,16
+800011d8:	b7 f4 82 54 	insert %d5,%d4,15,9,2
+800011dc:	b7 03 0b 44 	insert %d4,%d3,0,8,11
+800011e0:	80 22       	mov.d %d2,%a2
+800011e2:	0f 45 a0 30 	or %d3,%d5,%d4
+800011e6:	89 a2 40 09 	st.d [%sp],%e2
+800011ea:	09 a2 c0 09 	ld.da %a2,[%sp]
+800011ee:	0d 00 40 02 	rslcx 
+800011f2:	00 80       	rfe 
+800011f4:	00 90       	ret 
+
+800011f6 <IfxCpu_setCoreMode>:
+800011f6:	91 00 00 d8 	movh.a %a13,32768
+800011fa:	19 d2 14 80 	ld.w %d2,[%a13]532 <80000214 <IfxCpu_cfg_indexMap>>
+800011fe:	80 48       	mov.d %d8,%a4
+80001200:	d9 dc 14 80 	lea %a12,[%a13]532 <80000214 <IfxCpu_cfg_indexMap>>
+80001204:	5f 28 64 00 	jeq %d8,%d2,800012cc <IfxCpu_setCoreMode+0xd6>
+80001208:	19 c2 08 00 	ld.w %d2,[%a12]8
+8000120c:	5f 28 68 00 	jeq %d8,%d2,800012dc <IfxCpu_setCoreMode+0xe6>
+80001210:	19 c2 10 00 	ld.w %d2,[%a12]16
+80001214:	82 39       	mov %d9,3
+80001216:	5f 28 66 00 	jeq %d8,%d2,800012e2 <IfxCpu_setCoreMode+0xec>
+8000121a:	1b d4 ff 3f 	addi %d3,%d4,-3
+8000121e:	8b 04 20 22 	ne %d2,%d4,0
+80001222:	8b 23 a0 24 	and.ge.u %d2,%d3,2
+80001226:	df 02 03 80 	jne %d2,0,8000122c <IfxCpu_setCoreMode+0x36>
+8000122a:	00 90       	ret 
+8000122c:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001230:	8f 72 00 21 	and %d2,%d2,7
+80001234:	8b 24 00 a2 	eq %d10,%d4,2
+80001238:	5f 92 31 00 	jeq %d2,%d9,8000129a <IfxCpu_setCoreMode+0xa4>
+8000123c:	6d ff 04 fe 	call 80000e44 <IfxScuWdt_getSafetyWatchdogPassword>
+80001240:	02 24       	mov %d4,%d2
+80001242:	02 29       	mov %d9,%d2
+80001244:	6d ff cb fc 	call 80000bda <IfxScuWdt_clearSafetyEndinit>
+80001248:	19 d2 14 80 	ld.w %d2,[%a13]532
+8000124c:	5f 28 56 00 	jeq %d8,%d2,800012f8 <IfxCpu_setCoreMode+0x102>
+80001250:	19 c2 08 00 	ld.w %d2,[%a12]8
+80001254:	5f 28 55 00 	jeq %d8,%d2,800012fe <IfxCpu_setCoreMode+0x108>
+80001258:	19 c3 10 00 	ld.w %d3,[%a12]16
+8000125c:	82 32       	mov %d2,3
+8000125e:	5f 38 45 00 	jeq %d8,%d3,800012e8 <IfxCpu_setCoreMode+0xf2>
+80001262:	7b 30 00 3f 	movh %d3,61443
+80001266:	1b 03 00 36 	addi %d3,%d3,24576
+8000126a:	60 32       	mov.a %a2,%d3
+8000126c:	1b 52 03 20 	addi %d2,%d2,53
+80001270:	06 22       	sh %d2,2
+80001272:	01 22 00 26 	addsc.a %a2,%a2,%d2,0
+80001276:	02 94       	mov %d4,%d9
+80001278:	54 23       	ld.w %d3,[%a2]
+8000127a:	37 a3 02 30 	insert %d3,%d3,%d10,0,2
+8000127e:	74 23       	st.w [%a2],%d3
+80001280:	6d ff 10 fe 	call 80000ea0 <IfxScuWdt_setSafetyEndinit>
+80001284:	60 82       	mov.a %a2,%d8
+80001286:	bb 00 d0 2f 	mov.u %d2,64768
+8000128a:	01 22 00 26 	addsc.a %a2,%a2,%d2,0
+8000128e:	54 22       	ld.w %d2,[%a2]
+80001290:	b7 22 82 20 	insert %d2,%d2,2,1,2
+80001294:	74 22       	st.w [%a2],%d2
+80001296:	82 12       	mov %d2,1
+80001298:	00 90       	ret 
+8000129a:	6d ff c4 fd 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+8000129e:	02 24       	mov %d4,%d2
+800012a0:	02 28       	mov %d8,%d2
+800012a2:	6d ff 79 fc 	call 80000b94 <IfxScuWdt_clearCpuEndinit>
+800012a6:	7b 30 00 3f 	movh %d3,61443
+800012aa:	1b 03 00 36 	addi %d3,%d3,24576
+800012ae:	60 32       	mov.a %a2,%d3
+800012b0:	1b 59 03 20 	addi %d2,%d9,53
+800012b4:	06 22       	sh %d2,2
+800012b6:	01 22 00 26 	addsc.a %a2,%a2,%d2,0
+800012ba:	02 84       	mov %d4,%d8
+800012bc:	54 23       	ld.w %d3,[%a2]
+800012be:	37 a3 02 30 	insert %d3,%d3,%d10,0,2
+800012c2:	74 23       	st.w [%a2],%d3
+800012c4:	6d ff cb fd 	call 80000e5a <IfxScuWdt_setCpuEndinit>
+800012c8:	82 12       	mov %d2,1
+800012ca:	00 90       	ret 
+800012cc:	82 02       	mov %d2,0
+800012ce:	06 32       	sh %d2,3
+800012d0:	01 c2 00 26 	addsc.a %a2,%a12,%d2,0
+800012d4:	19 29 04 00 	ld.w %d9,[%a2]4
+800012d8:	1d ff a1 ff 	j 8000121a <IfxCpu_setCoreMode+0x24>
+800012dc:	82 12       	mov %d2,1
+800012de:	1d ff f8 ff 	j 800012ce <IfxCpu_setCoreMode+0xd8>
+800012e2:	82 22       	mov %d2,2
+800012e4:	1d ff f5 ff 	j 800012ce <IfxCpu_setCoreMode+0xd8>
+800012e8:	82 22       	mov %d2,2
+800012ea:	06 32       	sh %d2,3
+800012ec:	01 c2 00 c6 	addsc.a %a12,%a12,%d2,0
+800012f0:	19 c2 04 00 	ld.w %d2,[%a12]4
+800012f4:	1d ff b7 ff 	j 80001262 <IfxCpu_setCoreMode+0x6c>
+800012f8:	82 02       	mov %d2,0
+800012fa:	1d ff f8 ff 	j 800012ea <IfxCpu_setCoreMode+0xf4>
+800012fe:	82 12       	mov %d2,1
+80001300:	1d ff f5 ff 	j 800012ea <IfxCpu_setCoreMode+0xf4>
+
+80001304 <IfxCpu_startCore>:
+80001304:	02 43       	mov %d3,%d4
+80001306:	4d c0 e1 2f 	mfcr %d2,$core_id
+8000130a:	91 00 00 38 	movh.a %a3,32768
+8000130e:	8f 72 00 21 	and %d2,%d2,7
+80001312:	82 04       	mov %d4,0
+80001314:	d9 32 14 80 	lea %a2,[%a3]532 <80000214 <IfxCpu_cfg_indexMap>>
+80001318:	ff 32 06 80 	jge.u %d2,3,80001324 <IfxCpu_startCore+0x20>
+8000131c:	06 32       	sh %d2,3
+8000131e:	01 22 00 56 	addsc.a %a5,%a2,%d2,0
+80001322:	54 54       	ld.w %d4,[%a5]
+80001324:	80 42       	mov.d %d2,%a4
+80001326:	82 08       	mov %d8,0
+80001328:	5f 42 0b 00 	jeq %d2,%d4,8000133e <IfxCpu_startCore+0x3a>
+8000132c:	bb 80 e0 2f 	mov.u %d2,65032
+80001330:	01 42 00 56 	addsc.a %a5,%a4,%d2,0
+80001334:	82 18       	mov %d8,1
+80001336:	54 52       	ld.w %d2,[%a5]
+80001338:	37 23 01 20 	insert %d2,%d3,%d2,0,1
+8000133c:	74 52       	st.w [%a5],%d2
+8000133e:	19 32 14 80 	ld.w %d2,[%a3]532 <80000214 <IfxCpu_cfg_indexMap>>
+80001342:	80 43       	mov.d %d3,%a4
+80001344:	5f 23 39 00 	jeq %d3,%d2,800013b6 <IfxCpu_startCore+0xb2>
+80001348:	19 22 08 00 	ld.w %d2,[%a2]8
+8000134c:	5f 23 3d 00 	jeq %d3,%d2,800013c6 <IfxCpu_startCore+0xc2>
+80001350:	19 22 10 00 	ld.w %d2,[%a2]16
+80001354:	80 44       	mov.d %d4,%a4
+80001356:	82 33       	mov %d3,3
+80001358:	5f 24 3a 00 	jeq %d4,%d2,800013cc <IfxCpu_startCore+0xc8>
+8000135c:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001360:	8f 72 00 21 	and %d2,%d2,7
+80001364:	5f 32 25 00 	jeq %d2,%d3,800013ae <IfxCpu_startCore+0xaa>
+80001368:	bb 00 d0 2f 	mov.u %d2,64768
+8000136c:	01 42 00 26 	addsc.a %a2,%a4,%d2,0
+80001370:	54 22       	ld.w %d2,[%a2]
+80001372:	37 02 e2 40 	extr.u %d4,%d2,1,2
+80001376:	df 14 17 00 	jeq %d4,1,800013a4 <IfxCpu_startCore+0xa0>
+8000137a:	37 02 e2 20 	extr.u %d2,%d2,1,2
+8000137e:	df 02 11 80 	jne %d2,0,800013a0 <IfxCpu_startCore+0x9c>
+80001382:	8f 23 00 20 	sh %d2,%d3,2
+80001386:	7b 30 00 3f 	movh %d3,61443
+8000138a:	1b 43 0d 36 	addi %d3,%d3,24788
+8000138e:	60 32       	mov.a %a2,%d3
+80001390:	01 22 00 26 	addsc.a %a2,%a2,%d2,0
+80001394:	54 22       	ld.w %d2,[%a2]
+80001396:	37 02 63 24 	extr.u %d2,%d2,8,3
+8000139a:	df 12 03 00 	jeq %d2,1,800013a0 <IfxCpu_startCore+0x9c>
+8000139e:	54 22       	ld.w %d2,[%a2]
+800013a0:	02 82       	mov %d2,%d8
+800013a2:	00 90       	ret 
+800013a4:	6d ff 29 ff 	call 800011f6 <IfxCpu_setCoreMode>
+800013a8:	26 28       	and %d8,%d2
+800013aa:	02 82       	mov %d2,%d8
+800013ac:	00 90       	ret 
+800013ae:	4d 00 d0 2f 	mfcr %d2,$dbgsr
+800013b2:	1d ff e0 ff 	j 80001372 <IfxCpu_startCore+0x6e>
+800013b6:	82 02       	mov %d2,0
+800013b8:	06 32       	sh %d2,3
+800013ba:	01 22 00 26 	addsc.a %a2,%a2,%d2,0
+800013be:	19 23 04 00 	ld.w %d3,[%a2]4
+800013c2:	1d ff cd ff 	j 8000135c <IfxCpu_startCore+0x58>
+800013c6:	82 12       	mov %d2,1
+800013c8:	1d ff f8 ff 	j 800013b8 <IfxCpu_startCore+0xb4>
+800013cc:	82 22       	mov %d2,2
+800013ce:	1d ff f5 ff 	j 800013b8 <IfxCpu_startCore+0xb4>
+
+800013d2 <IfxCpu_waitEvent>:
+800013d2:	80 42       	mov.d %d2,%a4
+800013d4:	b7 02 1c 20 	insert %d2,%d2,0,0,28
+800013d8:	7b 00 00 3d 	movh %d3,53248
+800013dc:	40 4c       	mov.aa %a12,%a4
+800013de:	02 48       	mov %d8,%d4
+800013e0:	5f 32 0e 80 	jne %d2,%d3,800013fc <IfxCpu_waitEvent+0x2a>
+800013e4:	4d c0 e1 2f 	mfcr %d2,$core_id
+800013e8:	80 43       	mov.d %d3,%a4
+800013ea:	b7 03 0c 3a 	insert %d3,%d3,0,20,12
+800013ee:	8f c2 01 20 	sh %d2,%d2,28
+800013f2:	b7 f3 03 3e 	insert %d3,%d3,15,28,3
+800013f6:	0b 23 80 20 	sub %d2,%d3,%d2
+800013fa:	60 2c       	mov.a %a12,%d2
+800013fc:	6d ff b2 f8 	call 80000560 <IfxScuCcu_getSourceFrequency>
+80001400:	91 30 00 2f 	movh.a %a2,61443
+80001404:	19 23 34 06 	ld.w %d3,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+80001408:	4b 08 61 81 	utof %d8,%d8
+8000140c:	37 03 64 34 	extr.u %d3,%d3,8,4
+80001410:	d9 22 34 06 	lea %a2,[%a2]24628 <f0036034 <_SMALL_DATA4_+0x6002e034>>
+80001414:	4b 03 41 31 	itof %d3,%d3
+80001418:	85 f4 10 00 	ld.w %d4,f0000010 <_SMALL_DATA4_+0x5fff8010>
+8000141c:	4b 32 51 30 	div.f %d3,%d2,%d3
+80001420:	7b a0 47 24 	movh %d2,17530
+80001424:	4b 23 51 30 	div.f %d3,%d3,%d2
+80001428:	4b 83 41 30 	mul.f %d3,%d3,%d8
+8000142c:	4b 03 71 31 	ftouz %d3,%d3
+80001430:	1d 00 08 00 	j 80001440 <IfxCpu_waitEvent+0x6e>
+80001434:	00 00       	nop 
+80001436:	85 f2 10 00 	ld.w %d2,f0000010 <_SMALL_DATA4_+0x5fff8010>
+8000143a:	a2 42       	sub %d2,%d4
+8000143c:	7f 32 09 80 	jge.u %d2,%d3,8000144e <IfxCpu_waitEvent+0x7c>
+80001440:	54 c2       	ld.w %d2,[%a12]
+80001442:	8f 72 00 21 	and %d2,%d2,7
+80001446:	df 72 f7 ff 	jne %d2,7,80001434 <IfxCpu_waitEvent+0x62>
+8000144a:	82 02       	mov %d2,0
+8000144c:	00 90       	ret 
+8000144e:	82 12       	mov %d2,1
+80001450:	00 90       	ret 
+
+80001452 <IfxCpu_emitEvent>:
+80001452:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001456:	82 13       	mov %d3,1
+80001458:	57 30 21 22 	imask %e2,%d3,%d2,1
+8000145c:	49 42 40 08 	ldmst [%a4]0,%e2
+80001460:	00 90       	ret 
+
+80001462 <hardware_init_hook>:
+80001462:	00 90       	ret 
+
+80001464 <software_init_hook>:
+80001464:	00 90       	ret 
+
+80001466 <_Core0_start>:
+80001466:	91 30 00 2f 	movh.a %a2,61443
+8000146a:	19 22 00 46 	ld.w %d2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+8000146e:	91 20 00 37 	movh.a %a3,28674
+80001472:	37 02 6e 21 	extr.u %d2,%d2,2,14
+80001476:	d9 22 00 46 	lea %a2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+8000147a:	8f f2 83 81 	xor %d8,%d2,63
+8000147e:	80 32       	mov.d %d2,%a3
+80001480:	1b 02 60 29 	addi %d2,%d2,-27136
+80001484:	60 2a       	mov.a %sp,%d2
+80001486:	0d 00 80 04 	dsync 
+8000148a:	3b 00 98 20 	mov %d2,2432
+8000148e:	cd 42 e0 0f 	mtcr $psw,%d2
+80001492:	4d 00 e0 2f 	mfcr %d2,$pcxi
+80001496:	b7 02 14 20 	insert %d2,%d2,0,0,20
+8000149a:	cd 02 e0 0f 	mtcr $pcxi,%d2
+8000149e:	82 12       	mov %d2,1
+800014a0:	cd 42 20 09 	mtcr $pcon1,%d2
+800014a4:	4d c0 e1 2f 	mfcr %d2,$core_id
+800014a8:	8f 72 00 21 	and %d2,%d2,7
+800014ac:	01 22 03 26 	addsc.a %a2,%a2,%d2,3
+800014b0:	01 22 02 26 	addsc.a %a2,%a2,%d2,2
+800014b4:	54 22       	ld.w %d2,[%a2]
+800014b6:	54 23       	ld.w %d3,[%a2]
+800014b8:	37 02 6e 21 	extr.u %d2,%d2,2,14
+800014bc:	8f f2 83 21 	xor %d2,%d2,63
+800014c0:	6f 13 43 81 	jnz.t %d3,1,80001746 <_Core0_start+0x2e0>
+800014c4:	8f 22 00 30 	sh %d3,%d2,2
+800014c8:	54 22       	ld.w %d2,[%a2]
+800014ca:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800014ce:	a6 32       	or %d2,%d3
+800014d0:	8f 22 40 21 	or %d2,%d2,2
+800014d4:	74 22       	st.w [%a2],%d2
+800014d6:	54 22       	ld.w %d2,[%a2]
+800014d8:	6f 02 ff ff 	jnz.t %d2,0,800014d6 <_Core0_start+0x70>
+800014dc:	82 02       	mov %d2,0
+800014de:	cd c2 20 09 	mtcr $pcon0,%d2
+800014e2:	54 22       	ld.w %d2,[%a2]
+800014e4:	6f 12 09 00 	jz.t %d2,1,800014f6 <_Core0_start+0x90>
+800014e8:	54 22       	ld.w %d2,[%a2]
+800014ea:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800014ee:	a6 32       	or %d2,%d3
+800014f0:	8f 12 40 21 	or %d2,%d2,1
+800014f4:	74 22       	st.w [%a2],%d2
+800014f6:	54 22       	ld.w %d2,[%a2]
+800014f8:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800014fc:	a6 32       	or %d2,%d3
+800014fe:	8f 32 40 21 	or %d2,%d2,3
+80001502:	74 22       	st.w [%a2],%d2
+80001504:	54 22       	ld.w %d2,[%a2]
+80001506:	6f 02 ff 7f 	jz.t %d2,0,80001504 <_Core0_start+0x9e>
+8000150a:	0d 00 c0 04 	isync 
+8000150e:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001512:	7b 30 00 3f 	movh %d3,61443
+80001516:	1b 03 10 36 	addi %d3,%d3,24832
+8000151a:	8f 72 00 21 	and %d2,%d2,7
+8000151e:	13 c2 20 23 	madd %d2,%d3,%d2,12
+80001522:	60 22       	mov.a %a2,%d2
+80001524:	54 22       	ld.w %d2,[%a2]
+80001526:	54 23       	ld.w %d3,[%a2]
+80001528:	37 02 6e 21 	extr.u %d2,%d2,2,14
+8000152c:	8f f2 83 21 	xor %d2,%d2,63
+80001530:	6f 13 ff 80 	jnz.t %d3,1,8000172e <_Core0_start+0x2c8>
+80001534:	8f 22 00 30 	sh %d3,%d2,2
+80001538:	54 22       	ld.w %d2,[%a2]
+8000153a:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000153e:	a6 32       	or %d2,%d3
+80001540:	8f 22 40 21 	or %d2,%d2,2
+80001544:	74 22       	st.w [%a2],%d2
+80001546:	54 22       	ld.w %d2,[%a2]
+80001548:	6f 02 ff ff 	jnz.t %d2,0,80001546 <_Core0_start+0xe0>
+8000154c:	82 22       	mov %d2,2
+8000154e:	cd 02 04 09 	mtcr $dcon0,%d2
+80001552:	54 22       	ld.w %d2,[%a2]
+80001554:	6f 12 09 00 	jz.t %d2,1,80001566 <_Core0_start+0x100>
+80001558:	54 22       	ld.w %d2,[%a2]
+8000155a:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000155e:	a6 32       	or %d2,%d3
+80001560:	8f 12 40 21 	or %d2,%d2,1
+80001564:	74 22       	st.w [%a2],%d2
+80001566:	54 22       	ld.w %d2,[%a2]
+80001568:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000156c:	a6 32       	or %d2,%d3
+8000156e:	8f 32 40 21 	or %d2,%d2,3
+80001572:	74 22       	st.w [%a2],%d2
+80001574:	54 22       	ld.w %d2,[%a2]
+80001576:	6f 02 ff 7f 	jz.t %d2,0,80001574 <_Core0_start+0x10e>
+8000157a:	0d 00 c0 04 	isync 
+8000157e:	91 30 00 2f 	movh.a %a2,61443
+80001582:	19 22 00 46 	ld.w %d2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+80001586:	d9 22 00 46 	lea %a2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+8000158a:	8f 28 00 30 	sh %d3,%d8,2
+8000158e:	6f 12 09 00 	jz.t %d2,1,800015a0 <_Core0_start+0x13a>
+80001592:	54 22       	ld.w %d2,[%a2]
+80001594:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001598:	a6 32       	or %d2,%d3
+8000159a:	8f 12 40 21 	or %d2,%d2,1
+8000159e:	74 22       	st.w [%a2],%d2
+800015a0:	91 30 00 2f 	movh.a %a2,61443
+800015a4:	19 22 00 46 	ld.w %d2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+800015a8:	d9 22 00 46 	lea %a2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+800015ac:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800015b0:	a6 32       	or %d2,%d3
+800015b2:	8f 22 40 21 	or %d2,%d2,2
+800015b6:	74 22       	st.w [%a2],%d2
+800015b8:	54 22       	ld.w %d2,[%a2]
+800015ba:	6f 02 ff ff 	jnz.t %d2,0,800015b8 <_Core0_start+0x152>
+800015be:	91 00 00 38 	movh.a %a3,32768
+800015c2:	80 32       	mov.d %d2,%a3
+800015c4:	1b 02 10 20 	addi %d2,%d2,256
+800015c8:	cd 42 e2 0f 	mtcr $btv,%d2
+800015cc:	91 f0 01 38 	movh.a %a3,32799
+800015d0:	80 32       	mov.d %d2,%a3
+800015d2:	1b 02 00 24 	addi %d2,%d2,16384
+800015d6:	cd 02 e2 0f 	mtcr $biv,%d2
+800015da:	91 20 00 37 	movh.a %a3,28674
+800015de:	80 32       	mov.d %d2,%a3
+800015e0:	1b 02 b0 29 	addi %d2,%d2,-25856
+800015e4:	cd 82 e2 0f 	mtcr $isp,%d2
+800015e8:	54 22       	ld.w %d2,[%a2]
+800015ea:	6f 12 09 00 	jz.t %d2,1,800015fc <_Core0_start+0x196>
+800015ee:	54 22       	ld.w %d2,[%a2]
+800015f0:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800015f4:	a6 32       	or %d2,%d3
+800015f6:	8f 12 40 21 	or %d2,%d2,1
+800015fa:	74 22       	st.w [%a2],%d2
+800015fc:	91 30 00 2f 	movh.a %a2,61443
+80001600:	19 22 00 46 	ld.w %d2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+80001604:	d9 22 00 46 	lea %a2,[%a2]24832 <f0036100 <_SMALL_DATA4_+0x6002e100>>
+80001608:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000160c:	a6 32       	or %d2,%d3
+8000160e:	8f 32 40 21 	or %d2,%d2,3
+80001612:	74 22       	st.w [%a2],%d2
+80001614:	54 22       	ld.w %d2,[%a2]
+80001616:	6f 02 ff 7f 	jz.t %d2,0,80001614 <_Core0_start+0x1ae>
+8000161a:	91 10 00 26 	movh.a %a2,24577
+8000161e:	80 22       	mov.d %d2,%a2
+80001620:	1b 02 00 28 	addi %d2,%d2,-32768
+80001624:	60 20       	mov.a %a0,%d2
+80001626:	91 10 00 28 	movh.a %a2,32769
+8000162a:	80 22       	mov.d %d2,%a2
+8000162c:	1b 02 00 28 	addi %d2,%d2,-32768
+80001630:	60 21       	mov.a %a1,%d2
+80001632:	91 10 00 28 	movh.a %a2,32769
+80001636:	80 22       	mov.d %d2,%a2
+80001638:	1b 02 00 28 	addi %d2,%d2,-32768
+8000163c:	60 28       	mov.a %a8,%d2
+8000163e:	91 10 00 29 	movh.a %a2,36865
+80001642:	80 22       	mov.d %d2,%a2
+80001644:	1b 02 00 28 	addi %d2,%d2,-32768
+80001648:	60 29       	mov.a %a9,%d2
+8000164a:	91 20 00 37 	movh.a %a3,28674
+8000164e:	91 20 00 27 	movh.a %a2,28674
+80001652:	d9 33 c0 09 	lea %a3,[%a3]-25600 <70019c00 <__CSA0>>
+80001656:	d9 22 c0 0b 	lea %a2,[%a2]-17408 <7001bc00 <__CSA0_END>>
+8000165a:	01 32 20 20 	sub.a %a2,%a2,%a3
+8000165e:	80 22       	mov.d %d2,%a2
+80001660:	8f a2 1f 70 	sh %d7,%d2,-6
+80001664:	40 32       	mov.aa %a2,%a3
+80001666:	1b d7 ff 0f 	addi %d0,%d7,-3
+8000166a:	82 03       	mov %d3,0
+8000166c:	80 32       	mov.d %d2,%a3
+8000166e:	7b f0 00 40 	movh %d4,15
+80001672:	df 07 27 00 	jeq %d7,0,800016c0 <_Core0_start+0x25a>
+80001676:	37 02 70 53 	extr.u %d5,%d2,6,16
+8000167a:	8f 42 1f 60 	sh %d6,%d2,-12
+8000167e:	26 46       	and %d6,%d4
+80001680:	a6 65       	or %d5,%d6
+80001682:	df 03 16 00 	jeq %d3,0,800016ae <_Core0_start+0x248>
+80001686:	74 25       	st.w [%a2],%d5
+80001688:	5f 03 04 80 	jne %d3,%d0,80001690 <_Core0_start+0x22a>
+8000168c:	cd c5 e3 0f 	mtcr $lcx,%d5
+80001690:	c2 13       	add %d3,1
+80001692:	60 22       	mov.a %a2,%d2
+80001694:	1b 02 04 50 	addi %d5,%d2,64
+80001698:	5f 37 0f 00 	jeq %d7,%d3,800016b6 <_Core0_start+0x250>
+8000169c:	02 52       	mov %d2,%d5
+8000169e:	37 02 70 53 	extr.u %d5,%d2,6,16
+800016a2:	8f 42 1f 60 	sh %d6,%d2,-12
+800016a6:	26 46       	and %d6,%d4
+800016a8:	a6 65       	or %d5,%d6
+800016aa:	df 03 ee ff 	jne %d3,0,80001686 <_Core0_start+0x220>
+800016ae:	cd 85 e3 0f 	mtcr $fcx,%d5
+800016b2:	1d ff eb ff 	j 80001688 <_Core0_start+0x222>
+800016b6:	1b f7 ff 2f 	addi %d2,%d7,-1
+800016ba:	06 62       	sh %d2,6
+800016bc:	01 32 00 26 	addsc.a %a2,%a3,%d2,0
+800016c0:	82 02       	mov %d2,0
+800016c2:	74 22       	st.w [%a2],%d2
+800016c4:	6d ff c0 fb 	call 80000e44 <IfxScuWdt_getSafetyWatchdogPassword>
+800016c8:	02 84       	mov %d4,%d8
+800016ca:	02 29       	mov %d9,%d2
+800016cc:	6d ff a9 fa 	call 80000c1e <IfxScuWdt_disableCpuWatchdog>
+800016d0:	02 94       	mov %d4,%d9
+800016d2:	6d ff e5 fa 	call 80000c9c <IfxScuWdt_disableSafetyWatchdog>
+800016d6:	6d ff c6 fe 	call 80001462 <hardware_init_hook>
+800016da:	6d 00 e0 02 	call 80001c9a <Ifx_C_Init>
+800016de:	6d 00 35 08 	call 80002748 <_init>
+800016e2:	6d ff c1 fe 	call 80001464 <software_init_hook>
+800016e6:	02 84       	mov %d4,%d8
+800016e8:	6d ff 1c fb 	call 80000d20 <IfxScuWdt_enableCpuWatchdog>
+800016ec:	02 94       	mov %d4,%d9
+800016ee:	6d ff 58 fb 	call 80000d9e <IfxScuWdt_enableSafetyWatchdog>
+800016f2:	91 00 00 48 	movh.a %a4,32768
+800016f6:	d9 44 2c 80 	lea %a4,[%a4]556 <8000022c <IfxScuCcu_defaultClockConfig>>
+800016fa:	6d ff a5 f7 	call 80000644 <IfxScuCcu_init>
+800016fe:	91 00 00 28 	movh.a %a2,32768
+80001702:	80 22       	mov.d %d2,%a2
+80001704:	1b e2 75 41 	addi %d4,%d2,5982
+80001708:	91 30 88 4f 	movh.a %a4,63619
+8000170c:	6d ff fc fd 	call 80001304 <IfxCpu_startCore>
+80001710:	91 00 00 28 	movh.a %a2,32768
+80001714:	80 22       	mov.d %d2,%a2
+80001716:	1b c2 9f 41 	addi %d4,%d2,6652
+8000171a:	91 50 88 4f 	movh.a %a4,63621
+8000171e:	6d ff f3 fd 	call 80001304 <IfxCpu_startCore>
+80001722:	91 00 00 28 	movh.a %a2,32768
+80001726:	d9 22 30 22 	lea %a2,[%a2]8368 <800020b0 <core0_main>>
+8000172a:	dc 02       	ji %a2
+8000172c:	00 90       	ret 
+8000172e:	54 24       	ld.w %d4,[%a2]
+80001730:	8f 22 00 30 	sh %d3,%d2,2
+80001734:	b7 04 10 40 	insert %d4,%d4,0,0,16
+80001738:	0f 34 a0 20 	or %d2,%d4,%d3
+8000173c:	8f 12 40 21 	or %d2,%d2,1
+80001740:	74 22       	st.w [%a2],%d2
+80001742:	1d ff fb fe 	j 80001538 <_Core0_start+0xd2>
+80001746:	54 24       	ld.w %d4,[%a2]
+80001748:	8f 22 00 30 	sh %d3,%d2,2
+8000174c:	b7 04 10 40 	insert %d4,%d4,0,0,16
+80001750:	0f 34 a0 20 	or %d2,%d4,%d3
+80001754:	8f 12 40 21 	or %d2,%d2,1
+80001758:	74 22       	st.w [%a2],%d2
+8000175a:	1d ff b7 fe 	j 800014c8 <_Core0_start+0x62>
+
+8000175e <_Core1_start>:
+8000175e:	91 30 00 2f 	movh.a %a2,61443
+80001762:	19 22 0c 46 	ld.w %d2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+80001766:	d9 22 0c 46 	lea %a2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+8000176a:	37 02 6e 21 	extr.u %d2,%d2,2,14
+8000176e:	91 20 00 26 	movh.a %a2,24578
+80001772:	8f f2 83 41 	xor %d4,%d2,63
+80001776:	80 22       	mov.d %d2,%a2
+80001778:	1b 02 60 2b 	addi %d2,%d2,-18944
+8000177c:	60 2a       	mov.a %sp,%d2
+8000177e:	0d 00 80 04 	dsync 
+80001782:	3b 00 98 20 	mov %d2,2432
+80001786:	cd 42 e0 0f 	mtcr $psw,%d2
+8000178a:	4d 00 e0 2f 	mfcr %d2,$pcxi
+8000178e:	b7 02 14 20 	insert %d2,%d2,0,0,20
+80001792:	cd 02 e0 0f 	mtcr $pcxi,%d2
+80001796:	82 12       	mov %d2,1
+80001798:	cd 42 20 09 	mtcr $pcon1,%d2
+8000179c:	4d c0 e1 2f 	mfcr %d2,$core_id
+800017a0:	7b 30 00 3f 	movh %d3,61443
+800017a4:	1b 03 10 36 	addi %d3,%d3,24832
+800017a8:	8f 72 00 21 	and %d2,%d2,7
+800017ac:	13 c2 20 23 	madd %d2,%d3,%d2,12
+800017b0:	60 22       	mov.a %a2,%d2
+800017b2:	54 22       	ld.w %d2,[%a2]
+800017b4:	54 23       	ld.w %d3,[%a2]
+800017b6:	37 02 6e 21 	extr.u %d2,%d2,2,14
+800017ba:	8f f2 83 21 	xor %d2,%d2,63
+800017be:	6f 13 13 81 	jnz.t %d3,1,800019e4 <_Core1_start+0x286>
+800017c2:	8f 22 00 30 	sh %d3,%d2,2
+800017c6:	54 22       	ld.w %d2,[%a2]
+800017c8:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800017cc:	a6 32       	or %d2,%d3
+800017ce:	8f 22 40 21 	or %d2,%d2,2
+800017d2:	74 22       	st.w [%a2],%d2
+800017d4:	54 22       	ld.w %d2,[%a2]
+800017d6:	6f 02 ff ff 	jnz.t %d2,0,800017d4 <_Core1_start+0x76>
+800017da:	82 02       	mov %d2,0
+800017dc:	cd c2 20 09 	mtcr $pcon0,%d2
+800017e0:	54 22       	ld.w %d2,[%a2]
+800017e2:	6f 12 09 00 	jz.t %d2,1,800017f4 <_Core1_start+0x96>
+800017e6:	54 22       	ld.w %d2,[%a2]
+800017e8:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800017ec:	a6 32       	or %d2,%d3
+800017ee:	8f 12 40 21 	or %d2,%d2,1
+800017f2:	74 22       	st.w [%a2],%d2
+800017f4:	54 22       	ld.w %d2,[%a2]
+800017f6:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800017fa:	a6 32       	or %d2,%d3
+800017fc:	8f 32 40 21 	or %d2,%d2,3
+80001800:	74 22       	st.w [%a2],%d2
+80001802:	54 22       	ld.w %d2,[%a2]
+80001804:	6f 02 ff 7f 	jz.t %d2,0,80001802 <_Core1_start+0xa4>
+80001808:	0d 00 c0 04 	isync 
+8000180c:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001810:	7b 30 00 3f 	movh %d3,61443
+80001814:	1b 03 10 36 	addi %d3,%d3,24832
+80001818:	8f 72 00 21 	and %d2,%d2,7
+8000181c:	13 c2 20 23 	madd %d2,%d3,%d2,12
+80001820:	60 22       	mov.a %a2,%d2
+80001822:	54 22       	ld.w %d2,[%a2]
+80001824:	54 23       	ld.w %d3,[%a2]
+80001826:	37 02 6e 21 	extr.u %d2,%d2,2,14
+8000182a:	8f f2 83 21 	xor %d2,%d2,63
+8000182e:	6f 13 cf 80 	jnz.t %d3,1,800019cc <_Core1_start+0x26e>
+80001832:	8f 22 00 30 	sh %d3,%d2,2
+80001836:	54 22       	ld.w %d2,[%a2]
+80001838:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000183c:	a6 32       	or %d2,%d3
+8000183e:	8f 22 40 21 	or %d2,%d2,2
+80001842:	74 22       	st.w [%a2],%d2
+80001844:	54 22       	ld.w %d2,[%a2]
+80001846:	6f 02 ff ff 	jnz.t %d2,0,80001844 <_Core1_start+0xe6>
+8000184a:	82 02       	mov %d2,0
+8000184c:	cd 02 04 09 	mtcr $dcon0,%d2
+80001850:	54 22       	ld.w %d2,[%a2]
+80001852:	6f 12 09 00 	jz.t %d2,1,80001864 <_Core1_start+0x106>
+80001856:	54 22       	ld.w %d2,[%a2]
+80001858:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000185c:	a6 32       	or %d2,%d3
+8000185e:	8f 12 40 21 	or %d2,%d2,1
+80001862:	74 22       	st.w [%a2],%d2
+80001864:	54 22       	ld.w %d2,[%a2]
+80001866:	b7 02 10 20 	insert %d2,%d2,0,0,16
+8000186a:	a6 32       	or %d2,%d3
+8000186c:	8f 32 40 21 	or %d2,%d2,3
+80001870:	74 22       	st.w [%a2],%d2
+80001872:	54 22       	ld.w %d2,[%a2]
+80001874:	6f 02 ff 7f 	jz.t %d2,0,80001872 <_Core1_start+0x114>
+80001878:	0d 00 c0 04 	isync 
+8000187c:	91 30 00 2f 	movh.a %a2,61443
+80001880:	19 22 0c 46 	ld.w %d2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+80001884:	d9 22 0c 46 	lea %a2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+80001888:	06 24       	sh %d4,2
+8000188a:	6f 12 09 00 	jz.t %d2,1,8000189c <_Core1_start+0x13e>
+8000188e:	54 22       	ld.w %d2,[%a2]
+80001890:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001894:	a6 42       	or %d2,%d4
+80001896:	8f 12 40 21 	or %d2,%d2,1
+8000189a:	74 22       	st.w [%a2],%d2
+8000189c:	91 30 00 2f 	movh.a %a2,61443
+800018a0:	19 22 0c 46 	ld.w %d2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+800018a4:	d9 22 0c 46 	lea %a2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+800018a8:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800018ac:	a6 42       	or %d2,%d4
+800018ae:	8f 22 40 21 	or %d2,%d2,2
+800018b2:	74 22       	st.w [%a2],%d2
+800018b4:	54 22       	ld.w %d2,[%a2]
+800018b6:	6f 02 ff ff 	jnz.t %d2,0,800018b4 <_Core1_start+0x156>
+800018ba:	91 f0 01 38 	movh.a %a3,32799
+800018be:	80 32       	mov.d %d2,%a3
+800018c0:	1b 02 20 26 	addi %d2,%d2,25088
+800018c4:	cd 42 e2 0f 	mtcr $btv,%d2
+800018c8:	91 f0 01 38 	movh.a %a3,32799
+800018cc:	80 32       	mov.d %d2,%a3
+800018ce:	1b 02 00 24 	addi %d2,%d2,16384
+800018d2:	cd 02 e2 0f 	mtcr $biv,%d2
+800018d6:	91 20 00 36 	movh.a %a3,24578
+800018da:	80 32       	mov.d %d2,%a3
+800018dc:	1b 02 b0 2b 	addi %d2,%d2,-17664
+800018e0:	cd 82 e2 0f 	mtcr $isp,%d2
+800018e4:	54 22       	ld.w %d2,[%a2]
+800018e6:	6f 12 09 00 	jz.t %d2,1,800018f8 <_Core1_start+0x19a>
+800018ea:	54 22       	ld.w %d2,[%a2]
+800018ec:	b7 02 10 20 	insert %d2,%d2,0,0,16
+800018f0:	a6 42       	or %d2,%d4
+800018f2:	8f 12 40 21 	or %d2,%d2,1
+800018f6:	74 22       	st.w [%a2],%d2
+800018f8:	91 30 00 2f 	movh.a %a2,61443
+800018fc:	19 22 0c 46 	ld.w %d2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+80001900:	d9 22 0c 46 	lea %a2,[%a2]24844 <f003610c <_SMALL_DATA4_+0x6002e10c>>
+80001904:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001908:	a6 42       	or %d2,%d4
+8000190a:	8f 32 40 21 	or %d2,%d2,3
+8000190e:	74 22       	st.w [%a2],%d2
+80001910:	54 22       	ld.w %d2,[%a2]
+80001912:	6f 02 ff 7f 	jz.t %d2,0,80001910 <_Core1_start+0x1b2>
+80001916:	91 10 00 26 	movh.a %a2,24577
+8000191a:	80 22       	mov.d %d2,%a2
+8000191c:	1b 02 00 28 	addi %d2,%d2,-32768
+80001920:	60 20       	mov.a %a0,%d2
+80001922:	91 10 00 28 	movh.a %a2,32769
+80001926:	80 22       	mov.d %d2,%a2
+80001928:	1b 02 00 28 	addi %d2,%d2,-32768
+8000192c:	60 21       	mov.a %a1,%d2
+8000192e:	91 10 00 28 	movh.a %a2,32769
+80001932:	80 22       	mov.d %d2,%a2
+80001934:	1b 02 00 28 	addi %d2,%d2,-32768
+80001938:	60 28       	mov.a %a8,%d2
+8000193a:	91 10 00 29 	movh.a %a2,36865
+8000193e:	80 22       	mov.d %d2,%a2
+80001940:	1b 02 00 28 	addi %d2,%d2,-32768
+80001944:	60 29       	mov.a %a9,%d2
+80001946:	91 20 00 36 	movh.a %a3,24578
+8000194a:	91 20 00 26 	movh.a %a2,24578
+8000194e:	d9 33 c0 0b 	lea %a3,[%a3]-17408 <6001bc00 <__CSA1>>
+80001952:	d9 22 c0 0d 	lea %a2,[%a2]-9216 <6001dc00 <__CSA1_END>>
+80001956:	01 32 20 20 	sub.a %a2,%a2,%a3
+8000195a:	80 22       	mov.d %d2,%a2
+8000195c:	8f a2 1f 60 	sh %d6,%d2,-6
+80001960:	40 32       	mov.aa %a2,%a3
+80001962:	1b d6 ff 0f 	addi %d0,%d6,-3
+80001966:	82 03       	mov %d3,0
+80001968:	80 32       	mov.d %d2,%a3
+8000196a:	7b f0 00 70 	movh %d7,15
+8000196e:	df 06 27 00 	jeq %d6,0,800019bc <_Core1_start+0x25e>
+80001972:	37 02 70 43 	extr.u %d4,%d2,6,16
+80001976:	8f 42 1f 50 	sh %d5,%d2,-12
+8000197a:	26 75       	and %d5,%d7
+8000197c:	a6 54       	or %d4,%d5
+8000197e:	df 03 16 00 	jeq %d3,0,800019aa <_Core1_start+0x24c>
+80001982:	74 24       	st.w [%a2],%d4
+80001984:	5f 03 04 80 	jne %d3,%d0,8000198c <_Core1_start+0x22e>
+80001988:	cd c4 e3 0f 	mtcr $lcx,%d4
+8000198c:	c2 13       	add %d3,1
+8000198e:	60 22       	mov.a %a2,%d2
+80001990:	1b 02 04 40 	addi %d4,%d2,64
+80001994:	5f 36 0f 00 	jeq %d6,%d3,800019b2 <_Core1_start+0x254>
+80001998:	02 42       	mov %d2,%d4
+8000199a:	37 02 70 43 	extr.u %d4,%d2,6,16
+8000199e:	8f 42 1f 50 	sh %d5,%d2,-12
+800019a2:	26 75       	and %d5,%d7
+800019a4:	a6 54       	or %d4,%d5
+800019a6:	df 03 ee ff 	jne %d3,0,80001982 <_Core1_start+0x224>
+800019aa:	cd 84 e3 0f 	mtcr $fcx,%d4
+800019ae:	1d ff eb ff 	j 80001984 <_Core1_start+0x226>
+800019b2:	1b f6 ff 2f 	addi %d2,%d6,-1
+800019b6:	06 62       	sh %d2,6
+800019b8:	01 32 00 26 	addsc.a %a2,%a3,%d2,0
+800019bc:	82 02       	mov %d2,0
+800019be:	74 22       	st.w [%a2],%d2
+800019c0:	91 00 00 28 	movh.a %a2,32768
+800019c4:	d9 22 0a 52 	lea %a2,[%a2]8522 <8000214a <core1_main>>
+800019c8:	dc 02       	ji %a2
+800019ca:	00 90       	ret 
+800019cc:	54 25       	ld.w %d5,[%a2]
+800019ce:	8f 22 00 30 	sh %d3,%d2,2
+800019d2:	b7 05 10 50 	insert %d5,%d5,0,0,16
+800019d6:	0f 35 a0 20 	or %d2,%d5,%d3
+800019da:	8f 12 40 21 	or %d2,%d2,1
+800019de:	74 22       	st.w [%a2],%d2
+800019e0:	1d ff 2b ff 	j 80001836 <_Core1_start+0xd8>
+800019e4:	54 25       	ld.w %d5,[%a2]
+800019e6:	8f 22 00 30 	sh %d3,%d2,2
+800019ea:	b7 05 10 50 	insert %d5,%d5,0,0,16
+800019ee:	0f 35 a0 20 	or %d2,%d5,%d3
+800019f2:	8f 12 40 21 	or %d2,%d2,1
+800019f6:	74 22       	st.w [%a2],%d2
+800019f8:	1d ff e7 fe 	j 800017c6 <_Core1_start+0x68>
+
+800019fc <_Core2_start>:
+800019fc:	91 30 00 2f 	movh.a %a2,61443
+80001a00:	19 22 18 46 	ld.w %d2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001a04:	d9 22 18 46 	lea %a2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001a08:	37 02 6e 21 	extr.u %d2,%d2,2,14
+80001a0c:	91 20 00 25 	movh.a %a2,20482
+80001a10:	8f f2 83 41 	xor %d4,%d2,63
+80001a14:	80 22       	mov.d %d2,%a2
+80001a16:	1b 02 60 2b 	addi %d2,%d2,-18944
+80001a1a:	60 2a       	mov.a %sp,%d2
+80001a1c:	0d 00 80 04 	dsync 
+80001a20:	3b 00 98 20 	mov %d2,2432
+80001a24:	cd 42 e0 0f 	mtcr $psw,%d2
+80001a28:	4d 00 e0 2f 	mfcr %d2,$pcxi
+80001a2c:	b7 02 14 20 	insert %d2,%d2,0,0,20
+80001a30:	cd 02 e0 0f 	mtcr $pcxi,%d2
+80001a34:	82 12       	mov %d2,1
+80001a36:	cd 42 20 09 	mtcr $pcon1,%d2
+80001a3a:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001a3e:	7b 30 00 3f 	movh %d3,61443
+80001a42:	1b 03 10 36 	addi %d3,%d3,24832
+80001a46:	8f 72 00 21 	and %d2,%d2,7
+80001a4a:	13 c2 20 23 	madd %d2,%d3,%d2,12
+80001a4e:	60 22       	mov.a %a2,%d2
+80001a50:	54 22       	ld.w %d2,[%a2]
+80001a52:	54 23       	ld.w %d3,[%a2]
+80001a54:	37 02 6e 21 	extr.u %d2,%d2,2,14
+80001a58:	8f f2 83 21 	xor %d2,%d2,63
+80001a5c:	6f 13 13 81 	jnz.t %d3,1,80001c82 <_Core2_start+0x286>
+80001a60:	8f 22 00 30 	sh %d3,%d2,2
+80001a64:	54 22       	ld.w %d2,[%a2]
+80001a66:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001a6a:	a6 32       	or %d2,%d3
+80001a6c:	8f 22 40 21 	or %d2,%d2,2
+80001a70:	74 22       	st.w [%a2],%d2
+80001a72:	54 22       	ld.w %d2,[%a2]
+80001a74:	6f 02 ff ff 	jnz.t %d2,0,80001a72 <_Core2_start+0x76>
+80001a78:	82 02       	mov %d2,0
+80001a7a:	cd c2 20 09 	mtcr $pcon0,%d2
+80001a7e:	54 22       	ld.w %d2,[%a2]
+80001a80:	6f 12 09 00 	jz.t %d2,1,80001a92 <_Core2_start+0x96>
+80001a84:	54 22       	ld.w %d2,[%a2]
+80001a86:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001a8a:	a6 32       	or %d2,%d3
+80001a8c:	8f 12 40 21 	or %d2,%d2,1
+80001a90:	74 22       	st.w [%a2],%d2
+80001a92:	54 22       	ld.w %d2,[%a2]
+80001a94:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001a98:	a6 32       	or %d2,%d3
+80001a9a:	8f 32 40 21 	or %d2,%d2,3
+80001a9e:	74 22       	st.w [%a2],%d2
+80001aa0:	54 22       	ld.w %d2,[%a2]
+80001aa2:	6f 02 ff 7f 	jz.t %d2,0,80001aa0 <_Core2_start+0xa4>
+80001aa6:	0d 00 c0 04 	isync 
+80001aaa:	4d c0 e1 2f 	mfcr %d2,$core_id
+80001aae:	7b 30 00 3f 	movh %d3,61443
+80001ab2:	1b 03 10 36 	addi %d3,%d3,24832
+80001ab6:	8f 72 00 21 	and %d2,%d2,7
+80001aba:	13 c2 20 23 	madd %d2,%d3,%d2,12
+80001abe:	60 22       	mov.a %a2,%d2
+80001ac0:	54 22       	ld.w %d2,[%a2]
+80001ac2:	54 23       	ld.w %d3,[%a2]
+80001ac4:	37 02 6e 21 	extr.u %d2,%d2,2,14
+80001ac8:	8f f2 83 21 	xor %d2,%d2,63
+80001acc:	6f 13 cf 80 	jnz.t %d3,1,80001c6a <_Core2_start+0x26e>
+80001ad0:	8f 22 00 30 	sh %d3,%d2,2
+80001ad4:	54 22       	ld.w %d2,[%a2]
+80001ad6:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001ada:	a6 32       	or %d2,%d3
+80001adc:	8f 22 40 21 	or %d2,%d2,2
+80001ae0:	74 22       	st.w [%a2],%d2
+80001ae2:	54 22       	ld.w %d2,[%a2]
+80001ae4:	6f 02 ff ff 	jnz.t %d2,0,80001ae2 <_Core2_start+0xe6>
+80001ae8:	82 02       	mov %d2,0
+80001aea:	cd 02 04 09 	mtcr $dcon0,%d2
+80001aee:	54 22       	ld.w %d2,[%a2]
+80001af0:	6f 12 09 00 	jz.t %d2,1,80001b02 <_Core2_start+0x106>
+80001af4:	54 22       	ld.w %d2,[%a2]
+80001af6:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001afa:	a6 32       	or %d2,%d3
+80001afc:	8f 12 40 21 	or %d2,%d2,1
+80001b00:	74 22       	st.w [%a2],%d2
+80001b02:	54 22       	ld.w %d2,[%a2]
+80001b04:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001b08:	a6 32       	or %d2,%d3
+80001b0a:	8f 32 40 21 	or %d2,%d2,3
+80001b0e:	74 22       	st.w [%a2],%d2
+80001b10:	54 22       	ld.w %d2,[%a2]
+80001b12:	6f 02 ff 7f 	jz.t %d2,0,80001b10 <_Core2_start+0x114>
+80001b16:	0d 00 c0 04 	isync 
+80001b1a:	91 30 00 2f 	movh.a %a2,61443
+80001b1e:	19 22 18 46 	ld.w %d2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001b22:	d9 22 18 46 	lea %a2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001b26:	06 24       	sh %d4,2
+80001b28:	6f 12 09 00 	jz.t %d2,1,80001b3a <_Core2_start+0x13e>
+80001b2c:	54 22       	ld.w %d2,[%a2]
+80001b2e:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001b32:	a6 42       	or %d2,%d4
+80001b34:	8f 12 40 21 	or %d2,%d2,1
+80001b38:	74 22       	st.w [%a2],%d2
+80001b3a:	91 30 00 2f 	movh.a %a2,61443
+80001b3e:	19 22 18 46 	ld.w %d2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001b42:	d9 22 18 46 	lea %a2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001b46:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001b4a:	a6 42       	or %d2,%d4
+80001b4c:	8f 22 40 21 	or %d2,%d2,2
+80001b50:	74 22       	st.w [%a2],%d2
+80001b52:	54 22       	ld.w %d2,[%a2]
+80001b54:	6f 02 ff ff 	jnz.t %d2,0,80001b52 <_Core2_start+0x156>
+80001b58:	91 f0 01 38 	movh.a %a3,32799
+80001b5c:	80 32       	mov.d %d2,%a3
+80001b5e:	1b 02 10 26 	addi %d2,%d2,24832
+80001b62:	cd 42 e2 0f 	mtcr $btv,%d2
+80001b66:	91 f0 01 38 	movh.a %a3,32799
+80001b6a:	80 32       	mov.d %d2,%a3
+80001b6c:	1b 02 00 24 	addi %d2,%d2,16384
+80001b70:	cd 02 e2 0f 	mtcr $biv,%d2
+80001b74:	91 20 00 35 	movh.a %a3,20482
+80001b78:	80 32       	mov.d %d2,%a3
+80001b7a:	1b 02 b0 2b 	addi %d2,%d2,-17664
+80001b7e:	cd 82 e2 0f 	mtcr $isp,%d2
+80001b82:	54 22       	ld.w %d2,[%a2]
+80001b84:	6f 12 09 00 	jz.t %d2,1,80001b96 <_Core2_start+0x19a>
+80001b88:	54 22       	ld.w %d2,[%a2]
+80001b8a:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001b8e:	a6 42       	or %d2,%d4
+80001b90:	8f 12 40 21 	or %d2,%d2,1
+80001b94:	74 22       	st.w [%a2],%d2
+80001b96:	91 30 00 2f 	movh.a %a2,61443
+80001b9a:	19 22 18 46 	ld.w %d2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001b9e:	d9 22 18 46 	lea %a2,[%a2]24856 <f0036118 <_SMALL_DATA4_+0x6002e118>>
+80001ba2:	b7 02 10 20 	insert %d2,%d2,0,0,16
+80001ba6:	a6 42       	or %d2,%d4
+80001ba8:	8f 32 40 21 	or %d2,%d2,3
+80001bac:	74 22       	st.w [%a2],%d2
+80001bae:	54 22       	ld.w %d2,[%a2]
+80001bb0:	6f 02 ff 7f 	jz.t %d2,0,80001bae <_Core2_start+0x1b2>
+80001bb4:	91 10 00 26 	movh.a %a2,24577
+80001bb8:	80 22       	mov.d %d2,%a2
+80001bba:	1b 02 00 28 	addi %d2,%d2,-32768
+80001bbe:	60 20       	mov.a %a0,%d2
+80001bc0:	91 10 00 28 	movh.a %a2,32769
+80001bc4:	80 22       	mov.d %d2,%a2
+80001bc6:	1b 02 00 28 	addi %d2,%d2,-32768
+80001bca:	60 21       	mov.a %a1,%d2
+80001bcc:	91 10 00 28 	movh.a %a2,32769
+80001bd0:	80 22       	mov.d %d2,%a2
+80001bd2:	1b 02 00 28 	addi %d2,%d2,-32768
+80001bd6:	60 28       	mov.a %a8,%d2
+80001bd8:	91 10 00 29 	movh.a %a2,36865
+80001bdc:	80 22       	mov.d %d2,%a2
+80001bde:	1b 02 00 28 	addi %d2,%d2,-32768
+80001be2:	60 29       	mov.a %a9,%d2
+80001be4:	91 20 00 35 	movh.a %a3,20482
+80001be8:	91 20 00 25 	movh.a %a2,20482
+80001bec:	d9 33 c0 0b 	lea %a3,[%a3]-17408 <5001bc00 <__CSA2>>
+80001bf0:	d9 22 c0 0d 	lea %a2,[%a2]-9216 <5001dc00 <__CSA2_END>>
+80001bf4:	01 32 20 20 	sub.a %a2,%a2,%a3
+80001bf8:	80 22       	mov.d %d2,%a2
+80001bfa:	8f a2 1f 60 	sh %d6,%d2,-6
+80001bfe:	40 32       	mov.aa %a2,%a3
+80001c00:	1b d6 ff 0f 	addi %d0,%d6,-3
+80001c04:	82 03       	mov %d3,0
+80001c06:	80 32       	mov.d %d2,%a3
+80001c08:	7b f0 00 70 	movh %d7,15
+80001c0c:	df 06 27 00 	jeq %d6,0,80001c5a <_Core2_start+0x25e>
+80001c10:	37 02 70 43 	extr.u %d4,%d2,6,16
+80001c14:	8f 42 1f 50 	sh %d5,%d2,-12
+80001c18:	26 75       	and %d5,%d7
+80001c1a:	a6 54       	or %d4,%d5
+80001c1c:	df 03 16 00 	jeq %d3,0,80001c48 <_Core2_start+0x24c>
+80001c20:	74 24       	st.w [%a2],%d4
+80001c22:	5f 03 04 80 	jne %d3,%d0,80001c2a <_Core2_start+0x22e>
+80001c26:	cd c4 e3 0f 	mtcr $lcx,%d4
+80001c2a:	c2 13       	add %d3,1
+80001c2c:	60 22       	mov.a %a2,%d2
+80001c2e:	1b 02 04 40 	addi %d4,%d2,64
+80001c32:	5f 36 0f 00 	jeq %d6,%d3,80001c50 <_Core2_start+0x254>
+80001c36:	02 42       	mov %d2,%d4
+80001c38:	37 02 70 43 	extr.u %d4,%d2,6,16
+80001c3c:	8f 42 1f 50 	sh %d5,%d2,-12
+80001c40:	26 75       	and %d5,%d7
+80001c42:	a6 54       	or %d4,%d5
+80001c44:	df 03 ee ff 	jne %d3,0,80001c20 <_Core2_start+0x224>
+80001c48:	cd 84 e3 0f 	mtcr $fcx,%d4
+80001c4c:	1d ff eb ff 	j 80001c22 <_Core2_start+0x226>
+80001c50:	1b f6 ff 2f 	addi %d2,%d6,-1
+80001c54:	06 62       	sh %d2,6
+80001c56:	01 32 00 26 	addsc.a %a2,%a3,%d2,0
+80001c5a:	82 02       	mov %d2,0
+80001c5c:	74 22       	st.w [%a2],%d2
+80001c5e:	91 00 00 28 	movh.a %a2,32768
+80001c62:	d9 22 32 52 	lea %a2,[%a2]8562 <80002172 <core2_main>>
+80001c66:	dc 02       	ji %a2
+80001c68:	00 90       	ret 
+80001c6a:	54 25       	ld.w %d5,[%a2]
+80001c6c:	8f 22 00 30 	sh %d3,%d2,2
+80001c70:	b7 05 10 50 	insert %d5,%d5,0,0,16
+80001c74:	0f 35 a0 20 	or %d2,%d5,%d3
+80001c78:	8f 12 40 21 	or %d2,%d2,1
+80001c7c:	74 22       	st.w [%a2],%d2
+80001c7e:	1d ff 2b ff 	j 80001ad4 <_Core2_start+0xd8>
+80001c82:	54 25       	ld.w %d5,[%a2]
+80001c84:	8f 22 00 30 	sh %d3,%d2,2
+80001c88:	b7 05 10 50 	insert %d5,%d5,0,0,16
+80001c8c:	0f 35 a0 20 	or %d2,%d5,%d3
+80001c90:	8f 12 40 21 	or %d2,%d2,1
+80001c94:	74 22       	st.w [%a2],%d2
+80001c96:	1d ff e7 fe 	j 80001a64 <_Core2_start+0x68>
+
+80001c9a <Ifx_C_Init>:
+80001c9a:	91 00 00 28 	movh.a %a2,32768
+80001c9e:	19 22 24 a0 	ld.w %d2,[%a2]676 <800002a4 <__clear_table>>
+80001ca2:	20 08       	sub.a %sp,8
+80001ca4:	d9 27 24 a0 	lea %a7,[%a2]676
+80001ca8:	74 a2       	st.w [%sp],%d2
+80001caa:	19 72 04 00 	ld.w %d2,[%a7]4
+80001cae:	df f2 6d 00 	jeq %d2,-1,80001d88 <Ifx_C_Init+0xee>
+80001cb2:	82 05       	mov %d5,0
+80001cb4:	d9 77 08 00 	lea %a7,[%a7]8
+80001cb8:	a0 02       	mov.a %a2,0
+80001cba:	a0 03       	mov.a %a3,0
+80001cbc:	02 54       	mov %d4,%d5
+80001cbe:	02 56       	mov %d6,%d5
+80001cc0:	8f d2 1f 30 	sh %d3,%d2,-3
+80001cc4:	60 34       	mov.a %a4,%d3
+80001cc6:	d9 46 ff ff 	lea %a6,[%a4]-1
+80001cca:	df 03 44 00 	jeq %d3,0,80001d52 <Ifx_C_Init+0xb8>
+80001cce:	8f 73 00 31 	and %d3,%d3,7
+80001cd2:	df 03 1f 01 	jeq %d3,0,80001f10 <Ifx_C_Init+0x276>
+80001cd6:	df 13 36 00 	jeq %d3,1,80001d42 <Ifx_C_Init+0xa8>
+80001cda:	df 23 2d 00 	jeq %d3,2,80001d34 <Ifx_C_Init+0x9a>
+80001cde:	df 33 24 00 	jeq %d3,3,80001d26 <Ifx_C_Init+0x8c>
+80001ce2:	df 43 1b 00 	jeq %d3,4,80001d18 <Ifx_C_Init+0x7e>
+80001ce6:	df 53 12 00 	jeq %d3,5,80001d0a <Ifx_C_Init+0x70>
+80001cea:	df 63 09 00 	jeq %d3,6,80001cfc <Ifx_C_Init+0x62>
+80001cee:	d4 a4       	ld.a %a4,[%sp]
+80001cf0:	b0 f6       	add.a %a6,-1
+80001cf2:	d9 45 08 00 	lea %a5,[%a4]8
+80001cf6:	f4 a5       	st.a [%sp],%a5
+80001cf8:	89 42 c0 09 	st.da [%a4],%a2
+80001cfc:	d4 a4       	ld.a %a4,[%sp]
+80001cfe:	b0 f6       	add.a %a6,-1
+80001d00:	d9 45 08 00 	lea %a5,[%a4]8
+80001d04:	f4 a5       	st.a [%sp],%a5
+80001d06:	89 42 c0 09 	st.da [%a4],%a2
+80001d0a:	d4 a4       	ld.a %a4,[%sp]
+80001d0c:	b0 f6       	add.a %a6,-1
+80001d0e:	d9 45 08 00 	lea %a5,[%a4]8
+80001d12:	f4 a5       	st.a [%sp],%a5
+80001d14:	89 42 c0 09 	st.da [%a4],%a2
+80001d18:	d4 a4       	ld.a %a4,[%sp]
+80001d1a:	b0 f6       	add.a %a6,-1
+80001d1c:	d9 45 08 00 	lea %a5,[%a4]8
+80001d20:	f4 a5       	st.a [%sp],%a5
+80001d22:	89 42 c0 09 	st.da [%a4],%a2
+80001d26:	d4 a4       	ld.a %a4,[%sp]
+80001d28:	b0 f6       	add.a %a6,-1
+80001d2a:	d9 45 08 00 	lea %a5,[%a4]8
+80001d2e:	f4 a5       	st.a [%sp],%a5
+80001d30:	89 42 c0 09 	st.da [%a4],%a2
+80001d34:	d4 a4       	ld.a %a4,[%sp]
+80001d36:	b0 f6       	add.a %a6,-1
+80001d38:	d9 45 08 00 	lea %a5,[%a4]8
+80001d3c:	f4 a5       	st.a [%sp],%a5
+80001d3e:	89 42 c0 09 	st.da [%a4],%a2
+80001d42:	d4 a4       	ld.a %a4,[%sp]
+80001d44:	d9 45 08 00 	lea %a5,[%a4]8
+80001d48:	f4 a5       	st.a [%sp],%a5
+80001d4a:	89 42 c0 09 	st.da [%a4],%a2
+80001d4e:	fd 60 e1 00 	loop %a6,80001f10 <Ifx_C_Init+0x276>
+80001d52:	6f 22 07 00 	jz.t %d2,2,80001d60 <Ifx_C_Init+0xc6>
+80001d56:	d4 a4       	ld.a %a4,[%sp]
+80001d58:	d9 45 04 00 	lea %a5,[%a4]4
+80001d5c:	f4 a5       	st.a [%sp],%a5
+80001d5e:	74 45       	st.w [%a4],%d5
+80001d60:	6f 12 07 00 	jz.t %d2,1,80001d6e <Ifx_C_Init+0xd4>
+80001d64:	d4 a4       	ld.a %a4,[%sp]
+80001d66:	d9 45 02 00 	lea %a5,[%a4]2
+80001d6a:	f4 a5       	st.a [%sp],%a5
+80001d6c:	b4 44       	st.h [%a4],%d4
+80001d6e:	6f 02 04 00 	jz.t %d2,0,80001d76 <Ifx_C_Init+0xdc>
+80001d72:	d4 a4       	ld.a %a4,[%sp]
+80001d74:	34 46       	st.b [%a4],%d6
+80001d76:	40 74       	mov.aa %a4,%a7
+80001d78:	54 42       	ld.w %d2,[%a4]
+80001d7a:	d9 77 08 00 	lea %a7,[%a7]8
+80001d7e:	74 a2       	st.w [%sp],%d2
+80001d80:	19 72 fc ff 	ld.w %d2,[%a7]-4
+80001d84:	df f2 9e ff 	jne %d2,-1,80001cc0 <Ifx_C_Init+0x26>
+80001d88:	91 00 00 38 	movh.a %a3,32768
+80001d8c:	19 32 0c c0 	ld.w %d2,[%a3]780 <8000030c <__copy_table>>
+80001d90:	d9 36 0c c0 	lea %a6,[%a3]780 <8000030c <__copy_table>>
+80001d94:	59 a2 04 00 	st.w [%sp]4 <8000030c <__copy_table>>,%d2
+80001d98:	19 62 04 00 	ld.w %d2,[%a6]4 <8000030c <__copy_table>>
+80001d9c:	74 a2       	st.w [%sp],%d2
+80001d9e:	19 62 08 00 	ld.w %d2,[%a6]8 <8000030c <__copy_table>>
+80001da2:	df f2 6f 01 	jeq %d2,-1,80002080 <Ifx_C_Init+0x3e6>
+80001da6:	d9 66 0c 00 	lea %a6,[%a6]12
+80001daa:	8f d2 1f 30 	sh %d3,%d2,-3
+80001dae:	60 32       	mov.a %a2,%d3
+80001db0:	d9 25 ff ff 	lea %a5,[%a2]-1
+80001db4:	df 03 7c 00 	jeq %d3,0,80001eac <Ifx_C_Init+0x212>
+80001db8:	8f 73 00 31 	and %d3,%d3,7
+80001dbc:	df 03 e0 00 	jeq %d3,0,80001f7c <Ifx_C_Init+0x2e2>
+80001dc0:	df 13 66 00 	jeq %d3,1,80001e8c <Ifx_C_Init+0x1f2>
+80001dc4:	df 23 55 00 	jeq %d3,2,80001e6e <Ifx_C_Init+0x1d4>
+80001dc8:	df 33 44 00 	jeq %d3,3,80001e50 <Ifx_C_Init+0x1b6>
+80001dcc:	df 43 33 00 	jeq %d3,4,80001e32 <Ifx_C_Init+0x198>
+80001dd0:	df 53 22 00 	jeq %d3,5,80001e14 <Ifx_C_Init+0x17a>
+80001dd4:	df 63 11 00 	jeq %d3,6,80001df6 <Ifx_C_Init+0x15c>
+80001dd8:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001ddc:	b0 f5       	add.a %a5,-1
+80001dde:	d9 23 08 00 	lea %a3,[%a2]8
+80001de2:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001de6:	d4 a4       	ld.a %a4,[%sp]
+80001de8:	d9 43 08 00 	lea %a3,[%a4]8
+80001dec:	f4 a3       	st.a [%sp],%a3
+80001dee:	09 22 c0 09 	ld.da %a2,[%a2]
+80001df2:	89 42 c0 09 	st.da [%a4],%a2
+80001df6:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001dfa:	b0 f5       	add.a %a5,-1
+80001dfc:	d9 23 08 00 	lea %a3,[%a2]8
+80001e00:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001e04:	d4 a4       	ld.a %a4,[%sp]
+80001e06:	d9 43 08 00 	lea %a3,[%a4]8
+80001e0a:	f4 a3       	st.a [%sp],%a3
+80001e0c:	09 22 c0 09 	ld.da %a2,[%a2]
+80001e10:	89 42 c0 09 	st.da [%a4],%a2
+80001e14:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001e18:	b0 f5       	add.a %a5,-1
+80001e1a:	d9 23 08 00 	lea %a3,[%a2]8
+80001e1e:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001e22:	d4 a4       	ld.a %a4,[%sp]
+80001e24:	d9 43 08 00 	lea %a3,[%a4]8
+80001e28:	f4 a3       	st.a [%sp],%a3
+80001e2a:	09 22 c0 09 	ld.da %a2,[%a2]
+80001e2e:	89 42 c0 09 	st.da [%a4],%a2
+80001e32:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001e36:	b0 f5       	add.a %a5,-1
+80001e38:	d9 23 08 00 	lea %a3,[%a2]8
+80001e3c:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001e40:	d4 a4       	ld.a %a4,[%sp]
+80001e42:	d9 43 08 00 	lea %a3,[%a4]8
+80001e46:	f4 a3       	st.a [%sp],%a3
+80001e48:	09 22 c0 09 	ld.da %a2,[%a2]
+80001e4c:	89 42 c0 09 	st.da [%a4],%a2
+80001e50:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001e54:	b0 f5       	add.a %a5,-1
+80001e56:	d9 23 08 00 	lea %a3,[%a2]8
+80001e5a:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001e5e:	d4 a4       	ld.a %a4,[%sp]
+80001e60:	d9 43 08 00 	lea %a3,[%a4]8
+80001e64:	f4 a3       	st.a [%sp],%a3
+80001e66:	09 22 c0 09 	ld.da %a2,[%a2]
+80001e6a:	89 42 c0 09 	st.da [%a4],%a2
+80001e6e:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001e72:	b0 f5       	add.a %a5,-1
+80001e74:	d9 23 08 00 	lea %a3,[%a2]8
+80001e78:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001e7c:	d4 a4       	ld.a %a4,[%sp]
+80001e7e:	d9 43 08 00 	lea %a3,[%a4]8
+80001e82:	f4 a3       	st.a [%sp],%a3
+80001e84:	09 22 c0 09 	ld.da %a2,[%a2]
+80001e88:	89 42 c0 09 	st.da [%a4],%a2
+80001e8c:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001e90:	d9 23 08 00 	lea %a3,[%a2]8
+80001e94:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001e98:	d4 a4       	ld.a %a4,[%sp]
+80001e9a:	d9 43 08 00 	lea %a3,[%a4]8
+80001e9e:	f4 a3       	st.a [%sp],%a3
+80001ea0:	09 22 c0 09 	ld.da %a2,[%a2]
+80001ea4:	89 42 c0 09 	st.da [%a4],%a2
+80001ea8:	fd 50 6a 00 	loop %a5,80001f7c <Ifx_C_Init+0x2e2>
+80001eac:	6f 22 0e 00 	jz.t %d2,2,80001ec8 <Ifx_C_Init+0x22e>
+80001eb0:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001eb4:	d9 23 04 00 	lea %a3,[%a2]4
+80001eb8:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001ebc:	d4 a3       	ld.a %a3,[%sp]
+80001ebe:	54 23       	ld.w %d3,[%a2]
+80001ec0:	d9 34 04 00 	lea %a4,[%a3]4
+80001ec4:	f4 a4       	st.a [%sp],%a4
+80001ec6:	74 33       	st.w [%a3],%d3
+80001ec8:	6f 12 0f 00 	jz.t %d2,1,80001ee6 <Ifx_C_Init+0x24c>
+80001ecc:	99 a3 04 00 	ld.a %a3,[%sp]4
+80001ed0:	d9 32 02 00 	lea %a2,[%a3]2
+80001ed4:	b5 a2 04 00 	st.a [%sp]4,%a2
+80001ed8:	d4 a2       	ld.a %a2,[%sp]
+80001eda:	b9 33 00 00 	ld.hu %d3,[%a3]0
+80001ede:	d9 24 02 00 	lea %a4,[%a2]2
+80001ee2:	f4 a4       	st.a [%sp],%a4
+80001ee4:	b4 23       	st.h [%a2],%d3
+80001ee6:	6f 02 c1 00 	jz.t %d2,0,80002068 <Ifx_C_Init+0x3ce>
+80001eea:	99 a3 04 00 	ld.a %a3,[%sp]4
+80001eee:	d4 a2       	ld.a %a2,[%sp]
+80001ef0:	d9 66 0c 00 	lea %a6,[%a6]12
+80001ef4:	14 32       	ld.bu %d2,[%a3]
+80001ef6:	34 22       	st.b [%a2],%d2
+80001ef8:	19 62 f4 ff 	ld.w %d2,[%a6]-12
+80001efc:	59 a2 04 00 	st.w [%sp]4,%d2
+80001f00:	19 62 f8 ff 	ld.w %d2,[%a6]-8
+80001f04:	74 a2       	st.w [%sp],%d2
+80001f06:	19 62 fc ff 	ld.w %d2,[%a6]-4
+80001f0a:	df f2 50 ff 	jne %d2,-1,80001daa <Ifx_C_Init+0x110>
+80001f0e:	00 90       	ret 
+80001f10:	d4 a4       	ld.a %a4,[%sp]
+80001f12:	b0 86       	add.a %a6,-8
+80001f14:	80 63       	mov.d %d3,%a6
+80001f16:	d9 45 08 00 	lea %a5,[%a4]8
+80001f1a:	f4 a5       	st.a [%sp],%a5
+80001f1c:	89 42 c0 09 	st.da [%a4],%a2
+80001f20:	d4 a4       	ld.a %a4,[%sp]
+80001f22:	d9 45 08 00 	lea %a5,[%a4]8
+80001f26:	f4 a5       	st.a [%sp],%a5
+80001f28:	89 42 c0 09 	st.da [%a4],%a2
+80001f2c:	d4 a4       	ld.a %a4,[%sp]
+80001f2e:	d9 45 08 00 	lea %a5,[%a4]8
+80001f32:	f4 a5       	st.a [%sp],%a5
+80001f34:	89 42 c0 09 	st.da [%a4],%a2
+80001f38:	d4 a4       	ld.a %a4,[%sp]
+80001f3a:	d9 45 08 00 	lea %a5,[%a4]8
+80001f3e:	f4 a5       	st.a [%sp],%a5
+80001f40:	89 42 c0 09 	st.da [%a4],%a2
+80001f44:	d4 a4       	ld.a %a4,[%sp]
+80001f46:	d9 45 08 00 	lea %a5,[%a4]8
+80001f4a:	f4 a5       	st.a [%sp],%a5
+80001f4c:	89 42 c0 09 	st.da [%a4],%a2
+80001f50:	d4 a4       	ld.a %a4,[%sp]
+80001f52:	d9 45 08 00 	lea %a5,[%a4]8
+80001f56:	f4 a5       	st.a [%sp],%a5
+80001f58:	89 42 c0 09 	st.da [%a4],%a2
+80001f5c:	d4 a4       	ld.a %a4,[%sp]
+80001f5e:	d9 45 08 00 	lea %a5,[%a4]8
+80001f62:	f4 a5       	st.a [%sp],%a5
+80001f64:	89 42 c0 09 	st.da [%a4],%a2
+80001f68:	d4 a4       	ld.a %a4,[%sp]
+80001f6a:	d9 45 08 00 	lea %a5,[%a4]8
+80001f6e:	f4 a5       	st.a [%sp],%a5
+80001f70:	89 42 c0 09 	st.da [%a4],%a2
+80001f74:	df f3 ce ff 	jne %d3,-1,80001f10 <Ifx_C_Init+0x276>
+80001f78:	1d ff ed fe 	j 80001d52 <Ifx_C_Init+0xb8>
+80001f7c:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001f80:	b0 85       	add.a %a5,-8
+80001f82:	80 53       	mov.d %d3,%a5
+80001f84:	d9 23 08 00 	lea %a3,[%a2]8
+80001f88:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001f8c:	d4 a4       	ld.a %a4,[%sp]
+80001f8e:	d9 43 08 00 	lea %a3,[%a4]8
+80001f92:	f4 a3       	st.a [%sp],%a3
+80001f94:	09 22 c0 09 	ld.da %a2,[%a2]
+80001f98:	89 42 c0 09 	st.da [%a4],%a2
+80001f9c:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001fa0:	d9 23 08 00 	lea %a3,[%a2]8
+80001fa4:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001fa8:	d4 a4       	ld.a %a4,[%sp]
+80001faa:	d9 43 08 00 	lea %a3,[%a4]8
+80001fae:	f4 a3       	st.a [%sp],%a3
+80001fb0:	09 22 c0 09 	ld.da %a2,[%a2]
+80001fb4:	89 42 c0 09 	st.da [%a4],%a2
+80001fb8:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001fbc:	d9 23 08 00 	lea %a3,[%a2]8
+80001fc0:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001fc4:	d4 a4       	ld.a %a4,[%sp]
+80001fc6:	d9 43 08 00 	lea %a3,[%a4]8
+80001fca:	f4 a3       	st.a [%sp],%a3
+80001fcc:	09 22 c0 09 	ld.da %a2,[%a2]
+80001fd0:	89 42 c0 09 	st.da [%a4],%a2
+80001fd4:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001fd8:	d9 23 08 00 	lea %a3,[%a2]8
+80001fdc:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001fe0:	d4 a4       	ld.a %a4,[%sp]
+80001fe2:	d9 43 08 00 	lea %a3,[%a4]8
+80001fe6:	f4 a3       	st.a [%sp],%a3
+80001fe8:	09 22 c0 09 	ld.da %a2,[%a2]
+80001fec:	89 42 c0 09 	st.da [%a4],%a2
+80001ff0:	99 a2 04 00 	ld.a %a2,[%sp]4
+80001ff4:	d9 23 08 00 	lea %a3,[%a2]8
+80001ff8:	b5 a3 04 00 	st.a [%sp]4,%a3
+80001ffc:	d4 a4       	ld.a %a4,[%sp]
+80001ffe:	d9 43 08 00 	lea %a3,[%a4]8
+80002002:	f4 a3       	st.a [%sp],%a3
+80002004:	09 22 c0 09 	ld.da %a2,[%a2]
+80002008:	89 42 c0 09 	st.da [%a4],%a2
+8000200c:	99 a2 04 00 	ld.a %a2,[%sp]4
+80002010:	d9 23 08 00 	lea %a3,[%a2]8
+80002014:	b5 a3 04 00 	st.a [%sp]4,%a3
+80002018:	d4 a4       	ld.a %a4,[%sp]
+8000201a:	d9 43 08 00 	lea %a3,[%a4]8
+8000201e:	f4 a3       	st.a [%sp],%a3
+80002020:	09 22 c0 09 	ld.da %a2,[%a2]
+80002024:	89 42 c0 09 	st.da [%a4],%a2
+80002028:	99 a2 04 00 	ld.a %a2,[%sp]4
+8000202c:	d9 23 08 00 	lea %a3,[%a2]8
+80002030:	b5 a3 04 00 	st.a [%sp]4,%a3
+80002034:	d4 a4       	ld.a %a4,[%sp]
+80002036:	d9 43 08 00 	lea %a3,[%a4]8
+8000203a:	f4 a3       	st.a [%sp],%a3
+8000203c:	09 22 c0 09 	ld.da %a2,[%a2]
+80002040:	89 42 c0 09 	st.da [%a4],%a2
+80002044:	99 a2 04 00 	ld.a %a2,[%sp]4
+80002048:	d9 23 08 00 	lea %a3,[%a2]8
+8000204c:	b5 a3 04 00 	st.a [%sp]4,%a3
+80002050:	d4 a4       	ld.a %a4,[%sp]
+80002052:	d9 43 08 00 	lea %a3,[%a4]8
+80002056:	f4 a3       	st.a [%sp],%a3
+80002058:	09 22 c0 09 	ld.da %a2,[%a2]
+8000205c:	89 42 c0 09 	st.da [%a4],%a2
+80002060:	df f3 8e ff 	jne %d3,-1,80001f7c <Ifx_C_Init+0x2e2>
+80002064:	1d ff 24 ff 	j 80001eac <Ifx_C_Init+0x212>
+80002068:	54 62       	ld.w %d2,[%a6]
+8000206a:	59 a2 04 00 	st.w [%sp]4,%d2
+8000206e:	d9 66 0c 00 	lea %a6,[%a6]12
+80002072:	19 62 f8 ff 	ld.w %d2,[%a6]-8
+80002076:	74 a2       	st.w [%sp],%d2
+80002078:	19 62 fc ff 	ld.w %d2,[%a6]-4
+8000207c:	df f2 97 fe 	jne %d2,-1,80001daa <Ifx_C_Init+0x110>
+80002080:	00 90       	ret 
+
+80002082 <initGPIO>:
+80002082:	91 40 00 2f 	movh.a %a2,61444
+80002086:	19 22 10 8a 	ld.w %d2,[%a2]-24048 <f003a210 <_SMALL_DATA4_+0x60032210>>
+8000208a:	91 40 00 4f 	movh.a %a4,61444
+8000208e:	b7 02 85 25 	insert %d2,%d2,0,11,5
+80002092:	d9 22 10 8a 	lea %a2,[%a2]-24048 <f003a210 <_SMALL_DATA4_+0x60032210>>
+80002096:	3b 00 01 50 	mov %d5,16
+8000209a:	82 44       	mov %d4,4
+8000209c:	74 22       	st.w [%a2],%d2
+8000209e:	54 22       	ld.w %d2,[%a2]
+800020a0:	d9 44 00 8d 	lea %a4,[%a4]-11776 <f003d200 <_SMALL_DATA4_+0x60035200>>
+800020a4:	b7 f2 01 26 	insert %d2,%d2,15,12,1
+800020a8:	74 22       	st.w [%a2],%d2
+800020aa:	6d ff 1d f7 	call 80000ee4 <IfxPort_setPinMode>
+800020ae:	00 90       	ret 
+
+800020b0 <core0_main>:
+800020b0:	20 38       	sub.a %sp,56
+800020b2:	0d 00 00 03 	enable 
+800020b6:	6d ff b6 f6 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+800020ba:	02 24       	mov %d4,%d2
+800020bc:	6d ff b1 f5 	call 80000c1e <IfxScuWdt_disableCpuWatchdog>
+800020c0:	6d ff c2 f6 	call 80000e44 <IfxScuWdt_getSafetyWatchdogPassword>
+800020c4:	02 24       	mov %d4,%d2
+800020c6:	91 00 00 c6 	movh.a %a12,24576
+800020ca:	6d ff e9 f5 	call 80000c9c <IfxScuWdt_disableSafetyWatchdog>
+800020ce:	d9 cc 10 00 	lea %a12,[%a12]16 <60000010 <g_cpuSyncEvent>>
+800020d2:	40 c4       	mov.aa %a4,%a12
+800020d4:	6d ff bf f9 	call 80001452 <IfxCpu_emitEvent>
+800020d8:	82 14       	mov %d4,1
+800020da:	40 c4       	mov.aa %a4,%a12
+800020dc:	6d ff 7b f9 	call 800013d2 <IfxCpu_waitEvent>
+800020e0:	91 40 00 2f 	movh.a %a2,61444
+800020e4:	19 22 10 0b 	ld.w %d2,[%a2]-20464 <f003b010 <_SMALL_DATA4_+0x60033010>>
+800020e8:	d9 22 10 0b 	lea %a2,[%a2]-20464 <f003b010 <_SMALL_DATA4_+0x60033010>>
+800020ec:	b7 02 85 29 	insert %d2,%d2,0,19,5
+800020f0:	74 22       	st.w [%a2],%d2
+800020f2:	54 22       	ld.w %d2,[%a2]
+800020f4:	b7 f2 81 2b 	insert %d2,%d2,15,23,1
+800020f8:	74 22       	st.w [%a2],%d2
+800020fa:	54 22       	ld.w %d2,[%a2]
+800020fc:	b7 02 85 25 	insert %d2,%d2,0,11,5
+80002100:	74 22       	st.w [%a2],%d2
+80002102:	54 22       	ld.w %d2,[%a2]
+80002104:	b7 f2 81 27 	insert %d2,%d2,15,15,1
+80002108:	74 22       	st.w [%a2],%d2
+8000210a:	6d ff bc ff 	call 80002082 <initGPIO>
+8000210e:	91 c0 00 5f 	movh.a %a5,61452
+80002112:	d9 a4 04 00 	lea %a4,[%sp]4
+80002116:	6d ff 3d f7 	call 80000f90 <IfxI2c_I2c_initConfig>
+8000211a:	3b 40 06 40 	mov %d4,100
+8000211e:	6d ff 15 f7 	call 80000f48 <delay>
+80002122:	91 40 00 3f 	movh.a %a3,61444
+80002126:	91 40 00 2f 	movh.a %a2,61444
+8000212a:	d9 33 24 8a 	lea %a3,[%a3]-24028 <f003a224 <_SMALL_DATA4_+0x60032224>>
+8000212e:	d9 22 00 0b 	lea %a2,[%a2]-20480 <f003b000 <_SMALL_DATA4_+0x60033000>>
+80002132:	82 24       	mov %d4,2
+80002134:	82 43       	mov %d3,4
+80002136:	54 32       	ld.w %d2,[%a3]
+80002138:	6f 12 06 80 	jnz.t %d2,1,80002144 <core0_main+0x94>
+8000213c:	74 23       	st.w [%a2],%d3
+8000213e:	54 32       	ld.w %d2,[%a3]
+80002140:	6f 12 fe 7f 	jz.t %d2,1,8000213c <core0_main+0x8c>
+80002144:	74 24       	st.w [%a2],%d4
+80002146:	1d ff f8 ff 	j 80002136 <core0_main+0x86>
+
+8000214a <core1_main>:
+8000214a:	0d 00 00 03 	enable 
+8000214e:	6d ff 6a f6 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+80002152:	02 24       	mov %d4,%d2
+80002154:	91 00 00 c6 	movh.a %a12,24576
+80002158:	6d ff 63 f5 	call 80000c1e <IfxScuWdt_disableCpuWatchdog>
+8000215c:	d9 cc 10 00 	lea %a12,[%a12]16 <60000010 <g_cpuSyncEvent>>
+80002160:	40 c4       	mov.aa %a4,%a12
+80002162:	6d ff 78 f9 	call 80001452 <IfxCpu_emitEvent>
+80002166:	82 14       	mov %d4,1
+80002168:	40 c4       	mov.aa %a4,%a12
+8000216a:	6d ff 34 f9 	call 800013d2 <IfxCpu_waitEvent>
+8000216e:	1d 00 00 00 	j 8000216e <core1_main+0x24>
+
+80002172 <core2_main>:
+80002172:	0d 00 00 03 	enable 
+80002176:	6d ff 56 f6 	call 80000e22 <IfxScuWdt_getCpuWatchdogPassword>
+8000217a:	02 24       	mov %d4,%d2
+8000217c:	91 00 00 c6 	movh.a %a12,24576
+80002180:	6d ff 4f f5 	call 80000c1e <IfxScuWdt_disableCpuWatchdog>
+80002184:	d9 cc 10 00 	lea %a12,[%a12]16 <60000010 <g_cpuSyncEvent>>
+80002188:	40 c4       	mov.aa %a4,%a12
+8000218a:	6d ff 64 f9 	call 80001452 <IfxCpu_emitEvent>
+8000218e:	82 14       	mov %d4,1
+80002190:	40 c4       	mov.aa %a4,%a12
+80002192:	6d ff 20 f9 	call 800013d2 <IfxCpu_waitEvent>
+80002196:	1d 00 00 00 	j 80002196 <core2_main+0x24>
+
+8000219a <__divdf3>:
+8000219a:	20 38       	sub.a %sp,56
+8000219c:	d9 a5 10 00 	lea %a5,[%sp]16
+800021a0:	40 a4       	mov.aa %a4,%sp
+800021a2:	89 a4 40 09 	st.d [%sp],%e4
+800021a6:	89 a6 48 09 	st.d [%sp]8,%e6
+800021aa:	6d 00 d5 01 	call 80002554 <__unpack_d>
+800021ae:	d9 a5 24 00 	lea %a5,[%sp]36
+800021b2:	d9 a4 08 00 	lea %a4,[%sp]8
+800021b6:	6d 00 cf 01 	call 80002554 <__unpack_d>
+800021ba:	19 a2 10 00 	ld.w %d2,[%sp]16
+800021be:	ff 22 07 80 	jge.u %d2,2,800021cc <__divdf3+0x32>
+800021c2:	d9 a4 10 00 	lea %a4,[%sp]16
+800021c6:	6d 00 f8 00 	call 800023b6 <__pack_d>
+800021ca:	00 90       	ret 
+800021cc:	19 a3 24 00 	ld.w %d3,[%sp]36
+800021d0:	d9 a4 24 00 	lea %a4,[%sp]36
+800021d4:	bf 23 f9 ff 	jlt.u %d3,2,800021c6 <__divdf3+0x2c>
+800021d8:	19 a5 14 00 	ld.w %d5,[%sp]20
+800021dc:	19 a4 28 00 	ld.w %d4,[%sp]40
+800021e0:	c6 54       	xor %d4,%d5
+800021e2:	59 a4 14 00 	st.w [%sp]20,%d4
+800021e6:	1b e2 ff 4f 	addi %d4,%d2,-2
+800021ea:	8f 24 c0 41 	andn %d4,%d4,2
+800021ee:	df 04 0a 80 	jne %d4,0,80002202 <__divdf3+0x68>
+800021f2:	91 00 00 48 	movh.a %a4,32768
+800021f6:	d9 44 00 80 	lea %a4,[%a4]512 <80000200 <__thenan_df>>
+800021fa:	5f 32 e4 ff 	jne %d2,%d3,800021c2 <__divdf3+0x28>
+800021fe:	1d ff e4 ff 	j 800021c6 <__divdf3+0x2c>
+80002202:	df 43 51 00 	jeq %d3,4,800022a4 <__divdf3+0x10a>
+80002206:	df 23 5a 00 	jeq %d3,2,800022ba <__divdf3+0x120>
+8000220a:	19 a3 18 00 	ld.w %d3,[%sp]24
+8000220e:	19 a2 2c 00 	ld.w %d2,[%sp]44
+80002212:	09 a4 70 09 	ld.d %e4,[%sp]48
+80002216:	0b 23 80 00 	sub %d0,%d3,%d2
+8000221a:	09 a2 5c 09 	ld.d %e2,[%sp]28
+8000221e:	0b 53 00 61 	eq %d6,%d3,%d5
+80002222:	02 67       	mov %d7,%d6
+80002224:	0b 42 50 72 	and.ge.u %d7,%d2,%d4
+80002228:	59 a0 18 00 	st.w [%sp]24,%d0
+8000222c:	0b 35 a0 72 	or.lt.u %d7,%d5,%d3
+80002230:	df 07 0b 80 	jne %d7,0,80002246 <__divdf3+0xac>
+80002234:	1b f0 ff 6f 	addi %d6,%d0,-1
+80002238:	77 23 80 30 	dextr %d3,%d3,%d2,1
+8000223c:	06 12       	sh %d2,1
+8000223e:	59 a6 18 00 	st.w [%sp]24,%d6
+80002242:	0b 53 00 61 	eq %d6,%d3,%d5
+80002246:	3b d0 03 10 	mov %d1,61
+8000224a:	d2 08       	mov %e8,0
+8000224c:	82 00       	mov %d0,0
+8000224e:	7b 00 00 71 	movh %d7,4096
+80002252:	1d 00 04 00 	j 8000225a <__divdf3+0xc0>
+80002256:	0b 53 00 61 	eq %d6,%d3,%d5
+8000225a:	0b 42 30 62 	and.lt.u %d6,%d2,%d4
+8000225e:	0b 53 a0 62 	or.lt.u %d6,%d3,%d5
+80002262:	df 06 0c 80 	jne %d6,0,8000227a <__divdf3+0xe0>
+80002266:	0f 08 a0 a0 	or %d10,%d8,%d0
+8000226a:	0f 79 a0 60 	or %d6,%d9,%d7
+8000226e:	0b 42 c0 20 	subx %d2,%d2,%d4
+80002272:	0b a6 10 88 	mov %e8,%d6,%d10
+80002276:	0b 53 d0 30 	subc %d3,%d3,%d5
+8000227a:	c2 f1       	add %d1,-1
+8000227c:	77 07 80 0f 	dextr %d0,%d7,%d0,31
+80002280:	77 23 80 30 	dextr %d3,%d3,%d2,1
+80002284:	06 f7       	sh %d7,-1
+80002286:	06 12       	sh %d2,1
+80002288:	df 01 e7 ff 	jne %d1,0,80002256 <__divdf3+0xbc>
+8000228c:	8f f8 0f 41 	and %d4,%d8,255
+80002290:	8b 04 28 42 	ne %d4,%d4,128
+80002294:	df 04 1a 00 	jeq %d4,0,800022c8 <__divdf3+0x12e>
+80002298:	59 a8 1c 00 	st.w [%sp]28,%d8
+8000229c:	59 a9 20 00 	st.w [%sp]32,%d9
+800022a0:	1d ff 91 ff 	j 800021c2 <__divdf3+0x28>
+800022a4:	82 02       	mov %d2,0
+800022a6:	a0 02       	mov.a %a2,0
+800022a8:	a0 03       	mov.a %a3,0
+800022aa:	89 a2 dc 09 	st.da [%sp]28,%a2
+800022ae:	59 a2 18 00 	st.w [%sp]24,%d2
+800022b2:	d9 a4 10 00 	lea %a4,[%sp]16
+800022b6:	1d ff 88 ff 	j 800021c6 <__divdf3+0x2c>
+800022ba:	82 42       	mov %d2,4
+800022bc:	d9 a4 10 00 	lea %a4,[%sp]16
+800022c0:	59 a2 10 00 	st.w [%sp]16,%d2
+800022c4:	1d ff 81 ff 	j 800021c6 <__divdf3+0x2c>
+800022c8:	a6 32       	or %d2,%d3
+800022ca:	77 89 00 4c 	dextr %d4,%d9,%d8,24
+800022ce:	8b 02 20 32 	ne %d3,%d2,0
+800022d2:	0f 43 e0 20 	andn %d2,%d3,%d4
+800022d6:	df 02 e1 7f 	jeq %d2,0,80002298 <__divdf3+0xfe>
+800022da:	8b 08 88 80 	addx %d8,%d8,128
+800022de:	8b 09 a0 90 	addc %d9,%d9,0
+800022e2:	8f f8 cf 81 	andn %d8,%d8,255
+800022e6:	1d ff d9 ff 	j 80002298 <__divdf3+0xfe>
+
+800022ea <__floatsidf>:
+800022ea:	82 32       	mov %d2,3
+800022ec:	20 18       	sub.a %sp,24
+800022ee:	59 a2 04 00 	st.w [%sp]4,%d2
+800022f2:	8f 14 1e 20 	sh %d2,%d4,-31
+800022f6:	59 a2 08 00 	st.w [%sp]8,%d2
+800022fa:	df 04 0e 80 	jne %d4,0,80002316 <__floatsidf+0x2c>
+800022fe:	82 22       	mov %d2,2
+80002300:	59 a2 04 00 	st.w [%sp]4,%d2
+80002304:	d9 a4 04 00 	lea %a4,[%sp]4
+80002308:	6d 00 57 00 	call 800023b6 <__pack_d>
+8000230c:	60 25       	mov.a %a5,%d2
+8000230e:	60 34       	mov.a %a4,%d3
+80002310:	80 52       	mov.d %d2,%a5
+80002312:	80 43       	mov.d %d3,%a4
+80002314:	00 90       	ret 
+80002316:	ff 04 0a 00 	jge %d4,0,8000232a <__floatsidf+0x40>
+8000231a:	7b 00 00 28 	movh %d2,32768
+8000231e:	a0 05       	mov.a %a5,0
+80002320:	91 00 1e 4c 	movh.a %a4,49632
+80002324:	5f 24 f6 7f 	jeq %d4,%d2,80002310 <__floatsidf+0x26>
+80002328:	32 54       	rsub %d4
+8000232a:	0f 04 b0 61 	clz %d6,%d4
+8000232e:	1b d6 01 60 	addi %d6,%d6,29
+80002332:	8f f6 01 21 	and %d2,%d6,31
+80002336:	82 05       	mov %d5,0
+80002338:	8b 06 82 72 	ge %d7,%d6,32
+8000233c:	17 45 80 32 	dextr %d3,%d5,%d4,%d2
+80002340:	0f 24 00 20 	sh %d2,%d4,%d2
+80002344:	2b 23 50 37 	seln %d3,%d7,%d3,%d2
+80002348:	8b c6 03 61 	rsub %d6,%d6,60
+8000234c:	ab 02 a0 27 	seln %d2,%d7,%d2,0
+80002350:	59 a3 14 00 	st.w [%sp]20,%d3
+80002354:	59 a6 0c 00 	st.w [%sp]12,%d6
+80002358:	59 a2 10 00 	st.w [%sp]16,%d2
+8000235c:	1d ff d4 ff 	j 80002304 <__floatsidf+0x1a>
+
+80002360 <__truncdfsf2>:
+80002360:	20 20       	sub.a %sp,32
+80002362:	d9 a5 0c 00 	lea %a5,[%sp]12
+80002366:	d9 a4 04 00 	lea %a4,[%sp]4
+8000236a:	89 a4 44 09 	st.d [%sp]4,%e4
+8000236e:	6d 00 f3 00 	call 80002554 <__unpack_d>
+80002372:	19 a3 18 00 	ld.w %d3,[%sp]24
+80002376:	19 a2 1c 00 	ld.w %d2,[%sp]28
+8000237a:	77 32 00 21 	dextr %d2,%d2,%d3,2
+8000237e:	b7 03 02 3f 	insert %d3,%d3,0,30,2
+80002382:	02 27       	mov %d7,%d2
+80002384:	df 03 04 00 	jeq %d3,0,8000238c <__truncdfsf2+0x2c>
+80002388:	8f 12 40 71 	or %d7,%d2,1
+8000238c:	19 a6 14 00 	ld.w %d6,[%sp]20
+80002390:	19 a5 10 00 	ld.w %d5,[%sp]16
+80002394:	19 a4 0c 00 	ld.w %d4,[%sp]12
+80002398:	6d 00 03 00 	call 8000239e <__make_fp>
+8000239c:	00 90       	ret 
+
+8000239e <__make_fp>:
+8000239e:	20 10       	sub.a %sp,16
+800023a0:	40 a4       	mov.aa %a4,%sp
+800023a2:	74 a4       	st.w [%sp],%d4
+800023a4:	59 a5 04 00 	st.w [%sp]4,%d5
+800023a8:	59 a6 08 00 	st.w [%sp]8,%d6
+800023ac:	59 a7 0c 00 	st.w [%sp]12,%d7
+800023b0:	6d 00 31 01 	call 80002612 <__pack_f>
+800023b4:	00 90       	ret 
+
+800023b6 <__pack_d>:
+800023b6:	54 44       	ld.w %d4,[%a4]
+800023b8:	19 43 0c 00 	ld.w %d3,[%a4]12
+800023bc:	19 42 10 00 	ld.w %d2,[%a4]16
+800023c0:	19 41 04 00 	ld.w %d1,[%a4]4
+800023c4:	bf 24 56 80 	jlt.u %d4,2,80002470 <__pack_d+0xba>
+800023c8:	7b 00 ff 57 	movh %d5,32752
+800023cc:	d2 06       	mov %e6,0
+800023ce:	df 44 0b 00 	jeq %d4,4,800023e4 <__pack_d+0x2e>
+800023d2:	0f 23 a0 50 	or %d5,%d3,%d2
+800023d6:	8b 05 00 02 	eq %d0,%d5,0
+800023da:	8b 24 e0 04 	or.eq %d0,%d4,2
+800023de:	82 05       	mov %d5,0
+800023e0:	df 00 0c 00 	jeq %d0,0,800023f8 <__pack_d+0x42>
+800023e4:	0b 10 00 28 	mov %e2,%d1
+800023e8:	a6 75       	or %d5,%d7
+800023ea:	8f f2 01 20 	sh %d2,%d2,31
+800023ee:	0f 25 a0 40 	or %d4,%d5,%d2
+800023f2:	02 43       	mov %d3,%d4
+800023f4:	02 62       	mov %d2,%d6
+800023f6:	00 90       	ret 
+800023f8:	19 44 08 00 	ld.w %d4,[%a4]8
+800023fc:	3b 20 c0 0f 	mov %d0,-1022
+80002400:	3f 04 41 00 	jlt %d4,%d0,80002482 <__pack_d+0xcc>
+80002404:	3b 00 40 00 	mov %d0,1024
+80002408:	7b 00 ff 57 	movh %d5,32752
+8000240c:	7f 04 ec 7f 	jge %d4,%d0,800023e4 <__pack_d+0x2e>
+80002410:	8f f3 0f 51 	and %d5,%d3,255
+80002414:	8b 05 28 52 	ne %d5,%d5,128
+80002418:	df 05 1b 00 	jeq %d5,0,8000244e <__pack_d+0x98>
+8000241c:	8b f3 87 30 	addx %d3,%d3,127
+80002420:	8b 02 a0 20 	addc %d2,%d2,0
+80002424:	7b 00 00 52 	movh %d5,8192
+80002428:	0b 25 30 61 	lt.u %d6,%d5,%d2
+8000242c:	0b 25 70 62 	or.eq %d6,%d5,%d2
+80002430:	df 06 19 80 	jne %d6,0,80002462 <__pack_d+0xac>
+80002434:	1b f4 3f 40 	addi %d4,%d4,1023
+80002438:	0b 40 00 48 	mov %e4,%d4
+8000243c:	77 32 00 6c 	dextr %d6,%d2,%d3,24
+80002440:	06 82       	sh %d2,-8
+80002442:	b7 02 0c 7a 	insert %d7,%d2,0,20,12
+80002446:	8f 44 01 50 	sh %d5,%d4,20
+8000244a:	1d ff cd ff 	j 800023e4 <__pack_d+0x2e>
+8000244e:	8f 03 10 51 	and %d5,%d3,256
+80002452:	df 05 e9 7f 	jeq %d5,0,80002424 <__pack_d+0x6e>
+80002456:	8b 03 88 30 	addx %d3,%d3,128
+8000245a:	8b 02 a0 20 	addc %d2,%d2,0
+8000245e:	1d ff e3 ff 	j 80002424 <__pack_d+0x6e>
+80002462:	77 32 80 3f 	dextr %d3,%d2,%d3,31
+80002466:	1b 04 40 40 	addi %d4,%d4,1024
+8000246a:	06 f2       	sh %d2,-1
+8000246c:	1d ff e6 ff 	j 80002438 <__pack_d+0x82>
+80002470:	77 32 00 6c 	dextr %d6,%d2,%d3,24
+80002474:	06 82       	sh %d2,-8
+80002476:	b7 12 8d 79 	insert %d7,%d2,1,19,13
+8000247a:	7b 00 ff 57 	movh %d5,32752
+8000247e:	1d ff b3 ff 	j 800023e4 <__pack_d+0x2e>
+80002482:	0b 40 80 40 	sub %d4,%d0,%d4
+80002486:	8b 94 83 02 	ge %d0,%d4,57
+8000248a:	df 00 ad ff 	jne %d0,0,800023e4 <__pack_d+0x2e>
+8000248e:	8b 04 82 52 	ge %d5,%d4,32
+80002492:	2b 23 50 05 	seln %d0,%d5,%d3,%d2
+80002496:	ab 02 a0 75 	seln %d7,%d5,%d2,0
+8000249a:	8f f4 01 51 	and %d5,%d4,31
+8000249e:	8b 05 02 61 	rsub %d6,%d5,32
+800024a2:	17 07 80 66 	dextr %d6,%d7,%d0,%d6
+800024a6:	2b 06 40 65 	sel %d6,%d5,%d6,%d0
+800024aa:	8b 04 82 82 	ge %d8,%d4,32
+800024ae:	32 55       	rsub %d5
+800024b0:	02 60       	mov %d0,%d6
+800024b2:	8f f4 01 41 	and %d4,%d4,31
+800024b6:	82 f6       	mov %d6,-1
+800024b8:	0f 57 00 70 	sh %d7,%d7,%d5
+800024bc:	17 66 80 54 	dextr %d5,%d6,%d6,%d4
+800024c0:	0f 46 00 40 	sh %d4,%d6,%d4
+800024c4:	2b 45 50 58 	seln %d5,%d8,%d5,%d4
+800024c8:	ab 04 a0 48 	seln %d4,%d8,%d4,0
+800024cc:	0f 43 e0 30 	andn %d3,%d3,%d4
+800024d0:	0f 52 e0 20 	andn %d2,%d2,%d5
+800024d4:	a6 32       	or %d2,%d3
+800024d6:	02 03       	mov %d3,%d0
+800024d8:	8b 02 00 35 	or.ne %d3,%d2,0
+800024dc:	8f f3 0f 51 	and %d5,%d3,255
+800024e0:	82 12       	mov %d2,1
+800024e2:	8b 05 08 24 	and.eq %d2,%d5,128
+800024e6:	02 74       	mov %d4,%d7
+800024e8:	df 02 14 80 	jne %d2,0,80002510 <__pack_d+0x15a>
+800024ec:	8b f3 87 30 	addx %d3,%d3,127
+800024f0:	8b 07 a0 20 	addc %d2,%d7,0
+800024f4:	77 32 00 6c 	dextr %d6,%d2,%d3,24
+800024f8:	7b 00 00 31 	movh %d3,4096
+800024fc:	8f 82 1f 70 	sh %d7,%d2,-8
+80002500:	0b 32 50 21 	ge.u %d2,%d2,%d3
+80002504:	b7 07 0c 7a 	insert %d7,%d7,0,20,12
+80002508:	8f 42 01 50 	sh %d5,%d2,20
+8000250c:	1d ff 6c ff 	j 800023e4 <__pack_d+0x2e>
+80002510:	8b 03 88 60 	addx %d6,%d3,128
+80002514:	8b 07 a0 20 	addc %d2,%d7,0
+80002518:	7b 00 00 a1 	movh %d10,4096
+8000251c:	8f 82 1f 70 	sh %d7,%d2,-8
+80002520:	77 62 00 6c 	dextr %d6,%d2,%d6,24
+80002524:	0b a2 50 21 	ge.u %d2,%d2,%d10
+80002528:	53 12 40 80 	mul.u %e8,%d2,1
+8000252c:	8f 03 10 01 	and %d0,%d3,256
+80002530:	b7 07 0c 7a 	insert %d7,%d7,0,20,12
+80002534:	8f 48 01 50 	sh %d5,%d8,20
+80002538:	df 00 56 ff 	jne %d0,0,800023e4 <__pack_d+0x2e>
+8000253c:	8f 84 1f 70 	sh %d7,%d4,-8
+80002540:	0b a4 50 21 	ge.u %d2,%d4,%d10
+80002544:	77 34 00 6c 	dextr %d6,%d4,%d3,24
+80002548:	b7 07 0c 7a 	insert %d7,%d7,0,20,12
+8000254c:	8f 42 01 50 	sh %d5,%d2,20
+80002550:	1d ff 4a ff 	j 800023e4 <__pack_d+0x2e>
+
+80002554 <__unpack_d>:
+80002554:	09 48 40 09 	ld.d %e8,[%a4]
+80002558:	3b f0 7f 00 	mov %d0,2047
+8000255c:	8f 19 1e 70 	sh %d7,%d9,-31
+80002560:	37 09 6b 5a 	extr.u %d5,%d9,20,11
+80002564:	b7 09 0c 6a 	insert %d6,%d9,0,20,12
+80002568:	59 57 04 00 	st.w [%a5]4,%d7
+8000256c:	df 05 26 80 	jne %d5,0,800025b8 <__unpack_d+0x64>
+80002570:	8b 08 20 22 	ne %d2,%d8,0
+80002574:	8b 06 00 25 	or.ne %d2,%d6,0
+80002578:	df 02 33 00 	jeq %d2,0,800025de <__unpack_d+0x8a>
+8000257c:	82 32       	mov %d2,3
+8000257e:	77 86 00 34 	dextr %d3,%d6,%d8,8
+80002582:	8f 88 00 40 	sh %d4,%d8,8
+80002586:	74 52       	st.w [%a5],%d2
+80002588:	3b 10 c0 5f 	mov %d5,-1023
+8000258c:	7b 00 00 61 	movh %d6,4096
+80002590:	77 43 80 30 	dextr %d3,%d3,%d4,1
+80002594:	02 57       	mov %d7,%d5
+80002596:	0b 63 00 21 	eq %d2,%d3,%d6
+8000259a:	b7 02 01 20 	insert %d2,%d2,0,0,1
+8000259e:	06 14       	sh %d4,1
+800025a0:	0b 63 a0 22 	or.lt.u %d2,%d3,%d6
+800025a4:	c2 f5       	add %d5,-1
+800025a6:	df 02 f5 ff 	jne %d2,0,80002590 <__unpack_d+0x3c>
+800025aa:	59 57 08 00 	st.w [%a5]8,%d7
+800025ae:	59 54 0c 00 	st.w [%a5]12,%d4
+800025b2:	59 53 10 00 	st.w [%a5]16,%d3
+800025b6:	00 90       	ret 
+800025b8:	5f 05 16 00 	jeq %d5,%d0,800025e4 <__unpack_d+0x90>
+800025bc:	82 32       	mov %d2,3
+800025be:	1b 15 c0 5f 	addi %d5,%d5,-1023
+800025c2:	8f 88 00 40 	sh %d4,%d8,8
+800025c6:	74 52       	st.w [%a5],%d2
+800025c8:	77 86 00 24 	dextr %d2,%d6,%d8,8
+800025cc:	59 55 08 00 	st.w [%a5]8,%d5
+800025d0:	b7 f2 01 2e 	insert %d2,%d2,15,28,1
+800025d4:	59 54 0c 00 	st.w [%a5]12,%d4
+800025d8:	59 52 10 00 	st.w [%a5]16,%d2
+800025dc:	00 90       	ret 
+800025de:	82 22       	mov %d2,2
+800025e0:	74 52       	st.w [%a5],%d2
+800025e2:	00 90       	ret 
+800025e4:	8b 08 20 52 	ne %d5,%d8,0
+800025e8:	8b 06 00 55 	or.ne %d5,%d6,0
+800025ec:	df 05 05 80 	jne %d5,0,800025f6 <__unpack_d+0xa2>
+800025f0:	82 42       	mov %d2,4
+800025f2:	74 52       	st.w [%a5],%d2
+800025f4:	00 90       	ret 
+800025f6:	77 89 00 34 	dextr %d3,%d9,%d8,8
+800025fa:	37 09 e1 49 	extr.u %d4,%d9,19,1
+800025fe:	b7 03 85 3d 	insert %d3,%d3,0,27,5
+80002602:	8f 88 00 20 	sh %d2,%d8,8
+80002606:	74 54       	st.w [%a5],%d4
+80002608:	59 52 0c 00 	st.w [%a5]12,%d2
+8000260c:	59 53 10 00 	st.w [%a5]16,%d3
+80002610:	00 90       	ret 
+
+80002612 <__pack_f>:
+80002612:	54 44       	ld.w %d4,[%a4]
+80002614:	19 43 0c 00 	ld.w %d3,[%a4]12
+80002618:	19 47 04 00 	ld.w %d7,[%a4]4
+8000261c:	bf 24 3f 80 	jlt.u %d4,2,8000269a <__pack_f+0x88>
+80002620:	7b 00 f8 57 	movh %d5,32640
+80002624:	82 06       	mov %d6,0
+80002626:	df 44 09 00 	jeq %d4,4,80002638 <__pack_f+0x26>
+8000262a:	8b 03 00 22 	eq %d2,%d3,0
+8000262e:	8b 24 e0 24 	or.eq %d2,%d4,2
+80002632:	82 05       	mov %d5,0
+80002634:	df 02 08 00 	jeq %d2,0,80002644 <__pack_f+0x32>
+80002638:	8f f7 01 70 	sh %d7,%d7,31
+8000263c:	0f 56 a0 20 	or %d2,%d6,%d5
+80002640:	a6 72       	or %d2,%d7
+80002642:	00 90       	ret 
+80002644:	19 42 08 00 	ld.w %d2,[%a4]8
+80002648:	8b 22 98 42 	ge %d4,%d2,-126
+8000264c:	df 04 33 00 	jeq %d4,0,800026b2 <__pack_f+0xa0>
+80002650:	8b 02 88 42 	ge %d4,%d2,128
+80002654:	7b 00 f8 57 	movh %d5,32640
+80002658:	df 04 f0 ff 	jne %d4,0,80002638 <__pack_f+0x26>
+8000265c:	8f f3 07 51 	and %d5,%d3,127
+80002660:	8f 03 08 41 	and %d4,%d3,128
+80002664:	8b 05 24 52 	ne %d5,%d5,64
+80002668:	ab 03 04 44 	cadd %d4,%d4,%d3,64
+8000266c:	1b f3 03 30 	addi %d3,%d3,63
+80002670:	2b 43 40 35 	sel %d3,%d5,%d3,%d4
+80002674:	1b f2 07 50 	addi %d5,%d2,127
+80002678:	bf 03 0c 00 	jlt %d3,0,80002690 <__pack_f+0x7e>
+8000267c:	37 03 f7 63 	extr.u %d6,%d3,7,23
+80002680:	8f 75 01 50 	sh %d5,%d5,23
+80002684:	8f f7 01 70 	sh %d7,%d7,31
+80002688:	0f 56 a0 20 	or %d2,%d6,%d5
+8000268c:	a6 72       	or %d2,%d7
+8000268e:	00 90       	ret 
+80002690:	06 f3       	sh %d3,-1
+80002692:	1b 02 08 50 	addi %d5,%d2,128
+80002696:	1d ff f3 ff 	j 8000267c <__pack_f+0x6a>
+8000269a:	37 03 f6 33 	extr.u %d3,%d3,7,22
+8000269e:	7b 00 f8 57 	movh %d5,32640
+800026a2:	b7 f3 01 6b 	insert %d6,%d3,15,22,1
+800026a6:	8f f7 01 70 	sh %d7,%d7,31
+800026aa:	0f 56 a0 20 	or %d2,%d6,%d5
+800026ae:	a6 72       	or %d2,%d7
+800026b0:	00 90       	ret 
+800026b2:	8b 22 18 21 	rsub %d2,%d2,-126
+800026b6:	8b a2 81 42 	ge %d4,%d2,26
+800026ba:	df 04 bf ff 	jne %d4,0,80002638 <__pack_f+0x26>
+800026be:	82 f5       	mov %d5,-1
+800026c0:	8b 02 00 41 	rsub %d4,%d2,0
+800026c4:	0f 25 00 20 	sh %d2,%d5,%d2
+800026c8:	0f 43 00 40 	sh %d4,%d3,%d4
+800026cc:	0f 23 e0 30 	andn %d3,%d3,%d2
+800026d0:	8b 03 00 45 	or.ne %d4,%d3,0
+800026d4:	8f f4 07 31 	and %d3,%d4,127
+800026d8:	8b 03 04 32 	eq %d3,%d3,64
+800026dc:	df 03 0e 80 	jne %d3,0,800026f8 <__pack_f+0xe6>
+800026e0:	1b f4 03 20 	addi %d2,%d4,63
+800026e4:	7b 00 00 34 	movh %d3,16384
+800026e8:	37 02 f7 63 	extr.u %d6,%d2,7,23
+800026ec:	0b 32 50 21 	ge.u %d2,%d2,%d3
+800026f0:	8f 72 01 50 	sh %d5,%d2,23
+800026f4:	1d ff a2 ff 	j 80002638 <__pack_f+0x26>
+800026f8:	1b 04 04 30 	addi %d3,%d4,64
+800026fc:	7b 00 00 24 	movh %d2,16384
+80002700:	37 03 f7 63 	extr.u %d6,%d3,7,23
+80002704:	0b 23 50 31 	ge.u %d3,%d3,%d2
+80002708:	8f 73 01 50 	sh %d5,%d3,23
+8000270c:	6f 74 96 ff 	jnz.t %d4,7,80002638 <__pack_f+0x26>
+80002710:	0b 24 50 21 	ge.u %d2,%d4,%d2
+80002714:	37 04 f7 63 	extr.u %d6,%d4,7,23
+80002718:	8f 72 01 50 	sh %d5,%d2,23
+8000271c:	1d ff 8e ff 	j 80002638 <__pack_f+0x26>
+
+80002720 <__do_global_ctors_aux>:
+80002720:	91 00 00 28 	movh.a %a2,32768
+80002724:	d9 22 68 d2 	lea %a2,[%a2]10088 <80002768 <__CTOR_END__>>
+80002728:	19 22 fc ff 	ld.w %d2,[%a2]-4 <7ffffffc <__CSA0_END+0xffe43fc>>
+8000272c:	d9 23 fc ff 	lea %a3,[%a2]-4 <7ffffffc <__CSA0_END+0xffe43fc>>
+80002730:	df f2 0a 00 	jeq %d2,-1,80002744 <__do_global_ctors_aux+0x24>
+80002734:	40 3c       	mov.aa %a12,%a3
+80002736:	60 22       	mov.a %a2,%d2
+80002738:	b0 cc       	add.a %a12,-4
+8000273a:	2d 02 00 00 	calli %a2
+8000273e:	54 c2       	ld.w %d2,[%a12]
+80002740:	df f2 fb ff 	jne %d2,-1,80002736 <__do_global_ctors_aux+0x16>
+80002744:	00 90       	ret 
+	...
+
+Disassembly of section .init:
+
+80002748 <_init>:
+80002748:	6d ff a8 ee 	call 80000498 <frame_dummy>
+8000274c:	6d ff ea ff 	call 80002720 <__do_global_ctors_aux>
+80002750:	00 90       	ret 
+80002752:	00 00       	nop 
+80002754:	00 00       	nop 
+	...
+
+Disassembly of section .fini:
+
+80002758 <_fini>:
+80002758:	6d ff 6e ee 	call 80000434 <__do_global_dtors_aux>
+8000275c:	00 90       	ret 
+	...
+
+Disassembly of section .traptab_tc2:
+
+801f6100 <IfxCpu_Trap_vectorTable2>:
+801f6100:	0d 00 00 02 	svlcx 
+801f6104:	02 f4       	mov %d4,%d15
+801f6106:	91 00 00 28 	movh.a %a2,32768
+801f610a:	d9 22 d0 f0 	lea %a2,[%a2]4048 <80000fd0 <IfxCpu_Trap_memoryManagementError>>
+801f610e:	dc 02       	ji %a2
+801f6110:	00 80       	rfe 
+	...
+801f611e:	00 00       	nop 
+801f6120:	0d 00 00 02 	svlcx 
+801f6124:	02 f4       	mov %d4,%d15
+801f6126:	91 00 00 28 	movh.a %a2,32768
+801f612a:	d9 22 04 01 	lea %a2,[%a2]4100 <80001004 <IfxCpu_Trap_internalProtectionError>>
+801f612e:	dc 02       	ji %a2
+801f6130:	00 80       	rfe 
+	...
+801f613e:	00 00       	nop 
+801f6140:	0d 00 00 02 	svlcx 
+801f6144:	02 f4       	mov %d4,%d15
+801f6146:	91 00 00 28 	movh.a %a2,32768
+801f614a:	d9 22 3c 01 	lea %a2,[%a2]4156 <8000103c <IfxCpu_Trap_instructionError>>
+801f614e:	dc 02       	ji %a2
+801f6150:	00 80       	rfe 
+	...
+801f615e:	00 00       	nop 
+801f6160:	02 f4       	mov %d4,%d15
+801f6162:	91 00 00 28 	movh.a %a2,32768
+801f6166:	d9 22 34 11 	lea %a2,[%a2]4212 <80001074 <IfxCpu_Trap_contextManagementError>>
+801f616a:	dc 02       	ji %a2
+801f616c:	00 80       	rfe 
+	...
+801f617e:	00 00       	nop 
+801f6180:	0d 00 00 02 	svlcx 
+801f6184:	02 f4       	mov %d4,%d15
+801f6186:	91 00 00 28 	movh.a %a2,32768
+801f618a:	d9 22 2c 21 	lea %a2,[%a2]4268 <800010ac <IfxCpu_Trap_busError>>
+801f618e:	dc 02       	ji %a2
+801f6190:	00 80       	rfe 
+	...
+801f619e:	00 00       	nop 
+801f61a0:	0d 00 00 02 	svlcx 
+801f61a4:	02 f4       	mov %d4,%d15
+801f61a6:	91 00 00 28 	movh.a %a2,32768
+801f61aa:	d9 22 24 31 	lea %a2,[%a2]4324 <800010e4 <IfxCpu_Trap_assertion>>
+801f61ae:	dc 02       	ji %a2
+801f61b0:	00 80       	rfe 
+	...
+801f61be:	00 00       	nop 
+801f61c0:	0d 00 00 02 	svlcx 
+801f61c4:	02 f4       	mov %d4,%d15
+801f61c6:	91 00 00 28 	movh.a %a2,32768
+801f61ca:	d9 22 0a 61 	lea %a2,[%a2]4490 <8000118a <IfxCpu_Trap_systemCall_Cpu2>>
+801f61ce:	dc 02       	ji %a2
+801f61d0:	00 80       	rfe 
+	...
+801f61de:	00 00       	nop 
+801f61e0:	0d 00 00 02 	svlcx 
+801f61e4:	02 f4       	mov %d4,%d15
+801f61e6:	91 00 00 28 	movh.a %a2,32768
+801f61ea:	d9 22 14 51 	lea %a2,[%a2]4436 <80001154 <IfxCpu_Trap_nonMaskableInterrupt>>
+801f61ee:	dc 02       	ji %a2
+801f61f0:	00 80       	rfe 
+801f61f2:	00 90       	ret 
+
+801f61f4 <IfxCpu_Trap_vectorTable2_end>:
+	...
+
+Disassembly of section .traptab_tc1:
+
+801f6200 <IfxCpu_Trap_vectorTable1>:
+801f6200:	0d 00 00 02 	svlcx 
+801f6204:	02 f4       	mov %d4,%d15
+801f6206:	91 00 00 28 	movh.a %a2,32768
+801f620a:	d9 22 d0 f0 	lea %a2,[%a2]4048 <80000fd0 <IfxCpu_Trap_memoryManagementError>>
+801f620e:	dc 02       	ji %a2
+801f6210:	00 80       	rfe 
+	...
+801f621e:	00 00       	nop 
+801f6220:	0d 00 00 02 	svlcx 
+801f6224:	02 f4       	mov %d4,%d15
+801f6226:	91 00 00 28 	movh.a %a2,32768
+801f622a:	d9 22 04 01 	lea %a2,[%a2]4100 <80001004 <IfxCpu_Trap_internalProtectionError>>
+801f622e:	dc 02       	ji %a2
+801f6230:	00 80       	rfe 
+	...
+801f623e:	00 00       	nop 
+801f6240:	0d 00 00 02 	svlcx 
+801f6244:	02 f4       	mov %d4,%d15
+801f6246:	91 00 00 28 	movh.a %a2,32768
+801f624a:	d9 22 3c 01 	lea %a2,[%a2]4156 <8000103c <IfxCpu_Trap_instructionError>>
+801f624e:	dc 02       	ji %a2
+801f6250:	00 80       	rfe 
+	...
+801f625e:	00 00       	nop 
+801f6260:	02 f4       	mov %d4,%d15
+801f6262:	91 00 00 28 	movh.a %a2,32768
+801f6266:	d9 22 34 11 	lea %a2,[%a2]4212 <80001074 <IfxCpu_Trap_contextManagementError>>
+801f626a:	dc 02       	ji %a2
+801f626c:	00 80       	rfe 
+	...
+801f627e:	00 00       	nop 
+801f6280:	0d 00 00 02 	svlcx 
+801f6284:	02 f4       	mov %d4,%d15
+801f6286:	91 00 00 28 	movh.a %a2,32768
+801f628a:	d9 22 2c 21 	lea %a2,[%a2]4268 <800010ac <IfxCpu_Trap_busError>>
+801f628e:	dc 02       	ji %a2
+801f6290:	00 80       	rfe 
+	...
+801f629e:	00 00       	nop 
+801f62a0:	0d 00 00 02 	svlcx 
+801f62a4:	02 f4       	mov %d4,%d15
+801f62a6:	91 00 00 28 	movh.a %a2,32768
+801f62aa:	d9 22 24 31 	lea %a2,[%a2]4324 <800010e4 <IfxCpu_Trap_assertion>>
+801f62ae:	dc 02       	ji %a2
+801f62b0:	00 80       	rfe 
+	...
+801f62be:	00 00       	nop 
+801f62c0:	0d 00 00 02 	svlcx 
+801f62c4:	02 f4       	mov %d4,%d15
+801f62c6:	91 00 00 28 	movh.a %a2,32768
+801f62ca:	d9 22 00 71 	lea %a2,[%a2]4544 <800011c0 <IfxCpu_Trap_systemCall_Cpu1>>
+801f62ce:	dc 02       	ji %a2
+801f62d0:	00 80       	rfe 
+	...
+801f62de:	00 00       	nop 
+801f62e0:	0d 00 00 02 	svlcx 
+801f62e4:	02 f4       	mov %d4,%d15
+801f62e6:	91 00 00 28 	movh.a %a2,32768
+801f62ea:	d9 22 14 51 	lea %a2,[%a2]4436 <80001154 <IfxCpu_Trap_nonMaskableInterrupt>>
+801f62ee:	dc 02       	ji %a2
+801f62f0:	00 80       	rfe 
+801f62f2:	00 90       	ret 
+
+801f62f4 <IfxCpu_Trap_vectorTable1_end>:
+	...

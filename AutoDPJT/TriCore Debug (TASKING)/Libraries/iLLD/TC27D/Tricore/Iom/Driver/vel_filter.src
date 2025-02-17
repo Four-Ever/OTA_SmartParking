@@ -1,0 +1,1168 @@
+	; Module start
+	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
+	.compiler_invocation	"ctc -f C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\cc31212a --dep-file=Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc27xd -D__CPU_TC27XD__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc27xd -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Configurations -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra\\\\Platform -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra\\\\Sfr -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D\\\\_Reg -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Service -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Service\\\\CpuGeneric -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Comm -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Asc -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\CStart -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Irq -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Trap -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\I2c -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\I2c\\\\I2c -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\I2c\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Iom -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Iom\\\\Driver -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Iom\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm\\\\Std -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Impl -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib\\\\DataHandling -IC:\\\\Users\\\\USER\\\\AURIX_PJT\\\\AutoDPJT\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_PinMap -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.src ../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c"
+	.compiler_name		"ctc"
+	;source	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c'
+
+	
+$TC16X
+	
+	.sdecl	'.text.vel_filter.vel_filter_step',code,cluster('vel_filter_step')
+	.sect	'.text.vel_filter.vel_filter_step'
+	.align	2
+	
+	.global	vel_filter_step
+; Function vel_filter_step
+.L14:
+vel_filter_step:	.type	func
+	sub.a	a10,#24
+.L62:
+	mov.aa	a12,a4
+.L81:
+	movh.a	a15,#@his(.1.ini)
+	lea	a15,[a15]@los(.1.ini)
+	lea	a15,[a15]0
+.L82:
+	lea	a2,[a10]0
+	mov.a	a4,#4
+.L2:
+	ld.w	d15,[a15+]
+	st.w	[a2+],d15
+	loop	a4,.L2
+.L83:
+	insert	d15,d4,#0,#31,#1
+.L84:
+	mov.u	d0,#55050
+	addih	d0,d0,#15523
+.L85:
+	cmp.f	d15,d15,d0
+	extr.u	d15,d15,#0,#1
+.L86:
+	jeq	d15,#0,.L3
+.L87:
+	mov	d4,#0
+.L3:
+	insert	d15,d5,#0,#31,#1
+.L88:
+	mov.u	d0,#55050
+	addih	d0,d0,#15523
+.L89:
+	cmp.f	d15,d15,d0
+	extr.u	d15,d15,#0,#1
+.L90:
+	jeq	d15,#0,.L4
+.L91:
+	mov	d5,#0
+.L4:
+	mov	d15,#16384
+	addih	d15,d15,#17525
+.L92:
+	mul.f	d0,d4,d15
+.L65:
+	mov	d15,#16384
+	addih	d15,d15,#17525
+.L93:
+	mul.f	d1,d5,d15
+.L66:
+	mov	d15,#9216
+	addih	d15,d15,#51572
+.L94:
+	cmp.f	d15,d0,d15
+	jnz.t	d15:2,.L5
+.L95:
+	mov	d0,#0
+.L5:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L96:
+	mov.u	d15,#55050
+	addih	d15,d15,#15395
+.L97:
+	movh.a	a2,#@his(vel_filter_DW)
+	lea	a2,[a2]@los(vel_filter_DW)
+.L98:
+	ld.w	d2,[a2]
+.L99:
+	madd.f	d15,d2,d0,d15
+	st.w	[a15],d15
+.L100:
+	mov	d15,#9216
+	addih	d15,d15,#51572
+.L101:
+	cmp.f	d15,d1,d15
+	jnz.t	d15:2,.L6
+.L102:
+	mov	d1,#0
+.L6:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L103:
+	mov.u	d0,#55050
+.L67:
+	addih	d0,d0,#15395
+.L104:
+	movh.a	a2,#@his(vel_filter_DW)
+	lea	a2,[a2]@los(vel_filter_DW)
+.L105:
+	ld.w	d15,[a2]4
+.L106:
+	madd.f	d15,d15,d1,d0
+	st.w	[a15]4,d15
+.L107:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L108:
+	movh.a	a2,#@his(vel_filter_DW)
+	lea	a2,[a2]@los(vel_filter_DW)
+.L109:
+	ld.w	d15,[a2]
+.L110:
+	st.w	[a15],d15
+.L111:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L112:
+	movh.a	a2,#@his(vel_filter_DW)
+	lea	a2,[a2]@los(vel_filter_DW)
+.L113:
+	ld.w	d15,[a2]4
+.L114:
+	st.w	[a15]12,d15
+.L115:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L116:
+	ld.w	d15,[a15]
+.L117:
+	mov.u	d0,#55050
+	addih	d0,d0,#15523
+.L118:
+	cmp.f	d15,d15,d0
+	extr.u	d15,d15,#0,#1
+.L119:
+	jeq	d15,#0,.L7
+.L120:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L121:
+	ld.w	d15,[a15]
+.L122:
+	mov.u	d0,#55050
+	addih	d0,d0,#48291
+.L123:
+	cmp.f	d15,d15,d0
+	extr.u	d15,d15,#2,#1
+	jeq	d15,#0,.L8
+.L124:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L125:
+	mov	d15,#0
+.L126:
+	st.w	[a15],d15
+.L8:
+.L7:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L127:
+	ld.w	d15,[a15]4
+.L128:
+	mov.u	d0,#55050
+	addih	d0,d0,#15523
+.L129:
+	cmp.f	d15,d15,d0
+	extr.u	d15,d15,#0,#1
+.L130:
+	jeq	d15,#0,.L9
+.L131:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L132:
+	ld.w	d15,[a15]4
+.L133:
+	mov.u	d0,#55050
+	addih	d0,d0,#48291
+.L134:
+	cmp.f	d15,d15,d0
+	extr.u	d15,d15,#2,#1
+	jeq	d15,#0,.L10
+.L135:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L136:
+	mov	d15,#0
+.L137:
+	st.w	[a15]12,d15
+.L10:
+.L9:
+	movh.a	a2,#@his(vel_filter_DW)
+	lea	a2,[a2]@los(vel_filter_DW)
+.L138:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L139:
+	ld.w	d0,[a15]
+.L140:
+	mov.u	d1,#55050
+.L68:
+	addih	d1,d1,#15395
+.L141:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L142:
+	ld.w	d15,[a15]8
+.L143:
+	madd.f	d15,d15,d0,d1
+	st.w	[a2]8,d15
+.L144:
+	movh.a	a2,#@his(vel_filter_Y)
+	lea	a2,[a2]@los(vel_filter_Y)
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L145:
+	ld.w	d15,[a15]4
+.L146:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L147:
+	ld.w	d0,[a15]8
+.L148:
+	add.f	d15,d15,d0
+	st.w	[a2]4,d15
+.L149:
+	movh.a	a13,#@his(vel_filter_Y)
+	lea	a13,[a13]@los(vel_filter_Y)
+.L150:
+	movh.a	a2,#@his(vel_filter_Y)
+	lea	a2,[a2]@los(vel_filter_Y)
+.L151:
+	ld.w	d0,[a2]
+.L152:
+	movh.a	a2,#@his(vel_filter_Y)
+	lea	a2,[a2]@los(vel_filter_Y)
+.L153:
+	ld.w	d1,[a2]
+.L154:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L155:
+	ld.w	d15,[a15]12
+.L156:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L157:
+	ld.w	d2,[a15]12
+.L158:
+	mul.f	d15,d15,d2
+.L159:
+	madd.f	d4,d15,d0,d1
+.L63:
+	call	sqrt
+.L64:
+	st.w	[a13]8,d2
+.L160:
+	movh.a	a2,#@his(vel_filter_DW)
+	lea	a2,[a2]@los(vel_filter_DW)
+.L161:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L162:
+	ld.w	d15,[a15]12
+.L163:
+	mov.u	d0,#55050
+	addih	d0,d0,#15395
+.L164:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L165:
+	ld.w	d1,[a15]12
+.L166:
+	madd.f	d15,d1,d15,d0
+	st.w	[a2]12,d15
+.L167:
+	movh.a	a2,#@his(vel_filter_Y)
+	lea	a2,[a2]@los(vel_filter_Y)
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L168:
+	ld.w	d15,[a15]16
+.L169:
+	movh.a	a15,#@his(vel_filter_DW)
+	lea	a15,[a15]@los(vel_filter_DW)
+.L170:
+	ld.w	d0,[a15]12
+.L171:
+	add.f	d15,d15,d0
+	st.w	[a2]16,d15
+.L172:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L173:
+	ld.w	d15,[a15]4
+.L174:
+	st.w	[a10]4,d15
+.L175:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L176:
+	ld.w	d15,[a15]16
+.L177:
+	st.w	[a10]16,d15
+.L178:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L179:
+	ld.w	d15,[a15]
+.L180:
+	st.w	[a10],d15
+.L181:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L182:
+	ld.w	d15,[a15]12
+.L183:
+	st.w	[a10]12,d15
+.L184:
+	movh.a	a15,#@his(vel_filter_Y)
+	lea	a15,[a15]@los(vel_filter_Y)
+.L185:
+	ld.w	d15,[a15]8
+.L186:
+	st.w	[a10]8,d15
+.L187:
+	lea	a15,[a10]0
+.L188:
+	mov.a	a2,#4
+.L11:
+	ld.w	d15,[a15+]
+	st.w	[a12+],d15
+	loop	a2,.L11
+	j	.L12
+.L12:
+	ret
+.L50:
+	
+__vel_filter_step_function_end:
+	.size	vel_filter_step,__vel_filter_step_function_end-vel_filter_step
+.L32:
+	; End of function
+	
+	.sdecl	'.text.vel_filter.vel_filter_initialize',code,cluster('vel_filter_initialize')
+	.sect	'.text.vel_filter.vel_filter_initialize'
+	.align	2
+	
+	.global	vel_filter_initialize
+; Function vel_filter_initialize
+.L16:
+vel_filter_initialize:	.type	func
+	ret
+.L48:
+	
+__vel_filter_initialize_function_end:
+	.size	vel_filter_initialize,__vel_filter_initialize_function_end-vel_filter_initialize
+.L27:
+	; End of function
+	
+	.sdecl	'.text.vel_filter.vel_filter_terminate',code,cluster('vel_filter_terminate')
+	.sect	'.text.vel_filter.vel_filter_terminate'
+	.align	2
+	
+	.global	vel_filter_terminate
+; Function vel_filter_terminate
+.L18:
+vel_filter_terminate:	.type	func
+	ret
+.L57:
+	
+__vel_filter_terminate_function_end:
+	.size	vel_filter_terminate,__vel_filter_terminate_function_end-vel_filter_terminate
+.L37:
+	; End of function
+	
+	.sdecl	'.bss.vel_filter.vel_filter_DW',data,cluster('vel_filter_DW')
+	.sect	'.bss.vel_filter.vel_filter_DW'
+	.global	vel_filter_DW
+	.align	4
+vel_filter_DW:	.type	object
+	.size	vel_filter_DW,16
+	.space	16
+	.sdecl	'.bss.vel_filter.vel_filter_U',data,cluster('vel_filter_U')
+	.sect	'.bss.vel_filter.vel_filter_U'
+	.global	vel_filter_U
+	.align	4
+vel_filter_U:	.type	object
+	.size	vel_filter_U,8
+	.space	8
+	.sdecl	'.bss.vel_filter.vel_filter_Y',data,cluster('vel_filter_Y')
+	.sect	'.bss.vel_filter.vel_filter_Y'
+	.global	vel_filter_Y
+	.align	4
+vel_filter_Y:	.type	object
+	.size	vel_filter_Y,20
+	.space	20
+	.sdecl	'.bss.vel_filter.vel_filter_M_',data,cluster('vel_filter_M_')
+	.sect	'.bss.vel_filter.vel_filter_M_'
+	.align	4
+vel_filter_M_:	.type	object
+	.size	vel_filter_M_,4
+	.space	4
+	.sdecl	'.rodata.vel_filter.vel_filter_M',data,rom,cluster('vel_filter_M')
+	.sect	'.rodata.vel_filter.vel_filter_M'
+	.global	vel_filter_M
+	.align	4
+vel_filter_M:	.type	object
+	.size	vel_filter_M,4
+	.word	vel_filter_M_
+	.sdecl	'.rodata.vel_filter..1.ini',data,rom
+	.sect	'.rodata.vel_filter..1.ini'
+	.align	4
+.1.ini:	.type	object
+	.size	.1.ini,20
+	.space	20
+	.calls	'vel_filter_step','sqrt'
+	.calls	'vel_filter_step','',24
+	.calls	'vel_filter_initialize','',0
+	.extern	sqrt
+	.calls	'vel_filter_terminate','',0
+	.sdecl	'.debug_info',debug
+	.sect	'.debug_info'
+.L20:
+	.word	1029
+	.half	3
+	.word	.L21
+	.byte	4
+.L19:
+	.byte	1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L22
+.L51:
+	.byte	2
+	.byte	'float',0,4,4,3
+	.byte	'__fabs',0
+	.word	209
+	.byte	1,1,1,1,4
+	.byte	'd',0
+	.word	209
+	.byte	0,5
+	.byte	'sqrt',0,1,186,1,25
+	.word	209
+	.byte	1,1,1,1,6,1,186,1,43
+	.word	209
+	.byte	0
+.L49:
+	.byte	7,2,54,9,20,8
+	.byte	'filtered_velocity_x',0
+	.word	209
+	.byte	4,2,35,0,8
+	.byte	'filtered_location_x',0
+	.word	209
+	.byte	4,2,35,4,8
+	.byte	'speed',0
+	.word	209
+	.byte	4,2,35,8,8
+	.byte	'filtered_velocity_y',0
+	.word	209
+	.byte	4,2,35,12,8
+	.byte	'filtered_location_y',0
+	.word	209
+	.byte	4,2,35,16,0,9,1,10
+	.word	407
+	.byte	11
+	.byte	'__codeptr',0,3,1,1
+	.word	409
+	.byte	2
+	.byte	'char',0,1,6,11
+	.byte	'int8_T',0,4,51,21
+	.word	432
+	.byte	2
+	.byte	'unsigned char',0,1,8,11
+	.byte	'uint8_T',0,4,52,23
+	.word	455
+	.byte	2
+	.byte	'short int',0,2,5,11
+	.byte	'int16_T',0,4,53,15
+	.word	488
+	.byte	2
+	.byte	'unsigned short int',0,2,7,11
+	.byte	'uint16_T',0,4,54,24
+	.word	517
+	.byte	2
+	.byte	'int',0,4,5,11
+	.byte	'int32_T',0,4,55,13
+	.word	556
+	.byte	2
+	.byte	'unsigned int',0,4,7,11
+	.byte	'uint32_T',0,4,56,22
+	.word	579
+	.byte	11
+	.byte	'real32_T',0,4,57,15
+	.word	209
+	.byte	11
+	.byte	'real64_T',0,4,58,16
+	.word	209
+	.byte	11
+	.byte	'real_T',0,4,64,16
+	.word	209
+	.byte	2
+	.byte	'char',0,1,6,11
+	.byte	'char_T',0,4,70,14
+	.word	661
+	.byte	12
+	.word	661
+	.byte	10
+	.word	684
+	.byte	13
+	.word	689
+.L61:
+	.byte	14
+	.byte	'tag_RTM_vel_filter_T',0,2,63,8,4,8
+	.byte	'errorStatus',0
+	.word	694
+	.byte	4,2,35,0,0,11
+	.byte	'RT_MODEL_vel_filter_T',0,5,24,37
+	.word	699
+.L58:
+	.byte	7,2,40,9,16,8
+	.byte	'DTI_velocity_x_DSTATE',0
+	.word	209
+	.byte	4,2,35,0,8
+	.byte	'DTLvelocity_y_DSTATE',0
+	.word	209
+	.byte	4,2,35,4,8
+	.byte	'DTI_location_x_DSTATE',0
+	.word	209
+	.byte	4,2,35,8,8
+	.byte	'DTI_location_y_DSTATE',0
+	.word	209
+	.byte	4,2,35,12,0,11
+	.byte	'DW_vel_filter_T',0,2,45,3
+	.word	777
+.L59:
+	.byte	7,2,48,9,8,8
+	.byte	'ACCEL_X',0
+	.word	209
+	.byte	4,2,35,0,8
+	.byte	'ACCEL_Y',0
+	.word	209
+	.byte	4,2,35,4,0,11
+	.byte	'ExtU_vel_filter_T',0,2,51,3
+	.word	930
+	.byte	11
+	.byte	'ExtY_vel_filter_T',0,2,60,3
+	.word	270
+	.byte	10
+	.word	699
+.L60:
+	.byte	12
+	.word	1022
+	.byte	0
+	.sdecl	'.debug_abbrev',debug
+	.sect	'.debug_abbrev'
+.L21:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,36,0,3,8,11,15,62,15,0,0,3,46,1,3,8,73,19,54,15,39,12
+	.byte	63,12,60,12,0,0,4,5,0,3,8,73,19,0,0,5,46,1,3,8,58,15,59,15,57,15,73,19,54,15,39,12,63,12,60,12,0,0,6,5
+	.byte	0,58,15,59,15,57,15,73,19,0,0,7,19,1,58,15,59,15,57,15,11,15,0,0,8,13,0,3,8,73,19,11,15,56,9,0,0,9,21
+	.byte	0,54,15,0,0,10,15,0,73,19,0,0,11,22,0,3,8,58,15,59,15,57,15,73,19,0,0,12,38,0,73,19,0,0,13,53,0,73,19
+	.byte	0,0,14,19,1,3,8,58,15,59,15,57,15,11,15,0,0,0
+	.sdecl	'.debug_line',debug
+	.sect	'.debug_line'
+.L22:
+	.word	.L70-.L69
+.L69:
+	.half	3
+	.word	.L72-.L71
+.L71:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
+	.byte	'C:\\Infineon\\AURIX-Studio-1.10.6\\tools\\Compilers\\Tasking_1.1r8\\ctc\\include\\',0,0
+	.byte	'math.h',0,1,0,0
+	.byte	'..\\Libraries\\iLLD\\TC27D\\Tricore\\Iom\\Driver\\vel_filter.h',0,0,0,0
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0,0,0,0
+	.byte	'..\\Libraries\\iLLD\\TC27D\\Tricore\\Iom\\Driver\\rtwtypes.h',0,0,0,0
+	.byte	'..\\Libraries\\iLLD\\TC27D\\Tricore\\Iom\\Driver\\vel_filter_types.h',0,0,0,0,0
+.L72:
+.L70:
+	.sdecl	'.debug_info',debug,cluster('vel_filter_initialize')
+	.sect	'.debug_info'
+.L23:
+	.word	267
+	.half	3
+	.word	.L24
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L26,.L25
+	.byte	2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_initialize',0,1,153,1,6,1,1,1
+	.word	.L16,.L48,.L15
+	.byte	4
+	.word	.L16,.L48
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_initialize')
+	.sect	'.debug_abbrev'
+.L24:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
+	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('vel_filter_initialize')
+	.sect	'.debug_line'
+.L25:
+	.word	.L74-.L73
+.L73:
+	.half	3
+	.word	.L76-.L75
+.L75:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0,0,0,0,0
+.L76:
+	.byte	5,1,7,0,5,2
+	.word	.L16
+	.byte	3,155,1,1,7,9
+	.half	.L27-.L16
+	.byte	0,1,1
+.L74:
+	.sdecl	'.debug_ranges',debug,cluster('vel_filter_initialize')
+	.sect	'.debug_ranges'
+.L26:
+	.word	-1,.L16,0,.L27-.L16,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_step')
+	.sect	'.debug_info'
+.L28:
+	.word	375
+	.half	3
+	.word	.L29
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L31,.L30
+	.byte	2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_step',0,1,38,19
+	.word	.L49
+	.byte	1,1,1
+	.word	.L14,.L50,.L13
+	.byte	4
+	.byte	'accel_x',0,1,38,41
+	.word	.L51,.L52
+	.byte	4
+	.byte	'accel_y',0,1,38,55
+	.word	.L51,.L53
+	.byte	5
+	.word	.L14,.L50
+	.byte	6
+	.byte	'nowvelloc',0,1,40,23
+	.word	.L49,.L54
+	.byte	6
+	.byte	'rtb_accel_x',0,1,45,12
+	.word	.L51,.L55
+	.byte	6
+	.byte	'rtb_accel_y',0,1,46,12
+	.word	.L51,.L56
+	.byte	0,0,0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_step')
+	.sect	'.debug_abbrev'
+.L29:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,1,17,1,18,1,0,0,6
+	.byte	52,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,0
+	.sdecl	'.debug_line',debug,cluster('vel_filter_step')
+	.sect	'.debug_line'
+.L30:
+	.word	.L78-.L77
+.L77:
+	.half	3
+	.word	.L80-.L79
+.L79:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0,0,0,0,0
+.L80:
+	.byte	5,19,7,0,5,2
+	.word	.L14
+	.byte	3,37,1,5,33,9
+	.half	.L81-.L14
+	.byte	3,2,1,5,32,9
+	.half	.L82-.L81
+	.byte	1,5,7,9
+	.half	.L83-.L82
+	.byte	3,15,1,5,27,9
+	.half	.L84-.L83
+	.byte	1,5,25,9
+	.half	.L85-.L84
+	.byte	1,5,3,9
+	.half	.L86-.L85
+	.byte	1,5,17,7,9
+	.half	.L87-.L86
+	.byte	3,1,1,5,7,9
+	.half	.L3-.L87
+	.byte	3,3,1,5,27,9
+	.half	.L88-.L3
+	.byte	1,5,25,9
+	.half	.L89-.L88
+	.byte	1,5,3,9
+	.half	.L90-.L89
+	.byte	1,5,17,7,9
+	.half	.L91-.L90
+	.byte	3,1,1,5,18,9
+	.half	.L4-.L91
+	.byte	3,3,1,5,15,9
+	.half	.L92-.L4
+	.byte	1,5,18,9
+	.half	.L65-.L92
+	.byte	3,1,1,5,15,9
+	.half	.L93-.L65
+	.byte	1,5,23,9
+	.half	.L66-.L93
+	.byte	3,8,1,5,8,9
+	.half	.L94-.L66
+	.byte	1,5,17,9
+	.half	.L95-.L94
+	.byte	3,1,1,5,3,9
+	.half	.L5-.L95
+	.byte	3,7,1,5,42,9
+	.half	.L96-.L5
+	.byte	1,5,3,9
+	.half	.L97-.L96
+	.byte	1,5,16,9
+	.half	.L98-.L97
+	.byte	1,5,39,9
+	.half	.L99-.L98
+	.byte	1,5,23,9
+	.half	.L100-.L99
+	.byte	3,6,1,5,8,9
+	.half	.L101-.L100
+	.byte	1,5,17,9
+	.half	.L102-.L101
+	.byte	3,1,1,5,3,9
+	.half	.L6-.L102
+	.byte	3,7,1,5,41,9
+	.half	.L103-.L6
+	.byte	1,5,3,9
+	.half	.L104-.L103
+	.byte	1,5,16,9
+	.half	.L105-.L104
+	.byte	1,5,38,9
+	.half	.L106-.L105
+	.byte	1,5,3,9
+	.half	.L107-.L106
+	.byte	3,4,1,5,38,9
+	.half	.L108-.L107
+	.byte	1,5,51,9
+	.half	.L109-.L108
+	.byte	1,5,36,9
+	.half	.L110-.L109
+	.byte	1,5,3,9
+	.half	.L111-.L110
+	.byte	3,1,1,5,38,9
+	.half	.L112-.L111
+	.byte	1,5,51,9
+	.half	.L113-.L112
+	.byte	1,5,36,9
+	.half	.L114-.L113
+	.byte	1,5,8,9
+	.half	.L115-.L114
+	.byte	3,1,1,5,21,9
+	.half	.L116-.L115
+	.byte	1,5,46,9
+	.half	.L117-.L116
+	.byte	1,5,44,9
+	.half	.L118-.L117
+	.byte	1,5,7,9
+	.half	.L119-.L118
+	.byte	1,5,8,7,9
+	.half	.L120-.L119
+	.byte	3,1,1,5,21,9
+	.half	.L121-.L120
+	.byte	1,5,46,9
+	.half	.L122-.L121
+	.byte	1,5,44,9
+	.half	.L123-.L122
+	.byte	1,5,5,9
+	.half	.L124-.L123
+	.byte	3,1,1,5,40,9
+	.half	.L125-.L124
+	.byte	1,5,38,9
+	.half	.L126-.L125
+	.byte	1,5,8,9
+	.half	.L7-.L126
+	.byte	3,3,1,5,21,9
+	.half	.L127-.L7
+	.byte	1,5,45,9
+	.half	.L128-.L127
+	.byte	1,5,43,9
+	.half	.L129-.L128
+	.byte	1,5,7,9
+	.half	.L130-.L129
+	.byte	1,5,8,7,9
+	.half	.L131-.L130
+	.byte	3,1,1,5,21,9
+	.half	.L132-.L131
+	.byte	1,5,45,9
+	.half	.L133-.L132
+	.byte	1,5,43,9
+	.half	.L134-.L133
+	.byte	1,5,5,9
+	.half	.L135-.L134
+	.byte	3,1,1,5,40,9
+	.half	.L136-.L135
+	.byte	1,5,38,9
+	.half	.L137-.L136
+	.byte	1,5,3,9
+	.half	.L9-.L137
+	.byte	3,9,1,5,5,9
+	.half	.L138-.L9
+	.byte	3,1,1,5,17,9
+	.half	.L139-.L138
+	.byte	1,5,42,9
+	.half	.L140-.L139
+	.byte	3,127,1,5,3,9
+	.half	.L141-.L140
+	.byte	1,5,16,9
+	.half	.L142-.L141
+	.byte	1,5,39,9
+	.half	.L143-.L142
+	.byte	1,5,3,9
+	.half	.L144-.L143
+	.byte	3,6,1,5,15,9
+	.half	.L145-.L144
+	.byte	1,5,39,9
+	.half	.L146-.L145
+	.byte	1,5,52,9
+	.half	.L147-.L146
+	.byte	1,5,36,9
+	.half	.L148-.L147
+	.byte	1,5,3,9
+	.half	.L149-.L148
+	.byte	3,8,1,5,29,9
+	.half	.L150-.L149
+	.byte	1,5,41,9
+	.half	.L151-.L150
+	.byte	1,5,5,9
+	.half	.L152-.L151
+	.byte	3,1,1,5,17,9
+	.half	.L153-.L152
+	.byte	1,5,40,9
+	.half	.L154-.L153
+	.byte	1,5,52,9
+	.half	.L155-.L154
+	.byte	1,5,5,9
+	.half	.L156-.L155
+	.byte	3,1,1,5,17,9
+	.half	.L157-.L156
+	.byte	1,5,73,9
+	.half	.L158-.L157
+	.byte	3,127,1,5,38,9
+	.half	.L159-.L158
+	.byte	1,5,22,9
+	.half	.L64-.L159
+	.byte	3,127,1,5,3,9
+	.half	.L160-.L64
+	.byte	3,6,1,5,5,9
+	.half	.L161-.L160
+	.byte	3,1,1,5,17,9
+	.half	.L162-.L161
+	.byte	1,5,42,9
+	.half	.L163-.L162
+	.byte	3,127,1,5,3,9
+	.half	.L164-.L163
+	.byte	1,5,16,9
+	.half	.L165-.L164
+	.byte	1,5,39,9
+	.half	.L166-.L165
+	.byte	1,5,3,9
+	.half	.L167-.L166
+	.byte	3,6,1,5,15,9
+	.half	.L168-.L167
+	.byte	1,5,39,9
+	.half	.L169-.L168
+	.byte	1,5,52,9
+	.half	.L170-.L169
+	.byte	1,5,36,9
+	.half	.L171-.L170
+	.byte	1,5,35,9
+	.half	.L172-.L171
+	.byte	3,1,1,5,47,9
+	.half	.L173-.L172
+	.byte	1,5,33,9
+	.half	.L174-.L173
+	.byte	1,5,35,9
+	.half	.L175-.L174
+	.byte	3,1,1,5,47,9
+	.half	.L176-.L175
+	.byte	1,5,33,9
+	.half	.L177-.L176
+	.byte	1,5,35,9
+	.half	.L178-.L177
+	.byte	3,1,1,5,47,9
+	.half	.L179-.L178
+	.byte	1,5,33,9
+	.half	.L180-.L179
+	.byte	1,5,35,9
+	.half	.L181-.L180
+	.byte	3,1,1,5,47,9
+	.half	.L182-.L181
+	.byte	1,5,33,9
+	.half	.L183-.L182
+	.byte	1,5,21,9
+	.half	.L184-.L183
+	.byte	3,1,1,5,33,9
+	.half	.L185-.L184
+	.byte	1,5,19,9
+	.half	.L186-.L185
+	.byte	1,5,10,9
+	.half	.L187-.L186
+	.byte	3,2,1,5,3,9
+	.half	.L188-.L187
+	.byte	1,5,1,9
+	.half	.L12-.L188
+	.byte	3,1,1,7,9
+	.half	.L32-.L12
+	.byte	0,1,1
+.L78:
+	.sdecl	'.debug_ranges',debug,cluster('vel_filter_step')
+	.sect	'.debug_ranges'
+.L31:
+	.word	-1,.L14,0,.L32-.L14,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_terminate')
+	.sect	'.debug_info'
+.L33:
+	.word	266
+	.half	3
+	.word	.L34
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L36,.L35
+	.byte	2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_terminate',0,1,159,1,6,1,1,1
+	.word	.L18,.L57,.L17
+	.byte	4
+	.word	.L18,.L57
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_terminate')
+	.sect	'.debug_abbrev'
+.L34:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,54,15
+	.byte	39,12,63,12,17,1,18,1,64,6,0,0,4,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('vel_filter_terminate')
+	.sect	'.debug_line'
+.L35:
+	.word	.L190-.L189
+.L189:
+	.half	3
+	.word	.L192-.L191
+.L191:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0,0,0,0,0
+.L192:
+	.byte	5,1,7,0,5,2
+	.word	.L18
+	.byte	3,161,1,1,7,9
+	.half	.L37-.L18
+	.byte	0,1,1
+.L190:
+	.sdecl	'.debug_ranges',debug,cluster('vel_filter_terminate')
+	.sect	'.debug_ranges'
+.L36:
+	.word	-1,.L18,0,.L37-.L18,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_DW')
+	.sect	'.debug_info'
+.L38:
+	.word	236
+	.half	3
+	.word	.L39
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_DW',0,3,25,17
+	.word	.L58
+	.byte	1,5,3
+	.word	vel_filter_DW
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_DW')
+	.sect	'.debug_abbrev'
+.L39:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_U')
+	.sect	'.debug_info'
+.L40:
+	.word	235
+	.half	3
+	.word	.L41
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_U',0,3,28,19
+	.word	.L59
+	.byte	1,5,3
+	.word	vel_filter_U
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_U')
+	.sect	'.debug_abbrev'
+.L41:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_Y')
+	.sect	'.debug_info'
+.L42:
+	.word	235
+	.half	3
+	.word	.L43
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_Y',0,3,31,19
+	.word	.L49
+	.byte	1,5,3
+	.word	vel_filter_Y
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_Y')
+	.sect	'.debug_abbrev'
+.L43:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_M')
+	.sect	'.debug_info'
+.L44:
+	.word	235
+	.half	3
+	.word	.L45
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_M',0,3,35,30
+	.word	.L60
+	.byte	1,5,3
+	.word	vel_filter_M
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_M')
+	.sect	'.debug_abbrev'
+.L45:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('vel_filter_M_')
+	.sect	'.debug_info'
+.L46:
+	.word	235
+	.half	3
+	.word	.L47
+	.byte	4,1
+	.byte	'../Libraries/iLLD/TC27D/Tricore/Iom/Driver/vel_filter.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\AURIX_PJT\\AutoDPJT\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L19
+	.byte	3
+	.byte	'vel_filter_M_',0,3,34,30
+	.word	.L61
+	.byte	5,3
+	.word	vel_filter_M_
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('vel_filter_M_')
+	.sect	'.debug_abbrev'
+.L47:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,2,9,0,0,0
+	.sdecl	'.debug_loc',debug,cluster('vel_filter_initialize')
+	.sect	'.debug_loc'
+.L15:
+	.word	-1,.L16,0,.L48-.L16
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('vel_filter_step')
+	.sect	'.debug_loc'
+.L52:
+	.word	-1,.L14,0,.L63-.L14
+	.half	1
+	.byte	84
+	.word	0,0
+.L53:
+	.word	-1,.L14,0,.L64-.L14
+	.half	1
+	.byte	85
+	.word	0,0
+.L54:
+	.word	-1,.L14,0,.L50-.L14
+	.half	2
+	.byte	145,104
+	.word	0,0
+.L55:
+	.word	-1,.L14,0,.L65-.L14
+	.half	1
+	.byte	84
+	.word	.L65-.L14,.L67-.L14
+	.half	5
+	.byte	144,32,157,32,0
+	.word	0,0
+.L56:
+	.word	-1,.L14,0,.L66-.L14
+	.half	1
+	.byte	85
+	.word	.L66-.L14,.L68-.L14
+	.half	1
+	.byte	81
+	.word	0,0
+.L13:
+	.word	-1,.L14,0,.L62-.L14
+	.half	2
+	.byte	138,0
+	.word	.L62-.L14,.L50-.L14
+	.half	2
+	.byte	138,24
+	.word	.L50-.L14,.L50-.L14
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('vel_filter_terminate')
+	.sect	'.debug_loc'
+.L17:
+	.word	-1,.L18,0,.L57-.L18
+	.half	2
+	.byte	138,0
+	.word	0,0
+	.sdecl	'.debug_frame',debug
+	.sect	'.debug_frame'
+.L193:
+	.word	48
+	.word	-1
+	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
+	.byte	8,39
+	.sdecl	'.debug_frame',debug,cluster('vel_filter_step')
+	.sect	'.debug_frame'
+	.word	36
+	.word	.L193,.L14,.L50-.L14
+	.byte	4
+	.word	(.L62-.L14)/2
+	.byte	19,24,22,26,3,19,138,24,4
+	.word	(.L50-.L62)/2
+	.byte	19,0,8,26,0,0
+	.sdecl	'.debug_frame',debug,cluster('vel_filter_initialize')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L193,.L16,.L48-.L16
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	.sdecl	'.debug_frame',debug,cluster('vel_filter_terminate')
+	.sect	'.debug_frame'
+	.word	24
+	.word	.L193,.L18,.L57-.L18
+	.byte	8,18,8,19,8,20,8,21,8,22,8,23
+	; Module end
