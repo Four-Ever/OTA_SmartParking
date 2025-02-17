@@ -109,7 +109,7 @@ struct VCU_ParkingLane_Request_Data : public BaseMsg {
     struct {
         uint8_t Lane_Request : 1;
     } data;
-}
+};
 
 struct VCU_Camera_Data : public BaseMsg {
     struct {
