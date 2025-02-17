@@ -23,7 +23,7 @@
 
 
 /* Block states (default stoKge) */
-DW_decision_stateflow_T decision_stateflow_DW;
+//DW_decision_stateflow_T decision_stateflow_DW;
 
 /* Real-time model */
 RT_MODEL_decision_stateflow_T decision_stateflow_M_;
@@ -37,8 +37,8 @@ double initVel = 0;
 Transmission U8IsTrButton = 0;
 double U8Curr_vel = 0;
 double U8Ref_vel = 0;
-double DInputVD = 0.1;  //ÀüÁøÁÖÂ÷ ¼Óµµ
-double DInputVR = -0.1;   //ÈÄÁøÁÖÂ÷ ¼Óµµ
+double DInputVD = 0.1;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
+double DInputVR = -0.1;   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
 int IsRSPAButton = 0;
 int IsOTAFinished = 0;
 int U8IsWp_R = 0;
@@ -58,25 +58,25 @@ double D_Ref_vel=0;
 int lanecheck_request=0;
 
 int CameraSwitchRequest=0;
-int Isprkslot; //ÃÊÀ½ÆÄ Çì´õÆÄÀÏ¿¡¼­ °ª ¹Þ¾Æ¿Í¾ß ÇÔ
+int Isprkslot; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Þ¾Æ¿Í¾ï¿½ ï¿½ï¿½
 int U8Isprkslot=0;
 sint8 DSteeringinput=0;
 double DMoveDis=0;
-int calDis=0;  //1ÀÏ¶§ ÀÌµ¿°Å¸® °è»ê ½ÃÀÛ ¿äÃ» Àü´Þ
-int First_Set = 1; //Â÷¼±ÀÎ½Ä ½ÃÀÛ
+int calDis=0;  //1ï¿½Ï¶ï¿½ ï¿½Ìµï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½
+int First_Set = 1; //ï¿½ï¿½ï¿½ï¿½ï¿½Î½ï¿½ ï¿½ï¿½ï¿½ï¿½
 int U8IsConerline=0;
 
 IsPrk IsPrk_LR = InitIsPrk;
 
-//¾ÈÀü
+//ï¿½ï¿½ï¿½ï¿½
 CAState U8FCAState = InitCAState;
 CAState U8RCAState = InitCAState;
-double DTTC_D= 10.0; // Àü¹æ Àå¾Ö¹° ttc ¼¾¼­ µ¥ÀÌÅÍ°¡ µé¾î¿ÀÁö ¾ÊÀ» ¶§, state ¿µÇâ ¾ø´Â °ªÀ¸·Î ÃÊ±âÈ­
-double DTTC_R= 10.0; // ÈÄ¹æ Àå¾Ö¹° ttc ¼¾¼­ µ¥ÀÌÅÍ°¡ µé¾î¿ÀÁö ¾ÊÀ» ¶§, state ¿µÇâ ¾ø´Â °ªÀ¸·Î ÃÊ±âÈ­
-double DObs_dis_D= 100.0; //Àü¹æ Àå¾Ö¹° »ó´ë°Å¸® ¼¾¼­ µ¥ÀÌÅÍ°¡ µé¾î¿ÀÁö ¾ÊÀ» ¶§, state ¿µÇâ ¾ø´Â °ªÀ¸·Î ÃÊ±âÈ­
-double DObs_dis_R= 100.0; //ÈÄ¹æ Àå¾Ö¹° »ó´ë°Å¸® ¼¾¼­ µ¥ÀÌÅÍ°¡ µé¾î¿ÀÁö ¾ÊÀ» ¶§, state ¿µÇâ ¾ø´Â °ªÀ¸·Î ÃÊ±âÈ­
-double gainTTC=0.0; //Æ©´× ÆÄ¶ó¹ÌÅÍ
-
+double DTTC_D= 10.0; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ö¹ï¿½ ttc ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, state ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+double DTTC_R= 10.0; // ï¿½Ä¹ï¿½ ï¿½ï¿½Ö¹ï¿½ ttc ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, state ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+double DObs_dis_D= 100.0; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, state ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+double DObs_dis_R= 100.0; //ï¿½Ä¹ï¿½ ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½, state ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+double gainTTC=0.0; //Æ©ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½
+DW_decision_stateflow_T decision_stateflow_DW={0,0,0,0,0,0,0};
 
 
 
@@ -104,7 +104,7 @@ void decision_stateflow_step(void)
                 U8DriverState = InitDriverState;
                 U8RSPAState = InitRSPAState;
 
-                if (vehicle_status.engine_state == ENGINE_ON && ExitCAR_request == 0 )   //½Ãµ¿ ÄÑÁö¸é ¿îÀüÀÚ¸ðµå·Î ÀüÈ¯
+                if (vehicle_status.engine_state == ENGINE_ON && ExitCAR_request == 0 )   //ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
                 {
                     U8Engine=ModeOn;
 
@@ -114,7 +114,7 @@ void decision_stateflow_step(void)
 
                 }
 
-                if (vehicle_status.engine_state == ENGINE_OFF && ExitCAR_request==1){   //ÃâÂ÷¿äÃ»
+                if (vehicle_status.engine_state == ENGINE_OFF && ExitCAR_request==1){   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»
                     decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_FIND_CAR;
                 }
 
@@ -124,7 +124,7 @@ void decision_stateflow_step(void)
 
                 if (ExitCAR_request==1){
                     U8Ref_vel = DInputVD;
-                    //if (calDis==0.2){ //20cm Á¤µµ ÃâÂ÷ÇßÀ¸¸é    calDis °è»êÇÏ´Â ·ÎÁ÷ ¾ÆÁ÷ ¾ÈÂ«
+                    //if (calDis==0.2){ //20cm ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    calDis ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â«
                     if (move_distance(200) == REACHED_TARGET_DIS)
                     {
                         U8Ref_vel=0;
@@ -147,7 +147,7 @@ void decision_stateflow_step(void)
                         U8FCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && DObs_dis_D >=100) //³»Â÷ Á¤Áö + Àü¹æ Àå¾Ö¹° »ç¶óÁü
+                        if (U8Curr_vel == 0 && DObs_dis_D >=100) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
@@ -155,15 +155,15 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_FCA_DECEL:
                         U8FCAState = Decel;
-                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(DTTC_D+gainTTC)); //DTTC_D : 0 ÀÌ¸é ¿¡·¯
+                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(DTTC_D+gainTTC)); //DTTC_D : 0 ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 
                         if (DObs_dis_D >=100)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
                         break;
-                    case decision_stateflow_IN_FCA_EXIT:   //±ä±ÞÁ¦µ¿ ÇÏ±â ÀüÀÇ MODE ·Î º¹±Í
-                                                           //Å»Ãâ Á¶°Ç DObs_dis_D ¸¸Á·ÇÏ´ÂÁö È®ÀÎ
+                    case decision_stateflow_IN_FCA_EXIT:   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ MODE ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                                                           //Å»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ DObs_dis_D ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
                         U8FCAState = InitCAState;
 
                         if (U8DriverState == Driving)
@@ -199,7 +199,7 @@ void decision_stateflow_step(void)
                         U8RCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && DObs_dis_R >=100) //³»Â÷ Á¤Áö + ÈÄ¹æ Àå¾Ö¹° »ç¶óÁü
+                        if (U8Curr_vel == 0 && DObs_dis_R >=100) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ + ï¿½Ä¹ï¿½ ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
                         {
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
@@ -214,7 +214,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
                         break;
-                    case decision_stateflow_IN_RCA_EXIT:   //±ä±ÞÁ¦µ¿ ÇÏ±â ÀüÀÇ MODE ·Î º¹±Í
+                    case decision_stateflow_IN_RCA_EXIT:   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ MODE ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                         U8RCAState = InitCAState;
 
                         if (U8DriverState == Reversing)
@@ -254,7 +254,7 @@ void decision_stateflow_step(void)
                         {
                             decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_D;
                         }
-                        else if(vehicle_status.engine_state == ENGINE_OFF){  //½Ãµ¿ off
+                        else if(vehicle_status.engine_state == ENGINE_OFF){  //ï¿½Ãµï¿½ off
                             D_RefRPM = 0;
                             if (U8Curr_vel==0){
                                 //U8Ref_vel=(0);
@@ -267,7 +267,7 @@ void decision_stateflow_step(void)
                         U8DriverState = Driving;
                         U8Ref_vel = D_Ref_vel;
 
-                        //±ä±ÞÁ¦µ¿
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
@@ -278,7 +278,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
                         }
-                        //±â¾îº¯°æ
+                        //ï¿½ï¿½îº¯ï¿½ï¿½
                         if (U8IsTrButton == PARKING)
                         {
 
@@ -300,17 +300,17 @@ void decision_stateflow_step(void)
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
 
-                                //Ãß°¡ÇÑ ºÎºÐ ½ÃÀÛ
+                                //ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
 
                                 U8DriverState = InitDriverState;
                                 First_Set=1;
                                 IsRSPAButton = 0;
-                                //VCU ¿¡¼­ Á¬½¼³ª³ëÇÑÅ× Àü¹æÄ«¸Þ¶ó on ÇØ¼­ waypoint º¸³»´Þ¶ó°í ÇØ¾ßÇÔ (msg ¼Û½Å)
+                                //VCU ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä«ï¿½Þ¶ï¿½ on ï¿½Ø¼ï¿½ waypoint ï¿½ï¿½ï¿½ï¿½ï¿½Þ¶ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½ (msg ï¿½Û½ï¿½)
                                 //{
-                                CameraSwitchRequest = 1;  // Ä«¸Þ¶ó ÀüÈ¯ ¿äÃ» ÇÃ·¡±×(Àü¹æÄ«¸Þ¶ó on) (make_can_message¿¡¼­ Ã³¸®)
+                                CameraSwitchRequest = 1;  // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½Ã» ï¿½Ã·ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ä«ï¿½Þ¶ï¿½ on) (make_can_messageï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½)
                                 //}
-                                //Ãß°¡ÇÑ ºÎºÐ ³¡
+                                //ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Îºï¿½ ï¿½ï¿½
                                 
                             }
                         }
@@ -320,7 +320,7 @@ void decision_stateflow_step(void)
                         U8DriverState = Reversing;
                         U8Ref_vel = D_Ref_vel;
 
-                        //±ä±ÞÁ¦µ¿
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(DTTC_R <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
@@ -333,7 +333,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
 
                         }
-                        //±â¾îº¯°æ
+                        //ï¿½ï¿½îº¯ï¿½ï¿½
                         if (U8IsTrButton == DRIVING)
                         {
                             D_RefRPM=0;
@@ -358,10 +358,10 @@ void decision_stateflow_step(void)
                                 U8DriverState = InitDriverState;
 
                                 First_Set=1;
-                                IsRSPAButton = 0; // Ãß°¡
-                                //VCU ¿¡¼­ Á¬½¼³ª³ëÇÑÅ× Àü¹æÄ«¸Þ¶ó on ÇØ¼­ waypoint º¸³»´Þ¶ó°í ÇØ¾ßÇÔ (msg ¼Û½Å)
+                                IsRSPAButton = 0; // ï¿½ß°ï¿½
+                                //VCU ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä«ï¿½Þ¶ï¿½ on ï¿½Ø¼ï¿½ waypoint ï¿½ï¿½ï¿½ï¿½ï¿½Þ¶ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½ (msg ï¿½Û½ï¿½)
                                 //{
-                                CameraSwitchRequest = 1;  // Ä«¸Þ¶ó ÀüÈ¯ ¿äÃ» ÇÃ·¡±×(Àü¹æÄ«¸Þ¶ó on) (make_can_message¿¡¼­ Ã³¸®)
+                                CameraSwitchRequest = 1;  // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½Ã» ï¿½Ã·ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ä«ï¿½Þ¶ï¿½ on) (make_can_messageï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½)
                                 //}
                             }
                         }
@@ -369,7 +369,7 @@ void decision_stateflow_step(void)
                 }
                 break;
 
-            //ÁÖÂ÷º¸Á¶½Ã½ºÅÛ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½
             case decision_stateflow_IN_RSPA_Mode:
                 U8Driver=ModeOff;
                 U8RSPA=ModeOn;
@@ -383,8 +383,8 @@ void decision_stateflow_step(void)
                         U8RSPAState= Searching;
                         U8Ref_vel=DInputVD;
 
-                        //±ä±ÞÁ¦µ¿
-                        if(DTTC_D <= 1.0)    //ttc °è»êÇÏ´Â ·ÎÁ÷ ¾ÆÁ÷ ¾ÈÂ«
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        if(DTTC_D <= 1.0)    //ttc ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â«
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
@@ -397,7 +397,7 @@ void decision_stateflow_step(void)
 
                         }
 
-                        if (U8Isprkslot == 1)   // ºóÁÖÂ÷Ä­ Ã£À¸¸é STATE º¯°æ
+                        if (U8Isprkslot == 1)   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä­ Ã£ï¿½ï¿½ï¿½ï¿½ STATE ï¿½ï¿½ï¿½ï¿½
                         {
                             U8Ref_vel = 0;
                             if (U8Curr_vel==0){
@@ -415,7 +415,7 @@ void decision_stateflow_step(void)
                         U8RSPAState=Forward;
                         U8Ref_vel=DInputVD;
 
-                        //±ä±ÞÁ¦µ¿
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
@@ -429,17 +429,17 @@ void decision_stateflow_step(void)
 
                         }
 
-                        //if (DMoveDis == 0.10)  // 10CM ÁÂÃøÀ¸·Î ÀÌµ¿ÇßÀ¸¸é
+                        //if (DMoveDis == 0.10)  // 10CM ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(move_distance(100) == REACHED_TARGET_DIS) //100mm
                         {
                             DInputVD= 0;
                             
                             if (U8Curr_vel==0){
-                                // ¼­º¸¸ðÅÍ º¯°æ ¿Ï·áµÇ´Â ¿©À¯ ½Ã°£ Ãß°¡??
+                                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ß°ï¿½??
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
-                                //Ãß°¡ÇÑ ºÎºÐ
-                                CameraSwitchRequest = 2; // ÈÄ¹æ Ä«¸Þ¶ó
-                                //Ãß°¡ÇÑ ºÎºÐ ³¡
+                                //ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Îºï¿½
+                                CameraSwitchRequest = 2; // ï¿½Ä¹ï¿½ Ä«ï¿½Þ¶ï¿½
+                                //ï¿½ß°ï¿½ï¿½ï¿½ ï¿½Îºï¿½ ï¿½ï¿½
                             }
                         }
                         break;
@@ -447,7 +447,7 @@ void decision_stateflow_step(void)
                     case decision_stateflow_IN_RSPA_LANE_D:
                         U8RSPAState=Forward_Assist;
                         U8Ref_vel=DInputVD;
-                        //±ä±ÞÁ¦µ¿
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
@@ -461,7 +461,7 @@ void decision_stateflow_step(void)
 
                         }
 
-                        if (U8Parkingfail==1 )  //ÇÑ¹ø¿¡ ÁÖÂ÷ ¸øÇØ¼­ »ß±î»ß±î, STEERING Àº ÀÌÀü Á¶Çâ¹Ý´ë·Î * (-1)
+                        if (U8Parkingfail==1 )  //ï¿½Ñ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ß±ï¿½ß±ï¿½, STEERING ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ * (-1)
                         {
                             DInputVD= 0;
                             if (U8Curr_vel==0){
@@ -477,13 +477,13 @@ void decision_stateflow_step(void)
                         }
                         break;
 
-                    case decision_stateflow_IN_RSPA_R:  //steering Àº 3¾¿ °¨¼Ò
+                    case decision_stateflow_IN_RSPA_R:  //steering ï¿½ï¿½ 3ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                         U8RSPAState=Backward;
                         U8Ref_vel=DInputVR;
 
                         move_distance(700);
 
-                        //±ä±ÞÁ¦µ¿
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(DTTC_R <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
@@ -497,21 +497,21 @@ void decision_stateflow_step(void)
 
                         }
 
-                        if (CameraSwitchRequest == 2)  // ÈÄ¹æÄ«¸Þ¶ó Â÷¼± ÀÎÁöÇßÀ¸¸é WP ¹Þ¾ÒÀ¸¸é
+                        if (CameraSwitchRequest == 2)  // ï¿½Ä¹ï¿½Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ WP ï¿½Þ¾ï¿½ï¿½ï¿½ï¿½ï¿½
                         {
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
-                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_R; //º¯°æ
+                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_R; //ï¿½ï¿½ï¿½ï¿½
                             }
                         }
                         break;
 
-                    case decision_stateflow_IN_RSPA_LANE_R:  //ÀÌ¶§¸¸ Â÷¼±-STANELY
+                    case decision_stateflow_IN_RSPA_LANE_R:  //ï¿½Ì¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½-STANELY
                         U8RSPAState=Backward_Assist;
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
 
-                        //±ä±ÞÁ¦µ¿
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if(DTTC_R <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
@@ -526,7 +526,7 @@ void decision_stateflow_step(void)
                         }
                         //
 
-                        if (U8IsStopline == 1 && IsWPTrackingFinish == 1) //ÁÖÂ÷ ¿Ï·á
+                        if (U8IsStopline == 1 && IsWPTrackingFinish == 1) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½
                         {
                             U8Ref_vel = 0;
                             if (U8Curr_vel==0){
@@ -534,7 +534,7 @@ void decision_stateflow_step(void)
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
                             }
                         }
-                        else if (IsWPTrackingFinish == 1 && U8IsStopline == 0){ //ÁÖÂ÷ WP´Â ´Ù ÃßÁ¾Çß´Âµ¥, ÁÙÀÌ »ß¶Ô»ß¶ÔÇÒ¶§
+                        else if (IsWPTrackingFinish == 1 && U8IsStopline == 0){ //ï¿½ï¿½ï¿½ï¿½ WPï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß´Âµï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ß¶Ô»ß¶ï¿½ï¿½Ò¶ï¿½
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
@@ -542,13 +542,13 @@ void decision_stateflow_step(void)
                             }
                         }
 
-                        /*else if (U8IsOb_R == 0 ){ //°æ·Î´ë·Î ¿òÁ÷ÀÌ´Ù°¡ ÈÄ¹æ Ãæµ¹ÆÇ´Ü °¨Áö½Ã Á¤ÁöÇÏ°í ¸ðµå º¯°æ
+                        /*else if (U8IsOb_R == 0 ){ //ï¿½ï¿½Î´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì´Ù°ï¿½ ï¿½Ä¹ï¿½ ï¿½æµ¹ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_D;
                             }
-                        }*///ÀÌ·±»óÈ² °¡Á¤¾ÈÇÏ±â·ÎÇÔ!!
+                        }*///ï¿½Ì·ï¿½ï¿½ï¿½È² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½!!
                         break;
 
                     case decision_stateflow_IN_RSPA_P:
