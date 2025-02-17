@@ -52,7 +52,9 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INP
     }
 
 
-    if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
+
+
+if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
 
         //vehicle_status.transmission = D_trans;
         vehicle_status.transmission = U8IsTrButton;
@@ -145,5 +147,5 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INP
 
     //모터 input
     setServoAngle(vehicle_status.steering_angle);
-    RPM_CMD1=vehicle_status.ref_rpm;
+   // RPM_CMD1=vehicle_status.ref_rpm;
 }

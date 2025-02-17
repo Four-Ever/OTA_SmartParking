@@ -255,7 +255,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_D;
                         }
                         else if(vehicle_status.engine_state == ENGINE_OFF){  //시동 off
-                            U8Ref_vel = 0;
+                            D_RefRPM = 0;
                             if (U8Curr_vel==0){
                                 //U8Ref_vel=(0);
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_INIT_Mode;
@@ -281,7 +281,8 @@ void decision_stateflow_step(void)
                         //기어변경
                         if (U8IsTrButton == PARKING)
                         {
-                            U8Ref_vel = 0;
+
+                            D_RefRPM=0;
                             if (U8Curr_vel == 0){
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
                             }
@@ -289,13 +290,13 @@ void decision_stateflow_step(void)
                         }
                         else if (U8IsTrButton == REVERSE)
                         {
-                            U8Ref_vel=0;
+                            D_RefRPM=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_R;
                             }
                         }
                         else if (IsRSPAButton == 1 && IsOTAFinished == 1){
-                            U8Ref_vel=0;
+                            D_RefRPM=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
 
@@ -335,13 +336,13 @@ void decision_stateflow_step(void)
                         //기어변경
                         if (U8IsTrButton == DRIVING)
                         {
-                            U8Ref_vel=0;
+                            D_RefRPM=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_D;
                             }
                         }
                         else if(U8IsTrButton == PARKING){
-                            U8Ref_vel=0;
+                            D_RefRPM=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
                             }
@@ -349,7 +350,7 @@ void decision_stateflow_step(void)
 
                         else if (IsRSPAButton == 1 && IsOTAFinished == 1)
                         {
-                            U8Ref_vel=0;
+                            D_RefRPM=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
@@ -428,7 +429,7 @@ void decision_stateflow_step(void)
                         //if (DMoveDis == 0.10)  // 10CM 좌측으로 이동했으면
                         if(move_distance(100) == REACHED_TARGET_DIS) //100mm
                         {
-                            U8Ref_vel= 0;
+                            DInputVD= 0;
                             
                             if (U8Curr_vel==0){
                                 // 서보모터 변경 완료되는 여유 시간 추가??
@@ -459,14 +460,14 @@ void decision_stateflow_step(void)
 
                         if (U8Parkingfail==1 )  //한번에 주차 못해서 삐까삐까, STEERING 은 이전 조향반대로 * (-1)
                         {
-                            U8Ref_vel= 0;
+                            DInputVD= 0;
                             if (U8Curr_vel==0){
 
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
                             }
                         }
                         else if(U8IsStopline==1 && U8IsPrkFinished==1){
-                            U8Ref_vel= 0;
+                            DInputVD= 0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
                             }

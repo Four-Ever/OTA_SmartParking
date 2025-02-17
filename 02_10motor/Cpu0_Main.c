@@ -447,8 +447,7 @@ void AppTask100ms(void)
 #if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 주행 코드
     if (vehicle_status.engine_state == ENGINE_ON)
     {
-        if (vehicle_status.user_mode == USER_DRIVE_MODE)
-        {
+
             if (vehicle_status.transmission == DRIVING)
             {
                 RPM_CMD1 = vehicle_status.ref_rpm;
@@ -458,7 +457,7 @@ void AppTask100ms(void)
                 RPM_CMD1 = vehicle_status.ref_rpm * -1;
             }
             setServoAngle(vehicle_status.steering_angle);
-        }
+
         //시동이 켜져있을 때, can message 출력
         make_can_message();
     }
