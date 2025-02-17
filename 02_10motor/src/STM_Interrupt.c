@@ -95,26 +95,26 @@ IFX_INTERRUPT(isrSTM, 0, ISR_PRIORITY_STM);
 
 void RPM_cal(void)
 {
-    Encoder_update();   //Áö¿öµµ µÇ´ÂÁö È®ÀÎÇÒ°Í
+    Encoder_update();   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ò°ï¿½
     Enc_count_new = gpt12Config.module->T2.U;
 
     if (abs(Enc_count_new - Enc_count_old) > 32768)
     {
-        // ¿À¹ö, ¾ð´õÇÃ·Î¿ì ¹ß»ý
+        // ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Ã·Î¿ï¿½ ï¿½ß»ï¿½
         if (Enc_count_new > Enc_count_old)
         {
-            // ¾ð´õÇÃ·Î¿ì (¿ª¹æÇâ)
+            // ï¿½ï¿½ï¿½ï¿½Ã·Î¿ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
             Enc_count_diff = (float32)((Enc_count_new - 65535) - Enc_count_old);
         }
         else
         {
-            // ¿À¹öÇÃ·Î¿ì (Á¤¹æÇâ)
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ã·Î¿ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
             Enc_count_diff = (float32)((65535 - Enc_count_old) + Enc_count_new + 1);
         }
     }
     else
     {
-        // Á¤»óÀûÀÏ ¶§,
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½,
         Enc_count_diff = (float32)(Enc_count_new - Enc_count_old);
     }
     speed_pid.DisSum += Enc_count_diff * tick_dis;
@@ -130,13 +130,13 @@ void RPM_cal(void)
     sint16 s16_velocity;
     uint16 u16_velocity;
 
-    s16_velocity = round_to_integer(U8Curr_vel/10); //7bit·Î º¸³»ÁÖ±â À§ÇÔ
+    s16_velocity = round_to_integer(U8Curr_vel/10); //7bitï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½ï¿½
     u16_velocity = s16_velocity >= 0  ? s16_velocity : (s16_velocity * -1);
     u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
 
     vehicle_status.cur_rpm = s32_motor_speed_rpm;
     vehicle_status.cur_vel = U8Curr_vel;
-    vehicle_status.u8_velocity = (uint8)u16_velocity; // (½ÇÁ¦ ¼Óµµ / 10) [mm/0.1s]
+    vehicle_status.u8_velocity = (uint8)u16_velocity; // (ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ / 10) [mm/0.1s]
 
     Enc_count_old = Enc_count_new;
 }
@@ -269,7 +269,7 @@ TargetDistanceStatus move_distance(float32 tarDis)
 
     else if (speed_pid.TargetDis_state == REACHED_TARGET_DIS)
     {
-        speed_pid.TargetDis_state = NO_TARGET_DIS; // ÃÊ±âÈ­
+        speed_pid.TargetDis_state = NO_TARGET_DIS; // ï¿½Ê±ï¿½È­
         return REACHED_TARGET_DIS;
     }
 

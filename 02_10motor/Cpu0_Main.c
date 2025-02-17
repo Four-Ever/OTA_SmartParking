@@ -30,9 +30,9 @@
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-//#define motor_Test //¿£ÄÚ´õ °Å¸® È®ÀÎ
-//#define putty_Test //putty uart ¸Ş¼¼Áö È®ÀÎ
-//#define tuning_Test //½Ã¹Ä¸µÅ©¿¡¼­ pid °è¼ö Á¶Á¤ ¹× ½ºÄÚÇÁ È®ÀÎ
+//#define motor_Test //ì—”ì½”ë” ê±°ë¦¬ í™•ì¸
+//#define putty_Test //putty uart ë©”ì„¸ì§€ í™•ì¸
+//#define tuning_Test //ì‹œë®¬ë§í¬ì—ì„œ pid ê³„ìˆ˜ ì¡°ì • ë° ìŠ¤ì½”í”„ í™•ì¸
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -88,43 +88,10 @@ void AppTask5000ms(void);
 
 
 float g_angle;
-IfxI2c_I2c_Status first = 4;
-IfxI2c_I2c_Status second = 4;
-IfxI2c_I2c_Status third = 4;
-IfxI2c_I2c_Status fourth = 4;
-IfxI2c_I2c_Status test1 = 4;
-IfxI2c_I2c_Status test2 = 4;
-IfxI2c_I2c_Status test3 = 4;
-IfxI2c_I2c_Status test4 = 4;
-IfxI2c_I2c_Status test5 = 4;
-IfxI2c_I2c_Status test6 = 4;
-IfxI2c_I2c_Status test7 = 4;
-IfxI2c_I2c_Status test8 = 4;
-//////////////////////////////////
 IMU now_status = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 Euler now_euler = { 0, 0, 0 };
-uint8 in = 0;
-uint8 now13 = 0;
-// ak status check reg
-uint8 status1_val = 0;
-uint8 status2_val = 5;
-float asa_x = 0;
-float asa_y = 0;
-float asa_z = 0;
-int i = 0;
-float scale_x = 0.0f;
-float scale_y = 0.0f;
-float scale_z = 0.0f;
-float x_offset = 0.0f;
-float y_offset = 0.0f;
-float z_offset = 0.0f;
 volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;  // quaternion of sensor frame relative to auxiliary frame
-int nowcnt = 0;
-float nowtheta = 0.0f;
 float stanelytheta = 0.0f;
-void Touch(void);
-void initGPIO(void);
-IfxPort_State TouchState = 0;
 int stopstatus = 0;
 
 int core0_main(void)
@@ -162,15 +129,12 @@ int core0_main(void)
 
     initServo(); // D6
     initIMU();
-    now13 = 1;
-
-    in = 5;
     initGPIO();
-    // motor_dir = 0;    // 0:Á¤¹æÇâ, 1:¿ª¹æÇâ
-    // motor_enable = 0;  // 0:Á¦µ¿, 1:ÇØÁ¦
+    // motor_dir = 0;    // 0:ì •ë°©í–¥, 1:ì—­ë°©í–¥
+    // motor_enable = 0;  // 0:ì œë™, 1:í•´ì œ
 
 #ifdef motor_Test
-    // motor_enable = 1;  // 0:Á¦µ¿, 1:ÇØÁ¦
+    // motor_enable = 1;  // 0:ì œë™, 1:í•´ì œ
 
     Kp_s = 1.55f;//1.75f;
     Ki_s = 2.65f;//0.198f;
@@ -178,17 +142,17 @@ int core0_main(void)
 
     vehicle_status.engine_state = engine_on;
 
-    waitTime(300000000); // 3ÃÊ
+    waitTime(300000000); // 3ì´ˆ
     init_move_distance_control(1000.0f, 500.0f); // 1000mm, 1000rpm
 #endif
 
     while(1)
     {
         AppScheduling();
-
-        //can ¸Ş¼¼Áö ¹Ş´Â °÷
-#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // ÁÖÇà ÄÚµå
-        // ¿£Áø ¸Ş¼¼Áö
+        stopstatus=Touch();
+        //can ë©”ì„¸ì§€ ë°›ëŠ” ê³³
+#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // ì£¼í–‰ ì½”ë“œ
+        // ì—”ì§„ ë©”ì„¸ì§€
         if (db_flag.CGW_Engine_Flag == 1)
         {
             db_flag.CGW_Engine_Flag = 0;
@@ -201,10 +165,10 @@ int core0_main(void)
 
         }
 
-        // ¿£ÁøÀÌ ÄÑÁ® ÀÖÀ» ¶§,
+        // ì—”ì§„ì´ ì¼œì ¸ ìˆì„ ë•Œ,
         if (vehicle_status.engine_state == ENGINE_ON)
         {
-            // ¼öµ¿Á¶ÀÛ ¸Ş¼¼Áö
+            // ìˆ˜ë™ì¡°ì‘ ë©”ì„¸ì§€
             if (db_flag.CGW_Move_Flag == 1)
             {
                 db_flag.CGW_Move_Flag = 0;
@@ -216,7 +180,7 @@ int core0_main(void)
                 D_steering = db_msg.CGW_Move.control_steering_angle;
                 //vehicle_status.steering_angle = db_msg.CGW_Move.control_steering_angle;
 
-                // ¼öµ¿ Á¶ÀÛ ¸ğµå·Î ÀüÈ¯
+                // ìˆ˜ë™ ì¡°ì‘ ëª¨ë“œë¡œ ì „í™˜
                 //vehicle_status.user_mode = USER_DRIVE_MODE;
                 if (db_msg.CGW_Move.control_accel == 1) // accel
                 {
@@ -239,7 +203,7 @@ int core0_main(void)
                 D_Ref_vel = (double)((D_RefRPM * circumference) / (60 * gear_ratio));
             }
 
-            // ÀÚµ¿ ÁÖÂ÷ ¿äÃ»
+            // ìë™ ì£¼ì°¨ ìš”ì²­
 
             if (db_flag.CGW_Auto_Parking_Request_Flag==1)
             {
@@ -248,15 +212,15 @@ int core0_main(void)
                 IsRSPAButton = 1;
 
             }
-            //wp ¼ö½ÅÈ®ÀÎ
+            //wp ìˆ˜ì‹ í™•ì¸
             if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-                // ¸ğµç µ¥ÀÌÅÍ°¡ µé¾î¿Â °æ¿ì
+                // ëª¨ë“  ë°ì´í„°ê°€ ë“¤ì–´ì˜¨ ê²½ìš°
                 db_flag.CCU_Cordi_data1_Flag=0;
                 db_flag.CCU_Cordi_data2_Flag=0;
 
-                // Ä«¸Ş¶ó ÇÈ¼¿ ÁÂÇ¥ ÀúÀå
-                //if (db_msg.CCU_Cordi_data2.trust_value > 0.7){  //½Å·Úµµ ³ôÀ»°æ¿ì¸¸ °ªÀ» »ç¿ëÇÔ.
-                    // ÀÌÀü µ¥ÀÌÅÍ ÃÊ±âÈ­
+                // ì¹´ë©”ë¼ í”½ì…€ ì¢Œí‘œ ì €ì¥
+                //if (db_msg.CCU_Cordi_data2.trust_value > 0.7){  //ì‹ ë¢°ë„ ë†’ì„ê²½ìš°ë§Œ ê°’ì„ ì‚¬ìš©í•¨.
+                    // ì´ì „ ë°ì´í„° ì´ˆê¸°í™”
                     InitCampoints();
                     cam_points[0][0] = db_msg.CCU_Cordi_data1.cordi_data_x1;
                     cam_points[0][1] = db_msg.CCU_Cordi_data1.cordi_data_y1;
@@ -272,22 +236,22 @@ int core0_main(void)
 
                     data_ready_flag = 1;
                 //}
-                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //Â÷¼±±â¹İ ÁÖÇà ¸ğµå´Â µÎ°³¹Û¿¡ ¾øÀ½
+                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //ì°¨ì„ ê¸°ë°˜ ì£¼í–‰ ëª¨ë“œëŠ” ë‘ê°œë°–ì— ì—†ìŒ
                     if (data_ready_flag == 1){
                         InitWorldpoints();
 
-                        if(First_Set==1){   //¸Ç Ã³À½¿¡ wp ¹ŞÀ»¶§
+                        if(First_Set==1){   //ë§¨ ì²˜ìŒì— wp ë°›ì„ë•Œ
                             initStanley();
-                            transform_points(H, cam_points, world_points); //ÁÂÇ¥°è º¯È¯
+                            transform_points(H, cam_points, world_points); //ì¢Œí‘œê³„ ë³€í™˜
                             if (transform_finished==1){
-                                updateWaypoints(world_points);  //stanely ÀÇ ‘òÇ¥ waypoint º¯°æ
+                                updateWaypoints(world_points);  //stanely ì˜ ë¬™í‘œ waypoint ë³€ê²½
                             }
                             First_Set=0;
                             if (U8RSPAState==Searching){
                                 lanecheck_request=1;
                             }
                         }
-                        else if (IsWPTrackingFinish==1){ // ±× ÀÌÈÄ¿¡´Â ÀÌÀü wp ¸ğµÎ ÃßÁ¾ÇßÀ»¶§ »õ·Î °»½ÅÇÔ.
+                        else if (IsWPTrackingFinish==1){ // ê·¸ ì´í›„ì—ëŠ” ì´ì „ wp ëª¨ë‘ ì¶”ì¢…í–ˆì„ë•Œ ìƒˆë¡œ ê°±ì‹ í•¨.
                             initStanley();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
@@ -300,7 +264,7 @@ int core0_main(void)
             }
 
 
-            //Á¤Áö¼± °¢µµ
+            //ì •ì§€ì„  ê°ë„
             /*if (db_flag.CCU_RightAngle_detect_flag == 1)
             {
                 db_flag.CCU_RightAngle_detect_flag = 0;
@@ -308,31 +272,31 @@ int core0_main(void)
             }*/
         }
 
-        //¿£ÁøÀÌ ²¨Á® ÀÖÀ» ¶§,
+        //ì—”ì§„ì´ êº¼ì ¸ ìˆì„ ë•Œ,
         else if (vehicle_status.engine_state == ENGINE_OFF)
-        {          
+        {
             if (db_flag.CGW_Off_Request_Flag==1)
             {
                 db_flag.CGW_Off_Request_Flag=0;
 
-                // Â÷·® Ã£±â ¿äÃ»
+                // ì°¨ëŸ‰ ì°¾ê¸° ìš”ì²­
                 if (db_msg.CGW_Off_Request.alert_request==1)
                 {
-                    //ÁÖÂ÷ÇÑ Â÷·®ÀÌ ÀÖÀ¸¸é LED È¤Àº ºÎÀú »ß¿ë»ß¿ë
+                    //ì£¼ì°¨í•œ ì°¨ëŸ‰ì´ ìˆìœ¼ë©´ LED í˜¹ì€ ë¶€ì € ì‚ìš©ì‚ìš©
                     if (U8PrkFinished==1)
                     {
 
                     }
                 }
 
-                // ÃâÂ÷ ¿äÃ»
+                // ì¶œì°¨ ìš”ì²­
                 if (db_msg.CGW_Off_Request.auto_exit_request==1)
                 {
                     vehicle_status.engine_state = ENGINE_ON;
-                    // ½Ã½ºÅÛ Á¶ÀÛ ¸ğµå·Î ÀüÈ¯
+                    // ì‹œìŠ¤í…œ ì¡°ì‘ ëª¨ë“œë¡œ ì „í™˜
                     //vehicle_status.user_mode = SYSTEM_DRIVE_MODE;
 
-                    //ÁÖÂ÷ÇÑ Â÷·®ÀÌ ÀÖÀ» ¶§ ÃâÂ÷ ¿äÃ»// µü ÇÑ¹ø¸¸ ÁÖÂ÷-ÃâÂ÷
+                    //ì£¼ì°¨í•œ ì°¨ëŸ‰ì´ ìˆì„ ë•Œ ì¶œì°¨ ìš”ì²­// ë”± í•œë²ˆë§Œ ì£¼ì°¨-ì¶œì°¨
                     if (U8PrkFinished==1)
                     {
                         ExitCAR_request=1;
@@ -358,14 +322,14 @@ void make_can_message(void)
     update_message_engine_status(&db_msg.VCU_Vehicle_Engine_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Engine_Status, VCU_Vehicle_Engine_Status_ID);
 
-    if (CameraSwitchRequest != 0) // 1 : Àü¹æ, 2 : ÈÄ¹æ
+    if (CameraSwitchRequest != 0) // 1 : ì „ë°©, 2 : í›„ë°©
     {
         db_msg.VCU_Camera.camera_num = CameraSwitchRequest;
         output_message(&db_msg.VCU_Camera, VCU_Camera_ID);
         CameraSwitchRequest = 0;
     }
     if (lanecheck_request != 0) {
-        //Á¬½¼¿¡¼­ ÁÖÂ÷Á¤Áö¼±È®ÀÎ ¿äÃ»
+        //ì ¯ìŠ¨ì—ì„œ ì£¼ì°¨ì •ì§€ì„ í™•ì¸ ìš”ì²­
     }
 }
 
@@ -427,33 +391,31 @@ void AppTask10ms(void)
 
 void AppTask50ms(void){
     stTestCnt.u32nuCnt50ms++;
-    decision_stateflow_step();  //ÁÖÇà¸ğµå¿¡ µû¸¥ Á¾È¾ input °áÁ¤
+    decision_stateflow_step();  //ì£¼í–‰ëª¨ë“œì— ë”°ë¥¸ ì¢…íš¡ input ê²°ì •
 }
 
 void AppTask100ms(void)
 {
     stTestCnt.u32nuCnt100ms++;
-    update_VCU_inputs();  //¸ğÅÍ¿¡ Á¦¾îinput À» ³Ö¾îÁÜ
-    i++;
+    update_VCU_inputs();  //ëª¨í„°ì— ì œì–´input ì„ ë„£ì–´ì¤Œ
     now_status = imuRead();
-    stanelytheta = nowtheta + now_euler.yaw;
+    stanelytheta = now_euler.yaw;
     if (stopstatus == 1)
     {
         q0 = 1;
         q1 = 0;
         q2 = 0;
         q3 = 0;
-        nowtheta += now_euler.yaw;
         now_euler.yaw = 0;
     }
     now_euler = MadgwickAHRSupdateIMU(now_status);
     print_encimu(&now_status, &now_euler);
 
-#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // ÁÖÇà ÄÚµå
+#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // ì£¼í–‰ ì½”ë“œ
     if (vehicle_status.engine_state == ENGINE_ON)
     {
 
-        //½Ãµ¿ÀÌ ÄÑÁ®ÀÖÀ» ¶§, can message Ãâ·Â
+        //ì‹œë™ì´ ì¼œì ¸ìˆì„ ë•Œ, can message ì¶œë ¥
         make_can_message();
     }
 #endif
@@ -506,17 +468,3 @@ void AppScheduling(void)
         }
     }
 }
-void initGPIO(void)
-{
-    IfxPort_setPinMode(&MODULE_P14, 0, IfxPort_Mode_inputPullUp);  //input?¼ë¡œ ?¤ì •
-}
-
-void Touch(void)
-{
-    TouchState = IfxPort_getPinState(&MODULE_P14, 0);
-    if (TouchState == 1)
-        stopstatus = 1;
-    else
-        stopstatus = 0;
-}
-/*********************************************************************************************************************/
