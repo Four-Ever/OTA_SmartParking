@@ -118,7 +118,7 @@ struct tag_RTM_decision_stateflow_T {
 };
 
 /* Block states (default storage) */
-extern DW_decision_stateflow_T decision_stateflow_DW;
+//DW_decision_stateflow_T decision_stateflow_DW;
 extern double initVel;
 extern Transmission U8IsTrButton;
 extern double U8Curr_vel;
