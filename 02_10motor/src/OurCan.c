@@ -41,7 +41,8 @@
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 /*********************************************************************************************************************/
-
+VehicleStatus vehicle_status = {SYSTEM_DRIVE_MODE, 0.0f, 0.0f, 0, 0.0f,
+                                    0, 0, PARKING, PARKED, ENGINE_OFF};
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 IfxMultican_Can can;
@@ -68,7 +69,7 @@ void RX_Int0Handler(void)
     IfxCpu_enableInterrupts();
 
     IfxMultican_Message readmsg;
-    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// 수신 대기
+    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// �닔�떊 ��湲�
     if (IfxMultican_Can_MsgObj_readMessage(&canMsgObjRx, &readmsg) == IfxMultican_Status_newData)
     {
         switch (readmsg.id)
@@ -233,7 +234,7 @@ void RX_Int0Handler(void)
             break;
         }
     }
-    //IfxCpu_restoreInterrupts(interruptState);  // 이전 인터럽트 상태 복원
+    //IfxCpu_restoreInterrupts(interruptState);  // �씠�쟾 �씤�꽣�읇�듃 �긽�깭 蹂듭썝
 }
 void initCanDB(void)
 {
@@ -322,7 +323,7 @@ void output_message(void *msg, uint32 msgID)
 //            Serialize_CCU_Cordi_data1_Msg(&serialized, out_msg);
 //            //memcpy(&send_data[0],&serialized,4);
 //            //memcpy(&send_data[1],((uint32*)&serialized)+1,2);
-//            memcpy(send_data, &serialized, 6); // 하위 6바이트 복사
+//            memcpy(send_data, &serialized, 6); // �븯�쐞 6諛붿씠�듃 蹂듭궗
 //            IfxMultican_Message_init(&tx_msg, CCU_Cordi_data1_ID, send_data[0], send_data[1], CCU_Cordi_data1_Size);
 //            break;
 //        }
@@ -338,17 +339,17 @@ void output_message(void *msg, uint32 msgID)
 
 void initCan(void)
 {
-    // CAN 모듈 초기화
+    // CAN 紐⑤뱢 珥덇린�솕
     IfxMultican_Can_Config canConfig;
     IfxMultican_Can_initModuleConfig(&canConfig, &MODULE_CAN);
 
-    //     CAN0 인터럽트 활성화
+    //     CAN0 �씤�꽣�읇�듃 �솢�꽦�솕
     canConfig.nodePointer[TC275_CAN0].priority = 101;
     canConfig.nodePointer[TC275_CAN0].typeOfService = IfxSrc_Tos_cpu0;
 
     IfxMultican_Can_initModule(&can, &canConfig);
 
-    // CAN 노드 초기화
+    // CAN �끂�뱶 珥덇린�솕
     IfxMultican_Can_NodeConfig canNodeConfig;
     IfxMultican_Can_Node_initConfig(&canNodeConfig, &can);
     canNodeConfig.nodeId = IfxMultican_NodeId_0;
@@ -358,23 +359,23 @@ void initCan(void)
     canNodeConfig.txPinMode = IfxPort_OutputMode_pushPull;
     IfxMultican_Can_Node_init(&canNode, &canNodeConfig);
 
-    // Tx 메시지 객체 초기화
+    // Tx 硫붿떆吏� 媛앹껜 珥덇린�솕
     IfxMultican_Can_MsgObjConfig canMsgObjConfig;
     IfxMultican_Can_MsgObj_initConfig(&canMsgObjConfig, &canNode);
-    canMsgObjConfig.msgObjId = 0; // 메시지 객체 ID
+    canMsgObjConfig.msgObjId = 0; // 硫붿떆吏� 媛앹껜 ID
     canMsgObjConfig.messageId = CAN_TX_MESSAGE_ID;
     canMsgObjConfig.frame = IfxMultican_Frame_transmit;
     canMsgObjConfig.control.extendedFrame = FALSE;
     IfxMultican_Can_MsgObj_init(&canMsgObjTx, &canMsgObjConfig);
 
-    // Rx 메시지 객체 초기화
-    canMsgObjConfig.msgObjId = 1; // 메시지 객체 ID
+    // Rx 硫붿떆吏� 媛앹껜 珥덇린�솕
+    canMsgObjConfig.msgObjId = 1; // 硫붿떆吏� 媛앹껜 ID
     canMsgObjConfig.messageId = CAN_RX_MESSAGE_ID;
-    canMsgObjConfig.acceptanceMask = 0x0; // 비교 안함, 전부 수신
+    canMsgObjConfig.acceptanceMask = 0x0; // 鍮꾧탳 �븞�븿, �쟾遺� �닔�떊
     canMsgObjConfig.frame = IfxMultican_Frame_receive;
     canMsgObjConfig.control.extendedFrame = FALSE;
 
-    // 인터럽트 활성화
+    // �씤�꽣�읇�듃 �솢�꽦�솕
     canMsgObjConfig.rxInterrupt.enabled = TRUE;
     canMsgObjConfig.rxInterrupt.srcId = TC275_CAN0;
 
