@@ -163,7 +163,7 @@ void asc0RxISR(void)
 //    }
 //    if(IfxStdIf_DPipe_getReadCount(&g_ascStandardInterface) > 0)
 //    {
-//        // 사용자 정의 처리 함수 호출
+//        // �궗�슜�옄 �젙�쓽 泥섎━ �븿�닔 �샇異�
 //        dpipeReceiveCallback();
 //    }
 }
@@ -181,10 +181,10 @@ void dpipeReceiveCallback(void)
     Ifx_SizeT readCount = 1;
     Ifx_TickTime timeout = 0;
 
-    // 데이터가 있는 동안 읽기
+    // �뜲�씠�꽣媛� �엳�뒗 �룞�븞 �씫湲�
     while(IfxStdIf_DPipe_getReadCount(&g_ascStandardInterface) > 0)
     {
-        // 1바이트 읽기
+        // 1諛붿씠�듃 �씫湲�
         IfxStdIf_DPipe_read(&g_ascStandardInterface, &receivedByte, &readCount, timeout);
         //for(volatile int i = 0; i < 10; i++);
         //IfxStdIf_DPipe_clearRx(&g_ascStandardInterface);
@@ -193,29 +193,29 @@ void dpipeReceiveCallback(void)
         {
             rxBuffer[rxIndex++] = receivedByte;
 
-            // 8바이트를 모두 받았으면 데이터 처리
+            // 8諛붿씠�듃瑜� 紐⑤몢 諛쏆븯�쑝硫� �뜲�씠�꽣 泥섎━
             if(rxIndex == RX_BUFFER_SIZE)
             {
                 uint16 temp;
 
-                // P gain 복원
+                // P gain 蹂듭썝
                 temp = (uint16)(rxBuffer[0] << 8) | rxBuffer[1];
                 p_gain = (float)temp / 1000.0f;
 
-                // I gain 복원
+                // I gain 蹂듭썝
                 temp = (uint16)(rxBuffer[2] << 8) | rxBuffer[3];
                 i_gain = (float)temp / 1000.0f;
 
-                // D gain 복원
+                // D gain 蹂듭썝
                 temp = (uint16)(rxBuffer[4] << 8) | rxBuffer[5];
                 d_gain = (float)temp / 1000.0f;
 
-                // PWM speed 복원
+                // PWM speed 蹂듭썝
                 temp = (uint16)(rxBuffer[6] << 8) | rxBuffer[7];
                 rpm_speed = (sint16)temp - 5000;
 
                 servo_angle = (sint8)(rxBuffer[8] - 50);
-                // 버퍼 인덱스 초기화
+                // 踰꾪띁 �씤�뜳�뒪 珥덇린�솕
                 rxIndex = 0;
             }
         }
@@ -666,11 +666,11 @@ void initSerialInterface(void)
 
     ascConf.baudrate.prescaler = 1;
 
-    // 데이터 프레임 설정
+    // �뜲�씠�꽣 �봽�젅�엫 �꽕�젙
     ascConf.frame.dataLength = IfxAsclin_DataLength_8;
     ascConf.frame.stopBit = IfxAsclin_StopBit_1;
 
-    // 핸드쉐이크 설정
+    // �빖�뱶�뎽�씠�겕 �꽕�젙
     //ascConf.flowControl = IfxAsclin_FlowControl_none;
 
     /* ISR priorities and interrupt target */
@@ -780,7 +780,122 @@ void print_enc(sint32* cur_count)
 //    "%d",
 //    *cur_count);
 }
+void print_encimu (IMU *imu_data, Euler *euler_data)
+{
+//    char str[11]={'1','1','1','1','1','1','1','1','1','1','1'};
+//
+//
+//    sint32 value = (sint32)(cur_count->accel_x*10000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+//
+//    value1 = cur_count->accel_x;
+//    value2 = (sint32)(cur_count->accel_x*10000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+//
+//    boolean sign = FALSE;
+//
+//    if (value < 0) {
+//        value = -value;
+//        sign = TRUE;
+//    }
+//    sint32 divisor =1;
+//    for(int i=9;i>=0;i--)
+//    {
+//        if(i!=9)divisor*=10;
+//        str[i] = '0' + ((value/divisor) % 10);
+//    }
+////    str[3] = '0' + (value % 10);
+////    str[2] = '0' + ((value /10) % 10);
+////    str[1] = '0' + ((value / 100) % 10);
+////    str[0] = '0' + ((value / 1000) % 10);
+//
+//    if (sign == TRUE)
+//    {
+//        str[10] = 'm';
+//    }
+//    else
+//    {
+//        str[10] = 'p';
+//    }
+//
+//    //str[11] = '\0';
+//
+//    PRINT_ALL_SIGNAL(&g_ascStandardInterface, 1,
+//        "%c%c%c%c%c%c%c%c%c%c%c%c%c",
+//        str[0], str[1], str[2], str[3], str[4],str[5], str[6], str[7], str[8], str[9], str[10]);
 
+//    PRINT_ALL_SIGNAL(&g_ascStandardInterface, 1,
+//    "%d",
+//    *cur_count);
+
+    char str[130] = {0};
+    sint32 value = (sint32) (imu_data->accel_x * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 0);
+    value = (sint32) (imu_data->accel_y * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 1);
+    value = (sint32) (imu_data->accel_z * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 2);
+    value = (sint32) (imu_data->gyro_x * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 3);
+    value = (sint32) (imu_data->gyro_y * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 4);
+    value = (sint32) (imu_data->gyro_z * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 5);
+    value = (sint32) (imu_data->mag_x * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 6);
+    value = (sint32) (imu_data->mag_y * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 7);
+    value = (sint32) (imu_data->mag_z * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 8);
+    value = (sint32) (imu_data->heading * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 9);
+
+    value = (sint32) (euler_data->roll * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 10);
+    value = (sint32) (euler_data->pitch * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 11);
+    value = (sint32) (euler_data->yaw * 1000);  //32비트 부호있으면 10자리까지-> 9자리까지 한다 생각
+    put_data(str, value, 12);
+
+    //str[11] = '\0';
+
+    PRINT_ALL_SIGNAL(&g_ascStandardInterface, 1,
+            "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",
+            str[0], str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10], str[11], str[12],
+            str[13], str[14], str[15], str[16], str[17], str[18], str[19], str[20], str[21], str[22], str[23], str[24],
+            str[25], str[26], str[27], str[28], str[29], str[30], str[31], str[32], str[33], str[34], str[35], str[36],
+            str[37], str[38], str[39], str[40], str[41], str[42], str[43], str[44], str[45], str[46], str[47], str[48],
+            str[49], str[50], str[51], str[52], str[53], str[54], str[55], str[56], str[57], str[58], str[59], str[60],
+            str[61], str[62], str[63], str[64], str[65], str[66], str[67], str[68], str[69], str[70], str[71], str[72],
+            str[73], str[74], str[75], str[76], str[77], str[78], str[79], str[80], str[81], str[82], str[83], str[84],
+            str[85], str[86], str[87], str[88], str[89], str[90], str[91], str[92], str[93], str[94], str[95], str[96],
+            str[97], str[98], str[99],str[100], str[101], str[102], str[103], str[104], str[105], str[106], str[107], str[108], str[109], str[110], str[111], str[112],
+            str[113], str[114], str[115], str[116], str[117], str[118], str[119], str[120], str[121], str[122], str[123], str[124],
+            str[125], str[126], str[127], str[128], str[129]);
+}
+void put_data (char *str, sint32 value, uint8 cnt)
+{
+    boolean sign = FALSE;
+
+    if (value < 0)
+    {
+        value = -value;
+        sign = TRUE;
+    }
+    sint32 divisor = 1;
+    for (int i = 8; i >= 0; i--)
+    {
+        if (i != 8)
+            divisor *= 10;
+        str[cnt * 10 + i] = '0' + ((value / divisor) % 10);
+    }
+    if (sign == TRUE)
+    {
+        str[cnt * 10 + 9] = 'm';
+    }
+    else
+    {
+        str[cnt * 10 + 9] = 'p';
+    }
+}
 
 void print_debug(char *buf){
 
@@ -789,13 +904,13 @@ void print_debug(char *buf){
 
 #define BUFFER_SIZE 1024
 void myprintf(const char *format, ...) {
-    char buffer[BUFFER_SIZE];  // 출력할 문자열을 저장할 버퍼
+    char buffer[BUFFER_SIZE];  // 異쒕젰�븷 臾몄옄�뿴�쓣 ���옣�븷 踰꾪띁
     char* args;
 
-    va_start(args, format);  // 가변 인자 초기화
-    vsprintf(buffer, format, args);  // 포맷된 문자열을 버퍼에 저장
-    va_end(args);  // 가변 인자 종료
+    va_start(args, format);  // 媛�蹂� �씤�옄 珥덇린�솕
+    vsprintf(buffer, format, args);  // �룷留룸맂 臾몄옄�뿴�쓣 踰꾪띁�뿉 ���옣
+    va_end(args);  // 媛�蹂� �씤�옄 醫낅즺
 
-    // IfxStdIf_DPipe_print를 사용하여 UART로 출력
+    // IfxStdIf_DPipe_print瑜� �궗�슜�븯�뿬 UART濡� 異쒕젰
     IfxStdIf_DPipe_print(&g_ascStandardInterface, "%s", buffer);
 }

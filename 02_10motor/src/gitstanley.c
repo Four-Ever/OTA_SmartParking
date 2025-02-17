@@ -49,7 +49,7 @@ static const double waypoint_tolerance = 0.015; // Waypoint 도달 허용 오차
 static const double max_error = 7.0; // 경로 이탈 허용 범위
 static const double Kstanley = 0.6; // Stanley Controller 이득 값
 static const double PI = 3.14159265358979323846; // 🚀 M_PI 대신 사용
-
+extern float stanelytheta;
 /* 전역변수 정의 */
 double waypoints[4][2];
 double x, y, theta;
@@ -79,10 +79,11 @@ void updateWaypoints(float new_waypoints[][2]) {
 }
 
 /* Stanley Controller 적용 함수 */
-float gitstanley(void)
+float gitstanley()
 {
     if (Update_finished==1) {
     v=(double)U8Curr_vel/1000; //현재 차속 m/s
+    theta=stanelytheta;
 
     /*종료 조건: 경로 이탈 또는 모든 Waypoint 도달 */
     if (exitg1) {

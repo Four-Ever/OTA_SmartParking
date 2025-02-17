@@ -88,6 +88,44 @@ void AppTask5000ms(void);
 
 
 float g_angle;
+IfxI2c_I2c_Status first = 4;
+IfxI2c_I2c_Status second = 4;
+IfxI2c_I2c_Status third = 4;
+IfxI2c_I2c_Status fourth = 4;
+IfxI2c_I2c_Status test1 = 4;
+IfxI2c_I2c_Status test2 = 4;
+IfxI2c_I2c_Status test3 = 4;
+IfxI2c_I2c_Status test4 = 4;
+IfxI2c_I2c_Status test5 = 4;
+IfxI2c_I2c_Status test6 = 4;
+IfxI2c_I2c_Status test7 = 4;
+IfxI2c_I2c_Status test8 = 4;
+//////////////////////////////////
+IMU now_status = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+Euler now_euler = { 0, 0, 0 };
+uint8 in = 0;
+uint8 now13 = 0;
+// ak status check reg
+uint8 status1_val = 0;
+uint8 status2_val = 5;
+float asa_x = 0;
+float asa_y = 0;
+float asa_z = 0;
+int i = 0;
+float scale_x = 0.0f;
+float scale_y = 0.0f;
+float scale_z = 0.0f;
+float x_offset = 0.0f;
+float y_offset = 0.0f;
+float z_offset = 0.0f;
+volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;  // quaternion of sensor frame relative to auxiliary frame
+int nowcnt = 0;
+float nowtheta = 0.0f;
+float stanelytheta = 0.0f;
+void Touch(void);
+void initGPIO(void);
+IfxPort_State TouchState = 0;
+int stopstatus = 0;
 
 int core0_main(void)
 {
@@ -123,7 +161,11 @@ int core0_main(void)
     Driver_Stm_Init();
 
     initServo(); // D6
+    initIMU();
+    now13 = 1;
 
+    in = 5;
+    initGPIO();
     // motor_dir = 0;    // 0:정방향, 1:역방향
     // motor_enable = 0;  // 0:제동, 1:해제
 
@@ -387,6 +429,20 @@ void AppTask100ms(void)
 {
     stTestCnt.u32nuCnt100ms++;
     update_VCU_inputs();  //모터에 제어input 을 넣어줌
+    i++;
+    now_status = imuRead();
+    stanelytheta = nowtheta + now_euler.yaw;
+    if (stopstatus == 1)
+    {
+        q0 = 1;
+        q1 = 0;
+        q2 = 0;
+        q3 = 0;
+        nowtheta += now_euler.yaw;
+        now_euler.yaw = 0;
+    }
+    now_euler = MadgwickAHRSupdateIMU(now_status);
+    print_encimu(&now_status, &now_euler);
 
 #if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 주행 코드
     if (vehicle_status.engine_state == ENGINE_ON)
@@ -455,5 +511,18 @@ void AppScheduling(void)
             AppTask5000ms();
         }
     }
+}
+void initGPIO(void)
+{
+    IfxPort_setPinMode(&MODULE_P14, 0, IfxPort_Mode_inputPullUp);  //input?쇰줈 ?ㅼ젙
+}
+
+void Touch(void)
+{
+    TouchState = IfxPort_getPinState(&MODULE_P14, 0);
+    if (TouchState == 1)
+        stopstatus = 1;
+    else
+        stopstatus = 0;
 }
 /*********************************************************************************************************************/
