@@ -246,7 +246,7 @@ struct CCU_RightAngle_detect_Data : public BaseMsg {
 
 struct CCU_Parking_Complete_Data : public BaseMsg {
     struct {
-        uint8_t parkig_back_lane_detected;
+        int8_t parkig_back_lane_detected;
     } data;
 };
 
