@@ -6,21 +6,17 @@
  ******************************************************************************/
 
 #include "IMU_Driver.h"
-uint8 aaa=0;
 static IfxI2c_I2c_Device g_i2cSet;
 
 //static float asa_x = 0;
 //static float asa_y = 0;
 //static float asa_z = 0;
-extern float asa_x;
-extern float asa_y;
-extern float asa_z;
+float asa_x;
+float asa_y;
+float asa_z;
 static IMU imu_offset={0,0,0,0,0,0,0,0,0,0};
 static IfxI2c_I2c g_i2cMaster;
-extern uint8 now13;
 // ak status check reg
-extern uint8 status1_val;
-extern uint8 status2_val;
 static float magx_max = -10000;
 static float magy_max = -10000;
 static float magz_max = -10000;
@@ -28,38 +24,38 @@ static float magx_min = 10000;
 static float magy_min = 10000;
 static float magz_min = 10000;
 static float avg_rad = 0;
-
-extern float scale_x;
-extern float scale_y;
-extern float scale_z;
-extern float x_offset;
-extern float y_offset;
-extern float z_offset;
-
+uint8 status1_val;
+uint8 status2_val;
+float scale_x;
+float scale_y;
+float scale_z;
+float x_offset;
+float y_offset;
+float z_offset;
+IfxPort_State TouchState = 0;
 /*
- initIMU ÇÔ¼ö
- MPU9250 IMU(°¡¼Óµµ, °¢¼Óµµ) + AK8963(ÁöÀÚ±â) ¼¼ÆÃ
- Åë½ÅÈ®ÀÎÇÏ°í 5¹ø±îÁö ½Ãµµ
+ initIMU í•¨ìˆ˜
+ MPU9250 IMU(ê°€ì†ë„, ê°ì†ë„) + AK8963(ì§€ìê¸°) ì„¸íŒ…
+ í†µì‹ í™•ì¸í•˜ê³  5ë²ˆê¹Œì§€ ì‹œë„
  */
 void initIMU ()
 {
     uint8 readData = 0;
     uint8 trycnt = 0;
-    forceI2CBusReset();   // ¹ö½º °­Á¦ ¸®¼Â
+    forceI2CBusReset();   // ë²„ìŠ¤ ê°•ì œ ë¦¬ì…‹
     do
     {
         delay(100000);
         delay(100000);
-        initI2c();// I2C ÃÊ±âÈ­
+        initI2c();// I2C ì´ˆê¸°í™”
         delay(1000000);
 
-        initAK8963();// AK8963(ÁöÀÚ±â)ÃÊ±âÈ­
+        initAK8963();// AK8963(ì§€ìê¸°)ì´ˆê¸°í™”
         uint8 whoAmI = WHOAMI_REG;
         i2cWrite(MPU9250_ADDRESS, &whoAmI, 1);
         delay(10000);
         i2cRead(MPU9250_ADDRESS, &readData, 1);
         trycnt++;
-        now13=5;
     }while (readData != 0x71 && (trycnt < 5));
     setDLPF();
     delay(1000000);
@@ -67,9 +63,9 @@ void initIMU ()
 }
 
 /*
- initI2c ÇÔ¼ö
- MPU9250 IMU(°¡¼Óµµ, °¢¼Óµµ)¸¦ À§ÇÑ I2C ¼¼ÆÃ
- °¡¼Óµµ, °¢¼Óµµ µ¿ÀÛ¸ğµå ¼³Á¤
+ initI2c í•¨ìˆ˜
+ MPU9250 IMU(ê°€ì†ë„, ê°ì†ë„)ë¥¼ ìœ„í•œ I2C ì„¸íŒ…
+ ê°€ì†ë„, ê°ì†ë„ ë™ì‘ëª¨ë“œ ì„¤ì •
  */
 void initI2c (void)
 {
@@ -78,29 +74,28 @@ void initI2c (void)
     IfxI2c_I2c_Config i2cConfig;
 
 
-    //»ç¿ëÇÒ i2c¼³Á¤
+    //ì‚¬ìš©í•  i2cì„¤ì •
     IfxI2c_I2c_initConfig(&i2cConfig, &MODULE_I2C0);
     i2cConfig.pins = &i2cpinset;
-    i2cConfig.baudrate = 100000;   //Åë½Å ¼Óµµ 100000;
+    i2cConfig.baudrate = 100000;   //í†µì‹  ì†ë„ 100000;
     IfxI2c_I2c_initModule(&g_i2cMaster, &i2cConfig);
     g_i2cSet.i2c = &g_i2cMaster;
     g_i2cSet.deviceAddress = (MPU9250_ADDRESS << 1);
 
-    uint8 initData[2] = {PWR_MGMT_1, 0x00}; //MPUÀü¿ø
-    first = i2cWrite(MPU9250_ADDRESS, initData, 2); //Sleep¿¡¼­ ±ú¿ò
-    now13=6;
+    uint8 initData[2] = {PWR_MGMT_1, 0x00}; //MPUì „ì›
+    i2cWrite(MPU9250_ADDRESS, initData, 2); //Sleepì—ì„œ ê¹¨ì›€
     delay(1000000);
-    //°¡¼Óµµ, °¢¼Óµµ µ¿ÀÛ¸ğµå
+    //ê°€ì†ë„, ê°ì†ë„ ë™ì‘ëª¨ë“œ
     uint8 initAccelData[2] = {ACCEL_CONFIG_REG, 0x00}; //+-2g
-    second = i2cWrite(MPU9250_ADDRESS, initAccelData, 2);
+    i2cWrite(MPU9250_ADDRESS, initAccelData, 2);
     uint8 initGyroData[2] = {GYRO_CONFIG_REG, 0x00};  //+-250
-    third = i2cWrite(MPU9250_ADDRESS, initGyroData, 2);
+    i2cWrite(MPU9250_ADDRESS, initGyroData, 2);
 }
 
 /*
- i2cWrite ÇÔ¼ö
- g_i2cSet i2c¸¦ ÅëÇØ
- slave¿¡ write
+ i2cWrite í•¨ìˆ˜
+ g_i2cSet i2cë¥¼ í†µí•´
+ slaveì— write
  */
 IfxI2c_I2c_Status i2cWrite (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 {
@@ -112,9 +107,9 @@ IfxI2c_I2c_Status i2cWrite (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 }
 
 /*
- i2cRead ÇÔ¼ö
- g_i2cSet i2c¸¦ ÅëÇØ
- length¸¸Å­ ÀĞ¾î data¿¡ ÀúÀå
+ i2cRead í•¨ìˆ˜
+ g_i2cSet i2cë¥¼ í†µí•´
+ lengthë§Œí¼ ì½ì–´ dataì— ì €ì¥
  */
 void i2cRead (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 {
@@ -124,54 +119,52 @@ void i2cRead (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 }
 
 /*
- imuRead ÇÔ¼ö
- imu°ª ÀĞ¾î¿Í¼­ returnÇÏ´Â ÇÔ¼ö
+ imuRead í•¨ìˆ˜
+ imuê°’ ì½ì–´ì™€ì„œ returní•˜ëŠ” í•¨ìˆ˜
  */
 IMU imuRead ()
 {
     IMU now_imu={0,0,0,0,0,0,0,0,0,0};
-    // °¡¼Óµµ, °¢¼Óµµ, ÁöÀÚ±â°ª Á¢±Ù ·¹Áö½ºÅÍ
+    // ê°€ì†ë„, ê°ì†ë„, ì§€ìê¸°ê°’ ì ‘ê·¼ ë ˆì§€ìŠ¤í„°
     uint8 accelAddr = ACCEL_REG;
     uint8 gyroAddr = GYRO_REG;
     uint8 magAddr = MAG_REG;
 
-    // ¼¾¼­ µ¥ÀÌÅÍ ¹öÆÛ
-    uint8 accelData[6] = {0};      // °¡¼Óµµ µ¥ÀÌÅÍ ¹öÆÛ
-    uint8 gyroData[6] = {0};       // ÀÚÀÌ·Î µ¥ÀÌÅÍ ¹öÆÛ
-    uint8 magData[6] = {0};        // ÁöÀÚ±â µ¥ÀÌÅÍ ¹öÆÛ
+    // ì„¼ì„œ ë°ì´í„° ë²„í¼
+    uint8 accelData[6] = {0};      // ê°€ì†ë„ ë°ì´í„° ë²„í¼
+    uint8 gyroData[6] = {0};       // ìì´ë¡œ ë°ì´í„° ë²„í¼
+    uint8 magData[6] = {0};        // ì§€ìê¸° ë°ì´í„° ë²„í¼
 
-    // ÃøÁ¤ raw °ª
-    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // °¡¼Óµµ °ª (16ºñÆ®)
-    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // °¢¼Óµµ °ª (16ºñÆ®)
-    sint16 mag_x_raw, mag_y_raw, mag_z_raw;          // ÁöÀÚ±â °ª (16ºñÆ®)
+    // ì¸¡ì • raw ê°’
+    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // ê°€ì†ë„ ê°’ (16ë¹„íŠ¸)
+    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // ê°ì†ë„ ê°’ (16ë¹„íŠ¸)
+    sint16 mag_x_raw, mag_y_raw, mag_z_raw;          // ì§€ìê¸° ê°’ (16ë¹„íŠ¸)
 
-    // °á°ú °ª
-    float accel_x, accel_y, accel_z;    // °¡¼Óµµ °ª (16ºñÆ®)
-    float gyro_x, gyro_y, gyro_z;       // °¢¼Óµµ °ª (16ºñÆ®)
-    float mag_x, mag_y, mag_z;          // ÁöÀÚ±â °ª (16ºñÆ®)
+    // ê²°ê³¼ ê°’
+    float accel_x, accel_y, accel_z;    // ê°€ì†ë„ ê°’ (16ë¹„íŠ¸)
+    float gyro_x, gyro_y, gyro_z;       // ê°ì†ë„ ê°’ (16ë¹„íŠ¸)
+    float mag_x, mag_y, mag_z;          // ì§€ìê¸° ê°’ (16ë¹„íŠ¸)
     float heading;
 
 
 
 
-    // °¡¼Óµµ µ¥ÀÌÅÍ
+    // ê°€ì†ë„ ë°ì´í„°
     i2cWrite(MPU9250_ADDRESS, &accelAddr, 1);
     i2cRead(MPU9250_ADDRESS, accelData, 6);
 
-    // ÀÚÀÌ·Î µ¥ÀÌÅÍ
+    // ìì´ë¡œ ë°ì´í„°
     i2cWrite(MPU9250_ADDRESS, &gyroAddr, 1);
     i2cRead(MPU9250_ADDRESS, gyroData, 6);
-
-    now13=7;
-    // ÁöÀÚ±â setting
+    // ì§€ìê¸° setting
 
      //stop condition
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-     //ÁöÀÚ±â °ª updateµÆ´ÂÁö check
-    uint8 status_reg = AK_UPDATE_REG;       //drdyÈ®ÀÎ reg
+     //ì§€ìê¸° ê°’ updateëëŠ”ì§€ check
+    uint8 status_reg = AK_UPDATE_REG;       //drdyí™•ì¸ reg
     i2cWrite(AK8963_ADDRESS, &status_reg, 1);
     delay(10);
     i2cRead(AK8963_ADDRESS, &status1_val, 1);
@@ -180,46 +173,44 @@ IMU imuRead ()
     i2cStopCondition();
     delay(10);
     i2cStartCondition();
-    now13=8;
-    // ÁöÀÚ±â µ¥ÀÌÅÍ
-    i2cWrite(AK8963_ADDRESS, &magAddr, 1);  // AK8963 I2C ÁÖ¼Ò
+    // ì§€ìê¸° ë°ì´í„°
+    i2cWrite(AK8963_ADDRESS, &magAddr, 1);  // AK8963 I2C ì£¼ì†Œ
     delay(10);
     i2cRead(AK8963_ADDRESS, magData, 6);
 
-    now13=10;
     // ak read
     uint8 status2_reg = 0x09;
     i2cWrite(AK8963_ADDRESS, &status2_reg, 1);
     delay(10);
     i2cRead(AK8963_ADDRESS, &status2_val, 1);
-    now13=11;
-    /// ½ÃÀÛ -> ´ÜÀ§ Ã¼Å© //////////////////////////////////////////////////////////////////////////////////////
-    // °¡¼Óµµ µ¥ÀÌÅÍ º¯È¯
+
+    /// ì‹œì‘ -> ë‹¨ìœ„ ì²´í¬ //////////////////////////////////////////////////////////////////////////////////////
+    // ê°€ì†ë„ ë°ì´í„° ë³€í™˜
     accel_x_raw = (sint16) (accelData[0] << 8) | accelData[1];
     accel_y_raw = (sint16) (accelData[2] << 8) | accelData[3];
     accel_z_raw = (sint16) (accelData[4] << 8) | accelData[5];
 
-    //°¨µµ Á¶Á¤ 2g
+    //ê°ë„ ì¡°ì • 2g
     accel_x = ((float) accel_x_raw) / ACCEL_SEN - imu_offset.accel_x;
     accel_y = ((float) accel_y_raw) / ACCEL_SEN - imu_offset.accel_y;
     accel_z = ((float) accel_z_raw) / ACCEL_SEN - imu_offset.accel_z;
 
-    // ÀÚÀÌ·Î µ¥ÀÌÅÍ º¯È¯
+    // ìì´ë¡œ ë°ì´í„° ë³€í™˜
     gyro_x_raw = (sint16) (gyroData[0] << 8) | gyroData[1];
     gyro_y_raw = (sint16) (gyroData[2] << 8) | gyroData[3];
     gyro_z_raw = (sint16) (gyroData[4] << 8) | gyroData[5];
 
-    //°¨µµ Á¶Á¤ 250
+    //ê°ë„ ì¡°ì • 250
     gyro_x = ((float) gyro_x_raw) / GYRO_SEN - imu_offset.gyro_x;//* (M_PI / 180.0f)
     gyro_y = ((float) gyro_y_raw) / GYRO_SEN - imu_offset.gyro_y;
     gyro_z = ((float) gyro_z_raw) / GYRO_SEN - imu_offset.gyro_z;
 
-    // ÁöÀÚ±â µ¥ÀÌÅÍ º¯È¯
+    // ì§€ìê¸° ë°ì´í„° ë³€í™˜
     mag_x_raw = (sint16) (magData[1] << 8) | magData[0];
     mag_y_raw = (sint16) (magData[3] << 8) | magData[2];
     mag_z_raw = (sint16) (magData[5] << 8) | magData[4];
 
-    //°¨µµ Á¶Á¤
+    //ê°ë„ ì¡°ì •
     mag_x = ((float) mag_x_raw)* asa_x * MAG_SEN;
     mag_y = ((float) mag_y_raw)* asa_y * MAG_SEN;
     mag_z = ((float) mag_z_raw)* asa_z * MAG_SEN;
@@ -235,8 +226,8 @@ IMU imuRead ()
         magz_max=mag_z;
     if(mag_z<magz_min)
         magz_min=mag_z;
-    /////.hÆÄÀÏ 784
-    x_offset = (magx_max + magx_min) / 2;//¾ÆµÎÀÌ³ë¶û ´Ù¸£°Ô ³­ À§¿¡¼­ ÀÌ¹Ì ±¸ÇÔ
+    /////.híŒŒì¼ 784
+    x_offset = (magx_max + magx_min) / 2;//ì•„ë‘ì´ë…¸ë‘ ë‹¤ë¥´ê²Œ ë‚œ ìœ„ì—ì„œ ì´ë¯¸ êµ¬í•¨
     y_offset = (magy_max + magy_min) / 2;
     z_offset = (magz_max + magz_min) / 2;
     float scale_x_diff = magx_max - magx_min;
@@ -247,7 +238,7 @@ IMU imuRead ()
     scale_y = avg_rad / scale_y_diff;
     scale_z = avg_rad / scale_z_diff;
 
-    //heading -> ºÏÂÊ 0, ¿À¸¥ÂÊÀ¸·Î +
+    //heading -> ë¶ìª½ 0, ì˜¤ë¥¸ìª½ìœ¼ë¡œ +
     heading = atan2(mag_x, mag_y) *(180 / M_PI);
     if (heading < 0)
         heading += 360;
@@ -277,7 +268,7 @@ IMU imuRead ()
     //now_imu.mag_z = now_imu.mag_z;
 
 
-    //heading -> ºÏÂÊ 0, ¿À¸¥ÂÊÀ¸·Î +
+    //heading -> ë¶ìª½ 0, ì˜¤ë¥¸ìª½ìœ¼ë¡œ +
     heading = atan2(now_imu.mag_x, now_imu.mag_y) * (180 / M_PI);
     if (heading < 0)
         heading += 360;
@@ -301,54 +292,53 @@ IMU imuRead ()
 
 IMU initimuRead ()
 {
-    now13=9;
     IMU now_imu={0,0,0,0,0,0,0,0,0,0};
-    // °¡¼Óµµ, °¢¼Óµµ, ÁöÀÚ±â°ª Á¢±Ù ·¹Áö½ºÅÍ
+    // ê°€ì†ë„, ê°ì†ë„, ì§€ìê¸°ê°’ ì ‘ê·¼ ë ˆì§€ìŠ¤í„°
     uint8 accelAddr = ACCEL_REG;
     uint8 gyroAddr = GYRO_REG;
 
-    // ¼¾¼­ µ¥ÀÌÅÍ ¹öÆÛ
-    uint8 accelData[6] = {0};      // °¡¼Óµµ µ¥ÀÌÅÍ ¹öÆÛ
-    uint8 gyroData[6] = {0};       // ÀÚÀÌ·Î µ¥ÀÌÅÍ ¹öÆÛ
+    // ì„¼ì„œ ë°ì´í„° ë²„í¼
+    uint8 accelData[6] = {0};      // ê°€ì†ë„ ë°ì´í„° ë²„í¼
+    uint8 gyroData[6] = {0};       // ìì´ë¡œ ë°ì´í„° ë²„í¼
 
-    // ÃøÁ¤ raw °ª
-    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // °¡¼Óµµ °ª (16ºñÆ®)
-    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // °¢¼Óµµ °ª (16ºñÆ®)
+    // ì¸¡ì • raw ê°’
+    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // ê°€ì†ë„ ê°’ (16ë¹„íŠ¸)
+    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // ê°ì†ë„ ê°’ (16ë¹„íŠ¸)
 
-    // °á°ú °ª
-    float accel_x, accel_y, accel_z;    // °¡¼Óµµ °ª (16ºñÆ®)
-    float gyro_x, gyro_y, gyro_z;       // °¢¼Óµµ °ª (16ºñÆ®)
+    // ê²°ê³¼ ê°’
+    float accel_x, accel_y, accel_z;    // ê°€ì†ë„ ê°’ (16ë¹„íŠ¸)
+    float gyro_x, gyro_y, gyro_z;       // ê°ì†ë„ ê°’ (16ë¹„íŠ¸)
 
 
-    // °¡¼Óµµ µ¥ÀÌÅÍ
+    // ê°€ì†ë„ ë°ì´í„°
     i2cWrite(MPU9250_ADDRESS, &accelAddr, 1);
     i2cRead(MPU9250_ADDRESS, accelData, 6);
 
-    // ÀÚÀÌ·Î µ¥ÀÌÅÍ
+    // ìì´ë¡œ ë°ì´í„°
     i2cWrite(MPU9250_ADDRESS, &gyroAddr, 1);
     i2cRead(MPU9250_ADDRESS, gyroData, 6);
-    /// ½ÃÀÛ -> ´ÜÀ§ Ã¼Å© //////////////////////////////////////////////////////////////////////////////////////
-    // °¡¼Óµµ µ¥ÀÌÅÍ º¯È¯
+    /// ì‹œì‘ -> ë‹¨ìœ„ ì²´í¬ //////////////////////////////////////////////////////////////////////////////////////
+    // ê°€ì†ë„ ë°ì´í„° ë³€í™˜
     accel_x_raw = (sint16) (accelData[0] << 8) | accelData[1];
     accel_y_raw = (sint16) (accelData[2] << 8) | accelData[3];
     accel_z_raw = (sint16) (accelData[4] << 8) | accelData[5];
 
-    //°¨µµ Á¶Á¤ 2g
+    //ê°ë„ ì¡°ì • 2g
     accel_x = ((float) accel_x_raw) / ACCEL_SEN;
     accel_y = ((float) accel_y_raw) / ACCEL_SEN;
     accel_z = ((float) accel_z_raw) / ACCEL_SEN;
     //0
 
-    // ÀÚÀÌ·Î µ¥ÀÌÅÍ º¯È¯
+    // ìì´ë¡œ ë°ì´í„° ë³€í™˜
     gyro_x_raw = (sint16) (gyroData[0] << 8) | gyroData[1];
     gyro_y_raw = (sint16) (gyroData[2] << 8) | gyroData[3];
     gyro_z_raw = (sint16) (gyroData[4] << 8) | gyroData[5];
 
-    //°¨µµ Á¶Á¤ 250
+    //ê°ë„ ì¡°ì • 250
     gyro_x = ((float) gyro_x_raw) / GYRO_SEN;//* (M_PI / 180.0f);
     gyro_y = ((float) gyro_y_raw) / GYRO_SEN;//* (M_PI / 180.0f);
     gyro_z = ((float) gyro_z_raw) / GYRO_SEN;//* (M_PI / 180.0f);
-///0 -> ´ÜÀ§ Á¶Á¤Àº ³ªÁß¿¡ÀÎ°¡
+///0 -> ë‹¨ìœ„ ì¡°ì •ì€ ë‚˜ì¤‘ì—ì¸ê°€
     now_imu.accel_x = accel_x;
     now_imu.accel_y = accel_y;
     now_imu.accel_z = accel_z;
@@ -356,14 +346,14 @@ IMU initimuRead ()
     now_imu.gyro_x = gyro_x;
     now_imu.gyro_y = gyro_y;
     now_imu.gyro_z = gyro_z;
-////initÇÔ¼ö´Â ¹®Á¦ ¾ø´Âµí!!!!
+////inití•¨ìˆ˜ëŠ” ë¬¸ì œ ì—†ëŠ”ë“¯!!!!
     return now_imu;
 }
 
 
 /*
- initAK8963 ÇÔ¼ö
- AK8963(ÁöÀÚ±â) ¼¼ÆÃ
+ initAK8963 í•¨ìˆ˜
+ AK8963(ì§€ìê¸°) ì„¸íŒ…
  */
 
 void initAK8963 (void)
@@ -374,72 +364,72 @@ void initAK8963 (void)
 
     uint8 data[3];
 
-    // I2C master ºñÈ°¼ºÈ­ -> MPU°¡ ¸¶½ºÅÍ°¡ µÇÁö ¾Ê°Ô ¼³Á¤-> ³»°¡ ÀÚÃ¼ÀûÀ¸·Î Åë½ÅÇÒ°Å¶ó
+    // I2C master ë¹„í™œì„±í™” -> MPUê°€ ë§ˆìŠ¤í„°ê°€ ë˜ì§€ ì•Šê²Œ ì„¤ì •-> ë‚´ê°€ ìì²´ì ìœ¼ë¡œ í†µì‹ í• ê±°ë¼
     uint8 bypass_reg1[2] = {0x6A, 0x00};
-    test1=i2cWrite(MPU9250_ADDRESS, bypass_reg1, 2);
+    i2cWrite(MPU9250_ADDRESS, bypass_reg1, 2);
     delay(10000);
     // MPU9250 I2C bypass enable
     uint8 bypass_reg2[2] = {0x37, 0x02};
-    test2=i2cWrite(MPU9250_ADDRESS, bypass_reg2, 2);
+    i2cWrite(MPU9250_ADDRESS, bypass_reg2, 2);
     delay(10000);
 
-    // AK8963 ÃÊ±âÈ­
-    // Power down ->  ROM¿¡ Á¢±ÙÇÏ·Á°í °è¼Ó Àá±ñ ²ô±â
+    // AK8963 ì´ˆê¸°í™”
+    // Power down ->  ROMì— ì ‘ê·¼í•˜ë ¤ê³  ê³„ì† ì ê¹ ë„ê¸°
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    uint8 mag_power_down[2] = {AK_CNTL1_REG, 0x00};     // CNTL1 ·¹Áö½ºÅÍ
-    test3=i2cWrite(AK8963_ADDRESS, mag_power_down, 2);
+    uint8 mag_power_down[2] = {AK_CNTL1_REG, 0x00};     // CNTL1 ë ˆì§€ìŠ¤í„°
+    i2cWrite(AK8963_ADDRESS, mag_power_down, 2);
     delay(10000);
 
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    uint8 mag_mode_check = AK_CNTL1_REG;                   //offmode Àß µé¾î°¬´ÂÁö
-    test4=i2cWrite(AK8963_ADDRESS, &mag_mode_check, 1);
+    uint8 mag_mode_check = AK_CNTL1_REG;                   //offmode ì˜ ë“¤ì–´ê°”ëŠ”ì§€
+    i2cWrite(AK8963_ADDRESS, &mag_mode_check, 1);
     i2cRead(AK8963_ADDRESS, &mag_mode_valueoff, 1);
 
-    // Fuse ROM access mode-> ROM¿¡ Á¢±ÙÇØ¼­ ÃÊ±â °¨µµ ¾Ë¾Æ³»·Á°í
+    // Fuse ROM access mode-> ROMì— ì ‘ê·¼í•´ì„œ ì´ˆê¸° ê°ë„ ì•Œì•„ë‚´ë ¤ê³ 
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
     uint8 mag_rom_access[2] = {AK_CNTL1_REG, 0x0F};
-    test5=i2cWrite(AK8963_ADDRESS, mag_rom_access, 2);
+    i2cWrite(AK8963_ADDRESS, mag_rom_access, 2);
     delay(10000);
 
-    // ÃÊ±â °¨µµ ÀĞ±â
+    // ì´ˆê¸° ê°ë„ ì½ê¸°
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    uint8 asa_reg = 0x10;  //°¨µµ ÀúÀåµÈ°Å ½ÃÀÛ ÁÖ¼Ò
-    test6=i2cWrite(AK8963_ADDRESS, &asa_reg, 1);
+    uint8 asa_reg = 0x10;  //ê°ë„ ì €ì¥ëœê±° ì‹œì‘ ì£¼ì†Œ
+    i2cWrite(AK8963_ADDRESS, &asa_reg, 1);
     delay(100);
     i2cRead(AK8963_ADDRESS, data, 3);
 
-    // °¨µµ Á¶Á¤°ª ÀúÀå
+    // ê°ë„ ì¡°ì •ê°’ ì €ì¥
     asa_x = ((float) (data[0] - 128))/ 256.0f + 1.0f;
     asa_y = ((float) (data[1] - 128)) / 256.0f + 1.0f;
     asa_z = ((float) (data[2] - 128)) / 256.0f + 1.0f;
 
-    // Power down -> ROMÁ¢±Ù¸ğµå¿¡¼­ ³ª¿Í¼­!!ÃøÁ¤¸ğµå Àü¿¡ ¾ÈÁ¤È­ÇÏ·Á°í
+    // Power down -> ROMì ‘ê·¼ëª¨ë“œì—ì„œ ë‚˜ì™€ì„œ!!ì¸¡ì •ëª¨ë“œ ì „ì— ì•ˆì •í™”í•˜ë ¤ê³ 
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
-    test7=i2cWrite(AK8963_ADDRESS, mag_power_down, 2);
+    i2cWrite(AK8963_ADDRESS, mag_power_down, 2);
     delay(10000);
 
-    // ¿¬¼ÓÃøÁ¤¸ğµå ½ÃÀÛ
+    // ì—°ì†ì¸¡ì •ëª¨ë“œ ì‹œì‘
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
     uint8 mag_continuous[2] = {AK_CNTL1_REG, 0x06};  //
 
-    ///1Àº ÇÑ¹ø ÇÏ°í off
-    test8=i2cWrite(AK8963_ADDRESS, mag_continuous, 2);
+    ///1ì€ í•œë²ˆ í•˜ê³  off
+    i2cWrite(AK8963_ADDRESS, mag_continuous, 2);
     //mag_mode_check = AK_CNTL1_REG;
     i2cStopCondition();
     delay(1000);
@@ -449,12 +439,12 @@ void initAK8963 (void)
 
     delay(10000);
 
-    //¾÷µ¥ÀÌÆ® µÆ´ÂÁö È®ÀÎ
+    //ì—…ë°ì´íŠ¸ ëëŠ”ì§€ í™•ì¸
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    //drdyÈ®ÀÎ reg
+    //drdyí™•ì¸ reg
     uint8 status_reg = 0x02;
     i2cWrite(AK8963_ADDRESS, &status_reg, 1);
     delay(10);
@@ -463,19 +453,19 @@ void initAK8963 (void)
 }
 
 /*
- forceI2CBusReset ÇÔ¼ö
- Bus ÃÊ±âÈ­
+ forceI2CBusReset í•¨ìˆ˜
+ Bus ì´ˆê¸°í™”
  */
 void forceI2CBusReset (void)
 {
-    // I2C ¸ğµâ ºñÈ°¼ºÈ­
+    // I2C ëª¨ë“ˆ ë¹„í™œì„±í™”
     IfxI2c_disableModule(&MODULE_I2C0);
 
-    // SDA¿Í SCLÀ» GPIO
+    // SDAì™€ SCLì„ GPIO
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputPushPullGeneral); // SDA
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputPushPullGeneral); // SCL
 
-    // µÑ ´Ù high·Î ¼³Á¤
+    // ë‘˜ ë‹¤ highë¡œ ì„¤ì •
     IfxPort_setPinHigh(&MODULE_P13, 1);
     IfxPort_setPinHigh(&MODULE_P13, 2);
     delay(10000);
@@ -489,7 +479,7 @@ void forceI2CBusReset (void)
         delay(1000);
     }
 
-    // STOP condition -> sclÀÌ highÀÏ ¶§ sda low¿¡¼­ high
+    // STOP condition -> sclì´ highì¼ ë•Œ sda lowì—ì„œ high
     IfxPort_setPinLow(&MODULE_P13, 1);   //sda
     delay(1000);
     IfxPort_setPinHigh(&MODULE_P13, 2);  //scl
@@ -497,22 +487,22 @@ void forceI2CBusReset (void)
     IfxPort_setPinHigh(&MODULE_P13, 1);  //sda
     delay(10000);
 
-    // ´Ù½Ã I2C ÇÉÀ¸·Î ¼³Á¤
+    // ë‹¤ì‹œ I2C í•€ìœ¼ë¡œ ì„¤ì •
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputOpenDrainAlt6);
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputOpenDrainAlt6);
 }
 
 /*
- i2cStopCondition ÇÔ¼ö
- i2c stop condition »ı¼º
+ i2cStopCondition í•¨ìˆ˜
+ i2c stop condition ìƒì„±
  */
 void i2cStopCondition (void)
 {
-    // I2C ÇÉÀ» GPIO ¸ğµå·Î
+    // I2C í•€ì„ GPIO ëª¨ë“œë¡œ
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputPushPullGeneral); // SDA
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputPushPullGeneral); // SCL
 
-    // STOP condition -> sclÀÌ highÀÏ ¶§ sda low¿¡¼­ high
+    // STOP condition -> sclì´ highì¼ ë•Œ sda lowì—ì„œ high
     IfxPort_setPinLow(&MODULE_P13, 1);  // SDA LOW
     delay(10);
     IfxPort_setPinHigh(&MODULE_P13, 2); // SCL HIGH
@@ -520,23 +510,23 @@ void i2cStopCondition (void)
     IfxPort_setPinHigh(&MODULE_P13, 1); // SDA HIGH (STOP)
     delay(10);
 
-    // ´Ù½Ã I2C ¸ğµå
+    // ë‹¤ì‹œ I2C ëª¨ë“œ
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputOpenDrainAlt6);
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputOpenDrainAlt6);
 }
 
 /*
- i2cStartCondition ÇÔ¼ö
- i2c start condition »ı¼º
+ i2cStartCondition í•¨ìˆ˜
+ i2c start condition ìƒì„±
  */
 void i2cStartCondition (void)
 {
-    //  I2C ÇÉÀ» GPIO ¸ğµå·Î
+    //  I2C í•€ì„ GPIO ëª¨ë“œë¡œ
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputPushPullGeneral); // SDA
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputPushPullGeneral); // SCL
 
     // Start Condition
-    // SCLÀ» HIGH·Î ¼³Á¤
+    // SCLì„ HIGHë¡œ ì„¤ì •
     IfxPort_setPinHigh(&MODULE_P13, 2); // SCL HIGH
     delay(10);
     IfxPort_setPinHigh(&MODULE_P13, 1); // SDA HIGH
@@ -544,34 +534,34 @@ void i2cStartCondition (void)
     IfxPort_setPinLow(&MODULE_P13, 1);  // SDA LOW
     delay(10);
 
-    // SCLÀ» LOW·Î ¼³Á¤ (Å¬·° ½ÃÀÛ)
+    // SCLì„ LOWë¡œ ì„¤ì • (í´ëŸ­ ì‹œì‘)
     IfxPort_setPinLow(&MODULE_P13, 2);  // SCL LOW
     delay(10);
-    // I2C ¸ğµå·Î º¹±¸
+    // I2C ëª¨ë“œë¡œ ë³µêµ¬
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputOpenDrainAlt6);
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputOpenDrainAlt6);
 }
 
 /*
- setDLPF ÇÔ¼ö
- low pass filter ¼³Á¤
- -> ¼öÁ¤ÇØ¾ßÇÔ
+ setDLPF í•¨ìˆ˜
+ low pass filter ì„¤ì •
+ -> ìˆ˜ì •í•´ì•¼í•¨
  */
 void setDLPF (void)
 {
-    uint8 gyro_dlpf[2] = {0x1A, 0x03};  // ÀÚÀÌ·Î DLPF 41Hz ¼³Á¤
+    uint8 gyro_dlpf[2] = {0x1A, 0x03};  // ìì´ë¡œ DLPF 41Hz ì„¤ì •
     i2cWrite(MPU9250_ADDRESS, gyro_dlpf, 2);
     delay(10);
 
-    uint8 accel_dlpf[2] = {0x1D, 0x03};  // °¡¼Óµµ DLPF 21.2Hz ¼³Á¤
+    uint8 accel_dlpf[2] = {0x1D, 0x03};  // ê°€ì†ë„ DLPF 21.2Hz ì„¤ì •
     i2cWrite(MPU9250_ADDRESS, accel_dlpf, 2);
     delay(10);
 }
 
 /*
- checkoffset ÇÔ¼ö
- ÃÊ±â ¿À·ù º¸Á¤
- -> ¼öÁ¤ÇØ¾ßÇÔ
+ checkoffset í•¨ìˆ˜
+ ì´ˆê¸° ì˜¤ë¥˜ ë³´ì •
+ -> ìˆ˜ì •í•´ì•¼í•¨
  */
 void checkoffset(void)
 {
@@ -593,9 +583,23 @@ void checkoffset(void)
 
     imu_offset.accel_x = now_statussum.accel_x/100;
     imu_offset.accel_y = now_statussum.accel_y/100;
-    imu_offset.accel_z = now_statussum.accel_z/100-1;//Áß·Â ¿µÇâ Á¦°Å
+    imu_offset.accel_z = now_statussum.accel_z/100-1;//ì¤‘ë ¥ ì˜í–¥ ì œê±°
 
     imu_offset.gyro_x = now_statussum.gyro_x/100;
     imu_offset.gyro_y = now_statussum.gyro_y/100;
     imu_offset.gyro_z = now_statussum.gyro_z/100;
+}
+
+void initGPIO(void)
+{
+    IfxPort_setPinMode(&MODULE_P14, 0, IfxPort_Mode_inputPullUp);  //input?ì‡°ì¤ˆ ?ã…¼ì ™
+}
+
+int Touch(void)
+{
+    TouchState = IfxPort_getPinState(&MODULE_P14, 0);
+    if (TouchState == 1)
+        return 1;
+    else
+        return 0;
 }

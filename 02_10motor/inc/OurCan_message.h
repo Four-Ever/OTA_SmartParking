@@ -25,121 +25,134 @@
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
 
-#ifndef OURCAN_MESSAGE_H_
-#define OURCAN_MESSAGE_H_
-
-/*********************************************************************************************************************/
-/*-----------------------------------------------------Includes------------------------------------------------------*/
-#include "OurCan_signal.h"
-
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*------------------------------------------------------Macros-------------------------------------------------------*/
-// CANDB ID 정의
-#define VCU_Vehicle_Status_ID 0x01
-#define VCU_Parking_Status_ID 0x12
-#define VCU_Vehicle_Engine_Status_ID 0x02
-#define VCU_Camera_ID 0x0B
-#define SCU_Obstacle_Detection_ID 0x28
-#define CGW_OTA_File_Size_ID 0x5C
-#define CGW_OTA_File_Data_ID 0x5D
-#define CGW_OTA_Control_ID 0x59
-
-#define CGW_OTA_Update_Request_ID 0x5A
-#define CGW_OTA_Update_State_ID 0x5B
-#define CGW_Vehicle_Status_ID 0x42
-
-#define CGW_Engine_ID 0x49
-#define CGW_Move_ID 0x4A
-#define CGW_Auto_Parking_Request_ID 0x51
-#define CGW_Off_Request_ID 0x4B
-
-//#define CTRL_OTA_Update_Confirm_ID 201
-
-#define CCU_Cordi_data1_ID 0xA1
-#define CCU_Cordi_data2_ID 0xA2
-#define CTRL_Engine_ID 0xC9
-#define CTRL_Move_ID 0xCA
-#define CTRL_Auto_Parking_Request_ID 0xD1
-
-#define CTRL_OTA_Update_Confirm_ID 0xD9
-
-#define CTRL_Off_Request_ID 0xCB
-
-
-
-// CANDB 크기 정의
-#define VCU_Vehicle_Status_Size 2
-#define VCU_Parking_Status_Size 1
-#define VCU_Vehicle_Engine_Status_Size 1
-#define VCU_Camera_Size 1
-#define SCU_Obstacle_Detection_Size 1
-#define CGW_OTA_File_Size_Size 4
-#define CGW_OTA_File_Data_Size 8
-#define CGW_OTA_Control_Size 8
-
-#define CGW_OTA_Update_Request_Size 1
-#define CGW_OTA_Update_State_Size 1
-#define CGW_Vehicle_Status_Size 2
-
-#define CGW_Engine_Size 1
-#define CGW_Move_Size 2
-#define CGW_Auto_Parking_Request_Size 1
-#define CGW_Off_Request_Size 1
-
-#define CCU_Cordi_data1_Size 6
-#define CCU_Cordi_data2_Size 6
-#define CTRL_Engine_Size 1
-#define CTRL_Move_Size 2
-#define CTRL_Auto_Parking_Request_Size 1
-
-#define CTRL_OTA_Update_Confirm_Size 1
-
-#define CTRL_Off_Request_Size 1
-
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*-------------------------------------------------Global variables--------------------------------------------------*/
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*-------------------------------------------------Data Structures---------------------------------------------------*/
-
-
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*------------------------------------------------Function Prototypes------------------------------------------------*/
-/*********************************************************************************************************************/
-
-void Serialize_VCU_Vehicle_Status_Msg(uint16* serialized, const VCU_Vehicle_Status_Msg *data);
-void Serialize_VCU_Parking_Status_Msg(uint8* serialized, const VCU_Parking_Status_Msg *data);
-void Serialize_VCU_Vehicle_Engine_Status_Msg(uint8* serialized, const VCU_Vehicle_Engine_Status_Msg *data);
-void Serialize_VCU_Camera_Msg(uint8* serialized, const VCU_Camera_Msg *data);
-void Serialize_SCU_Obstacle_Detection_Msg(uint8* serialized, const SCU_Obstacle_Detection_Msg *data);
-
-void Serialize_CCU_Cordi_data1_Msg(uint64* serialized, const CCU_Cordi_data1_Msg* data);
-
-void Deserialize_CGW_OTA_File_Size_Msg(uint32* serialized, CGW_OTA_File_Size_Msg *data);
-void Deserialize_CGW_OTA_File_Data_Msg(uint64* serialized, CGW_OTA_File_Data_Msg *data);
-void Deserialize_CGW_OTA_Control_Msg(uint64* serialized, CGW_OTA_Control_Msg *data);
-void Deserialize_CCU_Cordi_data1_Msg(uint64* serialized, CCU_Cordi_data1_Msg *data);
-void Deserialize_CCU_Cordi_data2_Msg(uint64* serialized, CCU_Cordi_data2_Msg *data);
-
-void Deserialize_CGW_Engine_Msg(uint8* serialized, CGW_Engine_Msg *data);
-void Deserialize_CGW_Move_Msg(uint16* serialized, CGW_Move_Msg *data);
-void Deserialize_CGW_Auto_Parking_Request_Msg(uint8* serialized, CGW_Auto_Parking_Request_Msg *data);
-void Deserialize_CGW_Off_Request_Msg(uint8* serialized, CGW_Off_Request_Msg *data);
-
-void Deserialize_CTRL_Engine_Msg(uint8* serialized, CTRL_Engine_Msg *data);
-void Deserialize_CTRL_Move_Msg(uint16* serialized, CTRL_Move_Msg *data);
-void Deserialize_CTRL_Auto_Parking_Request_Msg(uint8* serialized, CTRL_Auto_Parking_Request_Msg *data);
-void Deserialize_CTRL_Off_Request_Msg(uint8* serialized, CTRL_Off_Request_Msg *data);
-
-#endif /* OURCAN_MESSAGE_H_ */
+ #ifndef OURCAN_MESSAGE_H_
+ #define OURCAN_MESSAGE_H_
+ 
+ /*********************************************************************************************************************/
+ /*-----------------------------------------------------Includes------------------------------------------------------*/
+ #include "OurCan_signal.h"
+ 
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*------------------------------------------------------Macros-------------------------------------------------------*/
+ // CANDB ID 정의
+ #define VCU_Vehicle_Status_ID 0x01
+ #define VCU_Parking_Status_ID 0x12
+ #define VCU_Vehicle_Engine_Status_ID 0x02
+ #define VCU_ParkingLane_Request_ID 0x0C
+ #define VCU_Camera_ID 0x0B
+ #define VCU_Exiting_Status_ID 0x13
+ #define SCU_Obstacle_Detection_ID 0x28
+ #define CGW_OTA_File_Size_ID 0x5C
+ #define CGW_OTA_File_Data_ID 0x5D
+ #define CGW_OTA_Control_ID 0x59
+ 
+ #define CGW_OTA_Update_Request_ID 0x5A
+ #define CGW_OTA_Update_State_ID 0x5B
+ #define CGW_Vehicle_Status_ID 0x42
+ 
+ #define CGW_Engine_ID 0x49
+ #define CGW_Move_ID 0x4A
+ #define CGW_Auto_Parking_Request_ID 0x51
+ #define CGW_Off_Request_ID 0x4B
+ 
+ //#define CTRL_OTA_Update_Confirm_ID 201
+ 
+ #define CCU_Cordi_data1_ID 0xA1
+ #define CCU_Cordi_data2_ID 0xA2
+ #define CCU_RightAngle_detect_ID 0xA0
+ #define CCU_Parking_Complete_ID 0xA3
+ #define CTRL_Engine_ID 0xC9
+ #define CTRL_Move_ID 0xCA
+ #define CTRL_Auto_Parking_Request_ID 0xD1
+ 
+ #define CTRL_OTA_Update_Confirm_ID 0xD9
+ 
+ #define CTRL_Off_Request_ID 0xCB
+ 
+ 
+ 
+ // CANDB 크기 정의
+ #define VCU_Vehicle_Status_Size 2
+ #define VCU_Parking_Status_Size 1
+ #define VCU_Vehicle_Engine_Status_Size 1
+ #define VCU_ParkingLane_Request_Size 1
+ #define VCU_Camera_Size 1
+ #define VCU_Exiting_Status_Size 1
+ #define SCU_Obstacle_Detection_Size 1
+ #define CGW_OTA_File_Size_Size 4
+ #define CGW_OTA_File_Data_Size 8
+ #define CGW_OTA_Control_Size 8
+ 
+ #define CGW_OTA_Update_Request_Size 1
+ #define CGW_OTA_Update_State_Size 1
+ #define CGW_Vehicle_Status_Size 2
+ 
+ #define CGW_Engine_Size 1
+ #define CGW_Move_Size 2
+ #define CGW_Auto_Parking_Request_Size 1
+ #define CGW_Off_Request_Size 1
+ 
+ #define CCU_Cordi_data1_Size 6
+ #define CCU_Cordi_data2_Size 7
+ #define CCU_RightAngle_detect_Size 1
+ #define CCU_Parking_Complete_Size 1
+ #define CTRL_Engine_Size 1
+ #define CTRL_Move_Size 2
+ #define CTRL_Auto_Parking_Request_Size 1
+ 
+ #define CTRL_OTA_Update_Confirm_Size 1
+ 
+ #define CTRL_Off_Request_Size 1
+ 
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*-------------------------------------------------Global variables--------------------------------------------------*/
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*-------------------------------------------------Data Structures---------------------------------------------------*/
+ 
+ 
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
+ /*********************************************************************************************************************/
+ 
+ /*********************************************************************************************************************/
+ /*------------------------------------------------Function Prototypes------------------------------------------------*/
+ /*********************************************************************************************************************/
+ 
+ void Serialize_VCU_Vehicle_Status_Msg(uint16* serialized, const VCU_Vehicle_Status_Msg *data);
+ void Serialize_VCU_Parking_Status_Msg(uint8* serialized, const VCU_Parking_Status_Msg *data);
+ void Serialize_VCU_Vehicle_Engine_Status_Msg(uint8* serialized, const VCU_Vehicle_Engine_Status_Msg *data);
+ void Serialize_VCU_Exiting_Status_Msg(uint8* serialized, const VCU_Exiting_Status_Msg *data);
+ void Serialize_VCU_ParkingLane_Request_Msg(uint8* serialized, const VCU_ParkingLane_Request_Msg *data);
+ void Serialize_VCU_Camera_Msg(uint8* serialized, const VCU_Camera_Msg *data);
+ void Serialize_SCU_Obstacle_Detection_Msg(uint8* serialized, const SCU_Obstacle_Detection_Msg *data);
+ 
+ //void Serialize_CCU_Cordi_data1_Msg(uint64* serialized, const CCU_Cordi_data1_Msg* data);
+ 
+ void Deserialize_CGW_OTA_File_Size_Msg(uint32* serialized, CGW_OTA_File_Size_Msg *data);
+ void Deserialize_CGW_OTA_File_Data_Msg(uint64* serialized, CGW_OTA_File_Data_Msg *data);
+ void Deserialize_CGW_OTA_Control_Msg(uint64* serialized, CGW_OTA_Control_Msg *data);
+ void Deserialize_CCU_Cordi_data1_Msg(uint64* serialized, CCU_Cordi_data1_Msg *data);
+ void Deserialize_CCU_Cordi_data2_Msg(uint64* serialized, CCU_Cordi_data2_Msg *data);
+ void Deserialize_CCU_RightAngle_detect_Msg(uint8* serialized, CCU_RightAngle_detect_Msg* data);
+ void Deserialize_CCU_Parking_Complete_Msg(uint8* serialized, CCU_Parking_Complete_Msg* data);
+ 
+ void Deserialize_CGW_Engine_Msg(uint8* serialized, CGW_Engine_Msg *data);
+ void Deserialize_CGW_Move_Msg(uint16* serialized, CGW_Move_Msg *data);
+ void Deserialize_CGW_Auto_Parking_Request_Msg(uint8* serialized, CGW_Auto_Parking_Request_Msg *data);
+ void Deserialize_CGW_Off_Request_Msg(uint8* serialized, CGW_Off_Request_Msg *data);
+ 
+ void Deserialize_CTRL_Engine_Msg(uint8* serialized, CTRL_Engine_Msg *data);
+ void Deserialize_CTRL_Move_Msg(uint16* serialized, CTRL_Move_Msg *data);
+ void Deserialize_CTRL_Auto_Parking_Request_Msg(uint8* serialized, CTRL_Auto_Parking_Request_Msg *data);
+ void Deserialize_CTRL_Off_Request_Msg(uint8* serialized, CTRL_Off_Request_Msg *data);
+ 
+ #endif /* OURCAN_MESSAGE_H_ */
+ 

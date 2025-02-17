@@ -40,14 +40,9 @@
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
-
-//    user_mode, target_rpm , target_vel, cur_rpm, cur_vel,
-//    uint8 velocity, sint8 steering_angle, transmission, parking_status, engine_state
-
+/*********************************************************************************************************************/
 VehicleStatus vehicle_status = {SYSTEM_DRIVE_MODE, 0.0f, 0.0f, 0, 0.0f,
                                     0, 0, PARKING, PARKED, ENGINE_OFF};
-/*********************************************************************************************************************/
-
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 IfxMultican_Can can;
@@ -70,10 +65,11 @@ IFX_INTERRUPT(RX_Int0Handler, 0, 101);
 // void RX_Int0Handler (void){}
 void RX_Int0Handler(void)
 {
+    //boolean interruptState = IfxCpu_disableInterrupts();
     IfxCpu_enableInterrupts();
 
     IfxMultican_Message readmsg;
-    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// 수신 대기
+    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// �닔�떊 ��湲�
     if (IfxMultican_Can_MsgObj_readMessage(&canMsgObjRx, &readmsg) == IfxMultican_Status_newData)
     {
         switch (readmsg.id)
@@ -83,25 +79,44 @@ void RX_Int0Handler(void)
                 uint32 serialized = 0;
                 memcpy(&serialized,&readmsg.data[0],CGW_OTA_File_Size_Size);
                 Deserialize_CGW_OTA_File_Size_Msg(&serialized,&db_msg.CGW_OTA_File_Size);
-                db_flag.CGW_OTA_File_Size_Flag = 1;
+                //db_flag.CGW_OTA_File_Size_Flag = 1;
+                
+                // fwUpdateRequested = 1;
+
+                // if (fwUpdateRequested == 1 && readmsg.lengthCode == 4) {
+                //     if (fwUpdateSize == 0)
+                //         fwUpdateSize = db_msg.CGW_OTA_File_Size.ota_file_size;
+                // }
                 break;
             }
             case CGW_OTA_File_Data_ID:
             {
-                uint64 serialized = 0;
-                memcpy(&serialized,&readmsg.data[0],CGW_OTA_File_Data_Size);
-                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_File_Data_Size-4);
-                Deserialize_CGW_OTA_File_Data_Msg(&serialized,&db_msg.CGW_OTA_File_Data);
-                db_flag.CGW_OTA_File_Data_Flag = 1;
+//                uint64 serialized = 0;
+//                memcpy(&serialized,&readmsg.data[0],CGW_OTA_File_Data_Size);
+//                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_File_Data_Size-4);
+//                Deserialize_CGW_OTA_File_Data_Msg(&serialized,&db_msg.CGW_OTA_File_Data);
+//                db_flag.CGW_OTA_File_Data_Flag = 1;
+
+                // if (!MessageBufferIsFull())
+                // {
+                //     messageBuffer[messageBufferHead] = readmsg;
+                //     messageBufferHead = (messageBufferHead + 1) % MESSAGE_BUFFER_SIZE;
+                // }
+
+
+
+
                 break;
             }
             case CGW_OTA_Control_ID:
             {
-                uint64 serialized = 0;
-                memcpy(&serialized,&readmsg.data[0],CGW_OTA_Control_Size);
-                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_Control_Size-4);
-                Deserialize_CGW_OTA_Control_Msg(&serialized,&db_msg.CGW_OTA_Control);
-                db_flag.CGW_OTA_Control_Flag = 1;
+//                uint64 serialized = 0;
+//                memcpy(&serialized,&readmsg.data[0],CGW_OTA_Control_Size);
+//                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_Control_Size-4);
+//                Deserialize_CGW_OTA_Control_Msg(&serialized,&db_msg.CGW_OTA_Control);
+//                db_flag.CGW_OTA_Control_Flag = 1;
+
+
                 break;
             }
             case CCU_Cordi_data1_ID:
@@ -122,6 +137,25 @@ void RX_Int0Handler(void)
                 db_flag.CCU_Cordi_data2_Flag = 1;
                 break;
             }
+            case CCU_RightAngle_detect_ID:
+            {
+                uint8 serialized = 0;
+                memcpy(&serialized,&readmsg.data[0],CCU_RightAngle_detect_Size);
+                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CCU_Cordi_data2_Size-4);
+                Deserialize_CCU_RightAngle_detect_Msg(&serialized,&db_msg.CCU_RightAngle_detect);
+                db_flag.CCU_RightAngle_detect_Flag = 1;
+                break;
+            }
+            case CCU_Parking_Complete_ID:
+            {
+                uint8 serialized = 0;
+                memcpy(&serialized,&readmsg.data[0],CCU_Parking_Complete_Size);
+                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CCU_Cordi_data2_Size-4);
+                Deserialize_CCU_Parking_Complete_Msg(&serialized,&db_msg.CCU_Parking_Complete);
+                db_flag.CCU_Parking_Complete_Flag = 1;
+                break;
+            }
+
             case CGW_Engine_ID:
             {
                 uint8 serialized = 0;
@@ -200,6 +234,7 @@ void RX_Int0Handler(void)
             break;
         }
     }
+    //IfxCpu_restoreInterrupts(interruptState);  // �씠�쟾 �씤�꽣�읇�듃 �긽�깭 蹂듭썝
 }
 void initCanDB(void)
 {
@@ -212,6 +247,7 @@ void initCanDB(void)
 
 void output_message(void *msg, uint32 msgID)
 {
+    //boolean interruptState = IfxCpu_disableInterrupts();
     IfxMultican_Message tx_msg;
     uint32 send_data[2] = {0};
 
@@ -244,6 +280,24 @@ void output_message(void *msg, uint32 msgID)
             IfxMultican_Message_init(&tx_msg, VCU_Vehicle_Engine_Status_ID, send_data[0], send_data[1], VCU_Vehicle_Engine_Status_Size);
             break;
         }
+        case VCU_Exiting_Status_ID:
+        {
+            uint8 serialized = 0;
+            VCU_Exiting_Status_Msg* out_msg = (VCU_Exiting_Status_Msg*)msg;
+            Serialize_VCU_Exiting_Status_Msg(&serialized, out_msg);
+            memcpy(&send_data[0],&serialized,1);
+            IfxMultican_Message_init(&tx_msg, VCU_Exiting_Status_ID, send_data[0], send_data[1], VCU_Exiting_Status_Size);
+            break;
+        }
+        case VCU_ParkingLane_Request_ID:
+        {
+            uint8 serialized = 0;
+            VCU_ParkingLane_Request_Msg* out_msg = (VCU_ParkingLane_Request_Msg*)msg;
+            Serialize_VCU_ParkingLane_Request_Msg(&serialized, out_msg);
+            memcpy(&send_data[0],&serialized,1);
+            IfxMultican_Message_init(&tx_msg, VCU_ParkingLane_Request_ID, send_data[0], send_data[1], VCU_ParkingLane_Request_Size);
+            break;
+        }
         case VCU_Camera_ID:
         {
             uint8 serialized = 0;
@@ -262,17 +316,17 @@ void output_message(void *msg, uint32 msgID)
             IfxMultican_Message_init(&tx_msg, SCU_Obstacle_Detection_ID, send_data[0], send_data[1], SCU_Obstacle_Detection_Size);
             break;
         }
-        case CCU_Cordi_data1_ID:
-        {
-            uint64 serialized = 0;
-            CCU_Cordi_data1_Msg* out_msg = (CCU_Cordi_data1_Msg*)msg;
-            Serialize_CCU_Cordi_data1_Msg(&serialized, out_msg);
-            //memcpy(&send_data[0],&serialized,4);
-            //memcpy(&send_data[1],((uint32*)&serialized)+1,2);
-            memcpy(send_data, &serialized, 6); // 하위 6바이트 복사
-            IfxMultican_Message_init(&tx_msg, CCU_Cordi_data1_ID, send_data[0], send_data[1], CCU_Cordi_data1_Size);
-            break;
-        }
+//        case CCU_Cordi_data1_ID:
+//        {
+//            uint64 serialized = 0;
+//            CCU_Cordi_data1_Msg* out_msg = (CCU_Cordi_data1_Msg*)msg;
+//            Serialize_CCU_Cordi_data1_Msg(&serialized, out_msg);
+//            //memcpy(&send_data[0],&serialized,4);
+//            //memcpy(&send_data[1],((uint32*)&serialized)+1,2);
+//            memcpy(send_data, &serialized, 6); // �븯�쐞 6諛붿씠�듃 蹂듭궗
+//            IfxMultican_Message_init(&tx_msg, CCU_Cordi_data1_ID, send_data[0], send_data[1], CCU_Cordi_data1_Size);
+//            break;
+//        }
         default:
             break;
         }
@@ -280,21 +334,22 @@ void output_message(void *msg, uint32 msgID)
         while (IfxMultican_Can_MsgObj_sendMessage(&canMsgObjTx, &tx_msg) == IfxMultican_Status_notSentBusy)
         {
         }
+    //IfxCpu_restoreInterrupts(interruptState);
 }
 
 void initCan(void)
 {
-    // CAN 모듈 초기화
+    // CAN 紐⑤뱢 珥덇린�솕
     IfxMultican_Can_Config canConfig;
     IfxMultican_Can_initModuleConfig(&canConfig, &MODULE_CAN);
 
-    //     CAN0 인터럽트 활성화
+    //     CAN0 �씤�꽣�읇�듃 �솢�꽦�솕
     canConfig.nodePointer[TC275_CAN0].priority = 101;
     canConfig.nodePointer[TC275_CAN0].typeOfService = IfxSrc_Tos_cpu0;
 
     IfxMultican_Can_initModule(&can, &canConfig);
 
-    // CAN 노드 초기화
+    // CAN �끂�뱶 珥덇린�솕
     IfxMultican_Can_NodeConfig canNodeConfig;
     IfxMultican_Can_Node_initConfig(&canNodeConfig, &can);
     canNodeConfig.nodeId = IfxMultican_NodeId_0;
@@ -304,23 +359,23 @@ void initCan(void)
     canNodeConfig.txPinMode = IfxPort_OutputMode_pushPull;
     IfxMultican_Can_Node_init(&canNode, &canNodeConfig);
 
-    // Tx 메시지 객체 초기화
+    // Tx 硫붿떆吏� 媛앹껜 珥덇린�솕
     IfxMultican_Can_MsgObjConfig canMsgObjConfig;
     IfxMultican_Can_MsgObj_initConfig(&canMsgObjConfig, &canNode);
-    canMsgObjConfig.msgObjId = 0; // 메시지 객체 ID
+    canMsgObjConfig.msgObjId = 0; // 硫붿떆吏� 媛앹껜 ID
     canMsgObjConfig.messageId = CAN_TX_MESSAGE_ID;
     canMsgObjConfig.frame = IfxMultican_Frame_transmit;
     canMsgObjConfig.control.extendedFrame = FALSE;
     IfxMultican_Can_MsgObj_init(&canMsgObjTx, &canMsgObjConfig);
 
-    // Rx 메시지 객체 초기화
-    canMsgObjConfig.msgObjId = 1; // 메시지 객체 ID
+    // Rx 硫붿떆吏� 媛앹껜 珥덇린�솕
+    canMsgObjConfig.msgObjId = 1; // 硫붿떆吏� 媛앹껜 ID
     canMsgObjConfig.messageId = CAN_RX_MESSAGE_ID;
-    canMsgObjConfig.acceptanceMask = 0x0; // 비교 안함, 전부 수신
+    canMsgObjConfig.acceptanceMask = 0x0; // 鍮꾧탳 �븞�븿, �쟾遺� �닔�떊
     canMsgObjConfig.frame = IfxMultican_Frame_receive;
     canMsgObjConfig.control.extendedFrame = FALSE;
 
-    // 인터럽트 활성화
+    // �씤�꽣�읇�듃 �솢�꽦�솕
     canMsgObjConfig.rxInterrupt.enabled = TRUE;
     canMsgObjConfig.rxInterrupt.srcId = TC275_CAN0;
 
