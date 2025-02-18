@@ -32,20 +32,19 @@
 #include "TC275_LCD_16x2.h"
 #include "IfxFlash.h"
 #include <string.h>
+#include <stdio.h>
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 
 #define DFLASH_START_ADDR     0xAF000000  // 데이터 플래시 시작 주소
-#define TEST_DATA             0x00000002  // 쓸 테스트 데이터
-#define APPLICATION_A_ADDRESS 0x80064020 /Partition A address/
-#define APPLICATION_B_ADDRESS 0x8012C020 /Partition B address/
+
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
-OTAUpdateState g_current_ota_update = OTA_ORIGINAL;
+OTAUpdateState g_current_ota_update;
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -147,11 +146,10 @@ void Show_OTA_State()
     // 둘째 줄
     LCD1602_2ndLine();
 
-//    uint8 ota_pct = 50;
+//    uint8 print_progress = local_udt_state_sig.ota_update_progress;
+    sprintf(str, "%02u%%[", ((local_udt_state_sig.ota_update_progress) < 100 ?
+            local_udt_state_sig.ota_update_progress : 99));
 
-
-    sprintf(str, "%02d%%[", local_udt_state_sig.ota_update_progress < 100 ?
-            local_udt_state_sig.ota_update_progress : 99);
 
     LCD1602_print(str);
 
@@ -163,6 +161,7 @@ void Show_OTA_State()
     if(local_udt_state_sig.ota_update_progress ==  100 )
     {
         g_current_ota_update = OTA_UPDATED;
+        writeFlash(OTA_UPDATED);
 
         LCD1602_clear();
         LCD1602_1stLine();
@@ -178,12 +177,11 @@ void Show_OTA_State()
 
 
 
- uint32 readData;
 
 
- void writeFlash(void)
+ void writeFlash(OTAUpdateState ota_info)
  {
-     uint32 writeData = TEST_DATA;
+     uint32 writeData = (uint32)ota_info;
 
      uint16 password;
 
@@ -220,5 +218,7 @@ void Show_OTA_State()
 
  void readFlash(void)
 {
-     readData = (uint32)DFLASH_START_ADDR;
+     uint32 *readData;
+     readData = (uint32*)DFLASH_START_ADDR;
+     g_current_ota_update = *readData;
 }

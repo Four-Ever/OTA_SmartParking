@@ -60,10 +60,14 @@ extern sint8 g_SH_adc_result;
 //Logic.c//Logic.c
 extern DriveDir dir_state;
 extern ControllerState g_current_ctrl_state;
+
 extern OUR_signal local_udt_req_sig;
 extern OUS_signal local_udt_state_sig;
 extern PS_signal local_prk_status_sig;
+extern EXS_signal local_exit_status_sig;
 extern VS_signal local_vhc_status_sig;
+
+
 extern TruthState g_isreq_reject ;
 extern uint32 g_reset_timer;
 
@@ -71,7 +75,7 @@ extern uint32 g_reset_timer;
 extern OTAUpdateState g_current_ota_update;
 
 
-extern uint8 here;
+//extern uint32 *readData;
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -108,8 +112,12 @@ uint8 get_btn_data(void);
 void Show_OTA_Confirm_State();
 void Show_OTA_State();
 
+void writeFlash(OTAUpdateState ota_info);
+void readFlash(void);
+
 //OFF_State.c
 void Show_Off_State();
+void Show_Auto_Exit_State();
 
 //Drive_State.c
 void Show_Drive_State();

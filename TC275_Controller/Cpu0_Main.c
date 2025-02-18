@@ -78,6 +78,7 @@ void core0_main(void)
 
     init_LCD();
     init_Controller();
+
 //    initPeripherals();
 #ifdef DEBUG_PRINT
     initShellInterface();

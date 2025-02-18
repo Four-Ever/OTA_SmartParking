@@ -172,6 +172,19 @@ void RCV_Command(void)
             break;
 
         }
+        case (ID_CGW_EXIT_STATUS_MSG):
+        {
+            msg.cgw_exit_status_msg.msgId = ID_CGW_EXIT_STATUS_MSG;
+            memcpy(&msg.cgw_exit_status_msg.signal, &g_rxData[1], g_rcv_size);
+            ready_flag.cgw_exit_status_flag = RECEIVE_COMPLETED;
+#ifdef DEBUG_PRINT
+            myprintf("ID : 0X%02X exiting_status : %u\n\r",
+                    msg.cgw_prk_status_msg.msgId,
+                    msg.cgw_prk_status_msg.signal.exiting_status);
+#endif
+            break;
+
+        }
         case (ID_CGW_VHC_STATUS_MSG):
         {
             msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
