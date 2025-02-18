@@ -24,6 +24,7 @@
 #include "decision_stateflow.h"
 #include "UpdateInputs.h"
 #include "Homo_Coordinate.h"
+#include "LED_Buzzer.h"
 
 
 //ToF
@@ -52,6 +53,7 @@ typedef struct
     uint32 u32nuCnt10ms;
     uint32 u32nuCnt50ms;
     uint32 u32nuCnt100ms;
+    uint32 u32nuCnt500ms;
     uint32 u32nuCnt1000ms;
     uint32 u32nuCnt5000ms;
 } Taskcnt;
@@ -78,6 +80,7 @@ void AppTask1ms(void);
 void AppTask10ms(void);
 void AppTask50ms(void);
 void AppTask100ms(void);
+void AppTask500ms(void);
 void AppTask1000ms(void);
 void AppTask5000ms(void);
 /*********************************************************************************************************************/
@@ -135,6 +138,7 @@ int core0_main(void)
     initServo(); // D6
     initIMU();
     initGPIO();
+    init_LED_Buzzer();
 
 
     //ToF user manual !
@@ -143,6 +147,9 @@ int core0_main(void)
     ToF_get_All_Distance(); // put this code to task code ( work for synchronize recent distance data )
     Distance[TOF0]; // uart0 ToF Data
     Distance[TOF1]; // uart2 ToF Data
+
+
+    alarm_request=1; //for test
 
 #ifdef motor_Test
     // motor_enable = 1;
@@ -155,6 +162,15 @@ int core0_main(void)
     waitTime(300000000); //
     init_move_distance_control(1000.0f, 500.0f); // 1000mm, 1000rpm
 #endif
+
+    /*initStanley();
+    Update_finished=1;
+    waitTime(300000000);
+    gitstanley();
+    */
+
+
+
 
     while(1)
     {
@@ -286,7 +302,7 @@ int core0_main(void)
                     //find my car_LED/Sound
                     if (U8PrkFinished==1)
                     {
-
+                        alarm_request=1;
                     }
                 }
 
@@ -430,6 +446,15 @@ void AppTask100ms(void)
 #endif
 }
 
+void AppTask500ms(void)
+{
+    stTestCnt.u32nuCnt500ms++;
+
+    FindCar_Plz();
+    cnt_alarm++;
+
+
+}
 
 void AppTask1000ms(void)
 {
@@ -464,6 +489,12 @@ void AppScheduling(void)
         {
             stSchedulingInfo.u8nuScheduling100msFlag = 0u;
             AppTask100ms();
+        }
+
+        if (stSchedulingInfo.u8nuScheduling500msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling500msFlag = 0u;
+            AppTask500ms();
         }
         if (stSchedulingInfo.u8nuScheduling1000msFlag == 1u)
         {
