@@ -36,7 +36,7 @@
  
  /*********************************************************************************************************************/
  /*------------------------------------------------------Macros-------------------------------------------------------*/
- // CANDB ID 정의
+ // CANDB ID �젙�쓽
  #define VCU_Vehicle_Status_ID 0x01
  #define VCU_Parking_Status_ID 0x12
  #define VCU_Vehicle_Engine_Status_ID 0x02
@@ -62,7 +62,8 @@
  #define CCU_Cordi_data1_ID 0xA1
  #define CCU_Cordi_data2_ID 0xA2
  #define CCU_RightAngle_detect_ID 0xA0
- #define CCU_Parking_Complete_ID 0xA3
+#define CCU_ParkingAngle_detect_ID 0xA3
+ #define CCU_Parking_Complete_ID 0xA4
  #define CTRL_Engine_ID 0xC9
  #define CTRL_Move_ID 0xCA
  #define CTRL_Auto_Parking_Request_ID 0xD1
@@ -73,7 +74,7 @@
  
  
  
- // CANDB 크기 정의
+ // CANDB �겕湲� �젙�쓽
  #define VCU_Vehicle_Status_Size 2
  #define VCU_Parking_Status_Size 1
  #define VCU_Vehicle_Engine_Status_Size 1
@@ -97,6 +98,7 @@
  #define CCU_Cordi_data1_Size 6
  #define CCU_Cordi_data2_Size 7
  #define CCU_RightAngle_detect_Size 1
+#define CCU_ParkingAngle_detect_Size 1
  #define CCU_Parking_Complete_Size 1
  #define CTRL_Engine_Size 1
  #define CTRL_Move_Size 2
@@ -142,6 +144,7 @@
  void Deserialize_CCU_Cordi_data1_Msg(uint64* serialized, CCU_Cordi_data1_Msg *data);
  void Deserialize_CCU_Cordi_data2_Msg(uint64* serialized, CCU_Cordi_data2_Msg *data);
  void Deserialize_CCU_RightAngle_detect_Msg(uint8* serialized, CCU_RightAngle_detect_Msg* data);
+ void Deserialize_CCU_ParkingAngle_detect_Msg(uint8* serialized, CCU_ParkingAngle_detect_Msg* data);
  void Deserialize_CCU_Parking_Complete_Msg(uint8* serialized, CCU_Parking_Complete_Msg* data);
  
  void Deserialize_CGW_Engine_Msg(uint8* serialized, CGW_Engine_Msg *data);

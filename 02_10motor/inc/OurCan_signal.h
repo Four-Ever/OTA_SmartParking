@@ -139,7 +139,13 @@
 
  typedef struct
  {
-         sint8 parkig_back_lane_detected;
+         sint8 parking_back_lane_angle : 8;
+
+ } CCU_ParkingAngle_detect_Msg;
+
+ typedef struct
+ {
+         uint8 parking_back_lane_detected : 1;
 
  } CCU_Parking_Complete_Msg;
 

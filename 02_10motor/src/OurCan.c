@@ -69,7 +69,7 @@ void RX_Int0Handler(void)
     IfxCpu_enableInterrupts();
 
     IfxMultican_Message readmsg;
-    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// �닔�떊 ��湲�
+    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// 占쎈땾占쎈뻿 占쏙옙疫뀐옙
     if (IfxMultican_Can_MsgObj_readMessage(&canMsgObjRx, &readmsg) == IfxMultican_Status_newData)
     {
         switch (readmsg.id)
@@ -144,6 +144,15 @@ void RX_Int0Handler(void)
                 //memcpy((uint32*)&serialized+1,&readmsg.data[1],CCU_Cordi_data2_Size-4);
                 Deserialize_CCU_RightAngle_detect_Msg(&serialized,&db_msg.CCU_RightAngle_detect);
                 db_flag.CCU_RightAngle_detect_Flag = 1;
+                break;
+            }
+            case CCU_ParkingAngle_detect_ID:
+            {
+                uint8 serialized = 0;
+                memcpy(&serialized,&readmsg.data[0],CCU_ParkingAngle_detect_Size);
+                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CCU_Cordi_data2_Size-4);
+                Deserialize_CCU_ParkingAngle_detect_Msg(&serialized,&db_msg.CCU_ParkingAngle_detect);
+                db_flag.CCU_ParkingAngle_detect_Flag = 1;
                 break;
             }
             case CCU_Parking_Complete_ID:
@@ -234,7 +243,7 @@ void RX_Int0Handler(void)
             break;
         }
     }
-    //IfxCpu_restoreInterrupts(interruptState);  // �씠�쟾 �씤�꽣�읇�듃 �긽�깭 蹂듭썝
+    //IfxCpu_restoreInterrupts(interruptState);  // 占쎌뵠占쎌읈 占쎌뵥占쎄숲占쎌쓦占쎈뱜 占쎄맒占쎄묶 癰귣벊�뜚
 }
 void initCanDB(void)
 {
@@ -323,7 +332,7 @@ void output_message(void *msg, uint32 msgID)
 //            Serialize_CCU_Cordi_data1_Msg(&serialized, out_msg);
 //            //memcpy(&send_data[0],&serialized,4);
 //            //memcpy(&send_data[1],((uint32*)&serialized)+1,2);
-//            memcpy(send_data, &serialized, 6); // �븯�쐞 6諛붿씠�듃 蹂듭궗
+//            memcpy(send_data, &serialized, 6); // 占쎈릭占쎌맄 6獄쏅뗄�뵠占쎈뱜 癰귣벊沅�
 //            IfxMultican_Message_init(&tx_msg, CCU_Cordi_data1_ID, send_data[0], send_data[1], CCU_Cordi_data1_Size);
 //            break;
 //        }
@@ -339,17 +348,17 @@ void output_message(void *msg, uint32 msgID)
 
 void initCan(void)
 {
-    // CAN 紐⑤뱢 珥덇린�솕
+    // CAN 筌뤴뫀諭� �룯�뜃由곤옙�넅
     IfxMultican_Can_Config canConfig;
     IfxMultican_Can_initModuleConfig(&canConfig, &MODULE_CAN);
 
-    //     CAN0 �씤�꽣�읇�듃 �솢�꽦�솕
+    //     CAN0 占쎌뵥占쎄숲占쎌쓦占쎈뱜 占쎌넞占쎄쉐占쎌넅
     canConfig.nodePointer[TC275_CAN0].priority = 101;
     canConfig.nodePointer[TC275_CAN0].typeOfService = IfxSrc_Tos_cpu0;
 
     IfxMultican_Can_initModule(&can, &canConfig);
 
-    // CAN �끂�뱶 珥덇린�솕
+    // CAN 占쎈걗占쎈굡 �룯�뜃由곤옙�넅
     IfxMultican_Can_NodeConfig canNodeConfig;
     IfxMultican_Can_Node_initConfig(&canNodeConfig, &can);
     canNodeConfig.nodeId = IfxMultican_NodeId_0;
@@ -359,23 +368,23 @@ void initCan(void)
     canNodeConfig.txPinMode = IfxPort_OutputMode_pushPull;
     IfxMultican_Can_Node_init(&canNode, &canNodeConfig);
 
-    // Tx 硫붿떆吏� 媛앹껜 珥덇린�솕
+    // Tx 筌롫뗄�뻻筌욑옙 揶쏆빘猿� �룯�뜃由곤옙�넅
     IfxMultican_Can_MsgObjConfig canMsgObjConfig;
     IfxMultican_Can_MsgObj_initConfig(&canMsgObjConfig, &canNode);
-    canMsgObjConfig.msgObjId = 0; // 硫붿떆吏� 媛앹껜 ID
+    canMsgObjConfig.msgObjId = 0; // 筌롫뗄�뻻筌욑옙 揶쏆빘猿� ID
     canMsgObjConfig.messageId = CAN_TX_MESSAGE_ID;
     canMsgObjConfig.frame = IfxMultican_Frame_transmit;
     canMsgObjConfig.control.extendedFrame = FALSE;
     IfxMultican_Can_MsgObj_init(&canMsgObjTx, &canMsgObjConfig);
 
-    // Rx 硫붿떆吏� 媛앹껜 珥덇린�솕
-    canMsgObjConfig.msgObjId = 1; // 硫붿떆吏� 媛앹껜 ID
+    // Rx 筌롫뗄�뻻筌욑옙 揶쏆빘猿� �룯�뜃由곤옙�넅
+    canMsgObjConfig.msgObjId = 1; // 筌롫뗄�뻻筌욑옙 揶쏆빘猿� ID
     canMsgObjConfig.messageId = CAN_RX_MESSAGE_ID;
-    canMsgObjConfig.acceptanceMask = 0x0; // 鍮꾧탳 �븞�븿, �쟾遺� �닔�떊
+    canMsgObjConfig.acceptanceMask = 0x0; // �뜮袁㏉꺍 占쎈툧占쎈맙, 占쎌읈�겫占� 占쎈땾占쎈뻿
     canMsgObjConfig.frame = IfxMultican_Frame_receive;
     canMsgObjConfig.control.extendedFrame = FALSE;
 
-    // �씤�꽣�읇�듃 �솢�꽦�솕
+    // 占쎌뵥占쎄숲占쎌쓦占쎈뱜 占쎌넞占쎄쉐占쎌넅
     canMsgObjConfig.rxInterrupt.enabled = TRUE;
     canMsgObjConfig.rxInterrupt.srcId = TC275_CAN0;
 
