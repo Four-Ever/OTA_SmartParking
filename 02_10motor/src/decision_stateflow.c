@@ -18,12 +18,13 @@
  */
 
 #include "decision_stateflow.h"
+
 #include "rtwtypes.h"
 #include "IfxGpt12_IncrEnc.h"
 
 
 /* Block states (default stoKge) */
-DW_decision_stateflow_T decision_stateflow_DW;
+//DW_decision_stateflow_T decision_stateflow_DW;
 
 /* Real-time model */
 RT_MODEL_decision_stateflow_T decision_stateflow_M_;
@@ -36,13 +37,14 @@ int ModeOn = 1;
 double initVel = 0;
 Transmission U8IsTrButton = 0;
 double U8Ref_vel = 0;
-double DInputVD = 0.1;  //
-double DInputVR = -0.1;   //
+double DInputVD = 0.1;
+double DInputVR = -0.1;
 int IsRSPAButton = 0;
-int IsOTAFinished = 0;
 int U8IsWp_R = 0;
 int U8IsStopline = 0;
 int U8IsPrkFinished = 0;
+int U8IsOb_R = 0;
+int U8IsOb_D=0;
 DriverState U8DriverState = InitDriverState;
 RSPAState U8RSPAState = InitRSPAState;
 int U8Driver = 0;
@@ -53,19 +55,27 @@ int U8PrkFinished=0;
 int ExitCAR_request=0;
 double D_Ref_vel=0;
 int lanecheck_request=0;
+
 int CameraSwitchRequest=0;
+int Isprkslot;
+int U8Isprkslot=0;
 sint8 DSteeringinput=0;
-int First_Set = 1; //占쏙옙占쏙옙占싸쏙옙 占쏙옙占쏙옙
-int U8IsConerline=0;
+double DMoveDis=0;
+int calDis=0;
+int First_Set = 1;
 
 IsPrk IsPrk_LR = InitIsPrk;
 
-//占쏙옙占쏙옙
+int U8IsConerline = 0;
 CAState U8FCAState = InitCAState;
 CAState U8RCAState = InitCAState;
-double DObs_dis_D= 100.0; //占쏙옙占쏙옙 占쏙옙岺占� 占쏙옙占신몌옙 占쏙옙占쏙옙 占쏙옙占쏙옙占싶곤옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙, state 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占십깍옙화
-double DObs_dis_R= 100.0; //占식뱄옙 占쏙옙岺占� 占쏙옙占신몌옙 占쏙옙占쏙옙 占쏙옙占쏙옙占싶곤옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙, state 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占십깍옙화
-double gainTTC=0.0; //튜占쏙옙 占식띰옙占쏙옙占�
+double DTTC_D= 10.0;
+double DTTC_R= 10.0;
+double DObs_dis_D= 100.0;
+double DObs_dis_R= 100.0;
+double gainTTC=0.0;
+DW_decision_stateflow_T decision_stateflow_DW={0,0,0,0,0,0,0};
+
 
 
 /* Model step function */
@@ -92,7 +102,7 @@ void decision_stateflow_step(void)
                 U8DriverState = InitDriverState;
                 U8RSPAState = InitRSPAState;
 
-                if (vehicle_status.engine_state == ENGINE_ON && ExitCAR_request == 0 )   //占시듸옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쌘몌옙占쏙옙 占쏙옙환
+                if (vehicle_status.engine_state == ENGINE_ON && ExitCAR_request == 0 )
                 {
                     U8Engine=ModeOn;
 
@@ -102,7 +112,7 @@ void decision_stateflow_step(void)
 
                 }
 
-                if (vehicle_status.engine_state == ENGINE_OFF && ExitCAR_request==1){   //占쏙옙占쏙옙占쏙옙청
+                if (vehicle_status.engine_state == ENGINE_OFF && ExitCAR_request==1){
                     decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_FIND_CAR;
                 }
 
@@ -112,7 +122,6 @@ void decision_stateflow_step(void)
 
                 if (ExitCAR_request==1){
                     U8Ref_vel = DInputVD;
-
                     if (move_distance(200) == REACHED_TARGET_DIS)
                     {
                         U8Ref_vel=0;
@@ -135,7 +144,7 @@ void decision_stateflow_step(void)
                         U8FCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && ((double)obstacle[F_OBSTACLE]/1000) == (double)FBOBSTACLE_WARNING)
+                        if (U8Curr_vel == 0 && DObs_dis_D >=100)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
@@ -143,20 +152,15 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_FCA_DECEL:
                         U8FCAState = Decel;
-                        if (U8Curr_vel !=0){
-                            U8Ref_vel=0;
-                        }
-                        else{
-                            U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCD(U8Curr_vel)+gainTTC));
-                        }
+                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(DTTC_D+gainTTC));
 
-                        if (((double)obstacle[F_OBSTACLE]/1000) == (double)FBOBSTACLE_WARNING)
+                        if (DObs_dis_D >=100)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
                         break;
-                    case decision_stateflow_IN_FCA_EXIT:   //占쏙옙占쏙옙占쏙옙占� 占싹깍옙 占쏙옙占쏙옙 MODE 占쏙옙 占쏙옙占쏙옙
-                                                           //탈占쏙옙 占쏙옙占쏙옙 DObs_dis_D 占쏙옙占쏙옙占싹댐옙占쏙옙 확占쏙옙
+                    case decision_stateflow_IN_FCA_EXIT:
+
                         U8FCAState = InitCAState;
 
                         if (U8DriverState == Driving)
@@ -179,7 +183,6 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
                             First_Set=1;
-                            //CameraSwitchRequest=1;
                         }
                         break;
                 }
@@ -192,7 +195,7 @@ void decision_stateflow_step(void)
                         U8RCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && ((double)obstacle[B_OBSTACLE]/1000) == (double)RLOBSTACLE_WARNING) //占쏙옙占쏙옙 占쏙옙占쏙옙 + 占식뱄옙 占쏙옙岺占� 占쏙옙占쏙옙占�
+                        if (U8Curr_vel == 0 && DObs_dis_R >=100)
                         {
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
@@ -200,19 +203,14 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_RCA_DECEL:
                         U8RCAState = Decel;
-                        if (U8Curr_vel !=0){
-                            U8Ref_vel=0;
-                        }
-                        else{
-                            U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCR(U8Curr_vel)+gainTTC));
-                        }
+                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(DTTC_R+gainTTC));
 
-                        if (((double)obstacle[B_OBSTACLE]/1000) == (double)RLOBSTACLE_WARNING)
+                        if (DObs_dis_R >=100)
                         {
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
                         break;
-                    case decision_stateflow_IN_RCA_EXIT:   //占쏙옙占쏙옙占쏙옙占� 占싹깍옙 占쏙옙占쏙옙 MODE 占쏙옙 占쏙옙占쏙옙
+                    case decision_stateflow_IN_RCA_EXIT:
                         U8RCAState = InitCAState;
 
                         if (U8DriverState == Reversing)
@@ -252,10 +250,10 @@ void decision_stateflow_step(void)
                         {
                             decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_D;
                         }
-                        else if(vehicle_status.engine_state == ENGINE_OFF){  //占시듸옙 off
+                        else if(vehicle_status.engine_state == ENGINE_OFF){
                             D_RefRPM = 0;
                             if (U8Curr_vel==0){
-                                //U8Ref_vel=(0);
+                                //U8Ref_vel=0;
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_INIT_Mode;
                             }
                         }
@@ -265,21 +263,18 @@ void decision_stateflow_step(void)
                         U8DriverState = Driving;
                         U8Ref_vel = D_Ref_vel;
 
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+                        if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
                         }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+                        else if(DTTC_D < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
                         }
-                        //占쏙옙咀�占쏙옙
                         if (U8IsTrButton == PARKING)
                         {
-
                             D_RefRPM=0;
                             if (U8Curr_vel == 0){
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
@@ -293,23 +288,18 @@ void decision_stateflow_step(void)
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_R;
                             }
                         }
-                        else if (IsRSPAButton == 1 && IsOTAFinished == 1){
+                        else if (IsRSPAButton == 1){
                             D_RefRPM=0;
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
 
-                                //占쌩곤옙占쏙옙 占싸븝옙 占쏙옙占쏙옙
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
 
                                 U8DriverState = InitDriverState;
                                 First_Set=1;
                                 IsRSPAButton = 0;
-                                //VCU 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙카占쌨띰옙 on 占쌔쇽옙 waypoint 占쏙옙占쏙옙占쌨띰옙占� 占쌔억옙占쏙옙 (msg 占쌜쏙옙)
-                                //{
-                                CameraSwitchRequest = 1;  // 카占쌨띰옙 占쏙옙환 占쏙옙청 占시뤄옙占쏙옙(占쏙옙占쏙옙카占쌨띰옙 on) (make_can_message占쏙옙占쏙옙 처占쏙옙)
-                                //}
-                                //占쌩곤옙占쏙옙 占싸븝옙 占쏙옙
-                                
+
+                                CameraSwitchRequest = 1;                                
                             }
                         }
                         break;
@@ -318,20 +308,20 @@ void decision_stateflow_step(void)
                         U8DriverState = Reversing;
                         U8Ref_vel = D_Ref_vel;
 
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
+
+                        if(DTTC_R <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
                         }
-                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+                        else if(DTTC_R < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
 
                         }
-                        //占쏙옙咀�占쏙옙
+
                         if (U8IsTrButton == DRIVING)
                         {
                             D_RefRPM=0;
@@ -346,7 +336,7 @@ void decision_stateflow_step(void)
                             }
                         }
 
-                        else if (IsRSPAButton == 1 && IsOTAFinished == 1)
+                        else if (IsRSPAButton == 1)
                         {
                             D_RefRPM=0;
                             if (U8Curr_vel==0){
@@ -356,18 +346,15 @@ void decision_stateflow_step(void)
                                 U8DriverState = InitDriverState;
 
                                 First_Set=1;
-                                IsRSPAButton = 0; // 占쌩곤옙
-                                //VCU 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙카占쌨띰옙 on 占쌔쇽옙 waypoint 占쏙옙占쏙옙占쌨띰옙占� 占쌔억옙占쏙옙 (msg 占쌜쏙옙)
-                                //{
-                                CameraSwitchRequest = 1;  // 카占쌨띰옙 占쏙옙환 占쏙옙청 占시뤄옙占쏙옙(占쏙옙占쏙옙카占쌨띰옙 on) (make_can_message占쏙옙占쏙옙 처占쏙옙)
-                                //}
+                                IsRSPAButton = 0;
+
+                                CameraSwitchRequest = 1;
                             }
                         }
                         break;
                 }
                 break;
 
-            //占쏙옙占쏙옙占쏙옙占쏙옙占시쏙옙占쏙옙
             case decision_stateflow_IN_RSPA_Mode:
                 U8Driver=ModeOff;
                 U8RSPA=ModeOn;
@@ -381,40 +368,27 @@ void decision_stateflow_step(void)
                         U8RSPAState= Searching;
                         U8Ref_vel=DInputVD;
 
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)    //ttc 占쏙옙占쏙옙求占� 占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙짬
+                        if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
 
                         }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+                        else if(DTTC_D < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
 
                         }
 
-                        if ((parking_spot[R_ULTRA] == 1) || (parking_spot[L_ULTRA] == 1) )   // 占쏙옙占쏙옙占쏙옙칸 찾占쏙옙占쏙옙 STATE 占쏙옙占쏙옙
+                        if (U8Isprkslot == 1)
                         {
                             U8Ref_vel = 0;
-
-                            if (parking_spot[R_ULTRA] == 1){
-                                IsPrk_LR = RIGHT;
-                            }
-                            else if(parking_spot[L_ULTRA] == 1) {
-                                IsPrk_LR = LEFT;
-                                }
-
-                            //
                             if (U8Curr_vel==0){
 
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
-
                             }
                         }
-
-
 
                         break;
 
@@ -422,31 +396,26 @@ void decision_stateflow_step(void)
                         U8RSPAState=Forward;
                         U8Ref_vel=DInputVD;
 
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+                        if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
 
                         }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+                        else if(DTTC_D < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
 
                         }
 
-                        //if (DMoveDis == 0.10)  // 10CM 占쏙옙占쏙옙占쏙옙占쏙옙 占싱듸옙占쏙옙占쏙옙占쏙옙
                         if(move_distance(100) == REACHED_TARGET_DIS) //100mm
                         {
                             DInputVD= 0;
                             
                             if (U8Curr_vel==0){
-                                // 占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 占싹뤄옙풔占� 占쏙옙占쏙옙 占시곤옙 占쌩곤옙??
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
-                                //占쌩곤옙占쏙옙 占싸븝옙
-                                CameraSwitchRequest = 2; // 占식뱄옙 카占쌨띰옙
-                                //占쌩곤옙占쏙옙 占싸븝옙 占쏙옙
+                                CameraSwitchRequest = 2;
                             }
                         }
                         break;
@@ -454,21 +423,21 @@ void decision_stateflow_step(void)
                     case decision_stateflow_IN_RSPA_LANE_D:
                         U8RSPAState=Forward_Assist;
                         U8Ref_vel=DInputVD;
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+
+                        if(DTTC_D <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
 
                         }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+                        else if(DTTC_D < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
 
                         }
 
-                        if (U8Parkingfail==1 )  //占싼뱄옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쌔쇽옙 占쌩깍옙薩占�, STEERING 占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙莩占쏙옙 * (-1)
+                        if (U8Parkingfail==1 )
                         {
                             DInputVD= 0;
                             if (U8Curr_vel==0){
@@ -484,56 +453,53 @@ void decision_stateflow_step(void)
                         }
                         break;
 
-                    case decision_stateflow_IN_RSPA_R:  //steering 占쏙옙 3占쏙옙 占쏙옙占쏙옙
+                    case decision_stateflow_IN_RSPA_R:
                         U8RSPAState=Backward;
                         U8Ref_vel=DInputVR;
 
                         move_distance(700);
 
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
+                        if(DTTC_R <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
                         }
-                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+                        else if(DTTC_R < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
 
                         }
 
-                        if (CameraSwitchRequest == 2)  // 占식뱄옙카占쌨띰옙 占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 WP 占쌨억옙占쏙옙占쏙옙
+                        if (CameraSwitchRequest == 2)
                         {
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
-                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_R; //占쏙옙占쏙옙
+                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_R;
                             }
                         }
                         break;
 
-                    case decision_stateflow_IN_RSPA_LANE_R:  //占싱띰옙占쏙옙 占쏙옙占쏙옙-STANELY
+                    case decision_stateflow_IN_RSPA_LANE_R: //stanly
                         U8RSPAState=Backward_Assist;
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
 
-                        //占쏙옙占쏙옙占쏙옙占�
-                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
+                        if(DTTC_R <= 1.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
                         }
-                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+                        else if(DTTC_R < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
 
                         }
-                        //
 
-                        if (U8IsStopline == 1 && IsWPTrackingFinish == 1) //占쏙옙占쏙옙 占싹뤄옙
+                        if (U8IsStopline == 1 && IsWPTrackingFinish == 1)
                         {
                             U8Ref_vel = 0;
                             if (U8Curr_vel==0){
@@ -541,7 +507,7 @@ void decision_stateflow_step(void)
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
                             }
                         }
-                        else if (IsWPTrackingFinish == 1 && U8IsStopline == 0){ //占쏙옙占쏙옙 WP占쏙옙 占쏙옙 占쏙옙占쏙옙占쌩는듸옙, 占쏙옙占쏙옙 占쌩뚤삐띰옙占쌀띰옙
+                        else if (IsWPTrackingFinish == 1 && U8IsStopline == 0){
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
@@ -549,13 +515,13 @@ void decision_stateflow_step(void)
                             }
                         }
 
-                        /*else if (obstacle[B_OBSTACLE] == 0 ){ //占쏙옙灌占쏙옙 占쏙옙占쏙옙占싱다곤옙 占식뱄옙 占썸돌占실댐옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싹곤옙 占쏙옙占� 占쏙옙占쏙옙
+                        /*else if (U8IsOb_R == 0 ){
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_D;
                             }
-                        }*///占싱뤄옙占쏙옙황 占쏙옙占쏙옙占쏙옙占싹깍옙占쏙옙占�!!
+                        }*/
                         break;
 
                     case decision_stateflow_IN_RSPA_P:
