@@ -71,6 +71,7 @@ void make_can_message(void);
 void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src);
 void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src);
 void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src);
+void initIMU_error(void);
 
 void AppScheduling(void);
 void AppTask1ms(void);
@@ -158,7 +159,7 @@ int core0_main(void)
     while(1)
     {
         AppScheduling();
-        stopstatus=Touch();
+        //stopstatus=Touch();
         //can msg 수신
 #if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 雅뚯눛六� �굜遺얜굡
         // 엔진 on/off
@@ -232,6 +233,7 @@ int core0_main(void)
                     int camera_mode = db_msg.CCU_Cordi_data2.using_camera;
 
                     data_ready_flag = 1;
+
                 //}
                 if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //lane detection mode
                     if (data_ready_flag == 1){
@@ -239,6 +241,7 @@ int core0_main(void)
 
                         if(First_Set==1){    //
                             initStanley();
+                            initIMU_error();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
@@ -250,6 +253,7 @@ int core0_main(void)
                         }
                         else if (IsWPTrackingFinish==1){    //
                             initStanley();
+                            initIMU_error();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
@@ -330,23 +334,33 @@ void make_can_message(void)
 
 void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->vehicle_velocity = vehicle_status.u8_velocity;
-    dest->vehicle_steering_angle = vehicle_status.steering_angle;
-    dest->vehicle_transmission = vehicle_status.transmission;
+    dest->vehicle_velocity = src->u8_velocity;
+    dest->vehicle_steering_angle = src->steering_angle;
+    dest->vehicle_transmission = src->transmission;
 }
 
 
 void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->parking_status = vehicle_status.parking_status;
+    dest->parking_status = src->parking_status;
 }
 
 
 void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->vehicle_engine_status = vehicle_status.engine_state;
+    dest->vehicle_engine_status = src->engine_state;
 }
 
+void initIMU_error(void){
+
+    {
+        q0 = 1;
+        q1 = 0;
+        q2 = 0;
+        q3 = 0;
+        now_euler.yaw = 0;
+    }
+}
 
 void AppTask1ms(void)
 {
@@ -394,14 +408,14 @@ void AppTask100ms(void)
 
     now_status = imuRead();
     stanelytheta = now_euler.yaw;
-    if (stopstatus == 1)
+    /*if (stopstatus == 1)
     {
         q0 = 1;
         q1 = 0;
         q2 = 0;
         q3 = 0;
         now_euler.yaw = 0;
-    }
+    }*/
     now_euler = MadgwickAHRSupdateIMU(now_status);
     //print_encimu(&now_status, &now_euler);
 
