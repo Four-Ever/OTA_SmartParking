@@ -121,11 +121,17 @@ typedef enum
     PARK_SEARCHING=0,
     PARK_ING_D,
     PARK_ING_R,
-    PARK_FINISH,
+    PARK_FINISHED,
     PARK_NOTHING
 
 }ParkingMode;
 
+typedef enum
+{
+    EXIT_ING,
+    EXIT_FINISHED,
+    EXIT_NOTHING
+}ExitingMode;
 
 typedef enum
 {
@@ -146,6 +152,7 @@ typedef enum
 {
     CTRL_OFF,
     CTRL_ON,
+    CTRL_AUTO_EXIT,
     CTRL_OTA_CONFIRM,
     CTRL_OTA,
     CTRL_AUTO_PARKING,

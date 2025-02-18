@@ -54,6 +54,8 @@ static char str[20];
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
+
+
 void Show_Off_State()
 {
     if(local_udt_req_sig.ota_update_request == 1 &&
@@ -112,7 +114,7 @@ void Show_Off_State()
             g_current_ctrl_state = CTRL_ON;
 
             //명령 송신
-            msg.engine_msg.signal.control_engine = g_current_ctrl_state;
+            msg.engine_msg.signal.control_engine = CTRL_ON;
 
 #ifndef PERIOD_VER
             Command[ORDER_ENGINE]();
@@ -162,7 +164,7 @@ void Show_Off_State()
             if(prev_state != OFF_AUTO_EXIT){
                 prev_state = OFF_AUTO_EXIT;
 
-                //SPI송신
+                //명령 송신
                 msg.off_req_msg.signal.auto_exit_request = 1;
 #ifndef PERIOD_VER
                 Command[ORDER_OFF_REQ]();
@@ -177,6 +179,8 @@ void Show_Off_State()
             LCD1602_print(str);
             LCD1602_2ndLine();
             LCD1602_loading();
+
+            g_current_ctrl_state = CTRL_AUTO_EXIT;
         }
         else
         {
@@ -208,5 +212,50 @@ void Show_Off_State()
     }
     }
 //    LCD1602_print(str);
+}
+
+
+void Show_Auto_Exit_State()
+{
+
+#ifdef BEFORE_RECEIVE_TEST
+    msg.cgw_exit_status_msg.signal.exiting_status = (uint8)msg.move_msg.signal.control_steering_angle %2;
+    ready_flag.cgw_exit_status_flag = RECEIVE_COMPLETED;
+#endif
+    LCD1602_clear();
+    // 첫째 줄 - 코멘트
+    LCD1602_1stLine();
+
+    switch (local_exit_status_sig.exiting_status)
+    {
+        case (EXIT_ING) :
+        {
+
+            LCD1602_print("EXITING PARKING");
+            LCD1602_2ndLine();
+            LCD1602_print("SPACE");
+            static int target = 0;
+            for(int i =0 ; i< target; i++)
+            {
+                LCD1602_print(".");
+            }
+            target++;
+            if(target == 16) target =0;
+            break;
+
+        }
+        case (EXIT_FINISHED) :
+        {
+            LCD1602_print("EXITING FINISHED");
+            LCD1602_2ndLine();
+            LCD1602_loading();
+            g_current_ctrl_state = CTRL_OFF;
+            break;
+        }
+        default :
+        {
+
+        }
+    }
 }
 /*********************************************************************************************************************/

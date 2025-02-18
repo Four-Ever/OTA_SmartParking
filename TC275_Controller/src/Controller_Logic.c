@@ -69,29 +69,24 @@ DriveDir dir_state = DIR_P;
 OUR_signal local_udt_req_sig;
 OUS_signal local_udt_state_sig;
 PS_signal local_prk_status_sig;
+EXS_signal local_exit_status_sig;
 VS_signal local_vhc_status_sig;
 
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
-static void disableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
-}
-
-static void enableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
-}
+//static void disableUartRxInterrupt() {
+//    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
+//}
+//
+//static void enableUartRxInterrupt() {
+//    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
+//}
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
-
-
-
-
-
-
 
 
 void Control_Current_State()
@@ -100,6 +95,7 @@ void Control_Current_State()
         msg.move_msg.signal.control_transmission = dir_state;
     }
     {
+
         // TASK마다 수신 값 최신화
         // 데이터 무결성을 위해, 값 최신화 중 uart수신 인터럽트 비활성화
 //        disableUartRxInterrupt();
@@ -124,6 +120,13 @@ void Control_Current_State()
 //            disableUartRxInterrupt();
             memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
             ready_flag.cgw_prk_status_flag = RECEIVE_WAIT;
+//            enableUartRxInterrupt();
+        }
+        if(ready_flag.cgw_exit_status_flag == RECEIVE_COMPLETED)
+        {
+//            disableUartRxInterrupt();
+            memcpy(&local_exit_status_sig, &msg.cgw_exit_status_msg.signal,sizeof(local_exit_status_sig));
+            ready_flag.cgw_exit_status_flag = RECEIVE_WAIT;
 //            enableUartRxInterrupt();
         }
 
@@ -160,6 +163,11 @@ void Control_Current_State()
         Show_Drive_State();
         break;
     }
+    case (CTRL_AUTO_EXIT):
+    {
+        Show_Auto_Exit_State();
+        break;
+    }
     case (CTRL_OTA_CONFIRM):
     {
         Show_OTA_Confirm_State();
@@ -181,19 +189,15 @@ void Control_Current_State()
         LCD1602_clear();
         get_SH_data();
         char str[20];
-//        sprintf(str,"%d %d ",local_udt_state_sig.ota_update_progress,msg.cgw_ota_udt_state_msg.signal.ota_update_progress);
-        sprintf(str,"%d %d %d %d",
-                local_vhc_status_sig.vehicle_velocity,
-                msg.cgw_vhc_status_msg.signal.vehicle_velocity,
-                g_rcv_size,
-                here);
+        sprintf(str,"%d ",
+                msg.move_msg.signal.control_steering_angle);
         LCD1602_print(str);
         LCD1602_2ndLine();
-        for(int i=0; i<g_rcv_size;i++)
-        {
-            sprintf(str,"%X ",g_rxData[i]);
-            LCD1602_print(str);
-        }
+//        for(int i=0; i<g_rcv_size;i++)
+//        {
+//            sprintf(str,"%X ",g_rxData[i]);
+//            LCD1602_print(str);
+//        }
     }
     }
 }
@@ -203,6 +207,10 @@ void init_Controller()
     //초기화면 설정칸
     init_Btn_Adc();
     init_Steering_Wheel();
+    // 실제 데모에선 삭제, OTA original 상태로 만드는 구문!
+    writeFlash(OTA_UPDATED);
+    //
+    readFlash();
     g_current_ctrl_state = CTRL_OFF;
 }
 

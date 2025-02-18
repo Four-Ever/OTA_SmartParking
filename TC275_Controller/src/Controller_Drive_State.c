@@ -119,7 +119,7 @@ void Show_Drive_State()
             {
                 g_current_ctrl_state = CTRL_OFF;
                 // 명령 송신
-                msg.engine_msg.signal.control_engine = g_current_ctrl_state;
+                msg.engine_msg.signal.control_engine = CTRL_OFF;
 #ifndef PERIOD_VER
                 Command[ORDER_ENGINE]();
 #endif
@@ -342,6 +342,7 @@ void Show_Auto_Parking_State()
     // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
 #ifdef BEFORE_RECEIVE_TEST
     msg.cgw_prk_status_msg.signal.parking_status = ((uint8)msg.move_msg.signal.control_steering_angle)>=45 ? 3 : ((uint8)msg.move_msg.signal.control_steering_angle)%3;
+    ready_flag.cgw_prk_status_flag = RECEIVE_COMPLETED;
 #endif
 
     switch (local_prk_status_sig.parking_status)
@@ -400,22 +401,23 @@ void Show_Auto_Parking_State()
         prev_state = PARK_ING_R;
         break;
     }
-    case (PARK_FINISH) :
+    case (PARK_FINISHED) :
     {
 #ifdef BEFORE_RECEIVE_TEST
         msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_P;
 #endif
         //msg.move_msg.signal.control_transmission = dir_state;
 
-        if(prev_state == PARK_FINISH){
+        if(prev_state == PARK_FINISHED){
          // Parking 기어 반영을 위함, 한번 더 수행 후 화면전환
+            g_current_ctrl_state = CTRL_ON;
             LCD1602_print("PARKING FINISHED");
             LCD1602_2ndLine();
             LCD1602_loading();
-            g_current_ctrl_state = CTRL_ON;
+
 
         }
-        prev_state = PARK_FINISH;
+        prev_state = PARK_FINISHED;
         break;
     }
     default :

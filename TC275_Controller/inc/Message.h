@@ -44,7 +44,9 @@
 #define ID_CGW_OTA_UDT_REQ_MSG      0x5A
 #define ID_CGW_OTA_UDT_STATE_MSG    0x5B
 #define ID_CGW_PRK_STATUS_MSG       0x52
+#define ID_CGW_EXIT_STATUS_MSG      0x53
 #define ID_CGW_VHC_STATUS_MSG       0x42
+
 
 
 
@@ -154,6 +156,19 @@ typedef struct
 
 typedef struct
 {
+    uint8 exiting_status:1;
+
+}EXS_signal;
+typedef struct
+{
+    uint8 msgId;  // 메시지 ID (1바이트)
+    EXS_signal signal;
+
+}CGW_Exiting_Status_Msg;
+
+
+typedef struct
+{
     uint8 vehicle_velocity:7;
     sint8 vehicle_steering_angle:7;
     uint8 vehicle_transmission:2;
@@ -175,6 +190,7 @@ typedef struct
     CGW_OTA_Update_Request cgw_ota_udt_req_msg;
     CGW_OTA_Update_State_Msg cgw_ota_udt_state_msg;
     CGW_Parking_Status_Msg cgw_prk_status_msg;
+    CGW_Exiting_Status_Msg cgw_exit_status_msg;
     CGW_Vehicle_Status_Msg cgw_vhc_status_msg;
 }Message;
 
@@ -186,6 +202,7 @@ typedef struct
     DataReceivedFlag cgw_ota_udt_req_flag:1;
     DataReceivedFlag cgw_ota_udt_state_flag:1;
     DataReceivedFlag cgw_prk_status_flag:1;
+    DataReceivedFlag cgw_exit_status_flag:1;
     DataReceivedFlag cgw_vhc_status_flag:1;
 }CGWGetReady;
 
