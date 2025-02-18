@@ -40,11 +40,11 @@
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 
-// CAN 노드 및 메시지 핸들러 선언
+// CAN �끂�뱶 諛� 硫붿떆吏� �빖�뱾�윭 �꽑�뼵
 #define CAN_TX_MESSAGE_ID 0x100
 #define CAN_RX_MESSAGE_ID 0x123
 
-// CAN RXTX 정의
+// CAN RXTX �젙�쓽
 #define TC275_CAN0 IfxMultican_SrcId_0
 #define CAN0_RX IfxMultican_RXD0B_P20_7_IN
 #define CAN0_TX IfxMultican_TXD0_P20_8_OUT
@@ -76,6 +76,7 @@ typedef struct
         CCU_Cordi_data1_Msg CCU_Cordi_data1;
         CCU_Cordi_data2_Msg CCU_Cordi_data2;
         CCU_RightAngle_detect_Msg CCU_RightAngle_detect;
+        CCU_ParkingAngle_detect_Msg CCU_ParkingAngle_detect;
         CCU_Parking_Complete_Msg CCU_Parking_Complete;
         CGW_Engine_Msg CGW_Engine;
         CGW_Move_Msg CGW_Move;
@@ -105,6 +106,7 @@ typedef struct
         uint8 CCU_Cordi_data1_Flag : 1;
         uint8 CCU_Cordi_data2_Flag : 1;
         uint8 CCU_RightAngle_detect_Flag : 1;
+        uint8 CCU_ParkingAngle_detect_Flag : 1;
         uint8 CCU_Parking_Complete_Flag : 1;
         uint8 CGW_Engine_Flag : 1;
         uint8 CGW_Move_Flag : 1;
@@ -119,7 +121,7 @@ typedef struct
 
 extern DBFlag db_flag;
 
-// Transmission 열거형 (대문자로 변경)
+// Transmission �뿴嫄고삎 (��臾몄옄濡� 蹂�寃�)
 typedef enum
 {
     PARKING = 0,
@@ -127,27 +129,27 @@ typedef enum
     REVERSE = 2
 } Transmission;
 
-// EngineState 열거형 (대문자로 변경)
+// EngineState �뿴嫄고삎 (��臾몄옄濡� 蹂�寃�)
 typedef enum
 {
     ENGINE_OFF = 0,
     ENGINE_ON = 1
 } EngineState;
 
-// Mode 열거형 (대문자로 변경)
+// Mode �뿴嫄고삎 (��臾몄옄濡� 蹂�寃�)
 typedef enum
 {
     SYSTEM_DRIVE_MODE = 0,
     USER_DRIVE_MODE = 1
 } Mode;
 
-// ParkingStatus 열거형 (대문자로 변경)
+// ParkingStatus �뿴嫄고삎 (��臾몄옄濡� 蹂�寃�)
 typedef enum
 {
     SERCHING = 0,
-    POSITIONING = 1, // 주차 공간 인식 후 전진하는 상태
-    REVERSING = 2,   // 후진 주차 중
-    PARKED = 3       // 주차 완료
+    POSITIONING = 1, // 二쇱감 怨듦컙 �씤�떇 �썑 �쟾吏꾪븯�뒗 �긽�깭
+    REVERSING = 2,   // �썑吏� 二쇱감 以�
+    PARKED = 3       // 二쇱감 �셿猷�
 } ParkingStatus;
 
 
