@@ -12,11 +12,11 @@ static unsigned char gBuf1_tof[16] = {0};
 int Distance[NUM_TOF] ={0};
 
 static void disableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
+    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX �씤�꽣�읇�듃 鍮꾪솢�꽦�솕
 }
 
 static void enableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
+    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX �씤�꽣�읇�듃 �솢�꽦�솕
 }
 
 void Init_ToF(void)
@@ -37,7 +37,7 @@ void IsrUart0RxHandler_tof(void)
     rxBuf[rxBuf0Idx] = c;
     ++rxBuf0Idx;
 
-    /* 버퍼가 꽉 차면, buf_tof에 복사 */
+    /* 踰꾪띁媛� 苑� 李⑤㈃, buf_tof�뿉 蹂듭궗 */
     if (rxBuf0Idx == TOF_length)
     {
         memcpy(gBuf0_tof, rxBuf, TOF_length);
@@ -56,7 +56,7 @@ void IsrUart1RxHandler_tof(void)
     rxBuf[rxBuf1Idx] = c;
     ++rxBuf1Idx;
 
-    /* 버퍼가 꽉 차면, buf_tof에 복사 */
+    /* 踰꾪띁媛� 苑� 李⑤㈃, buf_tof�뿉 蹂듭궗 */
     if (rxBuf1Idx == TOF_length)
     {
         memcpy(gBuf1_tof, rxBuf, TOF_length);
@@ -64,7 +64,7 @@ void IsrUart1RxHandler_tof(void)
     }
 }
 
-/* 수신 데이터가 정상이면 1, 그렇지 않으면 0 반환 */
+/* �닔�떊 �뜲�씠�꽣媛� �젙�긽�씠硫� 1, 洹몃젃吏� �븡�쑝硫� 0 諛섑솚 */
 static int verifyCheckSum(unsigned char data[])
 {
     unsigned char checksum = 0;
@@ -82,7 +82,7 @@ static int verifyCheckSum(unsigned char data[])
     }
 }
 
-/* 유효 거리인 경우 1 반환, 그렇지 않으면 0 반환 */
+/* �쑀�슚 嫄곕━�씤 寃쎌슦 1 諛섑솚, 洹몃젃吏� �븡�쑝硫� 0 諛섑솚 */
 static int checkTofStrength(unsigned char data[])
 {
     int TOF_distance = data[8] | (data[9] << 8) | (data[10] << 16);
@@ -182,3 +182,4 @@ int getTofDistance()
 
     return TOF_distance;
 }
+

@@ -178,11 +178,6 @@ void PI_Speed_con(void)
     {
         speed_pid.reset((void *)&speed_pid);
         setMotorControl(0,0);
-
-        speed_pid.Ref=0;
-        speed_pid.Fdb=0;
-        speed_pid.calc((void*)&speed_pid);
-
     }
     else
     {
@@ -198,11 +193,12 @@ void isrSTM(void)
 {
     /* Update the compare register value that will trigger the next interrupt and toggle the LED */
 //    IfxPort_setPinState(LED, IfxPort_State_toggled);
-    PI_Speed_con();
+
     RPM_cal();
+    PI_Speed_con();
 //    static sint32 ii =0;
 //    ii++;
-    //PI_Speed_con();
+
 
     if (speed_pid.Out>=0)
     {
