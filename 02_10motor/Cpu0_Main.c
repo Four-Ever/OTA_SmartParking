@@ -25,6 +25,10 @@
 #include "UpdateInputs.h"
 #include "Homo_Coordinate.h"
 
+
+//ToF 헤더
+#include "ToF.h"
+
 //#include "Ifx_IntPrioDef.h"
 /*********************************************************************************************************************/
 
@@ -130,6 +134,15 @@ int core0_main(void)
     initServo(); // D6
     initIMU();
     initGPIO();
+
+
+    //ToF user manual !
+    Init_ToF(); // init
+
+    ToF_get_All_Distance(); // put this code to task code ( work for synchronize recent distance data )
+    Distance[TOF0]; // uart0 ToF Data
+    Distance[TOF1]; // uart2 ToF Data
+
     // motor_dir = 0;    // 0:정방향, 1:역방향
     // motor_enable = 0;  // 0:제동, 1:해제
 
