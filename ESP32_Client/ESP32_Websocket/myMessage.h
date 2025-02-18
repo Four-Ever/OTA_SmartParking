@@ -13,9 +13,11 @@
 #define ID_CGW_OTA_UDT_REQ_MSG      0x5A
 #define ID_CGW_OTA_UDT_STATE_MSG    0x5B
 #define ID_CGW_PRK_STATUS_MSG       0x52
+#define ID_CGW_EXIT_STATUS_MSG      0x53
 #define ID_CGW_VHC_STATUS_MSG       0x42
 
-#define MESSAGE_NUM 9
+
+#define MESSAGE_NUM 10
 
 #define BUFFER_SIZE 32
 
@@ -31,8 +33,8 @@ typedef enum{
   LOCK_CGW_OTA_UDT_REQ,
   LOCK_CGW_OTA_UDT_STATUS,
   LOCK_CGW_PRK_STATUS,
-  LOCK_CGW_VHC_STATUS
-
+  LOCK_CGW_VHC_STATUS,
+  LOCK_CGW_EXIT_STATUS_MSG
 }CTRL;
 
 #pragma pack(1)
@@ -120,6 +122,16 @@ struct Nano_CGW_Parking_Status_Msg
     
 }; 
 
+struct Nano_CGW_Exiting_Status_Msg 
+{
+    uint8_t msgId;  // 메시지 ID (1바이트)
+    struct 
+    {
+      uint8_t exiting_status:1;
+    }signal;
+    
+}; 
+
 struct Nano_CGW_Vehicle_Status_Msg
 {
     uint8_t msgId;  // 메시지 ID (1바이트)
@@ -142,6 +154,7 @@ struct Nano_Message
   Nano_CGW_OTA_Update_Request cgw_odt_udt_req_msg;
   Nano_CGW_OTA_Update_State cgw_odt_state_msg;
   Nano_CGW_Parking_Status_Msg cgw_park_status_msg;
+  Nano_CGW_Exiting_Status_Msg cgw_exit_status_msg;
   Nano_CGW_Vehicle_Status_Msg cgw_vhc_status_msg;
 };
 
@@ -150,6 +163,7 @@ struct Nano_Flag
  uint8_t cgw_odt_udt_req_flag:1;
  uint8_t cgw_odt_state_flag:1;
  uint8_t cgw_park_status_flag:1;
+ uint8_t cgw_exit_status_flag:1;
  uint8_t cgw_vhc_status_flag:1;
 };
 
@@ -242,6 +256,16 @@ struct CGW_Parking_Status_Msg
     
 }; 
 
+struct CGW_Exiting_Status_Msg 
+{
+    uint8_t msgId;  // 메시지 ID (1바이트)
+    struct 
+    {
+      uint8_t exiting_status:1;
+    }signal;
+    
+}; 
+
 struct CGW_Vehicle_Status_Msg
 {
     uint8_t msgId;  // 메시지 ID (1바이트)
@@ -264,6 +288,7 @@ struct Message
   CGW_OTA_Update_Request cgw_odt_udt_req_msg;
   CGW_OTA_Update_State cgw_odt_state_msg;
   CGW_Parking_Status_Msg cgw_park_status_msg;
+  CGW_Exiting_Status_Msg cgw_exit_status_msg;
   CGW_Vehicle_Status_Msg cgw_vhc_status_msg;
 };
 

@@ -208,6 +208,25 @@ void read_datas_from_Nano(uint8_t * rx_buffer, size_t length){
         break;
     }
 
+    case ID_CGW_EXIT_STATUS_MSG:
+    {  
+        #ifdef LOCKING
+        pthread_mutex_lock(&lock[LOCK_CGW_EXIT_STATUS_MSG]);
+        #endif
+        byteArrayToStruct(&rx_buffer[0], &nano_msg.cgw_exit_status_msg, length);
+        #ifdef LOCKING
+        pthread_mutex_unlock(&lock[LOCK_CGW_EXIT_STATUS_MSG]);
+        #endif
+
+        nano_flag.cgw_exit_status_flag = 1;
+        #ifdef DEBUG_PRINT
+        Serial.printf("[WSC Received] MsgID: 0X%02X, exiting_status: %u\n", 
+                      nano_msg.cgw_exit_status_msg.msgId, nano_msg.cgw_exit_status_msg.signal.exiting_status);
+        Serial.println();
+        #endif 
+        break;
+    }
+
     case ID_CGW_VHC_STATUS_MSG:
     {  
         #ifdef LOCKING
@@ -281,6 +300,21 @@ delay(1);
           );
   #endif
 delay(1);
+
+  msg.cgw_exit_status_msg.msgId = ID_CGW_EXIT_STATUS_MSG;
+  msg.cgw_exit_status_msg.signal.exiting_status = (i<50)?0:1;
+
+  sent_uart_well(&msg.cgw_exit_status_msg,sizeof(msg.cgw_exit_status_msg));
+
+  #ifdef SENT_DEBUG_PRINT
+  Serial.printf("[Sent to TC275] - MsgID: 0x%02X, exiting_status : %u \n", 
+            msg.cgw_exit_status_msg.msgId,
+            msg.cgw_exit_status_msg.signal.exiting_status
+
+          );
+  #endif
+delay(1);
+
  static int speed =10;
   msg.cgw_vhc_status_msg.msgId = ID_CGW_VHC_STATUS_MSG;
   msg.cgw_vhc_status_msg.signal.vehicle_velocity = speed++;
@@ -317,11 +351,7 @@ void send_datas_to_TC275(){
     #endif
 
     sent_uart_well(&msg.cgw_odt_udt_req_msg,sizeof(msg.cgw_odt_udt_req_msg));
-    // uint8_t rx_buffer[32] ={0};
 
-    // structToByteArray(&msg.cgw_odt_udt_req_msg, rx_buffer, sizeof(msg.cgw_odt_udt_req_msg));
-    // rx_buffer[sizeof(msg.cgw_odt_udt_req_msg)] = 0xFF;
-    // uart_write_bytes(UART_NUM, &rx_buffer, sizeof(msg.cgw_odt_udt_req_msg)+1);
 
   }
   if(nano_flag.cgw_odt_state_flag == 1)
@@ -337,11 +367,7 @@ void send_datas_to_TC275(){
     #endif
 
     sent_uart_well(&msg.cgw_odt_state_msg,sizeof(msg.cgw_odt_state_msg));
-    // uint8_t rx_buffer[32] ={0};
 
-    // structToByteArray(&msg.cgw_odt_state_msg, rx_buffer, sizeof(msg.cgw_odt_state_msg));
-    // rx_buffer[sizeof(msg.cgw_odt_state_msg)] = 0xFF;
-    // uart_write_bytes(UART_NUM, &rx_buffer, sizeof(msg.cgw_odt_state_msg)+1);
 
 
   }
@@ -358,13 +384,26 @@ void send_datas_to_TC275(){
     #ifdef LOCKING
     #endif
     sent_uart_well(&msg.cgw_park_status_msg,sizeof(msg.cgw_park_status_msg));
-    // uint8_t rx_buffer[32] ={0};
 
-    // structToByteArray(&msg.cgw_park_status_msg, rx_buffer, sizeof(msg.cgw_park_status_msg));
-    // rx_buffer[sizeof(msg.cgw_park_status_msg)] = 0xFF;
-    // uart_write_bytes(UART_NUM, &rx_buffer, sizeof(msg.cgw_park_status_msg)+1);
 
   }
+
+  if(nano_flag.cgw_exit_status_flag == 1)
+  {
+    nano_flag.cgw_exit_status_flag = 0;
+    #ifdef LOCKING
+    #endif
+
+    msg.cgw_exit_status_msg.msgId = nano_msg.cgw_exit_status_msg.msgId;
+    msg.cgw_exit_status_msg.signal.exiting_status = nano_msg.cgw_exit_status_msg.signal.exiting_status;
+
+    #ifdef LOCKING
+    #endif
+    sent_uart_well(&msg.cgw_exit_status_msg,sizeof(msg.cgw_exit_status_msg));
+
+
+  }
+
   if(nano_flag.cgw_vhc_status_flag == 1)
   {
     nano_flag.cgw_vhc_status_flag = 0;
