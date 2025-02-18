@@ -12,11 +12,11 @@ static unsigned char gBuf1_tof[16] = {0};
 int Distance[NUM_TOF] ={0};
 
 static void disableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX �씤�꽣�읇�듃 鍮꾪솢�꽦�솕
+    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
 }
 
 static void enableUartRxInterrupt() {
-    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX �씤�꽣�읇�듃 �솢�꽦�솕
+    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
 }
 
 void Init_ToF(void)
@@ -37,7 +37,7 @@ void IsrUart0RxHandler_tof(void)
     rxBuf[rxBuf0Idx] = c;
     ++rxBuf0Idx;
 
-    /* 踰꾪띁媛� 苑� 李⑤㈃, buf_tof�뿉 蹂듭궗 */
+    /* 버퍼가 꽉 차면, buf_tof에 복사 */
     if (rxBuf0Idx == TOF_length)
     {
         memcpy(gBuf0_tof, rxBuf, TOF_length);
@@ -56,7 +56,7 @@ void IsrUart1RxHandler_tof(void)
     rxBuf[rxBuf1Idx] = c;
     ++rxBuf1Idx;
 
-    /* 踰꾪띁媛� 苑� 李⑤㈃, buf_tof�뿉 蹂듭궗 */
+    /* 버퍼가 꽉 차면, buf_tof에 복사 */
     if (rxBuf1Idx == TOF_length)
     {
         memcpy(gBuf1_tof, rxBuf, TOF_length);
@@ -64,7 +64,7 @@ void IsrUart1RxHandler_tof(void)
     }
 }
 
-/* �닔�떊 �뜲�씠�꽣媛� �젙�긽�씠硫� 1, 洹몃젃吏� �븡�쑝硫� 0 諛섑솚 */
+/* 수신 데이터가 정상이면 1, 그렇지 않으면 0 반환 */
 static int verifyCheckSum(unsigned char data[])
 {
     unsigned char checksum = 0;
@@ -82,7 +82,7 @@ static int verifyCheckSum(unsigned char data[])
     }
 }
 
-/* �쑀�슚 嫄곕━�씤 寃쎌슦 1 諛섑솚, 洹몃젃吏� �븡�쑝硫� 0 諛섑솚 */
+/* 유효 거리인 경우 1 반환, 그렇지 않으면 0 반환 */
 static int checkTofStrength(unsigned char data[])
 {
     int TOF_distance = data[8] | (data[9] << 8) | (data[10] << 16);
@@ -128,7 +128,8 @@ void ToF_get_All_Distance(){
 
     if( buf_ToF[3] == TOF0)
     {
-        Distance[TOF0] = TOF_distance + OFFSET <0 ? 0:TOF_distance + OFFSET;
+        Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
+        Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
     }
 
 //    disableUartRxInterrupt();
@@ -148,10 +149,9 @@ void ToF_get_All_Distance(){
 
     if( buf_ToF[3] == TOF1)
     {
-        Distance[TOF1] = TOF_distance + OFFSET <0 ? 0:TOF_distance + OFFSET;
+        Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
+        Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
     }
-
-
 
     return;
 }
@@ -182,4 +182,42 @@ int getTofDistance()
 
     return TOF_distance;
 }
+int F_getFilteredDistance(int TOF_Value)
+{
+    static int F_buffer[TOF_FILTER_COUNT] = {0};
+    static int F_index = 0;
 
+    F_buffer[F_index] = TOF_Value;
+    F_index = (F_index + 1) % TOF_FILTER_COUNT;
+
+    int sum = 0, weightSum = 0;
+    uint8 weight=TOF_FILTER_COUNT;
+    for (int i = 0; i < TOF_FILTER_COUNT; i++) {
+        int idx = (F_index - 1 - i + TOF_FILTER_COUNT) % TOF_FILTER_COUNT; // 최신 값에 더 큰 가중치
+        sum += F_buffer[idx] * weight;
+        weightSum += weight;
+        weight--;
+    }
+
+    return (int)(sum / weightSum);
+}
+
+int B_getFilteredDistance(int TOF_Value)
+{
+    static int B_buffer[TOF_FILTER_COUNT] = {0};
+    static int B_index = 0;
+
+    B_buffer[B_index] = TOF_Value;
+    B_index = (B_index + 1) % TOF_FILTER_COUNT;
+
+    int sum = 0, weightSum = 0;
+    uint8 weight=TOF_FILTER_COUNT;
+    for (int i = 0; i < TOF_FILTER_COUNT; i++) {
+        int idx = (B_index - 1 - i + TOF_FILTER_COUNT) % TOF_FILTER_COUNT; // 최신 값에 더 큰 가중치
+        sum += B_buffer[idx] * weight;
+        weightSum += weight;
+        weight--;
+    }
+
+    return (int)(sum / weightSum);
+}
