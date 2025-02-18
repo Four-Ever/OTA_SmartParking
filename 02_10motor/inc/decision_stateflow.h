@@ -118,7 +118,7 @@ struct tag_RTM_decision_stateflow_T {
 };
 
 /* Block states (default storage) */
-//DW_decision_stateflow_T decision_stateflow_DW;
+
 extern double initVel;
 extern Transmission U8IsTrButton;
 extern double U8Curr_vel;
@@ -151,7 +151,7 @@ extern int CameraSwitchRequest;
 extern int First_Set;
 extern int lanecheck_request;
 extern IsPrk IsPrk_LR;
-
+extern U8IsConerline;
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
 extern void decision_stateflow_step(void);

@@ -14,7 +14,8 @@ typedef enum
 
 void Init_ToF(void);
 void IsrUart1RxHandler_tof(void);
-void ToF_get_All_Distance();
+void ToF_get_All_Distance(void);
+
 
 extern int Distance[NUM_TOF];
 #endif /* BSW_IO_TOF_H_ */

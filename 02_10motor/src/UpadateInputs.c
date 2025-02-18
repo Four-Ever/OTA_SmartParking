@@ -6,6 +6,7 @@ float pre_stanelyAngle=0.0;
 float RefRPM=0;
 int steeringInputL=-40;
 int steeringInputR=40;
+int conersteering = -50;
 //int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
@@ -54,8 +55,7 @@ void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INP
 
 if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
 
-        //vehicle_status.transmission = D_trans;
-        vehicle_status.transmission = U8IsTrButton;
+       vehicle_status.transmission = U8IsTrButton;
 
         switch (U8DriverState) {
             case Parking:
@@ -128,6 +128,13 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
                 stanelyAngle=gitstanley();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;
+                if (U8IsConerline==1){
+                    vehicle_status.steering_angle=conersteering;
+                    if (move_distance(100) == REACHED_TARGET_DIS){
+                        U8IsConerline=0;
+
+                    }
+                }
 
                 break;
             case Backward_Assist:  //차선인식 후진 RA

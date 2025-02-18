@@ -26,7 +26,7 @@
 #include "Homo_Coordinate.h"
 
 
-//ToF 헤더
+//ToF
 #include "ToF.h"
 
 //#include "Ifx_IntPrioDef.h"
@@ -34,9 +34,9 @@
 
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
-//#define motor_Test //엔코더 거리 확인
-//#define putty_Test //putty uart 메세지 확인
-//#define tuning_Test //시뮬링크에서 pid 계수 조정 및 스코프 확인
+//#define motor_Test //
+//#define putty_Test //
+//#define tuning_Test //
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -71,6 +71,7 @@ void make_can_message(void);
 void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src);
 void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src);
 void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src);
+void initIMU_error(void);
 
 void AppScheduling(void);
 void AppTask1ms(void);
@@ -143,58 +144,44 @@ int core0_main(void)
     Distance[TOF0]; // uart0 ToF Data
     Distance[TOF1]; // uart2 ToF Data
 
-    // motor_dir = 0;    // 0:정방향, 1:역방향
-    // motor_enable = 0;  // 0:제동, 1:해제
-
 #ifdef motor_Test
-    // motor_enable = 1;  // 0:제동, 1:해제
-
+    // motor_enable = 1;
     Kp_s = 1.55f;//1.75f;
     Ki_s = 2.65f;//0.198f;
     Kd_s = 0.001f;
 
     vehicle_status.engine_state = engine_on;
 
-    waitTime(300000000); // 3초
+    waitTime(300000000); //
     init_move_distance_control(1000.0f, 500.0f); // 1000mm, 1000rpm
 #endif
 
     while(1)
     {
         AppScheduling();
-        stopstatus=Touch();
-        //can 메세지 받는 곳
-#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 주행 코드
-        // 엔진 메세지
+        //stopstatus=Touch();
+        //can msg 수신
+#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 雅뚯눛六� �굜遺얜굡
+        // 엔진 on/off
         if (db_flag.CGW_Engine_Flag == 1)
         {
             db_flag.CGW_Engine_Flag = 0;
-            //if (db_msg.CGW_Engine.control_engine==1){
-            //    vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
-            //}
+
             if (U8DriverState == Parking || U8RSPAState==Parking_Complete || U8DriverState == InitDriverState ){
                 vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
             }
 
         }
-
-        // 엔진이 켜져 있을 때,
+        //엔진 ON
         if (vehicle_status.engine_state == ENGINE_ON)
         {
-            // 수동조작 메세지
+            //driver mode
             if (db_flag.CGW_Move_Flag == 1)
             {
                 db_flag.CGW_Move_Flag = 0;
-
-                //D_trans = db_msg.CGW_Move.control_transmission;
                 U8IsTrButton = db_msg.CGW_Move.control_transmission;
-                //vehicle_status.transmission = db_msg.CGW_Move.control_transmission;
-                
                 D_steering = db_msg.CGW_Move.control_steering_angle;
-                //vehicle_status.steering_angle = db_msg.CGW_Move.control_steering_angle;
-
-                // 수동 조작 모드로 전환
-                //vehicle_status.user_mode = USER_DRIVE_MODE;
+                
                 if (db_msg.CGW_Move.control_accel == 1) // accel
                 {
                     D_RefRPM += 100.0f;
@@ -216,24 +203,22 @@ int core0_main(void)
                 D_Ref_vel = (double)((D_RefRPM * circumference) / (60 * gear_ratio));
             }
 
-            // 자동 주차 요청
-
+            //RSPA mode
             if (db_flag.CGW_Auto_Parking_Request_Flag==1)
             {
                 db_flag.CGW_Auto_Parking_Request_Flag=0;
 
                 IsRSPAButton = 1;
-
             }
-            //wp 수신확인
+
+            //waypoint msg
             if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-                // 모든 데이터가 들어온 경우
+                //紐⑤뱺 wp 硫붿꽭吏�瑜� �닔�떊�뻽�쓣 �븣
                 db_flag.CCU_Cordi_data1_Flag=0;
                 db_flag.CCU_Cordi_data2_Flag=0;
 
-                // 카메라 픽셀 좌표 저장
-                //if (db_msg.CCU_Cordi_data2.trust_value > 0.7){  //신뢰도 높을경우만 값을 사용함.
-                    // 이전 데이터 초기화
+                //
+                //if (db_msg.CCU_Cordi_data2.trust_value > 0.7){
                     InitCampoints();
                     cam_points[0][0] = db_msg.CCU_Cordi_data1.cordi_data_x1;
                     cam_points[0][1] = db_msg.CCU_Cordi_data1.cordi_data_y1;
@@ -248,24 +233,27 @@ int core0_main(void)
                     int camera_mode = db_msg.CCU_Cordi_data2.using_camera;
 
                     data_ready_flag = 1;
+
                 //}
-                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //차선기반 주행 모드는 두개밖에 없음
+                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //lane detection mode
                     if (data_ready_flag == 1){
                         InitWorldpoints();
 
-                        if(First_Set==1){   //맨 처음에 wp 받을때
+                        if(First_Set==1){    //
                             initStanley();
-                            transform_points(H, cam_points, world_points); //좌표계 변환
+                            initIMU_error();
+                            transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
-                                updateWaypoints(world_points);  //stanely 의 묙표 waypoint 변경
+                                updateWaypoints(world_points);
                             }
                             First_Set=0;
                             if (U8RSPAState==Searching){
                                 lanecheck_request=1;
                             }
                         }
-                        else if (IsWPTrackingFinish==1){ // 그 이후에는 이전 wp 모두 추종했을때 새로 갱신함.
+                        else if (IsWPTrackingFinish==1){    //
                             initStanley();
+                            initIMU_error();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
@@ -277,39 +265,36 @@ int core0_main(void)
             }
 
 
-            //정지선 각도
-            /*if (db_flag.CCU_RightAngle_detect_flag == 1)
+            //lane detecion_Coner
+            if (db_flag.CCU_RightAngle_detect_Flag == 1)
             {
-                db_flag.CCU_RightAngle_detect_flag = 0;
-                U8IsStopline = db_flag.CCU_RightAngle_detect.right_angle_lane_detected;
-            }*/
+                db_flag.CCU_RightAngle_detect_Flag = 0;
+                U8IsConerline = db_msg.CCU_RightAngle_detect.right_angle_lane_detected;
+            }
         }
 
-        //엔진이 꺼져 있을 때,
+        //engine off
         else if (vehicle_status.engine_state == ENGINE_OFF)
         {
             if (db_flag.CGW_Off_Request_Flag==1)
             {
                 db_flag.CGW_Off_Request_Flag=0;
 
-                // 차량 찾기 요청
+                //
                 if (db_msg.CGW_Off_Request.alert_request==1)
                 {
-                    //주차한 차량이 있으면 LED 혹은 부저 삐용삐용
+                    //find my car_LED/Sound
                     if (U8PrkFinished==1)
                     {
 
                     }
                 }
 
-                // 출차 요청
+                //출차
                 if (db_msg.CGW_Off_Request.auto_exit_request==1)
                 {
                     vehicle_status.engine_state = ENGINE_ON;
-                    // 시스템 조작 모드로 전환
-                    //vehicle_status.user_mode = SYSTEM_DRIVE_MODE;
 
-                    //주차한 차량이 있을 때 출차 요청// 딱 한번만 주차-출차
                     if (U8PrkFinished==1)
                     {
                         ExitCAR_request=1;
@@ -335,37 +320,47 @@ void make_can_message(void)
     update_message_engine_status(&db_msg.VCU_Vehicle_Engine_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Engine_Status, VCU_Vehicle_Engine_Status_ID);
 
-    if (CameraSwitchRequest != 0) // 1 : 전방, 2 : 후방
+    if (CameraSwitchRequest != 0) // 1 : front camera, 2 : rear carmera
     {
         db_msg.VCU_Camera.camera_num = CameraSwitchRequest;
         output_message(&db_msg.VCU_Camera, VCU_Camera_ID);
         CameraSwitchRequest = 0;
     }
     if (lanecheck_request != 0) {
-        //젯슨에서 주차정지선확인 요청
+        //
     }
 }
 
 
 void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->vehicle_velocity = vehicle_status.u8_velocity;
-    dest->vehicle_steering_angle = vehicle_status.steering_angle;
-    dest->vehicle_transmission = vehicle_status.transmission;
+    dest->vehicle_velocity = src->u8_velocity;
+    dest->vehicle_steering_angle = src->steering_angle;
+    dest->vehicle_transmission = src->transmission;
 }
 
 
 void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->parking_status = vehicle_status.parking_status;
+    dest->parking_status = src->parking_status;
 }
 
 
 void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src)
 {
-    dest->vehicle_engine_status = vehicle_status.engine_state;
+    dest->vehicle_engine_status = src->engine_state;
 }
 
+void initIMU_error(void){
+
+    {
+        q0 = 1;
+        q1 = 0;
+        q2 = 0;
+        q3 = 0;
+        now_euler.yaw = 0;
+    }
+}
 
 void AppTask1ms(void)
 {
@@ -404,31 +399,32 @@ void AppTask10ms(void)
 
 void AppTask50ms(void){
     stTestCnt.u32nuCnt50ms++;
-    decision_stateflow_step();  //주행모드에 따른 종횡 input 결정
+    decision_stateflow_step();
 }
 
 void AppTask100ms(void)
 {
     stTestCnt.u32nuCnt100ms++;
-    update_VCU_inputs();  //모터에 제어input 을 넣어줌
+
     now_status = imuRead();
     stanelytheta = now_euler.yaw;
-    if (stopstatus == 1)
+    /*if (stopstatus == 1)
     {
         q0 = 1;
         q1 = 0;
         q2 = 0;
         q3 = 0;
         now_euler.yaw = 0;
-    }
+    }*/
     now_euler = MadgwickAHRSupdateIMU(now_status);
-    print_encimu(&now_status, &now_euler);
+    //print_encimu(&now_status, &now_euler);
 
-#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 주행 코드
+    update_VCU_inputs();
+
+#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 雅뚯눛六� �굜遺얜굡
     if (vehicle_status.engine_state == ENGINE_ON)
     {
-
-        //시동이 켜져있을 때, can message 출력
+        //send message
         make_can_message();
     }
 #endif
