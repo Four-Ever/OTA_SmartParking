@@ -24,10 +24,8 @@
 #include "decision_stateflow.h"
 #include "UpdateInputs.h"
 #include "Homo_Coordinate.h"
+#include "Obstacle_Detection.h"
 
-
-//ToF
-#include "ToF.h"
 
 //#include "Ifx_IntPrioDef.h"
 /*********************************************************************************************************************/
@@ -139,10 +137,7 @@ int core0_main(void)
 
     //ToF user manual !
     Init_ToF(); // init
-
-    ToF_get_All_Distance(); // put this code to task code ( work for synchronize recent distance data )
-    Distance[TOF0]; // uart0 ToF Data
-    Distance[TOF1]; // uart2 ToF Data
+    initUltrasonic();
 
 #ifdef motor_Test
     // motor_enable = 1;
@@ -399,6 +394,7 @@ void AppTask10ms(void)
 
 void AppTask50ms(void){
     stTestCnt.u32nuCnt50ms++;
+    Obstacle_get_All_Distance();
     decision_stateflow_step();
 }
 

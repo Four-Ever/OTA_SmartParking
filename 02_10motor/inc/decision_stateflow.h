@@ -151,7 +151,7 @@ extern int CameraSwitchRequest;
 extern int First_Set;
 extern int lanecheck_request;
 extern IsPrk IsPrk_LR;
-extern U8IsConerline;
+extern int U8IsConerline;
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
 extern void decision_stateflow_step(void);
