@@ -25,6 +25,7 @@
 #include "UpdateInputs.h"
 #include "Homo_Coordinate.h"
 #include "Obstacle_Detection.h"
+#include "LED_Buzzer.h"
 
 
 //#include "Ifx_IntPrioDef.h"
@@ -50,6 +51,7 @@ typedef struct
     uint32 u32nuCnt10ms;
     uint32 u32nuCnt50ms;
     uint32 u32nuCnt100ms;
+    uint32 u32nuCnt500ms;
     uint32 u32nuCnt1000ms;
     uint32 u32nuCnt5000ms;
 } Taskcnt;
@@ -76,6 +78,7 @@ void AppTask1ms(void);
 void AppTask10ms(void);
 void AppTask50ms(void);
 void AppTask100ms(void);
+void AppTask500ms(void);
 void AppTask1000ms(void);
 void AppTask5000ms(void);
 /*********************************************************************************************************************/
@@ -139,6 +142,12 @@ int core0_main(void)
     Init_ToF(); // init
     initUltrasonic();
 
+    init_LED_Buzzer();
+
+
+
+    alarm_request=1;
+
 #ifdef motor_Test
     // motor_enable = 1;
     Kp_s = 1.55f;//1.75f;
@@ -162,9 +171,9 @@ int core0_main(void)
         {
             db_flag.CGW_Engine_Flag = 0;
 
-            if (U8DriverState == Parking || U8RSPAState==Parking_Complete || U8DriverState == InitDriverState ){
+            //if (U8DriverState == Parking || U8RSPAState==Parking_Complete || U8DriverState == InitDriverState ){
                 vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
-            }
+           // }
 
         }
         //엔진 ON
@@ -417,7 +426,7 @@ void AppTask100ms(void)
 
     update_VCU_inputs();
 
-#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) // 雅뚯눛六� �굜遺얜굡
+#if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) //
     if (vehicle_status.engine_state == ENGINE_ON)
     {
         //send message
@@ -426,6 +435,12 @@ void AppTask100ms(void)
 #endif
 }
 
+void AppTask500ms(void){
+    stTestCnt.u32nuCnt500ms++;
+
+    FindCar_Plz();
+    cnt_alarm++;
+}
 
 void AppTask1000ms(void)
 {
@@ -461,6 +476,13 @@ void AppScheduling(void)
             stSchedulingInfo.u8nuScheduling100msFlag = 0u;
             AppTask100ms();
         }
+
+        if (stSchedulingInfo.u8nuScheduling500msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling500msFlag = 0u;
+            AppTask500ms();
+        }
+
         if (stSchedulingInfo.u8nuScheduling1000msFlag == 1u)
         {
             stSchedulingInfo.u8nuScheduling1000msFlag = 0u;

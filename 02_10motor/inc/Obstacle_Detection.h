@@ -14,6 +14,12 @@
 #include "Ultra_Driver.h"
 #include "TOF.h"
 #define OBSTACLE_NUM 4
+
+#define PARKING_SPOT_WIDTH 20.0f
+#define FBOBSTACLE_WARNING 10.0f
+#define RLOBSTACLE_WARNING 4.0f
+#define PARKING_SPOT_LENGTH 25.0f
+
 typedef enum
 {
     F_OBSTACLE,
@@ -32,6 +38,8 @@ typedef enum
 void Obstacle_get_All_Distance(void);
 extern int obstacle[OBSTACLE_NUM];
 extern int parking_spot[NUM_ULTRA];
+extern double Cal_TTCD(double currvel);
+extern double Cal_TTCR(double currvel);
 
 //test
 extern float spotdistacne[NUM_ULTRA];
