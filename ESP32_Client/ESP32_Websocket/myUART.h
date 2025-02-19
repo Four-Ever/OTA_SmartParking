@@ -7,8 +7,8 @@
 // UART 번호 정의 (UART_NUM_1 사용)
 #define UART_NUM UART_NUM_1
 // 핀 번호 정의
-#define TXD_PIN 17
-#define RXD_PIN 16
+#define TXD_PIN 27
+#define RXD_PIN 14
 
 
 void init_uart2(void);

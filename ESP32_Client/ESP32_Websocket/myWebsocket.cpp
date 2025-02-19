@@ -12,7 +12,7 @@ const char* password = "rapa6074";
 // const char* ssid = "ESP32_Fourever";
 // const char* password = "1q2w3e4r";
 
-const char* webSocketServer = "192.168.201.226"; // 예: ws://192.168.1.100:8080
+const char* webSocketServer = "192.168.201.8"; // 예: ws://192.168.1.100:8080
 WebSocketsClient webSocket;
 
 void init_wifi()
