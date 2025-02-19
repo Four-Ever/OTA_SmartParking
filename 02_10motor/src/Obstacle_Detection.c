@@ -107,20 +107,21 @@ void Obstacle_get_All_Distance (void)
 
 double Cal_TTCD(double currvel) {
     double TTC;
-    if (currvel !=0) {
+    if (currvel !=0 && obstacle[F_OBSTACLE] !=0 ) {
         TTC = ((double)obstacle[F_OBSTACLE]/1000)/(currvel);
     }
-    else TTC=0;
+    else TTC=1000;
 
     return TTC;
 }
 
 double Cal_TTCR(double currvel) {
     double TTC;
-    if (currvel !=0) {
-        TTC =((double)obstacle[F_OBSTACLE]/1000) / (currvel);
+    if (currvel !=0 && obstacle[R_OBSTACLE]!=0) {
+        TTC =((double)obstacle[R_OBSTACLE]/1000) / (currvel);
+
     }
-    else TTC=0;
+    else TTC=1000;
 
     return TTC;
 
