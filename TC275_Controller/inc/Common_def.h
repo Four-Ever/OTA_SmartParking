@@ -112,9 +112,10 @@ typedef enum
 {
 
     PARK_BC_BRAKE=2,
+    PARK_BC_PASUE=4,
     PARK_BC_NOTHING=6
 
-}ParkingBrakeCheck;
+}ParkingButtonCheck;
 
 typedef enum
 {
@@ -163,8 +164,13 @@ typedef enum
 {
     DO_NOT_AUTO_PARKING,
     DO_AUTO_PARKING
-
 }ParkingAction;
+
+typedef enum
+{
+    DO_NOT_AUTO_EXITING,
+    DO_AUTO_EXITING
+}ExitingAction;
 
 
 typedef enum

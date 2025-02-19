@@ -165,12 +165,12 @@ void Show_Off_State()
                 prev_state = OFF_AUTO_EXIT;
 
                 //명령 송신
-                msg.off_req_msg.signal.auto_exit_request = 1;
+                msg.off_req_msg.signal.auto_exit_request = DO_AUTO_EXITING;
 #ifndef PERIOD_VER
                 Command[ORDER_OFF_REQ]();
                 // 1 신호만 보내고 기본신호 0으로 변경,
                 // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
-                msg.off_req_msg.signal.auto_exit_request = 0;
+                msg.off_req_msg.signal.auto_exit_request = DO_NOT_AUTO_EXITING;
 #endif
 
             }

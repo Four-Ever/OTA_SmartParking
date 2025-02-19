@@ -1,10 +1,16 @@
 /**********************************************************************************************************************
  * \file Controller_Logic.c
+ * \brief 컨트롤러 로직을 구현한 소스 파일
+ * \details 차량의 현재 상태를 제어하고 LCD 디스플레이에 정보를 출력하는 기능을 포함합니다.
  * \copyright Copyright (C) Infineon Technologies AG 2019
  * 
+ * \author Infineon Technologies
+ * \date 2019
+ *
  * Use of this file is subject to the terms of use agreed between (i) you or the company in which ordinary course of 
- * business you are acting and (ii) Infineon Technologies AG or its licensees. If and as long as no such terms of use
- * are agreed, use of this file is subject to following:
+ * business you are acting and (ii) Infineon Technologies AG or its licensees.
+ *
+ * If and as long as no such terms of use are agreed, use of this file is subject to following:
  * 
  * Boost Software License - Version 1.0 - August 17th, 2003
  * 
@@ -25,10 +31,6 @@
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
 
-
-/*********************************************************************************************************************/
-
-/*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Controller_Logic.h"
 #include "TC275_LCD_16x2.h"
 #include "Common_def.h"
@@ -38,183 +40,110 @@
 #include <string.h>
 #include <IfxSrc_reg.h>
 
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*------------------------------------------------------Macros-------------------------------------------------------*/
+/** \brief 재요청 시간 (초 단위) */
 #define RE_REQUEST_TIME 60 // (sec)
-/*********************************************************************************************************************/
 
-/*********************************************************************************************************************/
-/*-------------------------------------------------Global variables--------------------------------------------------*/
-uint8 here;
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-
-
+/** \brief 현재 컨트롤러 상태 */
 ControllerState g_current_ctrl_state = CTRL_OFF;
+/** \brief 요청 거부 상태 */
 TruthState g_isreq_reject = false;
+/** \brief 재설정 타이머 */
 uint32 g_reset_timer = 0;
-
-
-
+/** \brief 차량 진행 방향 */
 DriveDir dir_state = DIR_P;
 
-
-//데이터 무결성 보장을 위해, 통신데이터 저장후 사용
-
-
+/** \brief 통신 데이터 무결성을 위해 로컬 변수에 저장된 요청 신호 */
 OUR_signal local_udt_req_sig;
+/** \brief 통신 데이터 무결성을 위해 로컬 변수에 저장된 상태 신호 */
 OUS_signal local_udt_state_sig;
+/** \brief 통신 데이터 무결성을 위해 로컬 변수에 저장된 주차 상태 신호 */
 PS_signal local_prk_status_sig;
+/** \brief 통신 데이터 무결성을 위해 로컬 변수에 저장된 출구 상태 신호 */
 EXS_signal local_exit_status_sig;
+/** \brief 통신 데이터 무결성을 위해 로컬 변수에 저장된 차량 상태 신호 */
 VS_signal local_vhc_status_sig;
 
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*------------------------------------------------Function Prototypes------------------------------------------------*/
-//static void disableUartRxInterrupt() {
-//    SRC_ASCLIN0RX.B.SRE = 0;  // ASCLIN0 RX 인터럽트 비활성화
-//}
-//
-//static void enableUartRxInterrupt() {
-//    SRC_ASCLIN0RX.B.SRE = 1;  // ASCLIN0 RX 인터럽트 활성화
-//}
-/*********************************************************************************************************************/
-
-/*********************************************************************************************************************/
-/*---------------------------------------------Function Implementations----------------------------------------------*/
-
-
+/**
+ * \brief 현재 컨트롤러 상태를 관리하는 함수
+ * \details 각 상태에 맞는 동작을 수행하고, LCD 디스플레이에 관련 정보를 출력합니다.
+ */
 void Control_Current_State()
 {
+    msg.move_msg.signal.control_transmission = dir_state;
+
+    // 통신 데이터 수신 및 최신화
+    if(ready_flag.cgw_ota_udt_req_flag == RECEIVE_COMPLETED)
     {
-        msg.move_msg.signal.control_transmission = dir_state;
+        memcpy(&local_udt_req_sig, &msg.cgw_ota_udt_req_msg.signal,sizeof(local_udt_req_sig));
+        ready_flag.cgw_ota_udt_req_flag = RECEIVE_WAIT;
     }
+    if(ready_flag.cgw_ota_udt_state_flag == RECEIVE_COMPLETED)
     {
-
-        // TASK마다 수신 값 최신화
-        // 데이터 무결성을 위해, 값 최신화 중 uart수신 인터럽트 비활성화
-//        disableUartRxInterrupt();
-        if(ready_flag.cgw_ota_udt_req_flag == RECEIVE_COMPLETED)
-        {
-//            disableUartRxInterrupt();
-            memcpy(&local_udt_req_sig, &msg.cgw_ota_udt_req_msg.signal,sizeof(local_udt_req_sig));
-            ready_flag.cgw_ota_udt_req_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
-
-        if(ready_flag.cgw_ota_udt_state_flag == RECEIVE_COMPLETED)
-        {
-//            disableUartRxInterrupt();
-            memcpy(&local_udt_state_sig, &msg.cgw_ota_udt_state_msg.signal,sizeof(local_udt_state_sig));
-            ready_flag.cgw_ota_udt_state_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
-
-        if(ready_flag.cgw_prk_status_flag == RECEIVE_COMPLETED)
-        {
-//            disableUartRxInterrupt();
-            memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
-            ready_flag.cgw_prk_status_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
-        if(ready_flag.cgw_exit_status_flag == RECEIVE_COMPLETED)
-        {
-//            disableUartRxInterrupt();
-            memcpy(&local_exit_status_sig, &msg.cgw_exit_status_msg.signal,sizeof(local_exit_status_sig));
-            ready_flag.cgw_exit_status_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
-
-        if(ready_flag.cgw_vhc_status_flag == RECEIVE_COMPLETED)
-        {
-//            disableUartRxInterrupt();
-            memcpy(&local_vhc_status_sig, &msg.cgw_vhc_status_msg.signal,sizeof(local_vhc_status_sig));
-            ready_flag.cgw_vhc_status_flag = RECEIVE_WAIT;
-//            enableUartRxInterrupt();
-        }
-
-//        enableUartRxInterrupt();
+        memcpy(&local_udt_state_sig, &msg.cgw_ota_udt_state_msg.signal,sizeof(local_udt_state_sig));
+        ready_flag.cgw_ota_udt_state_flag = RECEIVE_WAIT;
+    }
+    if(ready_flag.cgw_prk_status_flag == RECEIVE_COMPLETED)
+    {
+        memcpy(&local_prk_status_sig, &msg.cgw_prk_status_msg.signal,sizeof(local_prk_status_sig));
+        ready_flag.cgw_prk_status_flag = RECEIVE_WAIT;
+    }
+    if(ready_flag.cgw_exit_status_flag == RECEIVE_COMPLETED)
+    {
+        memcpy(&local_exit_status_sig, &msg.cgw_exit_status_msg.signal,sizeof(local_exit_status_sig));
+        ready_flag.cgw_exit_status_flag = RECEIVE_WAIT;
+    }
+    if(ready_flag.cgw_vhc_status_flag == RECEIVE_COMPLETED)
+    {
+        memcpy(&local_vhc_status_sig, &msg.cgw_vhc_status_msg.signal,sizeof(local_vhc_status_sig));
+        ready_flag.cgw_vhc_status_flag = RECEIVE_WAIT;
     }
 
-    {
-        // 제어버튼, 조향 데이터 최신화
-        get_btn_data();
-    }
-
+    // 버튼 및 조향 데이터 최신화
+    get_btn_data();
 
     g_reset_timer++;
-    if(g_reset_timer % (RE_REQUEST_TIME * 10) ==0) // 60초
+    if(g_reset_timer % (RE_REQUEST_TIME * 10) == 0)
         g_isreq_reject = false;
 
-
+    // 현재 상태에 따라 동작 수행
     switch(g_current_ctrl_state){
     case (CTRL_OFF):
-    {
         Show_Off_State();
         break;
-    }
     case (CTRL_ON):
-    {
         Show_Drive_State();
         break;
-    }
     case (CTRL_AUTO_EXIT):
-    {
         Show_Auto_Exit_State();
         break;
-    }
     case (CTRL_OTA_CONFIRM):
-    {
         Show_OTA_Confirm_State();
         break;
-    }
     case (CTRL_OTA):
-    {
         Show_OTA_State();
         break;
-    }
     case (CTRL_AUTO_PARKING):
-    {
         Show_Auto_Parking_State();
         break;
-    }
-    default :
-    {
-        //LCD 테스트 출력 공간
+    default:
         LCD1602_clear();
         get_SH_data();
         char str[20];
-        sprintf(str,"%d ",
-                msg.move_msg.signal.control_steering_angle);
+        sprintf(str,"%d ", msg.move_msg.signal.control_steering_angle);
         LCD1602_print(str);
         LCD1602_2ndLine();
-//        for(int i=0; i<g_rcv_size;i++)
-//        {
-//            sprintf(str,"%X ",g_rxData[i]);
-//            LCD1602_print(str);
-//        }
-    }
     }
 }
 
+/**
+ * \brief 컨트롤러 초기화 함수
+ * \details 버튼 및 조향 장치를 초기화하고, 초기 상태를 설정합니다.
+ */
 void init_Controller()
 {
-    //초기화면 설정칸
     init_Btn_Adc();
     init_Steering_Wheel();
-    // 실제 데모에선 삭제, OTA original 상태로 만드는 구문!
     writeFlash(OTA_UPDATED);
-    //
     readFlash();
     g_current_ctrl_state = CTRL_OFF;
 }
-
-
-
-
-/*********************************************************************************************************************/

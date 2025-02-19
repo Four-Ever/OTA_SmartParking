@@ -301,7 +301,7 @@ void Show_Auto_Parking_State()
     // 첫째 줄 - 코멘트
     LCD1602_1stLine();
 
-
+    static ParkingButtonCheck prev_BC_state = PARK_BC_NOTHING;
     static ParkingMode prev_state = PARK_NOTHING;
 
 
@@ -315,20 +315,38 @@ void Show_Auto_Parking_State()
     {
         // parking중에도 Brake가 동작하도록
         //명령송신
+
         msg.move_msg.signal.control_accel = 0;
         msg.move_msg.signal.control_brake = 1;
-        LCD1602_print("PAUSE PARKING");
-        LCD1602_2ndLine();
-        LCD1602_loading();
+        LCD1602_print("SLOW SLOW");
+
         // 테스트용 ******************** 직접 받아서 할땐 지워야함!!!
         #ifdef BEFORE_RECEIVE_TEST
         if (msg.cgw_vhc_status_msg.signal.vehicle_velocity >0)
             msg.cgw_vhc_status_msg.signal.vehicle_velocity--;
         #endif
+        prev_BC_state = PARK_BC_BRAKE;
+        break;
+    }
+    case (PARK_BC_PASUE):
+    {
+        // auto parking pause
+        if(prev_state != PARK_BC_PASUE){
+            prev_BC_state = PARK_BC_PASUE;
+            g_current_ctrl_state = CTRL_ON;
 
-//        dir_state = local_vhc_status_sig.vehicle_transmission;
-        g_current_ctrl_state = CTRL_ON;
+            LCD1602_print("PARKING PAUSE");
+            LCD1602_2ndLine();
+            LCD1602_loading();
 
+            msg.auto_park_req_msg.signal.auto_parking = DO_NOT_AUTO_PARKING;
+#ifndef PERIOD_VER
+            Command[ORDER_AUTO_PRK_REQ]();
+#endif
+
+            // 명령 송신
+            //msg.move_msg.signal.control_transmission = dir_state;
+        }
         break;
     }
 
@@ -336,6 +354,7 @@ void Show_Auto_Parking_State()
     {
 //        sprintf(str, "");
 //        LCD1602_print(str);
+        prev_BC_state = PARK_BC_NOTHING;
     }
     }
 
@@ -349,18 +368,24 @@ void Show_Auto_Parking_State()
     {
     case (PARK_SEARCHING) :
     {
-
-        LCD1602_print("SEARCHING EMPTY");
-        LCD1602_2ndLine();
-        LCD1602_print("SPACE");
-        static int target = 0;
-        for(int i =0 ; i< target; i++)
+        if(prev_BC_state == PARK_BC_NOTHING)
         {
-            LCD1602_print(".");
+            LCD1602_clear();
+            LCD1602_1stLine();
+
+            LCD1602_print("SEARCHING EMPTY");
+            LCD1602_2ndLine();
+            LCD1602_print("SPACE");
+            static int target = 0;
+            for(int i =0 ; i< target; i++)
+            {
+                LCD1602_print(".");
+            }
+            target++;
+            if(target == 16) target =0;
         }
-        target++;
-        if(target == 16) target =0;
         prev_state = PARK_SEARCHING;
+
         break;
 
     }
@@ -370,15 +395,20 @@ void Show_Auto_Parking_State()
 #ifdef BEFORE_RECEIVE_TEST
         msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_D;
 #endif
-        LCD1602_print("PARKING IN DRIVE");
-        LCD1602_2ndLine();
-        static int target = 0;
-        for(int i =0 ; i< target; i++)
+        if(prev_BC_state == PARK_BC_NOTHING)
         {
-            LCD1602_print(".");
+            LCD1602_clear();
+            LCD1602_1stLine();
+            LCD1602_print("PARKING IN DRIVE");
+            LCD1602_2ndLine();
+            static int target = 0;
+            for(int i =0 ; i< target; i++)
+            {
+                LCD1602_print(".");
+            }
+            target++;
+            if(target == 16) target =0;
         }
-        target++;
-        if(target == 16) target =0;
 
         prev_state = PARK_ING_D;
         break;
@@ -388,16 +418,20 @@ void Show_Auto_Parking_State()
 #ifdef BEFORE_RECEIVE_TEST
         msg.cgw_vhc_status_msg.signal.vehicle_transmission = DIR_R;
 #endif
-        LCD1602_print("PARKING IN REVRS");
-        LCD1602_2ndLine();
-        static int target = 0;
-        for(int i =0 ; i< target; i++)
+        if(prev_BC_state == PARK_BC_NOTHING)
         {
-            LCD1602_print(".");
+            LCD1602_clear();
+            LCD1602_1stLine();
+            LCD1602_print("PARKING IN REVRS");
+            LCD1602_2ndLine();
+            static int target = 0;
+            for(int i =0 ; i< target; i++)
+            {
+                LCD1602_print(".");
+            }
+            target++;
+            if(target == 16) target =0;
         }
-        target++;
-        if(target == 16) target =0;
-
         prev_state = PARK_ING_R;
         break;
     }
@@ -410,12 +444,12 @@ void Show_Auto_Parking_State()
 
         if(prev_state == PARK_FINISHED){
          // Parking 기어 반영을 위함, 한번 더 수행 후 화면전환
+            LCD1602_clear();
+            LCD1602_1stLine();
             g_current_ctrl_state = CTRL_ON;
             LCD1602_print("PARKING FINISHED");
             LCD1602_2ndLine();
             LCD1602_loading();
-
-
         }
         prev_state = PARK_FINISHED;
         break;
