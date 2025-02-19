@@ -38,6 +38,7 @@ typedef enum
 void Obstacle_get_All_Distance(void);
 extern int obstacle[OBSTACLE_NUM];
 extern int parking_spot[NUM_ULTRA];
+extern int detecting_spot[NUM_ULTRA];
 extern double Cal_TTCD(double currvel);
 extern double Cal_TTCR(double currvel);
 

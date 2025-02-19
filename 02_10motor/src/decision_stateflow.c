@@ -43,8 +43,6 @@ int IsRSPAButton = 0;
 int U8IsWp_R = 0;
 int U8IsStopline = 0;
 int U8IsPrkFinished = 0;
-int U8IsOb_R = 0;
-int U8IsOb_D=0;
 DriverState U8DriverState = InitDriverState;
 RSPAState U8RSPAState = InitRSPAState;
 int U8Driver = 0;
@@ -58,7 +56,6 @@ int lanecheck_request=0;
 
 int CameraSwitchRequest=0;
 int Isprkslot;
-int U8Isprkslot=0;
 sint8 DSteeringinput=0;
 double DMoveDis=0;
 int calDis=0;
@@ -69,8 +66,6 @@ IsPrk IsPrk_LR = InitIsPrk;
 int U8IsConerline = 0;
 CAState U8FCAState = InitCAState;
 CAState U8RCAState = InitCAState;
-double DObs_dis_D= 100.0;
-double DObs_dis_R= 100.0;
 double gainTTC=0.0;
 
 
@@ -143,7 +138,7 @@ void decision_stateflow_step(void)
                         U8FCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && DObs_dis_D >=100)
+                        if (U8Curr_vel == 0 && ((double)obstacle[F_OBSTACLE]/1000) >=100)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
@@ -153,7 +148,7 @@ void decision_stateflow_step(void)
                         U8FCAState = Decel;
                         U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCD(U8Curr_vel)+gainTTC));
 
-                        if (DObs_dis_D >=100)
+                        if (((double)obstacle[F_OBSTACLE]/1000) >= 100)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
@@ -204,7 +199,7 @@ void decision_stateflow_step(void)
                         U8RCAState = Decel;
                         U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCR(U8Curr_vel)+gainTTC));
 
-                        if (DObs_dis_R >=100)
+                        if (((double)obstacle[B_OBSTACLE]/1000)>=100)
                         {
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
@@ -245,7 +240,7 @@ void decision_stateflow_step(void)
                         U8DriverState = Parking;
                         U8Ref_vel = initVel;
 
-                        if (vehicle_status.transmission == DRIVING && U8Curr_vel == 0)
+                        if (U8IsTrButton== DRIVING && U8Curr_vel == 0)
                         {
                             decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_D;
                         }
@@ -380,10 +375,15 @@ void decision_stateflow_step(void)
 
                         }
 
-                        if (U8Isprkslot == 1)
+                        if (detecting_spot[L_ULTRA] == 1 || detecting_spot[R_ULTRA] == 1 )
                         {
                             U8Ref_vel = 0;
+
                             if (U8Curr_vel==0){
+                                if (detecting_spot[L_ULTRA] == 1 ){
+                                    IsPrk_LR=LEFT;
+                                }
+                                else IsPrk_LR=RIGHT;
 
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                             }
