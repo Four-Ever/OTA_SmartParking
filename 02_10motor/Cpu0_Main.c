@@ -339,6 +339,10 @@ void make_can_message(void)
         db_msg.VCU_Parking_Status.parking_status = ToController_Prkstate;
         output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
     }
+
+    db_msg.VCU_Exiting_Status.exiting_status = ToController_Exitstate;
+    output_message(&db_msg.VCU_Exiting_Status, VCU_Exiting_Status_ID);
+
 }
 
 

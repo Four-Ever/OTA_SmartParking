@@ -69,6 +69,7 @@ CAState U8RCAState = InitCAState;
 double gainTTC=0.0;
 
 int ToController_Prkstate=0;
+int ToController_Exitstate=0;
 
 
 /* Model step function */
@@ -97,6 +98,7 @@ void decision_stateflow_step(void)
                 U8FCAState = InitCAState;
                 U8RCAState = InitCAState;
                 ToController_Prkstate=0;
+                ToController_Exitstate=0;
 
 
                 if (U8IsTrButton == ENGINE_ON && ExitCAR_request == 0 )
@@ -124,6 +126,7 @@ void decision_stateflow_step(void)
                 U8RSPAState = Parking_Complete;
                 U8FCAState = InitCAState;
                 U8RCAState = InitCAState;
+                ToController_Exitstate=1;
 
                 if (ExitCAR_request==1){
                     U8Ref_vel = DInputVD;
@@ -136,6 +139,7 @@ void decision_stateflow_step(void)
 
                         decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
                         decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+                        ToController_Exitstate=0;
                       }
                 }
                 break;
@@ -269,7 +273,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel = D_Ref_vel;
 
 //
-//                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
@@ -316,7 +320,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel = D_Ref_vel;
 
 
-//                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
@@ -375,7 +379,7 @@ void decision_stateflow_step(void)
                         ToController_Prkstate=0;
 
 
-//                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
@@ -409,7 +413,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel=DInputVD;
                         ToController_Prkstate=1;
 //
-//                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
@@ -438,7 +442,7 @@ void decision_stateflow_step(void)
                         U8RSPAState=Forward_Assist;
                         ToController_Prkstate=1;
                         U8Ref_vel=DInputVD;
-//                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
@@ -474,7 +478,7 @@ void decision_stateflow_step(void)
 
                         move_distance(700);
 
-//                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
@@ -501,7 +505,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
 
-//                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
