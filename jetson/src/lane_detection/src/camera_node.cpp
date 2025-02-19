@@ -36,7 +36,7 @@ CameraNode::CameraNode(const rclcpp::NodeOptions &options)
         RCLCPP_ERROR(this->get_logger(), "Failed to open front camera");
         return;
     }
-#ifndef DEBUG
+#ifndef DEBUG_CAMERA
     if (!rear_cap_.open(rear_cam_id_))
     {
         RCLCPP_ERROR(this->get_logger(), "Failed to open rear camera");
@@ -47,16 +47,16 @@ CameraNode::CameraNode(const rclcpp::NodeOptions &options)
     // 카메라 설정
     front_cap_.set(cv::CAP_PROP_FRAME_WIDTH, img_width_);
     front_cap_.set(cv::CAP_PROP_FRAME_HEIGHT, img_height_);
-#ifndef DEBUG
+#ifndef DEBUG_CAMERA
     rear_cap_.set(cv::CAP_PROP_FRAME_WIDTH, img_width_);
     rear_cap_.set(cv::CAP_PROP_FRAME_HEIGHT, img_height_);
 #endif
 
     // Publisher 생성
     front_pub_ = this->create_publisher<sensor_msgs::msg::Image>(
-        "front_camera/image", 10);
+        "front_camera/real_image", 10);
     rear_pub_ = this->create_publisher<sensor_msgs::msg::Image>(
-        "rear_camera/image", 10);
+        "rear_camera/real_image", 10);
 
     // 타이머 생성
     timer_ = this->create_wall_timer(
@@ -107,11 +107,11 @@ void CameraNode::publishImages() // 주기적으로 카메라 이미지 발행
             processed_frame = rear_frame;
         }
 
-        cv::Mat rotated_rear_frame;
+        // cv::Mat rotated_rear_frame;
         //    cv::rotate(processed_frame, rotated_rear_frame, cv::ROTATE_180);
 
         sensor_msgs::msg::Image::SharedPtr rear_msg =
-            cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", rotated_rear_frame).toImageMsg();
+            cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", processed_frame).toImageMsg();
         rear_pub_->publish(*rear_msg);
     }
 }
@@ -129,11 +129,13 @@ void CameraNode::loadCalibrationParams()
         // }
 
         // ROS2 패키지 경로 얻기
-        std::string package_path = ament_index_cpp::get_package_share_directory("lane_detection");
-        std::string front_calib_path = package_path + "/config/front_calibration.yaml";
-        std::string rear_calib_path = package_path + "/config/rear_calibration.yaml";
+        // std::string package_path = ament_index_cpp::get_package_share_directory("lane_detection");
+        // std::string front_calib_path = package_path + "/config/front_calibration.yaml";
+        // std::string rear_calib_path = package_path + "/config/rear_calibration.yaml";
+        std::string front_calib_path =  "/home/jetson/ros2_ws/src/lane_detection/config/front_calibration.yaml";
+        std::string rear_calib_path = "/home/jetson/ros2_ws/src/lane_detection/config/rear_calibration.yaml";
 
-        // 전방 카메라 파라미터
+        // 전방 카메라 파라미터D
         cv::FileStorage front_fs(front_calib_path, cv::FileStorage::READ);
         if (!front_fs.isOpened())
         {

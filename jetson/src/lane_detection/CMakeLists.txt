@@ -14,14 +14,22 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
-
+# CUDA 지원 활성화
+enable_language(CUDA)
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
-find_package(OpenCV REQUIRED)
+set(OpenCV_DIR /usr/lib/aarch64-linux-gnu/cmake/opencv4)
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda")
+set(OpenCV_CUDA_LIBRARIES 
+    "/home/jetson/opencv-4.2.0/build/lib/libopencv_cudafeatures2d.so"
+    "/home/jetson/opencv-4.2.0/build/lib/libopencv_cudaimgproc.so"
+)
+# find_package(OpenCV 4.2 REQUIRED COMPONENTS core imgproc highgui cudafeatures2d cudaimgproc)
+find_package(OpenCV 4.2 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(ament_index_cpp REQUIRED)
 find_package(CUDA REQUIRED)
@@ -29,8 +37,16 @@ find_package(CUDA REQUIRED)
 # CUDA 컴파일러 플래그 설정
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_53")  # Jetson Nano용
 
+# CUDA 지원 컴파일 옵션
+add_definitions(-DWITH_CUDA)
+
 # 헤더 파일 디렉토리 포함
-include_directories(include)
+include_directories(
+  include
+  ${OpenCV_INCLUDE_DIRS}
+  ${CUDA_INCLUDE_DIRS}
+  /usr/local/include/opencv4
+)
 
 # 실행 파일 생성
 add_executable(lane_detection_node 
@@ -55,6 +71,17 @@ ament_target_dependencies(lane_detection_node
   OpenCV
   Boost
   ament_index_cpp
+)
+
+target_link_libraries(lane_detection_node
+  ${OpenCV_LIBRARIES}
+  ${OpenCV_CUDA_LIBRARIES}
+  ${CUDA_LIBRARIES}
+  opencv_cudafeatures2d
+  opencv_cudaimgproc
+  opencv_core
+  opencv_imgproc
+  opencv_highgui
 )
 
 # 실행 파일 설치 규칙

@@ -53,6 +53,19 @@ void MySocketCAN::on_receive_can(const can_frame& frame) {
     {
         msg = std::make_shared<VCU_ParkingLane_Request_Msg>();
         memcpy(msg->SerializeCan(), frame.data, msg->GetSizeCan());
+        int Lane_Request = std::static_pointer_cast<VCU_ParkingLane_Request_Msg>(msg)->data_.data.Lane_Request;
+        if(vision_node)
+        {
+            if(Lane_Request == 0) // 요청 안함.
+            {
+                vision_node->set_parameter(rclcpp::Parameter("lane_request", false));
+            }
+            else if(Lane_Request == 1) // 요청 함.
+            {
+                vision_node->set_parameter(rclcpp::Parameter("lane_request", true));
+            }
+        }
+
         break;
     }
     case VCU_Exiting_Status_ID:
@@ -67,7 +80,8 @@ void MySocketCAN::on_receive_can(const can_frame& frame) {
         memcpy(msg->SerializeCan(),frame.data,msg->GetSizeCan());
     
         int camera_num = std::static_pointer_cast<VCU_Camera_Msg>(msg)->data_.data.camera_num;
-        if (vision_node) {
+        if (vision_node)
+        {
             if(camera_num == 0)
             {
                 vision_node->set_parameter(rclcpp::Parameter("mode", "offstate"));

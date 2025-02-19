@@ -32,7 +32,8 @@
 #define CCU_Cordi_data1_ID 0xA1
 #define CCU_Cordi_data2_ID 0xA2
 #define CCU_RightAngle_detect_ID 0xA0
-#define CCU_Parking_Complete_ID 0xA3
+#define CCU_ParkingAngle_detect_ID 0xA3
+#define CCU_Parking_Complete_ID 0xA4
 #define CTRL_Engine_ID 0xC9
 #define CTRL_Move_ID 0xCA
 #define CTRL_Auto_Parking_Request_ID 0xD1
@@ -67,6 +68,7 @@
 #define CCU_Cordi_data1_Size 6
 #define CCU_Cordi_data2_Size 6
 #define CCU_RightAngle_detect_Size 1
+#define CCU_ParkingAngle_detect_Size 1
 #define CCU_Parking_Complete_Size 1
 #define CTRL_Engine_Size 1
 #define CTRL_Move_Size 2
@@ -244,9 +246,15 @@ struct CCU_RightAngle_detect_Data : public BaseMsg {
     } data;
 };
 
+struct CCU_ParkingAngle_detect_Data : public BaseMsg {
+    struct {
+        int8_t parking_back_lane_angle;
+    } data;
+};
+
 struct CCU_Parking_Complete_Data : public BaseMsg {
     struct {
-        int8_t parkig_back_lane_detected;
+        uint8_t parking_back_lane_detected : 1;
     } data;
 };
 
@@ -373,7 +381,7 @@ public:
     
     void SetLaneRequest(uint8_t request) { data_.data.Lane_Request = request; }
 
-private:
+public:
     VCU_ParkingLane_Request_Data data_;
 };
 
@@ -739,6 +747,24 @@ public:
     CCU_RightAngle_detect_Data data_;
 };
 
+class CCU_ParkingAngle_detect_Msg : public IMessage {
+public:
+    CCU_ParkingAngle_detect_Msg() {
+        data_.msg_id = CCU_ParkingAngle_detect_ID;
+    }
+    
+    uint8_t* SerializeHttp() override { return reinterpret_cast<uint8_t*>(&data_); }
+    uint8_t* SerializeCan() override { return reinterpret_cast<uint8_t*>(&data_.data); }
+    size_t GetSizeHttp() const override { return sizeof(CCU_ParkingAngle_detect_Data); }
+    size_t GetSizeCan() const override { return sizeof(CCU_ParkingAngle_detect_Data) - sizeof(BaseMsg); }
+    uint8_t GetMsgId() const override { return data_.msg_id; }
+    
+    void SetParkingBackLaneAngle(int8_t angle) { data_.data.parking_back_lane_angle = angle; }
+
+public:
+    CCU_ParkingAngle_detect_Data data_;
+};
+
 class CCU_Parking_Complete_Msg : public IMessage {
 public:
     CCU_Parking_Complete_Msg() {
@@ -751,7 +777,7 @@ public:
     size_t GetSizeCan() const override { return sizeof(CCU_Parking_Complete_Data) - sizeof(BaseMsg); }
     uint8_t GetMsgId() const override { return data_.msg_id; }
     
-    void SetRightAngleLaneDetected(uint8_t detected) { data_.data.parkig_back_lane_detected = detected; }
+    void SetParkingBackLaneDetected(uint8_t detected) { data_.data.parking_back_lane_detected = detected; }
 
 public:
     CCU_Parking_Complete_Data data_;
