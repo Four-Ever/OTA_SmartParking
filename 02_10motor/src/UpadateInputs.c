@@ -7,6 +7,7 @@ float RefRPM=0;
 int steeringInputL=-40;
 int steeringInputR=40;
 int conersteering = -50;
+int brakeRequest=0;
 //int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
@@ -87,11 +88,17 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
             case Forward:  //하드코딩 전진
                 if (IsPrk_LR==LEFT) {// 왼쪽이 빈 주차칸
                     vehicle_status.steering_angle = 30;
-                    vehicle_status.ref_rpm = RefRPM;
+                    if(brakeRequest==1){
+                        vehicle_status.ref_rpm=RefRPM*0.7;
+                    }
+                    else vehicle_status.ref_rpm = RefRPM;
                 }
                 else if (IsPrk_LR==RIGHT) {  //오른쪽이 빈 주차칸
                     vehicle_status.steering_angle = -30;
-                    vehicle_status.ref_rpm = RefRPM;
+                    if(brakeRequest==1){
+                        vehicle_status.ref_rpm=RefRPM*0.7;
+                    }
+                    else vehicle_status.ref_rpm = RefRPM;
                 }
 
                 break;
@@ -102,22 +109,27 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
                 else if (IsPrk_LR==RIGHT){
                     vehicle_status.steering_angle = -10;
                 }
-                vehicle_status.ref_rpm = RefRPM;
+                if(brakeRequest==1){
+                    vehicle_status.ref_rpm=RefRPM*0.7;
+                }
+                else vehicle_status.ref_rpm = RefRPM;
                 break;
             case Backward:
                 if (IsPrk_LR==LEFT) {// 왼쪽이 빈 주차칸
                     DSteeringinput = steeringInputL - (int)((speed_pid.DisSum / 100)) * 3;
-
                     vehicle_status.steering_angle = DSteeringinput;
-                    vehicle_status.ref_rpm = -RefRPM;
                 }
 //
                 else if (IsPrk_LR==RIGHT) {  //오른쪽이 빈 주차칸
                     DSteeringinput = steeringInputR - (int)((speed_pid.DisSum / 100)) * 3;
-
                     vehicle_status.steering_angle = DSteeringinput;
-                    vehicle_status.ref_rpm = -RefRPM;
                 }
+
+                if(brakeRequest==1){
+                    vehicle_status.ref_rpm=-RefRPM*0.7;
+                }
+                else vehicle_status.ref_rpm =-RefRPM;
+
                 if(steeringInputR <= 19 || steeringInputL >= -19){
                     CameraSwitchRequest=2;
 
@@ -127,7 +139,11 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
             case Searching:  //차선인식 주차공간 탐색
                 stanelyAngle=gitstanley();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
-                vehicle_status.ref_rpm = RefRPM;
+                if(brakeRequest==1){
+                    vehicle_status.ref_rpm=RefRPM*0.7;
+                }
+                else vehicle_status.ref_rpm = RefRPM;
+
                 if (U8IsConerline==1){
                     vehicle_status.steering_angle=conersteering;
                     if (move_distance(100) == REACHED_TARGET_DIS){
@@ -140,7 +156,10 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
             case Backward_Assist:  //차선인식 후진 RA
                 stanelyAngle=gitstanley();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
-                vehicle_status.ref_rpm = -RefRPM;
+                if(brakeRequest==1){
+                    vehicle_status.ref_rpm=-RefRPM*0.7;
+                }
+                else vehicle_status.ref_rpm =-RefRPM;
                 break;
 
             case InitRSPAState:
