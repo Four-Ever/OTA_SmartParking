@@ -35,12 +35,5 @@ typedef enum
 
 void Obstacle_get_All_Distance(void);
 extern int obstacle[OBSTACLE_NUM];
-extern int parking_spot[NUM_ULTRA];
-extern int detecting_spot[NUM_ULTRA];
-//extern double Cal_TTCD(double currvel);
-//extern double Cal_TTCR(double currvel);
 
-//test
-extern float spotdistacne[NUM_ULTRA];
-extern int ultra[2];
 #endif /* INC_Obstacle_Detection_H_ */
