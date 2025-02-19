@@ -67,6 +67,8 @@ float32 s_T_samp= 0.001*TIMER_INT_TIME;
 float32 RPM_max = 5000, RPM_min = -5000;
 
 sint32 Enc_count;
+
+double U8Curr_vel;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -178,11 +180,6 @@ void PI_Speed_con(void)
     {
         speed_pid.reset((void *)&speed_pid);
         setMotorControl(0,0);
-
-        speed_pid.Ref=0;
-        speed_pid.Fdb=0;
-        speed_pid.calc((void*)&speed_pid);
-
     }
     else
     {
@@ -198,11 +195,12 @@ void isrSTM(void)
 {
     /* Update the compare register value that will trigger the next interrupt and toggle the LED */
 //    IfxPort_setPinState(LED, IfxPort_State_toggled);
-    PI_Speed_con();
+
     RPM_cal();
+    PI_Speed_con();
 //    static sint32 ii =0;
 //    ii++;
-    //PI_Speed_con();
+
 
     if (speed_pid.Out>=0)
     {

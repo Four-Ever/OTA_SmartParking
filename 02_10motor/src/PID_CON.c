@@ -68,7 +68,7 @@ void pid_reset(PIDREG3 *v)
      // reset the previous proportional output
     v->Out = 0;
     v->Out_1 = 0;
-//  v->ErrSum = 0;
+    v->ErrSum = 0;
     v->Fdb = 0;
 
     // reset the saturate difference

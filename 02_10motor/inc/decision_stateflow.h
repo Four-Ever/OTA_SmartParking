@@ -31,6 +31,7 @@
 #include "PID_CON.h"
 #include "gitstanley.h"
 #include "STM_Interrupt.h"
+#include "Obstacle_Detection.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
@@ -103,7 +104,7 @@ typedef enum{
   Backward,  // 3
   Backward_Assist, // 4
   Forward_Assist, // 5
-  Parking_Complete // 6  
+  Parking_Complete // 6
 }RSPAState;
 
 typedef enum{
@@ -121,16 +122,13 @@ struct tag_RTM_decision_stateflow_T {
 
 extern double initVel;
 extern Transmission U8IsTrButton;
-extern double U8Curr_vel;
 extern double U8Ref_vel;
 extern double DInputVD;
 extern double DInputVR;
 extern int IsRSPAButton;
-extern int IsOTAFinished;
 extern int U8IsWp_R;
 extern int U8IsStopline;
 extern int U8IsPrkFinished;
-extern int U8IsOb_R;
 extern DriverState U8DriverState;
 extern RSPAState U8RSPAState;
 extern int U8Driver;
@@ -138,12 +136,7 @@ extern int U8RSPA;
 extern int U8Engine;
 extern CAState U8FCAState;
 extern CAState U8RCAState;
-extern double DTTC_D; // �썑諛� �옣�븷臾� ttc
-extern double DTTC_R; // �쟾諛� �옣�븷臾� ttc
-extern double DObs_dis_D; //�쟾諛� �옣�븷臾� �긽��嫄곕━
-extern double DObs_dis_R; //�썑諛� �옣�븷臾� �긽��嫄곕━
 extern sint8 DSteeringinput;
-extern int calDis;
 extern int U8PrkFinished;
 extern int ExitCAR_request;
 extern double D_Ref_vel;
