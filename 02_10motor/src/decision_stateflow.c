@@ -105,9 +105,7 @@ void decision_stateflow_step(void)
                 {
                     U8Engine=ModeOn;
 
-                    decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
-                    decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
-
+                    decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_INIT_Mode;
 
                 }
 
@@ -405,7 +403,19 @@ void decision_stateflow_step(void)
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                             }
                         }
+                        if (IsRSPAButton == 1){  //RSPA STOP
+                             D_RefRPM=0;
+                             if (U8Curr_vel==0){
+                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
 
+                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+
+                                 U8RSPAState = InitDriverState;
+                                 First_Set=1;
+                                 IsRSPAButton = 0;
+                                 CameraSwitchRequest = 0;
+                             }
+                        }
                         break;
 
                     case decision_stateflow_IN_RSPA_D:
@@ -436,6 +446,19 @@ void decision_stateflow_step(void)
                                 CameraSwitchRequest = 2;
                             }
                         }
+                        if (IsRSPAButton == 1){  //RSPA STOP
+                             D_RefRPM=0;
+                             if (U8Curr_vel==0){
+                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
+
+                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+
+                                 U8RSPAState = InitDriverState;
+                                 First_Set=1;
+                                 IsRSPAButton = 0;
+                                 CameraSwitchRequest = 0;
+                             }
+                        }
                         break;
 
                     case decision_stateflow_IN_RSPA_LANE_D:
@@ -454,7 +477,19 @@ void decision_stateflow_step(void)
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
 //
 //                        }
+                        if (IsRSPAButton == 1){  //RSPA STOP
+                             D_RefRPM=0;
+                             if (U8Curr_vel==0){
+                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
 
+                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+
+                                 U8RSPAState = InitDriverState;
+                                 First_Set=1;
+                                 IsRSPAButton = 0;
+                                 CameraSwitchRequest = 0;
+                             }
+                        }
                         if (U8Parkingfail==1 )
                         {
                             DInputVD= 0;
@@ -490,7 +525,19 @@ void decision_stateflow_step(void)
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
 //
 //                        }
+                        if (IsRSPAButton == 1){  //RSPA STOP
+                             D_RefRPM=0;
+                             if (U8Curr_vel==0){
+                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
 
+                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+
+                                 U8RSPAState = InitDriverState;
+                                 First_Set=1;
+                                 IsRSPAButton = 0;
+                                 CameraSwitchRequest = 0;
+                             }
+                        }
                         if (CameraSwitchRequest == 2)  {
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
@@ -517,7 +564,19 @@ void decision_stateflow_step(void)
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
 //
 //                        }
+                        if (IsRSPAButton == 1){  //RSPA STOP
+                             D_RefRPM=0;
+                             if (U8Curr_vel==0){
+                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
 
+                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+
+                                 U8RSPAState = InitDriverState;
+                                 First_Set=1;
+                                 IsRSPAButton = 0;
+                                 CameraSwitchRequest = 0;
+                             }
+                        }
                         if (U8IsStopline == 1 && IsWPTrackingFinish == 1)
                         {
                             U8Ref_vel = 0;
