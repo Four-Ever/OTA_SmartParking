@@ -68,6 +68,9 @@ CAState U8FCAState = InitCAState;
 CAState U8RCAState = InitCAState;
 double gainTTC=0.0;
 
+int ToController_Prkstate=0;
+int ToController_Exitstate=0;
+
 
 /* Model step function */
 void decision_stateflow_step(void)
@@ -94,6 +97,8 @@ void decision_stateflow_step(void)
                 U8RSPAState = InitRSPAState;
                 U8FCAState = InitCAState;
                 U8RCAState = InitCAState;
+                ToController_Prkstate=0;
+                ToController_Exitstate=0;
 
 
                 if (U8IsTrButton == ENGINE_ON && ExitCAR_request == 0 )
@@ -113,6 +118,15 @@ void decision_stateflow_step(void)
                 break;
 
             case decision_stateflow_IN_FIND_CAR:
+                ToController_Prkstate=3;
+                U8Driver=ModeOff;
+                U8RSPA=ModeOff;
+                U8Engine=ModeOff;
+                U8DriverState = InitDriverState;
+                U8RSPAState = Parking_Complete;
+                U8FCAState = InitCAState;
+                U8RCAState = InitCAState;
+                ToController_Exitstate=1;
 
                 if (ExitCAR_request==1){
                     U8Ref_vel = DInputVD;
@@ -125,6 +139,7 @@ void decision_stateflow_step(void)
 
                         decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_DRIVER_Mode;
                         decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
+                        ToController_Exitstate=0;
                       }
                 }
                 break;
@@ -229,6 +244,7 @@ void decision_stateflow_step(void)
             case decision_stateflow_IN_DRIVER_Mode:
                 U8Driver=ModeOn;
                 U8RSPA=ModeOff;
+                ToController_Prkstate=0;
                 //U8Engine=ModeOff;
 
                 U8DriverState = InitDriverState;
@@ -256,17 +272,17 @@ void decision_stateflow_step(void)
                         U8DriverState = Driving;
                         U8Ref_vel = D_Ref_vel;
 
-
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-                        }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
-                        }
+//
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+//                        }
+//                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+//                        }
 
                         if (U8IsTrButton == PARKING)
                         {
@@ -304,18 +320,18 @@ void decision_stateflow_step(void)
                         U8Ref_vel = D_Ref_vel;
 
 
-                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
-                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
-
-                        }
-                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
-                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
-
-                        }
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+//                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
+//
+//                        }
+//                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+//                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
+//
+//                        }
 
                         if (U8IsTrButton == DRIVING)
                         {
@@ -360,20 +376,21 @@ void decision_stateflow_step(void)
                     case decision_stateflow_IN_RSPA_IS_SLOT:
                         U8RSPAState= Searching;
                         U8Ref_vel=DInputVD;
+                        ToController_Prkstate=0;
 
 
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-
-                        }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
-
-                        }
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+//
+//                        }
+//                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+//
+//                        }
 
                         if (detecting_spot[L_ULTRA] == 1 || detecting_spot[R_ULTRA] == 1 )
                         {
@@ -394,19 +411,20 @@ void decision_stateflow_step(void)
                     case decision_stateflow_IN_RSPA_D:
                         U8RSPAState=Forward;
                         U8Ref_vel=DInputVD;
-
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-
-                        }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
-
-                        }
+                        ToController_Prkstate=1;
+//
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+//
+//                        }
+//                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+//
+//                        }
 
 
                         if(move_distance(100) == REACHED_TARGET_DIS) //100mm
@@ -422,19 +440,20 @@ void decision_stateflow_step(void)
 
                     case decision_stateflow_IN_RSPA_LANE_D:
                         U8RSPAState=Forward_Assist;
+                        ToController_Prkstate=1;
                         U8Ref_vel=DInputVD;
-                        if(Cal_TTCD(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-
-                        }
-                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
-
-                        }
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+//
+//                        }
+//                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
+//
+//                        }
 
                         if (U8Parkingfail==1 )
                         {
@@ -454,22 +473,23 @@ void decision_stateflow_step(void)
 
                     case decision_stateflow_IN_RSPA_R:
                         U8RSPAState=Backward;
+                        ToController_Prkstate=2;
                         U8Ref_vel=DInputVR;
 
                         move_distance(700);
 
-                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
-                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
-
-                        }
-                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
-                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
-
-                        }
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+//                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
+//
+//                        }
+//                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+//                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
+//
+//                        }
 
                         if (CameraSwitchRequest == 2)  {
                             U8Ref_vel= 0;
@@ -481,21 +501,22 @@ void decision_stateflow_step(void)
 
                     case decision_stateflow_IN_RSPA_LANE_R:
                         U8RSPAState=Backward_Assist;
+                        ToController_Prkstate=2;
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
 
-                        if(Cal_TTCR(U8Curr_vel) <= 1.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
-                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
-
-                        }
-                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
-                        {
-                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
-                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
-
-                        }
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+//                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
+//
+//                        }
+//                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
+//                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
+//
+//                        }
 
                         if (U8IsStopline == 1 && IsWPTrackingFinish == 1)
                         {
@@ -527,6 +548,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel = initVel;
                         U8IsStopline=0;
                         lanecheck_request=0;
+                        ToController_Prkstate=3;
 
                         if (vehicle_status.engine_state == ENGINE_OFF){
                             if (U8Curr_vel==0){
