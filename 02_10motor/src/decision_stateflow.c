@@ -18,6 +18,7 @@
  */
 
 #include "decision_stateflow.h"
+#include "LED_Buzzer.h"
 
 #include "rtwtypes.h"
 #include "IfxGpt12_IncrEnc.h"
@@ -198,6 +199,9 @@ void decision_stateflow_step(void)
             case decision_stateflow_IN_SAFE_RCA:
 
                 switch (decision_stateflow_DW.is_SAFE_RCA){
+
+                    set_Buzzer_period(obstacle[B_OBSTACLE]);
+
                     case decision_stateflow_IN_RCA_EMERGENCY:
                         U8RCAState = Emergency;
                         U8Ref_vel = initVel;
@@ -219,6 +223,9 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_RCA_EXIT:
                         U8RCAState = InitCAState;
+
+                        //Buzzer_turn_off
+                        set_Buzzer_period(0);
 
                         if (U8DriverState == Reversing)
                         {
@@ -317,7 +324,7 @@ void decision_stateflow_step(void)
                         U8DriverState = Reversing;
                         U8Ref_vel = D_Ref_vel;
 
-
+                        set_Buzzer_period(obstacle[B_OBSTACLE]);
 //                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
@@ -335,12 +342,14 @@ void decision_stateflow_step(void)
                         {
                             D_RefRPM=0;
                             if (U8Curr_vel==0){
+                                set_Buzzer_period(0);
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_D;
                             }
                         }
                         else if(U8IsTrButton == PARKING){
                             D_RefRPM=0;
                             if (U8Curr_vel==0){
+                                set_Buzzer_period(0);
                                 decision_stateflow_DW.is_DRIVER_Mode = decision_stateflow_IN_DRIVER_P;
                             }
                         }
@@ -349,6 +358,7 @@ void decision_stateflow_step(void)
                         {
                             D_RefRPM=0;
                             if (U8Curr_vel==0){
+                                set_Buzzer_period(0);
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
 
@@ -513,6 +523,7 @@ void decision_stateflow_step(void)
 
                         move_distance(700);
 
+                        set_Buzzer_period(obstacle[B_OBSTACLE]);
 //                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
@@ -536,6 +547,8 @@ void decision_stateflow_step(void)
                                  First_Set=1;
                                  IsRSPAButton = 0;
                                  CameraSwitchRequest = 0;
+
+                                 set_Buzzer_period(0);
                              }
                         }
                         if (CameraSwitchRequest == 2)  {
@@ -552,6 +565,7 @@ void decision_stateflow_step(void)
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
 
+                        set_Buzzer_period(obstacle[B_OBSTACLE]);
 //                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
@@ -575,6 +589,8 @@ void decision_stateflow_step(void)
                                  First_Set=1;
                                  IsRSPAButton = 0;
                                  CameraSwitchRequest = 0;
+
+                                 set_Buzzer_period(0);
                              }
                         }
                         if (U8IsStopline == 1 && IsWPTrackingFinish == 1)
@@ -590,6 +606,8 @@ void decision_stateflow_step(void)
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_LANE_D;
+
+                                set_Buzzer_period(0);
                             }
                         }
 
@@ -622,6 +640,8 @@ void decision_stateflow_step(void)
                 break;
 
         }
+        //compare and buzzer toggle(buzzer cnt, buzzer_period);
+        Buzzer();
     }
 }
 
