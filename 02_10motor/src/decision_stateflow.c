@@ -24,7 +24,7 @@
 
 
 /* Block states (default stoKge) */
-//DW_decision_stateflow_T decision_stateflow_DW;
+DW_decision_stateflow_T decision_stateflow_DW;
 
 /* Real-time model */
 RT_MODEL_decision_stateflow_T decision_stateflow_M_;
@@ -151,7 +151,7 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_FCA_DECEL:
                         U8FCAState = Decel;
-                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(DTTC_D+gainTTC));
+                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCD(U8Curr_vel)+gainTTC));
 
                         if (DObs_dis_D >=100)
                         {
@@ -202,7 +202,7 @@ void decision_stateflow_step(void)
                         break;
                     case decision_stateflow_IN_RCA_DECEL:
                         U8RCAState = Decel;
-                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(DTTC_R+gainTTC));
+                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCR(U8Curr_vel)+gainTTC));
 
                         if (DObs_dis_R >=100)
                         {
@@ -267,7 +267,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
                         }
-                        else if(DTTC_D < 3.0)
+                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
@@ -298,7 +298,7 @@ void decision_stateflow_step(void)
                                 U8DriverState = InitDriverState;
                                 First_Set=1;
                                 IsRSPAButton = 0;
-                                CameraSwitchRequest = 1;  /
+                                CameraSwitchRequest = 1;
                                 
                             }
                         }
@@ -315,7 +315,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
                         }
-                        else if(DTTC_R < 3.0)
+                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
@@ -373,7 +373,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
 
                         }
-                        else if(DTTC_D < 3.0)
+                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
@@ -401,7 +401,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
 
                         }
-                        else if(DTTC_D < 3.0)
+                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
@@ -429,7 +429,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
 
                         }
-                        else if(DTTC_D < 3.0)
+                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
@@ -464,7 +464,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
                         }
-                        else if(DTTC_R < 3.0)
+                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
@@ -490,7 +490,7 @@ void decision_stateflow_step(void)
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 
                         }
-                        else if(DTTC_R < 3.0)
+                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
                         {
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
