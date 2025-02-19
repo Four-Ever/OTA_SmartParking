@@ -1,0 +1,9 @@
+CMake Error at /usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake:146 (message):
+  Could NOT find OpenCV (missing: cudafeatures2d cudaimgproc) (found suitable
+  version "4.2.0", minimum required is "4.2")
+Call Stack (most recent call first):
+  /usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake:393 (_FPHSA_FAILURE_MESSAGE)
+  /usr/lib/aarch64-linux-gnu/cmake/opencv4/OpenCVConfig.cmake:328 (find_package_handle_standard_args)
+  CMakeLists.txt:31 (find_package)
+
+

@@ -1,0 +1,6 @@
+ros2 run camera_calibration cameracalibrator --size 8x5 --square 0.024 --approximate 0.3 --no-service-check --ros-args -r image:=/image_raw
+
+ros2 run usb_cam usb_cam_node_exe --ros-args -p video_device:=/dev/video1
+
+
+ros2 run rqt_graph rqt_graph : Diagram Viewer 

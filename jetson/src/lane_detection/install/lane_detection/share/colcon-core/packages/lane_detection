@@ -1,0 +1,1 @@
+cv_bridge:libcuda-dev:nvidia-cuda-toolkit:opencv:rclcpp:sensor_msgs:std_msgs

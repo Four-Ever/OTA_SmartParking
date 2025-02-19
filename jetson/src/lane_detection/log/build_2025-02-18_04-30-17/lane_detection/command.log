@@ -1,0 +1,2 @@
+Invoking command in '/home/jetson/ros2_ws/src/lane_detection/build/lane_detection': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake /home/jetson/ros2_ws/src/lane_detection -DCMAKE_INSTALL_PREFIX=/home/jetson/ros2_ws/src/lane_detection/install/lane_detection
+Invoked command in '/home/jetson/ros2_ws/src/lane_detection/build/lane_detection' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy /usr/bin/cmake /home/jetson/ros2_ws/src/lane_detection -DCMAKE_INSTALL_PREFIX=/home/jetson/ros2_ws/src/lane_detection/install/lane_detection
