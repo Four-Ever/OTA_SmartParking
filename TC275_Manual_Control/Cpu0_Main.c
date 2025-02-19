@@ -175,10 +175,7 @@ int core0_main(void)
                 if (db_msg.CGW_Off_Request.alert_request==1)
                 {
                     //주차한 차량이 있으면 LED 혹은 부저 삐용삐용
-//                    if ()
-//                    {
-//
-//                    }
+                    FindCar_Plz();
                 }
             }
         }
