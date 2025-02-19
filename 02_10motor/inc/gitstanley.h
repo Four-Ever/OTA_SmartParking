@@ -27,6 +27,7 @@
 
 extern int IsWPTrackingFinish;
 extern int Update_finished;
+extern float stanleytref_vel;
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +35,7 @@ extern "C" {
 
 /* Function Declarations */
 float gitstanley(void);
+float gitstanleytest(void);
 void initStanley(void);
 void updateWaypoints(float new_waypoints[][2]);
 

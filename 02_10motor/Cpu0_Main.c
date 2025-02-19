@@ -147,6 +147,7 @@ int core0_main(void)
 
 
     alarm_request=1;
+    initStanley();
 
 #ifdef motor_Test
     // motor_enable = 1;
@@ -163,150 +164,150 @@ int core0_main(void)
     while(1)
     {
         AppScheduling();
-        //stopstatus=Touch();
-        //can msg 수신
-#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 雅뚯눛六� �굜遺얜굡
-        // 엔진 on/off
-        if (db_flag.CGW_Engine_Flag == 1)
-        {
-            db_flag.CGW_Engine_Flag = 0;
-
-            //if (U8DriverState == Parking || U8RSPAState==Parking_Complete || U8DriverState == InitDriverState ){
-                vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
-           // }
-
-        }
-        //엔진 ON
-        if (vehicle_status.engine_state == ENGINE_ON)
-        {
-            //driver mode
-            if (db_flag.CGW_Move_Flag == 1)
-            {
-                db_flag.CGW_Move_Flag = 0;
-                U8IsTrButton = db_msg.CGW_Move.control_transmission;
-                D_steering = db_msg.CGW_Move.control_steering_angle;
-                
-                if (db_msg.CGW_Move.control_accel == 1) // accel
-                {
-                    D_RefRPM += 100.0f;
-
-                    if (D_RefRPM >= 3000.0f)
-                    {
-                        D_RefRPM = 3000.0f;
-                    }
-                }
-                if (db_msg.CGW_Move.control_brake == 1)  //decel
-                {
-                    D_RefRPM -= 200.0f;
-
-                    if (D_RefRPM < 0.0f)
-                    {
-                        D_RefRPM = 0.0f;
-                    }
-                }
-                D_Ref_vel = (double)((D_RefRPM * circumference) / (60 * gear_ratio));
-            }
-
-            //RSPA mode
-            if (db_flag.CGW_Auto_Parking_Request_Flag==1)
-            {
-                db_flag.CGW_Auto_Parking_Request_Flag=0;
-
-                IsRSPAButton = 1;
-            }
-
-            //waypoint msg
-            if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-                //紐⑤뱺 wp 硫붿꽭吏�瑜� �닔�떊�뻽�쓣 �븣
-                db_flag.CCU_Cordi_data1_Flag=0;
-                db_flag.CCU_Cordi_data2_Flag=0;
-
-                //
-                //if (db_msg.CCU_Cordi_data2.trust_value > 0.7){
-                    InitCampoints();
-                    cam_points[0][0] = db_msg.CCU_Cordi_data1.cordi_data_x1;
-                    cam_points[0][1] = db_msg.CCU_Cordi_data1.cordi_data_y1;
-                    cam_points[1][0] = db_msg.CCU_Cordi_data1.cordi_data_x2;
-                    cam_points[1][1] = db_msg.CCU_Cordi_data1.cordi_data_y2;
-
-                    cam_points[2][0] = db_msg.CCU_Cordi_data2.cordi_data_x3;
-                    cam_points[2][1] = db_msg.CCU_Cordi_data2.cordi_data_y3;
-                    cam_points[3][0] = db_msg.CCU_Cordi_data2.cordi_data_x4;
-                    cam_points[3][1] = db_msg.CCU_Cordi_data2.cordi_data_y4;
-
-                    int camera_mode = db_msg.CCU_Cordi_data2.using_camera;
-
-                    data_ready_flag = 1;
-
-                //}
-                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //lane detection mode
-                    if (data_ready_flag == 1){
-                        InitWorldpoints();
-
-                        if(First_Set==1){    //
-                            initStanley();
-                            initIMU_error();
-                            transform_points(H, cam_points, world_points);
-                            if (transform_finished==1){
-                                updateWaypoints(world_points);
-                            }
-                            First_Set=0;
-                            if (U8RSPAState==Searching){
-                                lanecheck_request=1;
-                            }
-                        }
-                        else if (IsWPTrackingFinish==1){    //
-                            initStanley();
-                            initIMU_error();
-                            transform_points(H, cam_points, world_points);
-                            if (transform_finished==1){
-                                updateWaypoints(world_points);
-                            }
-                        }
-                        U8IsWp_R=camera_mode;
-                    }
-                }
-            }
-
-
-            //lane detecion_Coner
-            if (db_flag.CCU_RightAngle_detect_Flag == 1)
-            {
-                db_flag.CCU_RightAngle_detect_Flag = 0;
-                U8IsConerline = db_msg.CCU_RightAngle_detect.right_angle_lane_detected;
-            }
-        }
-
-        //engine off
-        else if (vehicle_status.engine_state == ENGINE_OFF)
-        {
-            if (db_flag.CGW_Off_Request_Flag==1)
-            {
-                db_flag.CGW_Off_Request_Flag=0;
-
-                //
-                if (db_msg.CGW_Off_Request.alert_request==1)
-                {
-                    //find my car_LED/Sound
-                    if (U8PrkFinished==1)
-                    {
-
-                    }
-                }
-
-                //출차
-                if (db_msg.CGW_Off_Request.auto_exit_request==1)
-                {
-                    vehicle_status.engine_state = ENGINE_ON;
-
-                    if (U8PrkFinished==1)
-                    {
-                        ExitCAR_request=1;
-                    }
-                }
-            }
-        }
-#endif
+//        //stopstatus=Touch();
+//        //can msg 수신
+//#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 雅뚯눛六� �굜遺얜굡
+//        // 엔진 on/off
+//        if (db_flag.CGW_Engine_Flag == 1)
+//        {
+//            db_flag.CGW_Engine_Flag = 0;
+//
+//            //if (U8DriverState == Parking || U8RSPAState==Parking_Complete || U8DriverState == InitDriverState ){
+//                vehicle_status.engine_state = db_msg.CGW_Engine.control_engine;
+//           // }
+//
+//        }
+//        //엔진 ON
+//        if (vehicle_status.engine_state == ENGINE_ON)
+//        {
+//            //driver mode
+//            if (db_flag.CGW_Move_Flag == 1)
+//            {
+//                db_flag.CGW_Move_Flag = 0;
+//                U8IsTrButton = db_msg.CGW_Move.control_transmission;
+//                D_steering = db_msg.CGW_Move.control_steering_angle;
+//
+//                if (db_msg.CGW_Move.control_accel == 1) // accel
+//                {
+//                    D_RefRPM += 100.0f;
+//
+//                    if (D_RefRPM >= 3000.0f)
+//                    {
+//                        D_RefRPM = 3000.0f;
+//                    }
+//                }
+//                if (db_msg.CGW_Move.control_brake == 1)  //decel
+//                {
+//                    D_RefRPM -= 200.0f;
+//
+//                    if (D_RefRPM < 0.0f)
+//                    {
+//                        D_RefRPM = 0.0f;
+//                    }
+//                }
+//                D_Ref_vel = (double)((D_RefRPM * circumference) / (60 * gear_ratio));
+//            }
+//
+//            //RSPA mode
+//            if (db_flag.CGW_Auto_Parking_Request_Flag==1)
+//            {
+//                db_flag.CGW_Auto_Parking_Request_Flag=0;
+//
+//                IsRSPAButton = 1;
+//            }
+//
+//            //waypoint msg
+//            if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
+//                //紐⑤뱺 wp 硫붿꽭吏�瑜� �닔�떊�뻽�쓣 �븣
+//                db_flag.CCU_Cordi_data1_Flag=0;
+//                db_flag.CCU_Cordi_data2_Flag=0;
+//
+//                //
+//                //if (db_msg.CCU_Cordi_data2.trust_value > 0.7){
+//                    InitCampoints();
+//                    cam_points[0][0] = db_msg.CCU_Cordi_data1.cordi_data_x1;
+//                    cam_points[0][1] = db_msg.CCU_Cordi_data1.cordi_data_y1;
+//                    cam_points[1][0] = db_msg.CCU_Cordi_data1.cordi_data_x2;
+//                    cam_points[1][1] = db_msg.CCU_Cordi_data1.cordi_data_y2;
+//
+//                    cam_points[2][0] = db_msg.CCU_Cordi_data2.cordi_data_x3;
+//                    cam_points[2][1] = db_msg.CCU_Cordi_data2.cordi_data_y3;
+//                    cam_points[3][0] = db_msg.CCU_Cordi_data2.cordi_data_x4;
+//                    cam_points[3][1] = db_msg.CCU_Cordi_data2.cordi_data_y4;
+//
+//                    int camera_mode = db_msg.CCU_Cordi_data2.using_camera;
+//
+//                    data_ready_flag = 1;
+//
+//                //}
+//                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //lane detection mode
+//                    if (data_ready_flag == 1){
+//                        InitWorldpoints();
+//
+//                        if(First_Set==1){    //
+//                            initStanley();
+//                            initIMU_error();
+//                            transform_points(H, cam_points, world_points);
+//                            if (transform_finished==1){
+//                                updateWaypoints(world_points);
+//                            }
+//                            First_Set=0;
+//                            if (U8RSPAState==Searching){
+//                                lanecheck_request=1;
+//                            }
+//                        }
+//                        else if (IsWPTrackingFinish==1){    //
+//                            initStanley();
+//                            initIMU_error();
+//                            transform_points(H, cam_points, world_points);
+//                            if (transform_finished==1){
+//                                updateWaypoints(world_points);
+//                            }
+//                        }
+//                        U8IsWp_R=camera_mode;
+//                    }
+//                }
+//            }
+//
+//
+//            //lane detecion_Coner
+//            if (db_flag.CCU_RightAngle_detect_Flag == 1)
+//            {
+//                db_flag.CCU_RightAngle_detect_Flag = 0;
+//                U8IsConerline = db_msg.CCU_RightAngle_detect.right_angle_lane_detected;
+//            }
+//        }
+//
+//        //engine off
+//        else if (vehicle_status.engine_state == ENGINE_OFF)
+//        {
+//            if (db_flag.CGW_Off_Request_Flag==1)
+//            {
+//                db_flag.CGW_Off_Request_Flag=0;
+//
+//                //
+//                if (db_msg.CGW_Off_Request.alert_request==1)
+//                {
+//                    //find my car_LED/Sound
+//                    if (U8PrkFinished==1)
+//                    {
+//
+//                    }
+//                }
+//
+//                //출차
+//                if (db_msg.CGW_Off_Request.auto_exit_request==1)
+//                {
+//                    vehicle_status.engine_state = ENGINE_ON;
+//
+//                    if (U8PrkFinished==1)
+//                    {
+//                        ExitCAR_request=1;
+//                    }
+//                }
+//            }
+//        }
+//#endif
     }
 
     return 0;
@@ -434,7 +435,9 @@ void AppTask100ms(void)
     now_euler = MadgwickAHRSupdateIMU(now_status);
     //print_encimu(&now_status, &now_euler);
 
-    update_VCU_inputs();
+    //update_VCU_inputs();
+    setServoAngle(gitstanleytest());
+    RPM_CMD1=stanleytref_vel;
 
 #if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) //
     if (vehicle_status.engine_state == ENGINE_ON)
