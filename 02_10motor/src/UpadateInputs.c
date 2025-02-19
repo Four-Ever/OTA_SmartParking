@@ -10,7 +10,7 @@ int conersteering = -50;
 //int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 void update_VCU_inputs(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
-    RefRPM= ((float)U8Ref_vel)*(60*gear_ratio*1000)/ (circumference);
+    RefRPM= ((float)U8Ref_vel)*(60*gear_ratio) / circumference;
     if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_SAFE_RCA ){
 
         switch (U8RCAState) {
