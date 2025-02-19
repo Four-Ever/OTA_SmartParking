@@ -80,6 +80,5 @@ void i2cStartCondition (void);
 void setDLPF(void);
 void checkoffset(void);
 int Touch(void);
-void initGPIO(void);
 
 #endif /* INC_IMU_DRIVER_H_ */
