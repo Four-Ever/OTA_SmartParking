@@ -27,6 +27,7 @@
 
 extern int IsWPTrackingFinish;
 extern int Update_finished;
+extern float refStanely_rpm;
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,6 +37,7 @@ extern "C" {
 float gitstanley(void);
 void initStanley(void);
 void updateWaypoints(float new_waypoints[][2]);
+float gitstanleycheck(void);
 
 #ifdef __cplusplus
 }
