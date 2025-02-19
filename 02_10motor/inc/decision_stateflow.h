@@ -126,7 +126,6 @@ extern double U8Ref_vel;
 extern double DInputVD;
 extern double DInputVR;
 extern int IsRSPAButton;
-extern int IsOTAFinished;
 extern int U8IsWp_R;
 extern int U8IsStopline;
 extern int U8IsPrkFinished;
