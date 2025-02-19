@@ -27,25 +27,34 @@
  */
 
 
-/*static const double waypoints[][2] = {
+static const double waypoints[][2] = {
     {0.0, -0.3},
     {0.2, -0.25},
     {0.4, -0.2},
     {0.6, -0.1},
     {0.8, 0},
     {0.9, 0.1}
-};*/
-
-static const double waypoints[][2] = {
-    {0.0, 0.0},
-    {0.1, 0.2},
-    {0.2, 0.4},
-    {0.3, 0.5},
-    {0.4, 0.6},
-    {0.5, 0.7}
 };
 
-static int num_waypoints = sizeof(waypoints) / sizeof(waypoints[0]);  //원래는 주석처리해야함
+static const double waypointsT[][2] = {
+//    {0.0, 0.0},
+//    {0.1, 0.2},
+//    {0.2, 0.4},
+//    {0.3, 0.5},
+//    {0.4, 0.6},
+//    {0.5, 0.7}
+
+        {0, 0},
+        {0, 0.15},
+        {0, 0.3},
+        {0, 0.45},
+        {0, 0.6}
+};
+
+
+
+
+static int num_waypoints = sizeof(waypointsT) / sizeof(waypointsT[0]);  //원래는 주석처리해야함
 
 /* 차량 상태 변수 */
 double x, y, theta;
@@ -57,7 +66,7 @@ static const double max_steer = 0.6981317;  // 최대 조향각 (40도)
 static const double waypoint_tolerance = 0.015; // Waypoint 도달 허용 오차
 static const double max_error = 7.0; // 경로 이탈 허용 범위
 static const double Kstanley = 0.6; // Stanley Controller 이득 값
-static const double PI = 3.14159265358979323846; // 🚀 M_PI 대신 사용
+static const double PI = 3.14159265358979323846; // M_PI 대신 사용
 extern float stanelytheta;
 /* 전역변수 정의 */
 //double waypoints[4][2];
@@ -93,15 +102,15 @@ float gitstanley()
 {
     if (Update_finished==1) {
     v=(double)U8Curr_vel/1000; //현재 차속 m/s
-    theta=stanelytheta;
+    theta=stanelytheta*(PI/180);
 
     /*종료 조건: 경로 이탈 또는 모든 Waypoint 도달 */
     if (exitg1) {
         return 0.0f;
     }
 
-    double target_x = waypoints[current_wp_idx][0];
-    double target_y = waypoints[current_wp_idx][1];
+    double target_x = waypointsT[current_wp_idx][0];
+    double target_y = waypointsT[current_wp_idx][1];
 
    /* 현재 목표 Waypoint와의 거리 계산 */
     double dx = target_x - x;
@@ -116,8 +125,8 @@ float gitstanley()
     /* Waypoint 도달 여부 확인 후 다음 Waypoint로 이동 */
     if (distance_to_wp < waypoint_tolerance && current_wp_idx + 1 < num_waypoints) {
         current_wp_idx++;
-        target_x = waypoints[current_wp_idx][0];
-        target_y = waypoints[current_wp_idx][1];
+        target_x = waypointsT[current_wp_idx][0];
+        target_y = waypointsT[current_wp_idx][1];
     }
 
     /* CTE(횡방향 오차) 계산 (embeddedStanley.m 방식 적용) */
@@ -162,8 +171,8 @@ float gitstanleytest()
 {
 
     v=(double)U8Curr_vel/1000; //현재 차속 m/s
-    theta=stanelytheta;
-    wrapToPi(&theta);
+    theta=stanelytheta*(PI/180);
+
 
     /*종료 조건: 경로 이탈 또는 모든 Waypoint 도달 */
     if (exitg1) {
