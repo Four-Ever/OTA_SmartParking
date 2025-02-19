@@ -104,7 +104,7 @@ typedef enum{
   Backward,  // 3
   Backward_Assist, // 4
   Forward_Assist, // 5
-  Parking_Complete // 6  
+  Parking_Complete // 6
 }RSPAState;
 
 typedef enum{

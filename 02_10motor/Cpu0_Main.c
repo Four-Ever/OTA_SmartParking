@@ -331,7 +331,9 @@ void make_can_message(void)
         CameraSwitchRequest = 0;
     }
     if (lanecheck_request != 0) {
-        //
+        db_msg.VCU_ParkingLane_Request.Lane_Request=lanecheck_request;
+        output_message(&db_msg.VCU_ParkingLane_Request, VCU_ParkingLane_Request_ID);
+        lanecheck_request=0;
     }
 }
 
