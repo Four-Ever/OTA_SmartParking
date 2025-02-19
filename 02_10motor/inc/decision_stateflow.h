@@ -145,6 +145,9 @@ extern int First_Set;
 extern int lanecheck_request;
 extern IsPrk IsPrk_LR;
 extern int U8IsConerline;
+
+extern int ToController_Prkstate;
+
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
 extern void decision_stateflow_step(void);

@@ -318,8 +318,8 @@ void make_can_message(void)
     update_message_vehicle_status(&db_msg.VCU_Vehicle_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Status, VCU_Vehicle_Status_ID);
 
-    update_message_parking_status(&db_msg.VCU_Parking_Status, &vehicle_status);
-    output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
+    //update_message_parking_status(&db_msg.VCU_Parking_Status, &vehicle_status);
+    //output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
 
     update_message_engine_status(&db_msg.VCU_Vehicle_Engine_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Engine_Status, VCU_Vehicle_Engine_Status_ID);
@@ -335,6 +335,10 @@ void make_can_message(void)
         output_message(&db_msg.VCU_ParkingLane_Request, VCU_ParkingLane_Request_ID);
         lanecheck_request=0;
     }
+    if (U8RSPAState != InitRSPAState){
+        db_msg.VCU_Parking_Status.parking_status = ToController_Prkstate;
+        output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
+    }
 }
 
 
@@ -346,10 +350,10 @@ void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleSt
 }
 
 
-void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src)
-{
-    dest->parking_status = src->parking_status;
-}
+//void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src)
+//{
+//    dest->parking_status = src->parking_status;
+//}
 
 
 void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src)
