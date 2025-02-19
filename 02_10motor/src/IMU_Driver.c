@@ -50,7 +50,7 @@ void initIMU ()
         initI2c();// I2C 珥덇린�솕
         delay(1000000);
 
-        initAK8963();// AK8963(吏��옄湲�)珥덇린�솕
+        //initAK8963();// AK8963(吏��옄湲�)珥덇린�솕
         uint8 whoAmI = WHOAMI_REG;
         i2cWrite(MPU9250_ADDRESS, &whoAmI, 1);
         delay(10000);
@@ -159,30 +159,30 @@ IMU imuRead ()
     // 吏��옄湲� setting
 
      //stop condition
-    i2cStopCondition();
-    delay(1000);
-    i2cStartCondition();
-
-     //吏��옄湲� 媛� update�릱�뒗吏� check
-    uint8 status_reg = AK_UPDATE_REG;       //drdy�솗�씤 reg
-    i2cWrite(AK8963_ADDRESS, &status_reg, 1);
-    delay(10);
-    i2cRead(AK8963_ADDRESS, &status1_val, 1);
-
-     //stop condition
-    i2cStopCondition();
-    delay(10);
-    i2cStartCondition();
-    // 吏��옄湲� �뜲�씠�꽣
-    i2cWrite(AK8963_ADDRESS, &magAddr, 1);  // AK8963 I2C 二쇱냼
-    delay(10);
-    i2cRead(AK8963_ADDRESS, magData, 6);
-
-    // ak read
-    uint8 status2_reg = 0x09;
-    i2cWrite(AK8963_ADDRESS, &status2_reg, 1);
-    delay(10);
-    i2cRead(AK8963_ADDRESS, &status2_val, 1);
+//    i2cStopCondition();
+//    delay(1000);
+//    i2cStartCondition();
+//
+//     //吏��옄湲� 媛� update�릱�뒗吏� check
+//    uint8 status_reg = AK_UPDATE_REG;       //drdy�솗�씤 reg
+//    i2cWrite(AK8963_ADDRESS, &status_reg, 1);
+//    delay(10);
+//    i2cRead(AK8963_ADDRESS, &status1_val, 1);
+//
+//     //stop condition
+//    i2cStopCondition();
+//    delay(10);
+//    i2cStartCondition();
+//    // 吏��옄湲� �뜲�씠�꽣
+//    i2cWrite(AK8963_ADDRESS, &magAddr, 1);  // AK8963 I2C 二쇱냼
+//    delay(10);
+//    i2cRead(AK8963_ADDRESS, magData, 6);
+//
+//    // ak read
+//    uint8 status2_reg = 0x09;
+//    i2cWrite(AK8963_ADDRESS, &status2_reg, 1);
+//    delay(10);
+//    i2cRead(AK8963_ADDRESS, &status2_val, 1);
 
     /// �떆�옉 -> �떒�쐞 泥댄겕 //////////////////////////////////////////////////////////////////////////////////////
     // 媛��냽�룄 �뜲�씠�꽣 蹂��솚
@@ -206,40 +206,40 @@ IMU imuRead ()
     gyro_z = ((float) gyro_z_raw) / GYRO_SEN - imu_offset.gyro_z;
 
     // 吏��옄湲� �뜲�씠�꽣 蹂��솚
-    mag_x_raw = (sint16) (magData[1] << 8) | magData[0];
-    mag_y_raw = (sint16) (magData[3] << 8) | magData[2];
-    mag_z_raw = (sint16) (magData[5] << 8) | magData[4];
-
-    //媛먮룄 議곗젙
-    mag_x = ((float) mag_x_raw)* asa_x * MAG_SEN;
-    mag_y = ((float) mag_y_raw)* asa_y * MAG_SEN;
-    mag_z = ((float) mag_z_raw)* asa_z * MAG_SEN;
-    if(mag_x>magx_max)
-        magx_max=mag_x;
-    if(mag_x<magx_min)
-        magx_min=mag_x;
-    if(mag_y>magy_max)
-        magy_max=mag_y;
-    if(mag_y<magy_min)
-        magy_min=mag_y;
-    if(mag_z>magz_max)
-        magz_max=mag_z;
-    if(mag_z<magz_min)
-        magz_min=mag_z;
-    /////.h�뙆�씪 784
-    x_offset = (magx_max + magx_min) / 2;//�븘�몢�씠�끂�옉 �떎瑜닿쾶 �궃 �쐞�뿉�꽌 �씠誘� 援ы븿
-    y_offset = (magy_max + magy_min) / 2;
-    z_offset = (magz_max + magz_min) / 2;
-    float scale_x_diff = magx_max - magx_min;
-    float scale_y_diff = magy_max - magy_min;
-    float scale_z_diff = magz_max - magz_min;
-    avg_rad = (scale_x_diff + scale_y_diff + scale_z_diff)/ 3.0f;
-    scale_x = avg_rad / scale_x_diff;
-    scale_y = avg_rad / scale_y_diff;
-    scale_z = avg_rad / scale_z_diff;
-
-    //heading -> 遺곸そ 0, �삤瑜몄そ�쑝濡� +
-    heading = atan2(mag_x, mag_y) *(180 / M_PI);
+//    mag_x_raw = (sint16) (magData[1] << 8) | magData[0];
+//    mag_y_raw = (sint16) (magData[3] << 8) | magData[2];
+//    mag_z_raw = (sint16) (magData[5] << 8) | magData[4];
+//
+//    //媛먮룄 議곗젙
+//    mag_x = ((float) mag_x_raw)* asa_x * MAG_SEN;
+//    mag_y = ((float) mag_y_raw)* asa_y * MAG_SEN;
+//    mag_z = ((float) mag_z_raw)* asa_z * MAG_SEN;
+//    if(mag_x>magx_max)
+//        magx_max=mag_x;
+//    if(mag_x<magx_min)
+//        magx_min=mag_x;
+//    if(mag_y>magy_max)
+//        magy_max=mag_y;
+//    if(mag_y<magy_min)
+//        magy_min=mag_y;
+//    if(mag_z>magz_max)
+//        magz_max=mag_z;
+//    if(mag_z<magz_min)
+//        magz_min=mag_z;
+//    /////.h�뙆�씪 784
+//    x_offset = (magx_max + magx_min) / 2;//�븘�몢�씠�끂�옉 �떎瑜닿쾶 �궃 �쐞�뿉�꽌 �씠誘� 援ы븿
+//    y_offset = (magy_max + magy_min) / 2;
+//    z_offset = (magz_max + magz_min) / 2;
+//    float scale_x_diff = magx_max - magx_min;
+//    float scale_y_diff = magy_max - magy_min;
+//    float scale_z_diff = magz_max - magz_min;
+//    avg_rad = (scale_x_diff + scale_y_diff + scale_z_diff)/ 3.0f;
+//    scale_x = avg_rad / scale_x_diff;
+//    scale_y = avg_rad / scale_y_diff;
+//    scale_z = avg_rad / scale_z_diff;
+//
+//    //heading -> 遺곸そ 0, �삤瑜몄そ�쑝濡� +
+//    heading = atan2(mag_x, mag_y) *(180 / M_PI);
     if (heading < 0)
         heading += 360;
     now_imu.accel_x = accel_x;
@@ -250,9 +250,9 @@ IMU imuRead ()
     now_imu.gyro_y = gyro_y* (M_PI / 180.0f);
     now_imu.gyro_z = gyro_z* (M_PI / 180.0f);
 
-    now_imu.mag_x = (mag_x - x_offset)*scale_x;
-    now_imu.mag_y = (mag_y - y_offset)*scale_y;
-    now_imu.mag_z = (mag_z - z_offset)*scale_z;
+//    now_imu.mag_x = (mag_x - x_offset)*scale_x;
+//    now_imu.mag_y = (mag_y - y_offset)*scale_y;
+//    now_imu.mag_z = (mag_z - z_offset)*scale_z;
     ///
     now_imu.accel_x = -now_imu.accel_x;
     //now_imu.accel_y = now_imu.accel_y;
