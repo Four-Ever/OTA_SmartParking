@@ -147,6 +147,7 @@ extern IsPrk IsPrk_LR;
 extern int U8IsConerline;
 
 extern int ToController_Prkstate;
+extern int ToController_Exitstate;
 
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
