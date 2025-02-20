@@ -42,10 +42,10 @@
 
 #include "decision_stateflow.h"
 
-#define tick_dis                0.219911486f                    //�뿏肄붾뜑 �븳 �떛�떦 嫄곕━ (mm)
-#define circumference           197.9203372f                    //�썝 �몮�젅(mm)
-#define gear_ratio              18.75f                          //湲곗뼱鍮�
-
+#define tick_dis                0.219911486f // dis per tick (mm)
+#define circumference           197.9203372f // (mm)
+#define gear_ratio              18.75f
+#define ENC_COUNT               10
 
 extern sint32 Enc_count;
 extern sint32 s32_motor_speed_rpm;

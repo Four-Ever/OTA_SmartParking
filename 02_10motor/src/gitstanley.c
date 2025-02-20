@@ -18,6 +18,7 @@
 #include <string.h>
 #include "ASCLIN_Shell_UART.h"
 #include "IfxStm.h"
+
 /* Function Definitions */
 /*
  * clear; clc; close all;
@@ -51,7 +52,7 @@ static const double waypoints[][2] = {
 //        {0.45, 0},
 //        {0.6, 0}
 
-//        //왼쪽 전진
+        //왼쪽 전진
         {0, 0},
         {0.15, 0.05},
         {0.3, 0.15},
@@ -91,15 +92,15 @@ double x, y, theta;
 double v;
 double v1;
 
+static uint32 prev_time =0;
+static uint32 now_time =0;
+
 double steering_output=0;
 int IsWPTrackingFinish = 0;
 int Update_finished=0;
 //int num_waypoints=4;
 float stanleytref_vel=0;
 
-//int flag = 0;
-static uint32 prev_time =0;
-static uint32 now_time =0;
 
 /* 초기화 함수 */
 void initStanley(void) {
@@ -250,21 +251,15 @@ float gitstanleytest()
     steering_angle = fmax(fmin(steering_angle, max_steer), -max_steer);
 
     /* 차량 위치 업데이트 */
+//    x += v1 * cos(theta) * 0.1;  // 100ms 간격 이동
+//    y += v1 * sin(theta) * 0.1;
     x += v1 * cos(theta) * deltaT;  // 100ms 간격 이동
     y += v1 * sin(theta) * deltaT;
 //    theta -= v1 / L * tan(steering_angle) * 0.1;
 //    wrapToPi(&theta);
-//    if (flag==0)
-//        stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
-//    if(current_wp_idx >= num_waypoints)
-//    {
-//        stanleytref_vel=0;
-//        flag=1;
-//    }
-//    if(flag==1)
-//        stanleytref_vel=0;
+
     /* 종료 조건을 만족하면 조향 입력 0 */
-    if(x >= 0.5){  //last
+    if(x >= 0.5){
         exitg1=1;
     }
     if (exitg1 || current_wp_idx >= num_waypoints ) {
@@ -276,10 +271,10 @@ float gitstanleytest()
     else { //종료조건이 아니면 계산한 steering 값 넣어주기
         steering_output = round(steering_angle * (180.0 / PI));  // DEGREE 변환
         if (steering_output >0){  //왼쪽
-            steering_output=steering_output+4;  //4
+            steering_output=steering_output+4;  //직진 4
         }
         else if (steering_output<0) {  //오른쪽
-            steering_output=steering_output-2;
+            steering_output=steering_output-2;  //직진 2
         }
         stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
     }
