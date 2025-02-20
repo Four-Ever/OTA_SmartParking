@@ -53,10 +53,11 @@ void Downloader::downloadFile(const std::string& serverIp, const std::string& po
 }
 
 void DownloadFirmware(void) {
-    std::string serverIp = "192.168.200.20"; 
+    std::cout<<"서버로부터 다운로드드"<<std::endl;
+    std::string serverIp = "192.168.203.197"; 
     std::string port = "5000";          
     //std::string canInterface = "can0";  
-    std::string downloadFolder = "/home/jetson/ros2_ws/Firmware";  // 다운로드 위치 변경됨
+    std::string downloadFolder = "/home/jetson/sj/auto-drivingpjt/jetson/Firmware";  // 다운로드 위치 변경됨
 
     std::string fileName = "PART_A.bin";
 
@@ -71,7 +72,7 @@ void DownloadFirmware(void) {
 }
 
 bool SendFirmware(void) {
-    std::string file_path = "/home/jetson/ros2_ws/Firmware/PART_A.bin";
+    std::string file_path = "/home/jetson/sj/auto-drivingpjt/jetson/Firmware/PART_A.bin";
     std::ifstream file(file_path, std::ios::binary);
     if (!file) {
         std::cerr << "Failed to open file: " << file_path << std::endl;
@@ -97,7 +98,7 @@ bool SendFirmware(void) {
     // frame.can_dlc = 8;
     // std::memcpy(frame.data, control_command, 8);
 
-    CGW_OTA_Control_ID
+    //CGW_OTA_Control_ID
     auto ota_control_msg = std::make_shared<CGW_OTA_Control_Msg>();
     std::memcpy(&(ota_control_msg->data_.data.ota_control), control_command, 8);
     
@@ -128,7 +129,7 @@ bool SendFirmware(void) {
         return false;
     }
 
-    std::cout << "File size sent" << std::endl;
+    std::cout << "File size sent"<< padded_size << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
     // Send file data (ID: 0x5D)
@@ -137,10 +138,10 @@ bool SendFirmware(void) {
     std::streamsize total_sent = 0;
     auto ota_file_data_msg = std::make_shared<CGW_OTA_File_Data_Msg>();
 
-
+    int previous_progress_ = 0;
     while (file.read(buffer, chunk_size) || file.gcount() > 0) {
-        frame.can_dlc = 8;  // Always send 8 bytes, pad with zeros if needed
-        std::memset(frame.data, 0, 8);  // Clear previous data
+        //frame.can_dlc = 8;  // Always send 8 bytes, pad with zeros if needed
+        std::memset(&(ota_file_data_msg->data_.data.ota_file_data), 0, 8);  // Clear previous data
         //std::memcpy(frame.data, buffer, file.gcount());
         std::memcpy(&(ota_file_data_msg->data_.data.ota_file_data), buffer, file.gcount());
 
@@ -160,7 +161,7 @@ bool SendFirmware(void) {
         //     float progress = (float)total_sent / padded_size * 100;
         //     std::cout << "\rProgress: " << progress << "%" << std::flush;
         // }
-        int previous_progress_ = 0;
+
         if (total_sent % 1024 == 0) {
             int current_progress = (int)((total_sent * 100) / padded_size);
             if (current_progress != previous_progress_) {  // 진행률이 변경되었을 때만 출력
@@ -174,31 +175,35 @@ bool SendFirmware(void) {
                 auto ws_session = CGW->ws_server_->current_session_;
                 if (ws_session) {
                     // 세션의 strand를 통해 메시지 전송
-                    auto ws_strand = ws_session->get_strand();  // strand getter 필요
-                    boost::asio::post(ws_strand, 
-                        [ws_session, msg]() {
-                            ws_session->send_message(msg);
-                        });
+                    // auto ws_strand = ws_session->get_strand();  // strand getter 필요
+                    // boost::asio::post(ws_strand, 
+                    //     [ws_session, wmsg]() {
+                    //         ws_session->send_message(wmsg);
+                    //     });
+                    ws_session->send(wmsg);
                 }
 
             }
         }
 
-        std::shared_ptr<IMessage> wmsg = std::make_shared<CGW_OTA_Update_State_Msg>();
-        auto request = std::static_pointer_cast<CGW_OTA_Update_State_Msg>(wmsg);
-        request->SetOtaUpdateProgress(100);
 
-        auto ws_session = CGW->ws_server_->current_session_;
-        if (ws_session) {
-            // 세션의 strand를 통해 메시지 전송
-            auto ws_strand = ws_session->get_strand();  // strand getter 필요
-            boost::asio::post(ws_strand, 
-                [ws_session, msg]() {
-                    ws_session->send_message(msg);
-                });
-        }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1));  // 1ms delay between frames
+    }
+
+    std::shared_ptr<IMessage> wmsg = std::make_shared<CGW_OTA_Update_State_Msg>();
+    auto request = std::static_pointer_cast<CGW_OTA_Update_State_Msg>(wmsg);
+    request->SetOtaUpdateProgress(100);
+
+    auto ws_session = CGW->ws_server_->current_session_;
+    if (ws_session) {
+        // 세션의 strand를 통해 메시지 전송
+        // auto ws_strand = ws_session->get_strand();  // strand getter 필요
+        // boost::asio::post(ws_strand, 
+        //     [ws_session, wmsg]() {
+        //         ws_session->send_message(wmsg);
+        //     });
+        ws_session->send(wmsg);
     }
 
     std::cout << "\nTotal sent: " << total_sent << " bytes" << std::endl;

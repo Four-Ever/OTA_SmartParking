@@ -5,6 +5,7 @@
 #include "lane_detection/OTADownloader.h"
 #include <iostream>
 #include <thread>
+#include <chrono>
 
 MyWebSocketSession::MyWebSocketSession(boost::asio::ip::tcp::socket&& socket, std::shared_ptr<CentralGateway> owner)
     : WebSocketSession(std::move(socket)), owner_(owner) {
@@ -27,6 +28,38 @@ void MyWebSocketSession::on_read(boost::beast::error_code ec, std::size_t bytes_
     {
         msg = std::make_shared<CGW_Engine_Msg>();
         memcpy(msg->SerializeCan(), (uint8_t*)(buffer_.data().data())+1, msg->GetSizeCan());
+        CGW->can_socket_->async_send(msg);
+
+        std::shared_ptr<CGW_Engine_Msg> cmsg = std::static_pointer_cast<CGW_Engine_Msg>(msg);
+
+        if (cmsg->data_.data.control_engine == 0) {
+            std::shared_ptr<IMessage> wmsg = std::make_shared<CGW_OTA_Update_Request_Msg>();
+            auto request = std::static_pointer_cast<CGW_OTA_Update_Request_Msg>(wmsg);
+            request->SetOtaUpdateRequest(1);
+            //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            std::cout<<"OTA 요청 전송"<<std::endl;
+            auto ws_session = CGW->ws_server_->current_session_;
+            if (ws_session) {
+                // 세션의 strand를 통해 메시지 전송
+                auto ws_strand = ws_session->get_strand();  // strand getter 필요
+                boost::asio::post(ws_strand, 
+                    [ws_session, wmsg]() {
+                        ws_session->send_message(wmsg);
+                    });
+            }
+
+            //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            if (ws_session) {
+                // 세션의 strand를 통해 메시지 전송
+                auto ws_strand = ws_session->get_strand();  // strand getter 필요
+                boost::asio::post(ws_strand, 
+                    [ws_session, wmsg]() {
+                        ws_session->send_message(wmsg);
+                    });
+            }
+        }
+
+
         break;
     }
     case CTRL_Move_ID:
@@ -45,32 +78,34 @@ void MyWebSocketSession::on_read(boost::beast::error_code ec, std::size_t bytes_
     {
         msg = std::make_shared<CGW_Off_Request_Msg>();
         memcpy(msg->SerializeCan(), (uint8_t*)(buffer_.data().data())+1, msg->GetSizeCan());
-        CGW->can_socket_->async_send(msg);
+        //CGW->can_socket_->async_send(msg);
 
-        //CGW_OTA_Update_Request
+        // //CGW_OTA_Update_Request
 
-        std::shared_ptr<IMessage> wmsg = std::make_shared<CGW_OTA_Update_Request_Msg>();
-        auto request = std::static_pointer_cast<CGW_OTA_Update_Request_Msg>(wmsg);
-        request->SetOtaUpdateRequest(1);
-        std::cout<<"OTA 요청 전송"<<std::endl;
-        auto ws_session = CGW->ws_server_->current_session_;
-        if (ws_session) {
-            // 세션의 strand를 통해 메시지 전송
-            auto ws_strand = ws_session->get_strand();  // strand getter 필요
-            boost::asio::post(ws_strand, 
-                [ws_session, wmsg]() {
-                    ws_session->send_message(wmsg);
-                });
-        }
+        // std::shared_ptr<IMessage> wmsg = std::make_shared<CGW_OTA_Update_Request_Msg>();
+        // auto request = std::static_pointer_cast<CGW_OTA_Update_Request_Msg>(wmsg);
+        // request->SetOtaUpdateRequest(1);
+        // std::cout<<"OTA 요청 전송"<<std::endl;
+        // auto ws_session = CGW->ws_server_->current_session_;
+        // if (ws_session) {
+        //     // 세션의 strand를 통해 메시지 전송
+        //     auto ws_strand = ws_session->get_strand();  // strand getter 필요
+        //     boost::asio::post(ws_strand, 
+        //         [ws_session, wmsg]() {
+        //             ws_session->send_message(wmsg);
+        //         });
+        // }
 
         break;
     }
     case CTRL_OTA_Update_Confirm_ID:
     {
+        std::cout<<"confirm"<<std::endl;
         msg = std::make_shared<CTRL_OTA_Update_Confirm_Msg>();
         memcpy(msg->SerializeHttp(), (uint8_t*)(buffer_.data().data()), msg->GetSizeHttp());
         std::shared_ptr<CTRL_OTA_Update_Confirm_Msg> wmsg = std::static_pointer_cast<CTRL_OTA_Update_Confirm_Msg>(msg);
         bool ans = wmsg->data_.data.ota_confirm;
+        std::cout<<"ans"<<ans<<std::endl;
         if (!ans) 
             break;
         //OTA 전송시작
@@ -87,7 +122,7 @@ void MyWebSocketSession::on_read(boost::beast::error_code ec, std::size_t bytes_
         return;
     }
     }
-    if (id != CTRL_OTA_Update_Confirm_ID && id != CTRL_Off_Request_ID) {
+    if (id != CTRL_OTA_Update_Confirm_ID && id != CTRL_Engine_ID) {
         CGW->can_socket_->async_send(msg);
     }
     buffer_.consume(buffer_.size());

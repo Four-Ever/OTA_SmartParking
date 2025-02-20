@@ -21,4 +21,4 @@ private:
 };
 
 void DownloadFirmware(void);
-void SendFirmware(void);
+bool SendFirmware(void);

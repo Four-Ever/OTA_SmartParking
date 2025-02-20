@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
             executor_ptr->add_node(vision_node);
 #ifndef DEBUG_CGW
             CGW->Start();
+            std::cout<<"펌웨어 다운로드"<<std::endl;
             std::thread download_thread(DownloadFirmware);
 
 #endif
@@ -67,8 +68,8 @@ int main(int argc, char *argv[])
             executor_ptr->spin();
 
 #ifndef DEBUG_CGW
-            if (downloadThread.joinable()) {
-                  downloadThread.join();
+            if (download_thread.joinable()) 
+                  download_thread.join();
 
 #endif
 
