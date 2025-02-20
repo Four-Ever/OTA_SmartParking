@@ -143,6 +143,7 @@ void setServoAngle(sint8 angle)
 {
     // �꽌蹂� 以묎컙 �쐞移� (unsigned int)(CLK_FREQ / 50 * 0.075);
 
+    angle = angle + 1;
     if (angle < -MAX_ANGLE)
     {
         angle = -MAX_ANGLE;
