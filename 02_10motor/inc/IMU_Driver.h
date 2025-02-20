@@ -39,20 +39,20 @@ typedef struct {
 /***********************************************************************/
 #define MPU9250_ADDRESS  0x68  //MPU I2C Slave Addr
 #define AK8963_ADDRESS 0x0C    //AK8963 Slave Addr
-#define ACCEL_CONFIG_REG 0x1C  // 가속도 init Reg
-#define GYRO_CONFIG_REG  0x1B  // 각속도 init Reg
-#define MAG_CONFIG_REG   //지자기 Reg
+#define ACCEL_CONFIG_REG 0x1C  // 媛��냽�룄 init Reg
+#define GYRO_CONFIG_REG  0x1B  // 媛곸냽�룄 init Reg
+#define MAG_CONFIG_REG   //吏��옄湲� Reg
 
-#define ACCEL_REG 0x3B    //엑셀 시작 reg주소
-#define GYRO_REG  0x43    //자이로 시작 reg주소
-#define MAG_REG  0x03  // AK8963 mag 시작 reg주소
+#define ACCEL_REG 0x3B    //�뿊�� �떆�옉 reg二쇱냼
+#define GYRO_REG  0x43    //�옄�씠濡� �떆�옉 reg二쇱냼
+#define MAG_REG  0x03  // AK8963 mag �떆�옉 reg二쇱냼
 #define WHOAMI_REG 0x75
 
 
 
-#define ACCEL_SEN 16384.0f //2g -> Accel 감도 조정
-#define GYRO_SEN 131.072f //250도/s  -> Gyro 감도 조정
-#define MAG_SEN 5.997558f //uT/LSB -> 지자기 감도 조정10곱해서 mG단위
+#define ACCEL_SEN 16384.0f //2g -> Accel 媛먮룄 議곗젙
+#define GYRO_SEN 131.072f //250�룄/s  -> Gyro 媛먮룄 議곗젙
+#define MAG_SEN 5.997558f //uT/LSB -> 吏��옄湲� 媛먮룄 議곗젙10怨깊빐�꽌 mG�떒�쐞
 
 #define SCL_PIN  IfxI2c0_SCL_P13_1_INOUT
 #define SDA_PIN  IfxI2c0_SDA_P13_2_INOUT
@@ -80,6 +80,6 @@ void i2cStartCondition (void);
 void setDLPF(void);
 void checkoffset(void);
 int Touch(void);
-void initGPIO(void);
+//void initGPIO(void);
 
 #endif /* INC_IMU_DRIVER_H_ */
