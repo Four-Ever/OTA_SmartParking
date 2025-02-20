@@ -17,7 +17,7 @@
 #include <math.h>
 #include <string.h>
 #include "ASCLIN_Shell_UART.h"
-
+#include "IfxStm.h"
 /* Function Definitions */
 /*
  * clear; clc; close all;
@@ -98,7 +98,8 @@ int Update_finished=0;
 float stanleytref_vel=0;
 
 //int flag = 0;
-
+static uint32 prev_time =0;
+static uint32 now_time =0;
 
 /* 초기화 함수 */
 void initStanley(void) {
@@ -189,6 +190,18 @@ float gitstanley()
 
 float gitstanleytest()
 {
+    float deltaT =0;
+    prev_time=now_time;
+    now_time=MODULE_STM0.TIM0.U;
+
+    if(prev_time>now_time||prev_time==0)
+        deltaT=0.1;
+    else
+        {
+            deltaT=(float)(now_time-prev_time)/ (IfxStm_getFrequency(&MODULE_STM0) / 1000000);
+            deltaT=deltaT*0.001*0.001;///s단위
+        }
+
 
     v1=(double)U8Curr_vel/1000; //현재 차속 m/s
     if(v1 >= 0.1){
@@ -237,8 +250,8 @@ float gitstanleytest()
     steering_angle = fmax(fmin(steering_angle, max_steer), -max_steer);
 
     /* 차량 위치 업데이트 */
-    x += v1 * cos(theta) * 0.1;  // 100ms 간격 이동
-    y += v1 * sin(theta) * 0.1;
+    x += v1 * cos(theta) * deltaT;  // 100ms 간격 이동
+    y += v1 * sin(theta) * deltaT;
 //    theta -= v1 / L * tan(steering_angle) * 0.1;
 //    wrapToPi(&theta);
 //    if (flag==0)
