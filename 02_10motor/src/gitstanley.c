@@ -36,7 +36,7 @@ static const double waypoints[][2] = {
     {0.9, 0.1}
 };
 
-static const double waypointsT[][2] = {
+ const double waypointsT[][2] = {
 //    {0.0, 0.0},
 //    {0.1, 0.2},
 //    {0.2, 0.4},
@@ -44,7 +44,7 @@ static const double waypointsT[][2] = {
 //    {0.4, 0.6},
 //    {0.5, 0.7}
 
-//        //전진
+//        //전진 ok
 //        {0, 0},
 //        {0.15, 0},
 //        {0.3, 0},
@@ -52,18 +52,18 @@ static const double waypointsT[][2] = {
 //        {0.6, 0}
 
 //        //왼쪽 전진
-//        {0, 0},
-//        {0.15, 0.05},
-//        {0.3, 0.15},
-//        {0.4, 0.2},
-//        {0.5, 0.22}
+        {0, 0},
+        {0.15, 0.05},
+        {0.3, 0.15},
+        {0.4, 0.2},
+        {0.5, 0.22}
 
         //오른쪽 전진
-        {0, 0},
-        {0.15, -0.05},
-        {0.3, -0.15},
-        {0.4, -0.2},
-        {0.5, -0.22}
+//        {0, 0},
+//        {0.15, -0.05},
+//        {0.3, -0.15},
+//        {0.4, -0.2},
+//        {0.5, -0.22}
 };
 
 
@@ -73,12 +73,14 @@ static int num_waypoints = sizeof(waypointsT) / sizeof(waypointsT[0]);  //원래
 
 /* 차량 상태 변수 */
 double x, y, theta;
-static int current_wp_idx;
+//testing
+int current_wp_idx;
+//
 static bool isReversing;
 static bool exitg1;
 static const double L = 0.135;  // 차량 축거
 static const double max_steer = 0.6981317;  // 최대 조향각 (40도)
-static const double waypoint_tolerance = 0.015; // Waypoint 도달 허용 오차 0.015
+static const double waypoint_tolerance = 0.03; // Waypoint 도달 허용 오차 0.015
 static const double max_error = 1.0; // 경로 이탈 허용 범위
 static const double Kstanley = 0.6; // Stanley Controller 이득 값
 static const double PI = 3.14159265358979323846; // M_PI 대신 사용
@@ -162,8 +164,8 @@ float gitstanley()
     /* 차량 위치 업데이트 */
     x += v * cos(theta) * 0.01;  // 100ms 간격 이동
     y += v * sin(theta) * 0.01;
-    theta -= v / L * tan(steering_angle) * 0.01;
-    wrapToPi(&theta);
+    //theta -= v / L * tan(steering_angle) * 0.01;
+    //wrapToPi(&theta);
 
     /* 종료 조건을 만족하면 조향 입력 0 */
     if (exitg1 || current_wp_idx >= num_waypoints) {
@@ -189,6 +191,9 @@ float gitstanleytest()
 {
 
     v1=(double)U8Curr_vel/1000; //현재 차속 m/s
+    if(v1 >= 0.1){
+        v1=0.1;
+    }
     theta=-stanelytheta*(PI/180);
 
 
@@ -234,8 +239,8 @@ float gitstanleytest()
     /* 차량 위치 업데이트 */
     x += v1 * cos(theta) * 0.1;  // 100ms 간격 이동
     y += v1 * sin(theta) * 0.1;
-    theta -= v1 / L * tan(steering_angle) * 0.1;
-    wrapToPi(&theta);
+//    theta -= v1 / L * tan(steering_angle) * 0.1;
+//    wrapToPi(&theta);
 //    if (flag==0)
 //        stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
 //    if(current_wp_idx >= num_waypoints)
@@ -246,7 +251,10 @@ float gitstanleytest()
 //    if(flag==1)
 //        stanleytref_vel=0;
     /* 종료 조건을 만족하면 조향 입력 0 */
-    if (exitg1 || current_wp_idx >= num_waypoints) {
+    if(x >= 0.5){  //last
+        exitg1=1;
+    }
+    if (exitg1 || current_wp_idx >= num_waypoints ) {
         steering_output = 0;
         IsWPTrackingFinish = 1;
         stanleytref_vel=0;
@@ -254,10 +262,10 @@ float gitstanleytest()
     }
     else { //종료조건이 아니면 계산한 steering 값 넣어주기
         steering_output = round(steering_angle * (180.0 / PI));  // DEGREE 변환
-        if (steering_output >0){
-            steering_output=steering_output+2;
+        if (steering_output >0){  //왼쪽
+            steering_output=steering_output+4;  //4
         }
-        else if (steering_output<0) {
+        else if (steering_output<0) {  //오른쪽
             steering_output=steering_output-2;
         }
         stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;

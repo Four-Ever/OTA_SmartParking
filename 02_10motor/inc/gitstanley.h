@@ -28,6 +28,10 @@
 extern int IsWPTrackingFinish;
 extern int Update_finished;
 extern float stanleytref_vel;
+//test
+extern double x, y;
+extern const double waypointsT[][2];
+extern int current_wp_idx;
 
 #ifdef __cplusplus
 extern "C" {
