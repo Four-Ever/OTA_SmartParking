@@ -135,7 +135,7 @@ int core0_main(void)
 
     initServo(); // D6
     initIMU();
-    initGPIO();
+    //initGPIO();
 
 
     //ToF user manual !
@@ -148,6 +148,7 @@ int core0_main(void)
 
     alarm_request=1;
     initStanley();
+    waitTime(300000000);
 
 #ifdef motor_Test
     // motor_enable = 1;
@@ -165,9 +166,9 @@ int core0_main(void)
     {
         AppScheduling();
 //        //stopstatus=Touch();
-//        //can msg 수신
-//#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 雅뚯눛六� �굜遺얜굡
-//        // 엔진 on/off
+//        //can msg �닔�떊
+//#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // �썒�슣�닗筌묕옙 占쎄턀�겫�뼔援�
+//        // �뿏吏� on/off
 //        if (db_flag.CGW_Engine_Flag == 1)
 //        {
 //            db_flag.CGW_Engine_Flag = 0;
@@ -177,7 +178,7 @@ int core0_main(void)
 //           // }
 //
 //        }
-//        //엔진 ON
+//        //�뿏吏� ON
 //        if (vehicle_status.engine_state == ENGINE_ON)
 //        {
 //            //driver mode
@@ -218,7 +219,7 @@ int core0_main(void)
 //
 //            //waypoint msg
 //            if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-//                //紐⑤뱺 wp 硫붿꽭吏�瑜� �닔�떊�뻽�쓣 �븣
+//                //筌뤴뫀諭� wp 筌롫뗄苑�筌욑옙�몴占� 占쎈땾占쎈뻿占쎈뻥占쎌뱽 占쎈르
 //                db_flag.CCU_Cordi_data1_Flag=0;
 //                db_flag.CCU_Cordi_data2_Flag=0;
 //
@@ -295,7 +296,7 @@ int core0_main(void)
 //                    }
 //                }
 //
-//                //출차
+//                //異쒖감
 //                if (db_msg.CGW_Off_Request.auto_exit_request==1)
 //                {
 //                    vehicle_status.engine_state = ENGINE_ON;
