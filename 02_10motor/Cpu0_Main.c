@@ -27,7 +27,6 @@
 #include "Obstacle_Detection.h"
 #include "LED_Buzzer.h"
 
-
 //#include "Ifx_IntPrioDef.h"
 /*********************************************************************************************************************/
 
@@ -56,7 +55,6 @@ typedef struct
     uint32 u32nuCnt5000ms;
 } Taskcnt;
 
-
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -67,20 +65,20 @@ Taskcnt stTestCnt;
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
-void make_can_message(void);
-void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src);
-void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src);
-void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src);
-void initIMU_error(void);
+void make_can_message (void);
+void update_message_vehicle_status (VCU_Vehicle_Status_Msg *dest, const VehicleStatus *src);
+void update_message_parking_status (VCU_Parking_Status_Msg *dest, const VehicleStatus *src);
+void update_message_engine_status (VCU_Vehicle_Engine_Status_Msg *dest, const VehicleStatus *src);
+void initIMU_error (void);
 
-void AppScheduling(void);
-void AppTask1ms(void);
-void AppTask10ms(void);
-void AppTask50ms(void);
-void AppTask100ms(void);
-void AppTask500ms(void);
-void AppTask1000ms(void);
-void AppTask5000ms(void);
+void AppScheduling (void);
+void AppTask1ms (void);
+void AppTask10ms (void);
+void AppTask50ms (void);
+void AppTask100ms (void);
+void AppTask500ms (void);
+void AppTask1000ms (void);
+void AppTask5000ms (void);
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -92,15 +90,14 @@ void AppTask5000ms(void);
 //    IfxGpt12_IncrEnc_onZeroIrq(&gpt12Config);
 //}
 
-
 float g_angle;
-IMU now_status = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-Euler now_euler = { 0, 0, 0 };
+IMU now_status = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+Euler now_euler = {0, 0, 0};
 volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;  // quaternion of sensor frame relative to auxiliary frame
 float stanelytheta = 0.0f;
 int stopstatus = 0;
 
-int core0_main(void)
+int core0_main (void)
 {
     // Initialize system
     IfxCpu_enableInterrupts();
@@ -117,10 +114,8 @@ int core0_main(void)
 
     /* Initialize a time variable */
 //    Ifx_TickTime ticksFor10ms = IfxStm_getTicksFromMilliseconds(BSP_DEFAULT_TIMER, WAIT_TIME);
-
     // Install interrupt handlers
 //    IfxCpu_Irq_installInterruptHandler(&ISR_IncrIncZero, ISR_PRIORITY_INCRENC_ZERO);
-
     // Initialize peripherals
     initIncrEnc();
 
@@ -137,16 +132,13 @@ int core0_main(void)
     initIMU();
     //initGPIO();
 
-
     //ToF user manual !
     Init_ToF(); // init
     initUltrasonic();
 
     init_LED_Buzzer();
 
-
-
-    alarm_request=1;
+    alarm_request = 1;
     initStanley();
     waitTime(300000000);
 
@@ -162,7 +154,7 @@ int core0_main(void)
     init_move_distance_control(1000.0f, 500.0f); // 1000mm, 1000rpm
 #endif
 
-    while(1)
+    while (1)
     {
         AppScheduling();
 //        //stopstatus=Touch();
@@ -314,8 +306,7 @@ int core0_main(void)
     return 0;
 }
 
-
-void make_can_message(void)
+void make_can_message (void)
 {
     update_message_vehicle_status(&db_msg.VCU_Vehicle_Status, &vehicle_status);
     output_message(&db_msg.VCU_Vehicle_Status, VCU_Vehicle_Status_ID);
@@ -332,12 +323,14 @@ void make_can_message(void)
         output_message(&db_msg.VCU_Camera, VCU_Camera_ID);
         CameraSwitchRequest = 0;
     }
-    if (lanecheck_request != 0) {
-        db_msg.VCU_ParkingLane_Request.Lane_Request=lanecheck_request;
+    if (lanecheck_request != 0)
+    {
+        db_msg.VCU_ParkingLane_Request.Lane_Request = lanecheck_request;
         output_message(&db_msg.VCU_ParkingLane_Request, VCU_ParkingLane_Request_ID);
-        lanecheck_request=0;
+        lanecheck_request = 0;
     }
-    if (U8RSPAState != InitRSPAState){
+    if (U8RSPAState != InitRSPAState)
+    {
         db_msg.VCU_Parking_Status.parking_status = ToController_Prkstate;
         output_message(&db_msg.VCU_Parking_Status, VCU_Parking_Status_ID);
     }
@@ -347,27 +340,25 @@ void make_can_message(void)
 
 }
 
-
-void update_message_vehicle_status(VCU_Vehicle_Status_Msg* dest, const VehicleStatus* src)
+void update_message_vehicle_status (VCU_Vehicle_Status_Msg *dest, const VehicleStatus *src)
 {
     dest->vehicle_velocity = src->u8_velocity;
     dest->vehicle_steering_angle = src->steering_angle;
     dest->vehicle_transmission = src->transmission;
 }
 
-
 //void update_message_parking_status(VCU_Parking_Status_Msg* dest, const VehicleStatus* src)
 //{
 //    dest->parking_status = src->parking_status;
 //}
 
-
-void update_message_engine_status(VCU_Vehicle_Engine_Status_Msg* dest, const VehicleStatus* src)
+void update_message_engine_status (VCU_Vehicle_Engine_Status_Msg *dest, const VehicleStatus *src)
 {
     dest->vehicle_engine_status = src->engine_state;
 }
 
-void initIMU_error(void){
+void initIMU_error (void)
+{
 
     {
         q0 = 1;
@@ -378,15 +369,26 @@ void initIMU_error(void){
     }
 }
 
-void AppTask1ms(void)
+void AppTask1ms (void)
 {
     stTestCnt.u32nuCnt1ms++;
 }
 
-
-void AppTask10ms(void)
+void AppTask10ms (void)
 {
     stTestCnt.u32nuCnt10ms++;
+    now_status = imuRead();
+    stanelytheta = now_euler.yaw;
+    /*if (stopstatus == 1)
+     {
+     q0 = 1;
+     q1 = 0;
+     q2 = 0;
+     q3 = 0;
+     now_euler.yaw = 0;
+     }*/
+    now_euler = MadgwickAHRSupdateIMU(now_status);
+
 
 #ifdef motor_Test
     setServoAngle(-50.0f);
@@ -413,32 +415,28 @@ void AppTask10ms(void)
 #endif
 }
 
-void AppTask50ms(void){
+void AppTask50ms (void)
+{
     stTestCnt.u32nuCnt50ms++;
     Obstacle_get_All_Distance();
     decision_stateflow_step();
 }
 
-void AppTask100ms(void)
+void AppTask100ms (void)
 {
     stTestCnt.u32nuCnt100ms++;
 
-    now_status = imuRead();
-    stanelytheta = now_euler.yaw;
-    /*if (stopstatus == 1)
-    {
-        q0 = 1;
-        q1 = 0;
-        q2 = 0;
-        q3 = 0;
-        now_euler.yaw = 0;
-    }*/
-    now_euler = MadgwickAHRSupdateIMU(now_status);
-    //print_encimu(&now_status, &now_euler);
-
     //update_VCU_inputs();
     setServoAngle(gitstanleytest());
-    RPM_CMD1=stanleytref_vel;
+    RPM_CMD1 = stanleytref_vel;
+    now_status.accel_x = x;
+    now_status.accel_y = y;
+    now_status.accel_z = (float)current_wp_idx;
+    now_status.gyro_x = waypointsT[current_wp_idx][0];
+    now_status.gyro_y = waypointsT[current_wp_idx][1];
+
+    print_encimu(&now_status, &now_euler);
+
 
 #if (!defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test)) //
     if (vehicle_status.engine_state == ENGINE_ON)
@@ -449,24 +447,25 @@ void AppTask100ms(void)
 #endif
 }
 
-void AppTask500ms(void){
+void AppTask500ms (void)
+{
     stTestCnt.u32nuCnt500ms++;
 
     FindCar_Plz();
     cnt_alarm++;
 }
 
-void AppTask1000ms(void)
+void AppTask1000ms (void)
 {
     stTestCnt.u32nuCnt1000ms++;
 }
 
-void AppTask5000ms(void)
+void AppTask5000ms (void)
 {
     stTestCnt.u32nuCnt5000ms++;
 }
 
-void AppScheduling(void)
+void AppScheduling (void)
 {
     if (stSchedulingInfo.u8nuScheduling1msFlag == 1u)
     {
