@@ -11,6 +11,7 @@ public:
     virtual bool Init(const std::string& interface_name);
     void async_send(std::shared_ptr<class IMessage>& message);
     void start_receive();
+    bool send(std::shared_ptr<class IMessage> message);
 
 protected:
     virtual void on_receive_can(const can_frame& frame) = 0;

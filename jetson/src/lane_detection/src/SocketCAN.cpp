@@ -68,6 +68,40 @@ void SocketCAN::start_receive() {
     async_receive();
 }
 
+bool SocketCAN::send(std::shared_ptr<class IMessage> message) {
+        // CAN 프레임 초기화
+        struct can_frame frame = { };
+    
+        // 메시지 ID와 크기 설정
+        frame.can_id = message->GetMsgId();
+        frame.can_dlc = message->GetSizeCan();
+        
+        // 데이터 복사
+        memcpy(frame.data, message->SerializeCan(), message->GetSizeCan());
+        
+        try {
+            boost::system::error_code error;
+            
+            // 동기식 전송 수행
+            size_t bytes_transferred = socket_.send(
+                boost::asio::buffer(&frame, sizeof(frame)),
+                0,  // flags
+                error
+            );
+    
+            // 에러 체크
+            if (error) {
+                return false;
+            }
+    
+            // 전송된 바이트 수 확인
+            return bytes_transferred == sizeof(frame);
+        }
+        catch (const std::exception& e) {
+            return false;
+        }
+}
+
 void SocketCAN::async_receive() {
     auto frame = std::make_shared<can_frame>();
     post(socket_.get_executor(), [this, frame]() {

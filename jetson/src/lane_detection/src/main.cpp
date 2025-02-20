@@ -5,6 +5,9 @@
 #include "lane_detection/DevOption.hpp"
 #include <iostream>
 #include <signal.h>
+#include <string>
+#include <thread>
+#include "lane_detection/OTADownloader.h"
 
 std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> executor_ptr = nullptr;
 
@@ -54,12 +57,20 @@ int main(int argc, char *argv[])
             executor_ptr->add_node(vision_node);
 #ifndef DEBUG_CGW
             CGW->Start();
+            std::thread download_thread(DownloadFirmware);
+
 #endif
             // std::cout << "Enter눌러 종료" << std::endl;
             // std::cin.get();
 
             // 실행
             executor_ptr->spin();
+
+#ifndef DEBUG_CGW
+            if (downloadThread.joinable()) {
+                  downloadThread.join();
+
+#endif
 
 // end
 #ifndef DEBUG_CGW
