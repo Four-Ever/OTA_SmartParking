@@ -101,9 +101,6 @@ int Update_finished=0;
 //int num_waypoints=4;
 float stanleytref_vel=0;
 
-//int flag = 0;
-static uint32 prev_time =0;
-static uint32 now_time =0;
 
 /* 초기화 함수 */
 void initStanley(void) {
