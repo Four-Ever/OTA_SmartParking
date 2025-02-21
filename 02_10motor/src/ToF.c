@@ -126,7 +126,12 @@ void ToF_get_All_Distance(){
     TOF_distance = buf_ToF[8] | (buf_ToF[9] << 8) | (buf_ToF[10] << 16);
 
 
-    if( buf_ToF[3] == TOF0)
+    if( buf_ToF[3] == TOF1)
+    {
+        Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
+        Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+    }
+    else if( buf_ToF[3] == TOF0)
     {
         Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
         Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
@@ -151,6 +156,11 @@ void ToF_get_All_Distance(){
     {
         Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
         Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+    }
+    else if( buf_ToF[3] == TOF0)
+    {
+        Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
+        Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
     }
 
     return;
