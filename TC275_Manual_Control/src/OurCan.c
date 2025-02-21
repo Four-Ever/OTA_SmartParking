@@ -31,6 +31,7 @@
 #include "Platform_Types.h"
 #include <string.h>
 #include "ASCLIN_Shell_UART.h"
+#include "OTA.h"
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -57,7 +58,9 @@ IfxMultican_Can_MsgObj canMsgObjRx;
 
 DBMessages db_msg;
 DBFlag db_flag;
-
+uint32 temp_data_size = 0;
+uint8 write_flag = 0;
+uint8 write_cnt = 0;
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -73,6 +76,8 @@ void RX_Int0Handler(void)
     IfxCpu_enableInterrupts();
 
     IfxMultican_Message readmsg;
+    readmsg.data[0] = 0xffffffff;
+    readmsg.data[1] = 0xffffffff;
     //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// 수신 대기
     if (IfxMultican_Can_MsgObj_readMessage(&canMsgObjRx, &readmsg) == IfxMultican_Status_newData)
     {
@@ -83,25 +88,34 @@ void RX_Int0Handler(void)
                 uint32 serialized = 0;
                 memcpy(&serialized,&readmsg.data[0],CGW_OTA_File_Size_Size);
                 Deserialize_CGW_OTA_File_Size_Msg(&serialized,&db_msg.CGW_OTA_File_Size);
-                db_flag.CGW_OTA_File_Size_Flag = 1;
+                fwUpdateSize = db_msg.CGW_OTA_File_Size.ota_file_size;
+                temp_data_size = fwUpdateSize;
+                //myprintf("%u\n\r",fwUpdateSize);
                 break;
             }
             case CGW_OTA_File_Data_ID:
             {
-                uint64 serialized = 0;
-                memcpy(&serialized,&readmsg.data[0],CGW_OTA_File_Data_Size);
-                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_File_Data_Size-4);
-                Deserialize_CGW_OTA_File_Data_Msg(&serialized,&db_msg.CGW_OTA_File_Data);
-                db_flag.CGW_OTA_File_Data_Flag = 1;
+
+                if (!MessageBufferIsFull())
+                {
+                    messageBuffer[messageBufferHead] = readmsg;
+                    messageBufferHead = (messageBufferHead + 1) % MESSAGE_BUFFER_SIZE;
+                    write_cnt++;
+                    temp_data_size -= 8;
+                    if (write_cnt >= 4)
+                        write_flag = 1;
+                    else
+                        write_flag = 0;
+//                    if (write_cnt == 4)
+//                        write_cnt = 0;
+
+
+                }
                 break;
             }
             case CGW_OTA_Control_ID:
             {
-                uint64 serialized = 0;
-                memcpy(&serialized,&readmsg.data[0],CGW_OTA_Control_Size);
-                //memcpy((uint32*)&serialized+1,&readmsg.data[1],CGW_OTA_Control_Size-4);
-                Deserialize_CGW_OTA_Control_Msg(&serialized,&db_msg.CGW_OTA_Control);
-                db_flag.CGW_OTA_Control_Flag = 1;
+                fwUpdateRequested = 1;
                 break;
             }
             case CCU_Cordi_data1_ID:

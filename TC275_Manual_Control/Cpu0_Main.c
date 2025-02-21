@@ -15,7 +15,9 @@
 #include "Ifx_DateTime.h"
 #include "SysSe/Bsp/Bsp.h"
 #include "STM_Interrupt.h"
+#include "Flash_Programming.h"
 #include "OurCan.h"
+#include "OTA.h"
 
 #include "Driver_Stm.h"
 #include "ASCLIN_Shell_UART.h"
@@ -122,6 +124,11 @@ int core0_main(void)
     while(1)
     {
         AppScheduling();
+
+        if (temp_data_size == 0 && write_cnt != 0)
+            write_flag = 1;
+
+        FirmwareUpdateStateMachine();
 
         //can 메세지 받는 곳
 #if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 주행 코드

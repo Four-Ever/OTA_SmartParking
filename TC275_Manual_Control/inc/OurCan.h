@@ -110,6 +110,10 @@ typedef struct
 } DBFlag;
 
 extern DBFlag db_flag;
+extern uint32 temp_data_size;
+extern uint8 write_flag;
+
+extern uint8 write_cnt;
 
 // Transmission 열거형 (대문자로 변경)
 typedef enum
