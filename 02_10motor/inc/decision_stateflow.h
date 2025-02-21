@@ -147,6 +147,7 @@ extern RSPAState U8RSPAState;
 extern int U8Driver;
 extern int U8RSPA;
 extern int U8Engine;
+extern ConerState U8ConerState;
 extern CAState U8FCAState;
 extern CAState U8RCAState;
 extern sint8 DSteeringinput;
@@ -162,6 +163,7 @@ extern int U8IsConerline;
 extern int ToController_Prkstate;
 extern int ToController_Exitstate;
 extern int md_flag;
+extern int conering_dir_flag;
 
 
 /* Model entry point functions */
