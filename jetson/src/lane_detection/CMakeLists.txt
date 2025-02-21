@@ -60,6 +60,7 @@ add_executable(lane_detection_node
   src/Protocol.cpp 
   src/SocketCAN.cpp 
   src/WebSocketServer.cpp
+  src/OTADownloader.cpp
 )
 
 # 의존성 연결

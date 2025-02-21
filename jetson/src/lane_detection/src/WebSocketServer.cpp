@@ -92,6 +92,18 @@ void WebSocketSession::send_message(const std::shared_ptr<IMessage> message) {
     do_write();
 }
 
+bool WebSocketSession::send(const std::shared_ptr<class IMessage> message) {
+    try {
+        //std::string msg_str = message->Serialize();
+        ws_.write(boost::asio::buffer(message->SerializeHttp(), message->GetSizeHttp()));
+        return true;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "WebSocket send error: " << e.what() << std::endl;
+        return false;
+    }
+}
+
 WebSocketServer::WebSocketServer(net::io_context& ioc, unsigned short port)
     : ioc_(ioc),
       acceptor_(ioc, {net::ip::make_address("0.0.0.0"), port}),

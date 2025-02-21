@@ -15,7 +15,7 @@ public:
 
     virtual void start();
     void send_message(const std::shared_ptr<class IMessage> message);
-
+    bool send(const std::shared_ptr<class IMessage> message);
     boost::asio::strand<boost::asio::executor>& get_strand() { 
         return strand_; 
     }
