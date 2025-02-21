@@ -34,7 +34,10 @@
 #include "IfxPort.h"
 #include "Ifx_Types.h"
 #include "IfxGtm_Tom_Pwm.h"
+#include "IfxGtm_Atom_Pwm.h"
 
+#define LED     &MODULE_P00,2   /* Port pin for the LED     */
+#define BUZZER2  &MODULE_P00,1
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -59,7 +62,9 @@ extern int period_50ms;
 void FindCar_Plz(void);
 void set_Buzzer_period(int);
 void LED_Buzzer_Blink(void);
-
+void initBuzzerGtmATomPwm(void);
+void init_LED_Buzzer(void);
+void setBuzzerPeriod(int);
 /*********************************************************************************************************************/
 
 
