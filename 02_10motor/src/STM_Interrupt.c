@@ -95,28 +95,48 @@ IFX_INTERRUPT(isrSTM, 0, ISR_PRIORITY_STM);
 
 //void pid_reset(PIDREG3 *v);
 
+double getFilteredVel (double Enc_Value)
+{
+    static double E_buffer[ENC_COUNT] = {0};
+    static int E_index = 0;
+
+    E_buffer[E_index] = Enc_Value;
+    E_index = (E_index + 1) % ENC_COUNT;
+
+    double sum = 0, weightSum = 0;
+    uint8 weight = ENC_COUNT;
+    for (int i = 0; i < ENC_COUNT; i++)
+    {
+        int idx = (E_index - 1 - i + ENC_COUNT) % ENC_COUNT;
+        sum += E_buffer[idx] * weight;
+        weightSum += weight;
+        weight--;
+    }
+
+    return sum / weightSum;
+}
+
 void RPM_cal(void)
 {
-    Encoder_update();   //������ �Ǵ��� Ȯ���Ұ�
+    Encoder_update();
     Enc_count_new = gpt12Config.module->T2.U;
 
+    // for overflow, underflow
     if (abs(Enc_count_new - Enc_count_old) > 32768)
     {
-        // ����, ����÷ο�  �߻�
+        // for underflow
         if (Enc_count_new > Enc_count_old)
         {
-            // ����÷ο�  (������)
             Enc_count_diff = (float32)((Enc_count_new - 65535) - Enc_count_old);
         }
+        // for overflow
         else
         {
-            // �����÷ο� (������)
             Enc_count_diff = (float32)((65535 - Enc_count_old) + Enc_count_new + 1);
         }
     }
     else
     {
-        // �������� ��,
         Enc_count_diff = (float32)(Enc_count_new - Enc_count_old);
     }
     speed_pid.DisSum += Enc_count_diff * tick_dis;
@@ -127,18 +147,18 @@ void RPM_cal(void)
     motor_speed_rpm = Enc_count_diff/(float32)CPR/(float32)(TIMER_INT_TIME*0.001)*60.0f;
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
 
-    U8Curr_vel = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
+    U8Curr_vel = getFilteredVel((s32_motor_speed_rpm * circumference) / (60 * gear_ratio));
 
     sint16 s16_velocity;
     uint16 u16_velocity;
 
-    s16_velocity = round_to_integer(U8Curr_vel/10); //7bit�� �����ֱ� ����
+    s16_velocity = round_to_integer(U8Curr_vel/10);
     u16_velocity = s16_velocity >= 0  ? s16_velocity : (s16_velocity * -1);
     u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
 
     vehicle_status.cur_rpm = s32_motor_speed_rpm;
     vehicle_status.cur_vel = U8Curr_vel;
-    vehicle_status.u8_velocity = (uint8)u16_velocity; // (���� �ӵ� / 10) [mm/0.1s]
+    vehicle_status.u8_velocity = (uint8)u16_velocity; // [mm/0.1s]
 
     Enc_count_old = Enc_count_new;
 }
@@ -271,7 +291,7 @@ TargetDistanceStatus move_distance(float32 tarDis)
 
     else if (speed_pid.TargetDis_state == REACHED_TARGET_DIS)
     {
-        speed_pid.TargetDis_state = NO_TARGET_DIS; // �ʱ�ȭ
+        speed_pid.TargetDis_state = NO_TARGET_DIS;
         return REACHED_TARGET_DIS;
     }
 

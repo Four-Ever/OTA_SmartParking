@@ -42,6 +42,8 @@ IfxGtm_Tom_Pwm_Config g_tomConfig;                                  /* Timer con
 IfxGtm_Tom_Pwm_Driver g_tomDriver;
 uint32 uPeriod = (10000000/329.724);/* Timer Driver structure                       */
 
+int cnt_50ms = 0;
+int period_50ms = 0;
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
 /*********************************************************************************************************************/
@@ -50,6 +52,7 @@ int cnt_alarm=0;
 int alarm_request=0;
 int led=1;
 int buzzer=1;
+
 /* Function to configure the port pins for the push button and the LED */
 
 void init_LED_Buzzer(void)
@@ -80,7 +83,7 @@ void LED_Buzzer_Blink(void)
     }
 }
 
-void Buzzer(void)
+void toggle_buzzer(void)
 {
     if (buzzer==0)
     {
@@ -95,6 +98,21 @@ void Buzzer(void)
     }
 }
 
+void Buzzer(void)
+{
+    if (period_50ms == 0)
+    {
+        IfxPort_setPinLow(BUZZER2); // turn_off
+    }
+    else if (period_50ms != 0)
+    {
+        cnt_50ms++;
+        if (cnt_50ms >= period_50ms) {
+            cnt_50ms = 0;
+            toggle_buzzer();
+        }
+    }
+}
 void FindCar_Plz(void){
     if (alarm_request==1){
         if (cnt_alarm <=5)
@@ -111,6 +129,26 @@ void FindCar_Plz(void){
             alarm_request=0;
             cnt_alarm=0;
         }
+    }
+}
+
+void set_Buzzer_period(int R_distance){
+    // within 2cm : 100ms period
+    // within 4cm : 200ms period
+    // within 6cm : 300ms period
+    // within 8cm : 400ms period
+    // within 10cm : 500ms period
+    if (R_distance <= 50 && R_distance > 0)
+    {
+        period_50ms = 1;
+    }
+    else if (period_50ms <= 100) // 10cm
+    {
+        period_50ms = (int)(R_distance / 10);
+    }
+    else
+    {
+        period_50ms = 0;
     }
 }
 

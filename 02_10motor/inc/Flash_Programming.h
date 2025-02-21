@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
- * \file STM_Interrupt.h
+ * \file Flash_Programming.h
  * \copyright Copyright (C) Infineon Technologies AG 2019
  *
  * Use of this file is subject to the terms of use agreed between (i) you or the company in which ordinary course of
@@ -25,40 +25,20 @@
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
 
-#ifndef STM_INTERRUPT_H_
-#define STM_INTERRUPT_H_
+#ifndef FLASH_PROGRAMMING_H_
+#define FLASH_PROGRAMMING_H_
 
-#include "Bsp.h"
-#include "IfxPort.h"
-#include "IfxStm.h"
-#include "Ifx_Types.h"
-
-#include "IfxGpt12_IncrEnc.h"
-#include "EncMotor.h"
-
-#include "PID_CON.h"
-#include "GTM_ATOM_PWM.h"
-#include "OurCan.h"
-
-#include "decision_stateflow.h"
-
-#define tick_dis                0.219911486f // dis per tick (mm)
-#define circumference           197.9203372f // (mm)
-#define gear_ratio              18.75f
-#define ENC_COUNT               10
-
-extern sint32 Enc_count;
-extern sint32 s32_motor_speed_rpm;
-extern sint32 s32_DisSum;
-extern PIDREG3 speed_pid;
-extern double U8Curr_vel;
+#include "IfxMultican_Can.h"
+extern uint8 bb;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
-void initPeripherals(void);
-void initSTM(void);
-
-void init_move_distance_control(float32 tarDis, float32 tarVel);
-TargetDistanceStatus move_distance(float32 tarDis);
-
-#endif /* STM_INTERRUPT_H_ */
+void initLEDs(void);            /* Function that initializes the LEDs                                               */
+//void writeProgramFlash(void);   /* Function that flashes the Program Flash memory calling the routines from the PSPR*/
+void writeDataFlash(void);      /* Function that flashes the Data Flash memory                                      */
+//void verifyProgramFlash(void);  /* Function that verifies the data written in the Program Flash memory              */
+//void verifyDataFlash(void);     /* Function that verifies the data written in the Data Flash memory                 */
+void EraseProgramFlash(uint32 eraseAddr);
+void copyFunctionsToPSPR(void);
+void WriteFirmware(uint32 startingAddr,IfxMultican_Message* msgArr, uint8 cnt);
+#endif /* FLASH_PROGRAMMING_H_ */

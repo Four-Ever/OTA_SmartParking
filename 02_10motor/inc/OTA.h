@@ -1,5 +1,5 @@
 /**********************************************************************************************************************
- * \file UpdateInputs.h
+ * \file OTA.h
  * \copyright Copyright (C) Infineon Technologies AG 2019
  * 
  * Use of this file is subject to the terms of use agreed between (i) you or the company in which ordinary course of 
@@ -25,42 +25,69 @@
  * IN THE SOFTWARE.
  *********************************************************************************************************************/
 
-#ifndef LEDBUZZER_H_
-#define LEDBUZZER_H_
+#ifndef OTA_H_
+#define OTA_H_
+#include "IfxMultican_Can.h"
 
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 /*********************************************************************************************************************/
-#include "IfxPort.h"
-#include "Ifx_Types.h"
-#include "IfxGtm_Tom_Pwm.h"
-
+typedef enum {
+    FW_UPDATE_IDLE,
+    FW_UPDATE_REQUESTED,
+    FW_UPDATE_IN_PROGRESS,
+    FW_UPDATE_COMPLETE
+} FirmwareUpdateStat_t;
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
 /*********************************************************************************************************************/
+#define BOOT_FLAG_ADDR        0xAF000000  // 데이터 플래시 시작 주소
+#define APPLICATION_A_ADDRESS 0xA0100000 /*Partition A address */
+#define APPLICATION_B_ADDRESS 0xA0180000 /*Partition B address */
+#define BOOT_FLAG_A 0x00000001 /* Partition A flag */
+#define BOOT_FLAG_B 0x00000002 /* Partition B flag */
+#define MESSAGE_BUFFER_SIZE 512
 
+#define PFLASH_PAGE_LENGTH          IFXFLASH_PFLASH_PAGE_LENGTH /* 0x20 = 32 Bytes (smallest unit that can be
+                                                                 * programmed in the Program Flash memory (PFLASH)) */
+#define PROGRAM_FLASH_0             IfxFlash_FlashType_P0       /* Define the Program Flash Bank to be used         */
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 /*********************************************************************************************************************/
-extern int alarm_request;
-extern int cnt_alarm;
-extern int cnt_50ms;
-extern int period_50ms;
+extern FirmwareUpdateStat_t fwUpdateState;
+extern volatile uint8 fwUpdateRequested;
+extern volatile uint8 fwUpdateComplete;
+extern uint32 fwUpdateAddress;
+extern uint32 fwUpdateSize;
+extern uint32 fwUpdateReceivedBytes;
+
+extern IfxMultican_Message messageBuffer[MESSAGE_BUFFER_SIZE];
+
+extern volatile uint16 messageBufferHead;
+extern volatile uint16 messageBufferTail;
+extern uint32 currentUpdateAddr;
+extern uint8 temp;
+
 /*********************************************************************************************************************/
 /*-------------------------------------------------Data Structures---------------------------------------------------*/
 /*********************************************************************************************************************/
- 
+
 /*********************************************************************************************************************/
-/*------------------------------------------Private Variables/Constants--------------------------------------------*/
+/*--------------------------------------------Private Variables/Constants--------------------------------------------*/
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
-void FindCar_Plz(void);
-void set_Buzzer_period(int);
-void LED_Buzzer_Blink(void);
-
 /*********************************************************************************************************************/
+uint32 GetBootFlag(void);
+void SetBootFlag(void);
 
+uint8 MessageBufferIsFull(void);
+uint8 MessageBufferIsEmpty(void);
+void MessageBufferPut(IfxMultican_Message* msg);
+void MessageBufferGet(IfxMultican_Message* msg);
 
-#endif /* LEDBUZZER_H_ */
+void StartFirmwareUpdate(void);
+void FirmwareUpdateStateMachine(void);
+
+#endif /* OTA_H_ */
