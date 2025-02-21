@@ -70,7 +70,7 @@
 #define decision_stateflow_IN_RCA_EXIT           ((uint8_T)3U)
 
 #define decision_stateflow_IN_FIND_CAR             ((uint8_T)6U)
-
+#define decision_stateflow_IN_CONERING             ((uint8_T)7U)
 
 
 /* Block states (default storage) for system '<Root>' */
@@ -82,6 +82,7 @@ typedef struct {
   uint8_T is_SAFE_RCA;
   uint8_T is_SAFE_FCA;
   uint8_T is_FIND_CAR;
+  uint8_T is_CONERING;
 } DW_decision_stateflow_T;
 
 typedef enum{
@@ -112,6 +113,14 @@ typedef enum{
   LEFT,
   RIGHT
 }IsPrk;
+
+typedef enum{
+  InitConering = 0,
+  Conering_Forward,
+  Conering_Backward,
+  Conering_Finished
+
+}ConerState;
 
 /* Real-time Model Data Structure */
 struct tag_RTM_decision_stateflow_T {

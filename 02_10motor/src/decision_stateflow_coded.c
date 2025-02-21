@@ -65,12 +65,15 @@ int md_flag=0;
 IsPrk IsPrk_LR = InitIsPrk;
 
 int U8IsConerline = 0;
+ConerState U8ConerState=InitConering;
+
 CAState U8FCAState = InitCAState;
 CAState U8RCAState = InitCAState;
 double gainTTC=0.0;
 
 int ToController_Prkstate=0;
 int ToController_Exitstate=0;
+
 
 
 /* Model step function */
@@ -116,20 +119,17 @@ void decision_stateflow_step_c(void)
                     decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_FIND_CAR;
                 }
 
-                                if (IsRSPAButton == 1){
-                                    D_RefRPM=0;
-                                         if (U8Curr_vel==0){
-                                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+                if (IsRSPAButton == 1){
+                    D_RefRPM=0;
+                    if (U8Curr_vel==0){
+                        decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+                        decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
 
-                                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
-
-                                             U8DriverState = InitDriverState;
-                                             First_Set=1;
-                                             IsRSPAButton = 0;
-                                             //CameraSwitchRequest = 1;
-
-                                             }
-                                     }
+                        U8DriverState = InitDriverState;
+                        First_Set=1;
+                        IsRSPAButton = 0;
+                    }
+                }
 
                 break;
 
@@ -169,7 +169,7 @@ void decision_stateflow_step_c(void)
                         U8FCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && ((double)obstacle[F_OBSTACLE]/1000) >=100)
+                        if (U8Curr_vel == 0 && ((double)obstacle[F_OBSTACLE]/1000) == 0)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
@@ -179,7 +179,7 @@ void decision_stateflow_step_c(void)
                         U8FCAState = Decel;
                         U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCD(U8Curr_vel)+gainTTC));
 
-                        if (((double)obstacle[F_OBSTACLE]/1000) >= 100)
+                        if (((double)obstacle[F_OBSTACLE]/1000) == 0)
                         {
                             decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EXIT;
                         }
@@ -220,7 +220,7 @@ void decision_stateflow_step_c(void)
                         U8RCAState = Emergency;
                         U8Ref_vel = initVel;
 
-                        if (U8Curr_vel == 0 && ((double)obstacle[B_OBSTACLE]/1000) == (double)RLOBSTACLE_WARNING)
+                        if (U8Curr_vel == 0 && ((double)obstacle[B_OBSTACLE]/1000) == 0)
                         {
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
@@ -230,7 +230,7 @@ void decision_stateflow_step_c(void)
                         U8RCAState = Decel;
                         U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCR(U8Curr_vel)+gainTTC));
 
-                        if (((double)obstacle[B_OBSTACLE]/1000)>=100)
+                        if (((double)obstacle[B_OBSTACLE]/1000)==0)
                         {
                             decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EXIT;
                         }
@@ -408,19 +408,17 @@ void decision_stateflow_step_c(void)
 //
 //                        }
 
-                        if (detecting_spot[L_ULTRA] == 1 || detecting_spot[R_ULTRA] == 1 )
+                        if ( detecting_spot[R_ULTRA] == 1 )
                         {
                             U8Ref_vel = 0;
 
                             if (U8Curr_vel==0){
-                                if (detecting_spot[L_ULTRA] == 1 ){
-                                    IsPrk_LR=LEFT;
-                                }
-                                else IsPrk_LR=RIGHT;
-
-                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+                               IsPrk_LR=RIGHT;
+                               decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                             }
                         }
+
+
 
                         break;
 
@@ -548,7 +546,6 @@ void decision_stateflow_step_c(void)
                             md_flag++;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                         }
-
                         break;
 
                     case decision_stateflow_IN_RSPA_LANE_R:

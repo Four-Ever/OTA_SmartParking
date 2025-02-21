@@ -186,7 +186,7 @@ void Obstacle_get_All_Distance (void)
         obstacle[F_OBSTACLE] = Distance[TOF0]/10;  //cm
     else
         obstacle[F_OBSTACLE] = 0;
-    if ((Distance[TOF0]) < FBOBSTACLE_WARNING*10) // uart2 ToF Data
+    if ((Distance[TOF1]) < FBOBSTACLE_WARNING*10) // uart2 ToF Data
         obstacle[B_OBSTACLE] = Distance[TOF1]/10;  //cm
     else
         obstacle[B_OBSTACLE] = 0;
@@ -195,7 +195,7 @@ void Obstacle_get_All_Distance (void)
 
 double Cal_TTCD(double currvel) {
     double TTC;
-    if (currvel !=0) {
+    if (currvel !=0 || obstacle[F_OBSTACLE] !=0 ) {
         TTC = ((double)obstacle[F_OBSTACLE]/1000)/(currvel);
     }
     else TTC=0;
@@ -205,8 +205,8 @@ double Cal_TTCD(double currvel) {
 
 double Cal_TTCR(double currvel) {
     double TTC;
-    if (currvel !=0) {
-        TTC =((double)obstacle[F_OBSTACLE]/1000) / (currvel);
+    if (currvel !=0 || obstacle[R_OBSTACLE] !=0 ) {
+        TTC =((double)obstacle[R_OBSTACLE]/1000) / (currvel);
     }
     else TTC=0;
 
