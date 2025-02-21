@@ -99,9 +99,12 @@ int core0_main(void)
     initCan();
     initCanDB();
     initShellInterface();
+
     Driver_Stm_Init();
 
     initServo(); // D6
+    Init_ToF();
+    init_LED_Buzzer();
 
 #ifdef motor_Test
     // motor_enable = 1;  // 0:제동, 1:해제
@@ -245,17 +248,20 @@ void AppTask10ms(void)
 #endif
 
 #ifdef putty_Test
-    Kp_s = 1.55f;
-    Ki_s = 2.65f;
-    Kd_s = 0.001f;
-    RPM_CMD1 = 1500.0f;
+//    Kp_s = 1.55f;
+//    Ki_s = 2.65f;
+//    Kd_s = 0.001f;
+//    RPM_CMD1 = 1500.0f;
 
-    myprintf("rpm : %d\r\n", s32_motor_speed_rpm);
+    myprintf("B_Obstacle : %d\r\n", obstacle[B_OBSTACLE]);
+
+
 #endif
 }
 
 void AppTask50ms(void){
     stTestCnt.u32nuCnt50ms++;
+    Obstacle_get_All_Distance();
 }
 
 void AppTask100ms(void)
