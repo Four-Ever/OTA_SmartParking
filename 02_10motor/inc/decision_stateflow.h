@@ -148,11 +148,14 @@ extern int U8IsConerline;
 
 extern int ToController_Prkstate;
 extern int ToController_Exitstate;
+extern int md_flag;
+
 
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
 extern void decision_stateflow_step(void);
 extern void decision_stateflow_terminate(void);
+extern void decision_stateflow_step_c(void);
 
 /* Real-time Model object */
 extern RT_MODEL_decision_stateflow_T *const decision_stateflow_M;
