@@ -94,7 +94,9 @@ install(DIRECTORY include/
 install(
   FILES 
   config/front_calibration.yaml
+  config/wide_front_calibration.yaml
   config/rear_calibration.yaml
+  config/wide_rear_calibration.yaml
   DESTINATION config/
 )
 

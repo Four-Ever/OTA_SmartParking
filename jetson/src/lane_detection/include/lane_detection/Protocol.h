@@ -221,9 +221,9 @@ struct CTRL_OTA_Update_Confirm_Data : public BaseMsg {
 
 struct CCU_Cordi_data1_Data : public BaseMsg {
     struct {
-        uint16_t cordi_data_y1 : 11;
+        int16_t cordi_data_y1 : 11;
         int16_t cordi_data_x1 : 10;
-        uint16_t cordi_data_y2 : 11;
+        int16_t cordi_data_y2 : 11;
         int16_t cordi_data_x2 : 10;
         //uint8_t using_camera : 2;
     } data;
@@ -231,9 +231,9 @@ struct CCU_Cordi_data1_Data : public BaseMsg {
 
 struct CCU_Cordi_data2_Data : public BaseMsg {
     struct {
-        uint16_t cordi_data_y3 : 11;
+        int16_t cordi_data_y3 : 11;
         int16_t cordi_data_x3 : 10;
-        uint16_t cordi_data_y4 : 11;
+        int16_t cordi_data_y4 : 11;
         int16_t cordi_data_x4 : 10;
         uint8_t using_camera : 2;
         uint8_t trust_value : 6;
@@ -696,9 +696,9 @@ public:
     size_t GetSizeCan() const override { return sizeof(CCU_Cordi_data1_Data) - sizeof(BaseMsg); }
     uint8_t GetMsgId() const override { return data_.msg_id; }
     
-    void SetCordiY1(uint16_t y) { data_.data.cordi_data_y1 = y; }
+    void SetCordiY1(int16_t y) { data_.data.cordi_data_y1 = y; }
     void SetCordiX1(int16_t x) { data_.data.cordi_data_x1 = x; }
-    void SetCordiY2(uint16_t y) { data_.data.cordi_data_y2 = y; }
+    void SetCordiY2(int16_t y) { data_.data.cordi_data_y2 = y; }
     void SetCordiX2(int16_t x) { data_.data.cordi_data_x2 = x; }
     //void SetUsingCamera(uint8_t camera) { data_.data.using_camera = camera; }
 
@@ -718,9 +718,9 @@ public:
     size_t GetSizeCan() const override { return sizeof(CCU_Cordi_data2_Data) - sizeof(BaseMsg); }
     uint8_t GetMsgId() const override { return data_.msg_id; }
     
-    void SetCordiY3(uint16_t y) { data_.data.cordi_data_y3 = y; }
+    void SetCordiY3(int16_t y) { data_.data.cordi_data_y3 = y; }
     void SetCordiX3(int16_t x) { data_.data.cordi_data_x3 = x; }
-    void SetCordiY4(uint16_t y) { data_.data.cordi_data_y4 = y; }
+    void SetCordiY4(int16_t y) { data_.data.cordi_data_y4 = y; }
     void SetCordiX4(int16_t x) { data_.data.cordi_data_x4 = x; }
     void SetUsingCamera(uint8_t camera) { data_.data.using_camera = camera; }
     void SetTrustValue(uint8_t value) { data_.data.trust_value = value; };

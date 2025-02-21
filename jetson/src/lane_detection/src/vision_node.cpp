@@ -40,15 +40,19 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     width_plot_pub_rear_ = this->create_publisher<std_msgs::msg::Int32>("param/lane_width_plot_rear", 10);
 
     // IPM 변환 행렬 파라미터 초기화
-    std::vector<cv::Point2f> src_points = {
+    std::vector<cv::Point2f> front_src_points = {
         cv::Point2f(0, 390), cv::Point2f(640, 390),
         // cv::Point2f(110, 200), cv::Point2f(530, 200)
-        cv::Point2f(220, 0), cv::Point2f(420, 0)};
+        // rear : cv::Point2f(200, 0), cv::Point2f(440, 0)};
+        cv::Point2f(175, 180), cv::Point2f(465, 180)};
+    std::vector<cv::Point2f> rear_src_points = {
+        cv::Point2f(0, 430), cv::Point2f(640, 430),
+        cv::Point2f(170, 50), cv::Point2f(470, 50)};
     std::vector<cv::Point2f> dst_points = {
         cv::Point2f(0, IMG_HEIGHT), cv::Point2f(IMG_WIDTH, IMG_HEIGHT),
         cv::Point2f(0, 0), cv::Point2f(IMG_WIDTH, 0)};
-    front_M_ = cv::getPerspectiveTransform(src_points, dst_points);
-    rear_M_ = front_M_.clone();
+    front_M_ = cv::getPerspectiveTransform(front_src_points, dst_points);
+    rear_M_ = cv::getPerspectiveTransform(rear_src_points, dst_points);
 
     // 모드 설정
     std::string mode_str = this->get_parameter("mode").as_string();
@@ -145,13 +149,18 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
         {
             // 정규화 적용
             cv::Point2f norm = pixelToNormalized(point, UsingCamera::Front);
-            cv::Point2i original_points = cv::Point2i(static_cast<int>(norm.x *100), static_cast<int>(norm.y*100));
+            cv::Point2i original_points = cv::Point2i(static_cast<int>(norm.x * 100), static_cast<int>(norm.y * 100));
             result_waypoints.push_back(original_points);
         }
 
         // sum_window_confidences 변경
         sum_window_confidences = sum_window_confidences * 10 - 30;
 
+        RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+        RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+        RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+        RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+        RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 #ifndef DEBUG_CGW
         // VCU로 전송
         auto msg1 = std::make_shared<CCU_Cordi_data1_Msg>();
@@ -165,12 +174,12 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
         msg2->SetCordiX3(result_waypoints[2].x);
         msg2->SetCordiY4(result_waypoints[3].y);
         msg2->SetCordiX4(result_waypoints[3].x);
-        
-         RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
-         RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
-         RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
-         RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
-         RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
+
+        RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+        RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+        RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+        RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+        RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 
         msg2->SetUsingCamera(1); // UsingCamera::Front
         msg2->SetTrustValue(static_cast<int>(sum_window_confidences));
@@ -226,18 +235,23 @@ void VisionNode::processRearImage(const sensor_msgs::msg::Image::SharedPtr msg)
             waypoints_img_float.push_back(float_point);
         }
         // IPM 역변환 적용
-        cv::perspectiveTransform(waypoints_img_float, original_points, front_M_.inv());
+        cv::perspectiveTransform(waypoints_img_float, original_points, rear_M_.inv());
         for (const auto &point : original_points)
         {
             // 정규화 적용
             cv::Point2f norm = pixelToNormalized(point, UsingCamera::Front);
-            cv::Point2i original_points = cv::Point2i(static_cast<int>(norm.x *100), static_cast<int>(norm.y*100));
+            cv::Point2i original_points = cv::Point2i(static_cast<int>(norm.x * 100), static_cast<int>(norm.y * 100));
             result_waypoints.push_back(original_points);
         }
 
         // sum_window_confidences 변경
         sum_window_confidences = sum_window_confidences * 10 - 30;
 
+        RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+        RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+        RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+        RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+        RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 #ifndef DEBUG_CGW
         // VCU로 전송
         auto msg1 = std::make_shared<CCU_Cordi_data1_Msg>();
@@ -257,7 +271,7 @@ void VisionNode::processRearImage(const sensor_msgs::msg::Image::SharedPtr msg)
         // RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
         // RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
         // RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
-        
+
         msg2->SetUsingCamera(2); // UsingCamera::Rear
         msg2->SetTrustValue(static_cast<int>(sum_window_confidences));
         std::shared_ptr<IMessage> imsg1 = msg1;
@@ -792,7 +806,7 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
     // 모폴로지 연산
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); // 작은 커널 사용
     // cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_OPEN, kernel);  // 침식 -> 팽창
-    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel);  // 팽창 -> 침식
+    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel); // 팽창 -> 침식
 
     // Canny 엣지 검출
     cv::Mat edges;
@@ -806,7 +820,7 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
     // 전체 ROI 설정
     cv::Mat full_roi = edges;
     float parking_line_angle = 100.0f; // 미검출 값
-    bool line_in_bottom = false; // 아래 라인에 있다면
+    bool line_in_bottom = false;       // 아래 라인에 있다면
 
     if (lane_request_)
     {
@@ -832,7 +846,7 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
                     line_in_bottom = true;
                 }
 
-                RCLCPP_INFO(this->get_logger(), "Parking line detected! Angle: %.2f, In bottom: %d", 
+                RCLCPP_INFO(this->get_logger(), "Parking line detected! Angle: %.2f, In bottom: %d",
                             parking_line_angle, line_in_bottom);
 #ifdef DEBUG_IMAGE
                 cv::line(debug_img,
@@ -1224,7 +1238,7 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
 
     // 역변환 수행
     cv::Mat original_image_with_debug;
-    cv::warpPerspective(debug_img, original_image_with_debug, front_M_.inv(), cv::Size(IMG_WIDTH, IMG_HEIGHT));
+    cv::warpPerspective(debug_img, original_image_with_debug, rear_M_.inv(), cv::Size(IMG_WIDTH, IMG_HEIGHT));
 
     sensor_msgs::msg::Image::SharedPtr original_image_with_debug_msg =
         cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", original_image_with_debug).toImageMsg();
