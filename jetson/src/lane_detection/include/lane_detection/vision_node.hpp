@@ -133,13 +133,21 @@ private:
 
 
    // 카메라 intrinsic
-   const cv::Mat front_camera_matrix_ = (cv::Mat_<double>(3,3) <<
-   638.433158, 0, 332.586432,
-   0, 639.580011, 248.493045,
+   // const cv::Mat front_camera_matrix_ = (cv::Mat_<double>(3,3) <<
+   // 638.433158, 0, 332.586432,
+   // 0, 639.580011, 248.493045,
+   // 0, 0, 1);
+   const cv::Mat wide_front_camera_matrix_ = (cv::Mat_<double>(3,3) <<
+   505.844573, 0, 300.088078,
+   0, 520.071999, 272.405645,
    0, 0, 1);
-   const cv::Mat rear_camera_matrix_ = (cv::Mat_<double>(3,3) <<
-   577.342746, 0, 318.850211, 
-   0, 581.499986, 232.537614, 
+   // const cv::Mat rear_camera_matrix_ = (cv::Mat_<double>(3,3) <<
+   // 577.342746, 0, 318.850211, 
+   // 0, 581.499986, 232.537614, 
+   // 0, 0, 1);
+   const cv::Mat wide_rear_camera_matrix_ = (cv::Mat_<double>(3,3) <<
+   416.325380, 0, 316.931237,
+   0, 421.930054, 246.635248,
    0, 0, 1);
 };
 

@@ -8,7 +8,7 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     : Node("vision_node", options)
 {
     // 파라미터 선언
-    //this->declare_parameter("mode", "driving");
+    // this->declare_parameter("mode", "driving");
     this->declare_parameter("mode", "offstate");                 // 실제 동작때.
     this->declare_parameter("expected_lane_width", 500);         // Edit Param
     this->declare_parameter("expected_parking_lane_width", 500); // Edit Param
@@ -166,11 +166,11 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
         msg2->SetCordiY4(result_waypoints[3].y);
         msg2->SetCordiX4(result_waypoints[3].x);
         
-        // RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
-        // RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
-        // RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
-        // RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
-        // RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
+         RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+         RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+         RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+         RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+         RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 
         msg2->SetUsingCamera(1); // UsingCamera::Front
         msg2->SetTrustValue(static_cast<int>(sum_window_confidences));
@@ -285,7 +285,7 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
     cv::Mat warped;
     cv::warpPerspective(img, warped, front_M_, cv::Size(IMG_WIDTH, IMG_HEIGHT));
 
-    // HSV 색상 공간으로 변환
+    // HSV 색상 공간으로 변환 (흰색 마스크 색상정보 정확히 추출)
     cv::Mat hsv;
     cv::cvtColor(warped, hsv, cv::COLOR_BGR2HSV);
 
@@ -296,9 +296,11 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
                 white_mask);
 
     // 원본 그레이스케일에 마스크 적용
-    cv::Mat gray;
+    cv::Mat gray; // (밝기 정보 유지)
     cv::cvtColor(warped, gray, cv::COLOR_BGR2GRAY);
     cv::Mat masked_gray;
+
+    // BitWise처리
     cv::bitwise_and(gray, gray, masked_gray, white_mask);
 
     // 가우시안 블러로 노이즈 제거
@@ -306,15 +308,12 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
 
     // 모폴로지 연산
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); // 작은 커널 사용
-    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_OPEN, kernel);
-    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel);
+    // cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_OPEN, kernel); // 침식 -> 팽창
+    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel); // 팽창 -> 침식
 
     // Canny 엣지 검출
     cv::Mat edges;
     cv::Canny(masked_gray, edges, 50, 150);
-
-    cv::Mat edges_color;
-    cv::cvtColor(edges, edges_color, cv::COLOR_GRAY2BGR);
 
 // 디버그 이미지용
 #ifdef DEBUG_IMAGE
@@ -783,6 +782,8 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
     cv::Mat gray;
     cv::cvtColor(warped, gray, cv::COLOR_BGR2GRAY);
     cv::Mat masked_gray;
+
+    // BitWise처리
     cv::bitwise_and(gray, gray, masked_gray, white_mask);
 
     // 가우시안 블러로 노이즈 제거
@@ -790,15 +791,12 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
 
     // 모폴로지 연산
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3)); // 작은 커널 사용
-    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_OPEN, kernel);
-    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel);
+    // cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_OPEN, kernel);  // 침식 -> 팽창
+    cv::morphologyEx(masked_gray, masked_gray, cv::MORPH_CLOSE, kernel);  // 팽창 -> 침식
 
     // Canny 엣지 검출
     cv::Mat edges;
     cv::Canny(masked_gray, edges, 50, 150);
-
-    cv::Mat edges_color;
-    cv::cvtColor(edges, edges_color, cv::COLOR_GRAY2BGR);
 
 // 디버그 이미지용
 #ifdef DEBUG_IMAGE
@@ -1473,7 +1471,7 @@ cv::Point2i VisionNode::vehicleToImage(const cv::Point2i &vehicle_point)
 cv::Point2f VisionNode::pixelToNormalized(const cv::Point2f &pixel, UsingCamera is_front)
 {
     // 카메라 내부 파라미터를 사용한 정규화
-    const cv::Mat &camera_matrix = (is_front == UsingCamera::Front) ? front_camera_matrix_ : rear_camera_matrix_;
+    const cv::Mat &camera_matrix = (is_front == UsingCamera::Front) ? wide_front_camera_matrix_ : wide_rear_camera_matrix_;
 
     return cv::Point2f(
         (pixel.x - camera_matrix.at<double>(0, 2)) / camera_matrix.at<double>(0, 0),
