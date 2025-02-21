@@ -132,8 +132,9 @@ void CameraNode::loadCalibrationParams()
         // std::string package_path = ament_index_cpp::get_package_share_directory("lane_detection");
         // std::string front_calib_path = package_path + "/config/front_calibration.yaml";
         // std::string rear_calib_path = package_path + "/config/rear_calibration.yaml";
-        std::string front_calib_path =  "/home/jetson/ros2_ws/src/lane_detection/config/front_calibration.yaml";
-        std::string rear_calib_path = "/home/jetson/ros2_ws/src/lane_detection/config/rear_calibration.yaml";
+        // std::string front_calib_path =  "/home/jetson/ros2_ws/src/lane_detection/config/front_calibration.yaml";
+        std::string front_calib_path =  "/home/jetson/ros2_ws/src/lane_detection/config/wide_front_calibration.yaml"; // 광각카메라 적용
+        std::string rear_calib_path = "/home/jetson/ros2_ws/src/lane_detection/config/wide_rear_calibration.yaml";
 
         // 전방 카메라 파라미터D
         cv::FileStorage front_fs(front_calib_path, cv::FileStorage::READ);
