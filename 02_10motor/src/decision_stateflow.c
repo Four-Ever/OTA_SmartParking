@@ -115,6 +115,20 @@ void decision_stateflow_step(void)
                     decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_FIND_CAR;
                 }
 
+                if (IsRSPAButton == 1){
+                    D_RefRPM=0;
+                         if (U8Curr_vel==0){
+                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+
+                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
+
+                             U8DriverState = InitDriverState;
+                             First_Set=1;
+                             IsRSPAButton = 0;
+                             //CameraSwitchRequest = 1;
+
+                             }
+                     }
                 break;
 
             case decision_stateflow_IN_FIND_CAR:
@@ -375,7 +389,7 @@ void decision_stateflow_step(void)
                 {
                     case decision_stateflow_IN_RSPA_IS_SLOT:
                         U8RSPAState= Searching;
-                        U8Ref_vel=DInputVD;
+                        U8Ref_vel=0.25;   //DInputVD
                         ToController_Prkstate=0;
 
 

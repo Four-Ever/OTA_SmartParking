@@ -126,7 +126,8 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
                 break;
             case Searching:  //차선인식 주차공간 탐색
                 stanelyAngle=gitstanley();
-                vehicle_status.steering_angle = (sint8)stanelyAngle;  //
+                //vehicle_status.steering_angle = (sint8)stanelyAngle;  //
+                vehicle_status.steering_angle = 5;  //
                 vehicle_status.ref_rpm = RefRPM;
                 if (U8IsConerline==1){
                     vehicle_status.steering_angle=conersteering;
