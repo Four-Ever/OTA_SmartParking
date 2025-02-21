@@ -132,6 +132,33 @@ void decision_stateflow_step_c(void)
                 }
 
                 break;
+            case decision_stateflow_IN_CONERING:
+                U8RSPA=ModeOn;
+                U8Driver=ModeOff;
+                U8ConerState=InitConering;
+
+                switch (decision_stateflow_DW.is_CONERING)
+                {
+                    case decision_stateflow_IN_CONER_D:
+                        U8ConerState=Conering_Forward;
+                        break;
+
+                    case decision_stateflow_IN_CONER_R:
+                        U8ConerState=Conering_Backward;
+                    break;
+
+                    case decision_stateflow_IN_CONER_EXIT:
+                        U8ConerState=Conering_Finished;
+                        D_RefRPM=0;
+                        if (U8Curr_vel==0){
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
+                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
+                        }
+                    break;
+
+                }
+
+                break;
 
             case decision_stateflow_IN_FIND_CAR:
                 ToController_Prkstate=3;
@@ -418,7 +445,12 @@ void decision_stateflow_step_c(void)
                             }
                         }
 
+                        if (U8IsConerline==1){
+                            U8Ref_vel = 0;
+                            if (U8Curr_vel==0){
 
+                            }
+                        }
 
                         break;
 

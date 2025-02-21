@@ -70,7 +70,11 @@
 #define decision_stateflow_IN_RCA_EXIT           ((uint8_T)3U)
 
 #define decision_stateflow_IN_FIND_CAR             ((uint8_T)6U)
-#define decision_stateflow_IN_CONERING             ((uint8_T)7U)
+
+#define decision_stateflow_IN_CONERING              ((uint8_T)7U)
+#define decision_stateflow_IN_CONER_D               ((uint8_T)1U)
+#define decision_stateflow_IN_CONER_R               ((uint8_T)2U)
+#define decision_stateflow_IN_CONER_EXIT            ((uint8_T)3U)
 
 
 /* Block states (default storage) for system '<Root>' */
