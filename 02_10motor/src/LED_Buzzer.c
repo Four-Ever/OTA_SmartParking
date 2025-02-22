@@ -32,87 +32,163 @@
 #include "Ifx_Types.h"
 /*********************************************************************************************************************/
 /*------------------------------------------------------Macros-------------------------------------------------------*/
+#define BUZZER                IfxGtm_ATOM1_1_TOUT10_P00_1_OUT
+#define BUZZER_PWM_PERIOD            1000000 / 5000
+#define BUZZER_CLK_FREQ              1000000.0f
 /*********************************************************************************************************************/
-#define LED     &MODULE_P00,1   /* Port pin for the LED     */
-#define BUZZER2  &MODULE_P00,9
+
 /*********************************************************************************************************************/
 /*-------------------------------------------------Global variables--------------------------------------------------*/
 /*********************************************************************************************************************/
+IfxGtm_Tom_Pwm_Config g_tomConfig; /* Timer configuration structure                */
+IfxGtm_Tom_Pwm_Driver g_tomDriver;
+uint32 uPeriod = (10000000 / 329.724);/* Timer Driver structure                       */
 
+IfxGtm_Atom_Pwm_Config g_atom_Buzzer_Config; /* Timer configuration structure                    */
+IfxGtm_Atom_Pwm_Driver g_atom_Buzzer_Driver; /* Timer Driver structure                           */
 
+int cnt_50ms = 0;
+int period_50ms = 0;
 /*********************************************************************************************************************/
 /*---------------------------------------------Function Implementations----------------------------------------------*/
 /*********************************************************************************************************************/
 
-int cnt_alarm=0;
-int alarm_request=0;
-int led=1;
-int buzzer=1;
+int cnt_alarm = 0;
+int alarm_request = 0;
+int led = 1;
+int buzzer = 1;
+
 /* Function to configure the port pins for the push button and the LED */
 
-void init_LED_Buzzer(void)
+void init_LED_Buzzer (void)
 {
-    IfxPort_setPinModeOutput(LED,IfxPort_OutputMode_pushPull, IfxPort_OutputIdx_general);  //led
+    IfxPort_setPinModeOutput(LED, IfxPort_OutputMode_pushPull, IfxPort_OutputIdx_general);  //led
     IfxPort_setPinLow(LED);
 
-    IfxPort_setPinModeOutput(BUZZER2,IfxPort_OutputMode_pushPull, IfxPort_OutputIdx_general);  //led
+    initBuzzerGtmATomPwm();
+    IfxPort_setPinModeOutput(BUZZER2, IfxPort_OutputMode_pushPull, IfxPort_OutputIdx_general);  //led
     IfxPort_setPinLow(BUZZER2);
+}
 
+void initBuzzerGtmATomPwm (void)
+{
+    IfxGtm_enable(&MODULE_GTM); /* Enable GTM */
+
+    //IfxGtm_Cmu_setClkFrequency(&MODULE_GTM, IfxGtm_Cmu_Clk_0, BUZZER_PWM_PERIOD);        /* Set the CMU clock 0 frequency    */
+    IfxGtm_Cmu_enableClocks(&MODULE_GTM, IFXGTM_CMU_CLKEN_CLK0); /* Enable the CMU clock 0           */
+
+    IfxGtm_Atom_Pwm_initConfig(&g_atom_Buzzer_Config, &MODULE_GTM); /* Initialize default parameters    */
+
+    g_atom_Buzzer_Config.atom = BUZZER.atom; /* Select the ATOM depending on the LED     */
+    g_atom_Buzzer_Config.atomChannel = BUZZER.channel; /* Select the channel depending on the LED  */
+    g_atom_Buzzer_Config.period = BUZZER_PWM_PERIOD; /* Set timer period                         */
+    g_atom_Buzzer_Config.pin.outputPin = &BUZZER; /* Set LED as output                        */
+    g_atom_Buzzer_Config.synchronousUpdateEnabled = TRUE; /* Enable synchronous update                */
+
+    g_atom_Buzzer_Config.dutyCycle = BUZZER_PWM_PERIOD;
+
+    IfxGtm_Atom_Pwm_init(&g_atom_Buzzer_Driver, &g_atom_Buzzer_Config); /* Initialize the PWM                       */
+    IfxGtm_Atom_Pwm_start(&g_atom_Buzzer_Driver, TRUE); /* Start the PWM                            */
+}
+void setBuzzerPeriod (int cycle)
+{
+    g_atom_Buzzer_Config.dutyCycle = cycle;
 }
 
 /* Depending on the the state of the "BUTTON" port pin, the LED is turned on or off */
-void LED_Buzzer_Blink(void)
+void LED_Buzzer_Blink (void)
 {
-    if (led==0)
+    if (led == 0)
     {
         IfxPort_setPinLow(LED);
         IfxPort_setPinLow(BUZZER2);
 
-        led=1;
+        led = 1;
     }
     else
     {
         IfxPort_setPinHigh(LED);
         IfxPort_setPinHigh(BUZZER2);
-        led=0;
+        led = 0;
     }
 }
 
-void Buzzer(void)
+void toggle_buzzer (void)
 {
-    if (buzzer==0)
+    if (buzzer == 0)
     {
         IfxPort_setPinLow(BUZZER2);
 
-        buzzer=1;
+        buzzer = 1;
     }
     else
     {
         IfxPort_setPinHigh(BUZZER2);
-        buzzer=0;
+        buzzer = 0;
     }
 }
 
-void FindCar_Plz(void){
-    if (alarm_request==1){
-        if (cnt_alarm <=5)
+void Buzzer (void)
+{
+    if (period_50ms == 0)
+    {
+        IfxPort_setPinLow(BUZZER2); // turn_off
+    }
+    else if (period_50ms != 0)
+    {
+        cnt_50ms++;
+        if (cnt_50ms >= period_50ms)
+        {
+            cnt_50ms = 0;
+            toggle_buzzer();
+        }
+    }
+}
+void FindCar_Plz (void)
+{
+    if (alarm_request == 1)
+    {
+        if (cnt_alarm <= 5)
         {
             LED_Buzzer_Blink();
             //Buzzer();
 
         }
 
-        else if (cnt_alarm>5){
+        else if (cnt_alarm > 5)
+        {
             //setDutyCycleB(0);
             //buzzer=0;
-            led=1;
-            alarm_request=0;
-            cnt_alarm=0;
+            led = 1;
+            alarm_request = 0;
+            cnt_alarm = 0;
         }
     }
 }
 
-void Obstacle_Alarm(void){
+void set_Buzzer_period (int R_distance)
+{
+    // within 2cm : 100ms period
+    // within 4cm : 200ms period
+    // within 6cm : 300ms period
+    // within 8cm : 400ms period
+    // within 10cm : 500ms period
+    if (R_distance <= 5 && R_distance > 0)    //5cm보다 작으면
+    {
+        period_50ms = 1;
+    }
+    else if (period_50ms <= 100) // 10cm
+    {
+        period_50ms = (int) (R_distance);
+    }
+    else
+    {
+        period_50ms = 0;
+    }
+}
+
+void Obstacle_Alarm (void)
+{
 
 }
 
