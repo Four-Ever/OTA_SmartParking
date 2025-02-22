@@ -32,7 +32,7 @@
 #include "Controller_Logic.h"
 //#include "SPI_CPU.h"
 #include "Driver_Stm.h"
-#include "ASCLIN_Shell_UART.h"
+//#include "ASCLIN_Shell_UART.h"
 #include "ASCLIN_UART.h"
 #include "Message.h"
 #include "Data_process.h"

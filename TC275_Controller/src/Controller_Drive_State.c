@@ -213,18 +213,17 @@ void Show_Drive_State()
                 {
                     ms_state = MS_DRIVE;
                     dir_state = DIR_D;
-#ifdef PERIOD_VER
-                    msg.auto_park_req_msg.signal.auto_parking = DO_NOT_AUTO_PARKING;
-#endif
 
-#ifndef PERIOD_VER
                     //이벤트 함수라, 굳이 전송 x
-//                    msg.auto_park_req_msg.signal.auto_parking = 0;
+//                    msg.auto_park_req_msg.signal.auto_parking = DO_NOT_AUTO_PARKING;
+//#ifndef PERIOD_VER
 //                    Command[ORDER_AUTO_PRK_REQ]();
-#endif
+//#endif
                     LCD1602_1stLine();
-                    sprintf(str, "DRIVING MODE");
-                    LCD1602_print(str);
+
+                    LCD1602_print("CHANGE TO DRIVING");
+                    LCD1602_2ndLine();
+                    LCD1602_print("Mode");
                     LCD1602_loading();
                 }
                 //명령 송신

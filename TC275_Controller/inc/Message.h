@@ -76,6 +76,7 @@ typedef struct
     uint8 control_brake:1;
     sint8 control_steering_angle:7;
     uint8 control_transmission:2;
+//    uint32 control_timer:32; //지울것
 }move_signal;
 typedef struct
 {
