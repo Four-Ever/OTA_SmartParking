@@ -43,6 +43,7 @@
 extern double cam_points[4][2];
 extern double world_points[4][2];
 extern double H[3][3];
+extern double HR[3][3];
 extern int data_ready_flag;
 extern int transform_finished;
 /*********************************************************************************************************************/
@@ -59,6 +60,7 @@ extern int transform_finished;
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 void TransformData_Init(void);
 void transform_points(double H[3][3], double cam_points[4][2], double world_points[4][2]);
+void transform_points_HR(double HR[3][3], double cam_points[4][2], double world_points[4][2]);
 void InitCampoints(void);
 void InitWorldpoints(void);
 /*********************************************************************************************************************/

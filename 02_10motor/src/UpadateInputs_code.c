@@ -161,11 +161,11 @@ void update_VCU_inputs_c(void) {
             case Searching:  //차선인식 주차공간 탐색
                 stanelyAngle=gitstanleytest();
                 //vehicle_status.steering_angle = (sint8)stanelyAngle;  //
-                vehicle_status.steering_angle = stanelyAngle;  //
+                vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;
                 break;
             case Backward_Assist:  //차선인식 후진 RA
-                stanelyAngle=gitstanley();
+                stanelyAngle=gitstanleytest();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = -RefRPM;
                 break;

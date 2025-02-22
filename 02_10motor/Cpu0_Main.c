@@ -243,13 +243,12 @@ int core0_main (void)
                     data_ready_flag = 1;
 
                 //}
-                if (U8RSPAState == Searching || U8RSPAState == Backward_Assist) {  //lane detection mode
+                if (U8RSPAState == Searching ) {  //lane detection mode U8RSPAState == Backward_Assist
                     if (data_ready_flag == 1){
                         InitWorldpoints();
 
                         if(First_Set==1){    //
                             initStanley();
-                            initIMU_error();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
@@ -262,6 +261,31 @@ int core0_main (void)
                         else if (IsWPTrackingFinish==1){    //
                             initStanley();
                             initIMU_error();
+                            transform_points(H, cam_points, world_points);
+                            if (transform_finished==1){
+                                updateWaypoints(world_points);
+                            }
+                        }
+                        //U8IsWp_R=camera_mode;
+                    }
+                }
+                if ( U8RSPAState == Backward_Assist ) {  //lane detection mode U8RSPAState == Backward_Assist
+                    if (data_ready_flag == 1){
+                        InitWorldpoints();
+
+                        if(First_Set==1){    //
+                            initStanley();
+                            transform_points_HR(HR, cam_points, world_points);
+                            if (transform_finished==1){
+                                updateWaypoints(world_points);
+                            }
+                            First_Set=0;
+                            if (U8RSPAState==Searching){
+                                lanecheck_request=1;
+                            }
+                        }
+                        else if (IsWPTrackingFinish==1){    //
+                            initStanley();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
