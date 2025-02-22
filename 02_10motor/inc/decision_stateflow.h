@@ -71,6 +71,10 @@
 
 #define decision_stateflow_IN_FIND_CAR             ((uint8_T)6U)
 
+#define decision_stateflow_IN_CONERING              ((uint8_T)7U)
+#define decision_stateflow_IN_CONER_D               ((uint8_T)1U)
+#define decision_stateflow_IN_CONER_R               ((uint8_T)2U)
+#define decision_stateflow_IN_CONER_EXIT            ((uint8_T)3U)
 
 
 /* Block states (default storage) for system '<Root>' */
@@ -82,6 +86,7 @@ typedef struct {
   uint8_T is_SAFE_RCA;
   uint8_T is_SAFE_FCA;
   uint8_T is_FIND_CAR;
+  uint8_T is_CONERING;
 } DW_decision_stateflow_T;
 
 typedef enum{
@@ -113,6 +118,14 @@ typedef enum{
   RIGHT
 }IsPrk;
 
+typedef enum{
+  InitConering = 0,
+  Conering_Forward,
+  Conering_Backward,
+  Conering_Finished
+
+}ConerState;
+
 /* Real-time Model Data Structure */
 struct tag_RTM_decision_stateflow_T {
   const char_T * volatile errorStatus;
@@ -134,6 +147,7 @@ extern RSPAState U8RSPAState;
 extern int U8Driver;
 extern int U8RSPA;
 extern int U8Engine;
+extern ConerState U8ConerState;
 extern CAState U8FCAState;
 extern CAState U8RCAState;
 extern sint8 DSteeringinput;
@@ -148,11 +162,15 @@ extern int U8IsConerline;
 
 extern int ToController_Prkstate;
 extern int ToController_Exitstate;
+extern int md_flag;
+extern int conering_dir_flag;
+
 
 /* Model entry point functions */
 extern void decision_stateflow_initialize(void);
 extern void decision_stateflow_step(void);
 extern void decision_stateflow_terminate(void);
+extern void decision_stateflow_step_c(void);
 
 /* Real-time Model object */
 extern RT_MODEL_decision_stateflow_T *const decision_stateflow_M;

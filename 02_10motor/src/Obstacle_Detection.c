@@ -24,7 +24,7 @@ static float32 L_enddis = 0;
 
 int detecting_spot[NUM_ULTRA] = {0};
 float spotdistacne[NUM_ULTRA] = {0};
-//double U8Curr_vel = 10; //�굹以묒뿉 extern�빐�삤湲컈m/s
+//double U8Curr_vel = 10; //占쎄돌餓λ쵐肉� extern占쎈퉸占쎌궎疫뀁퍑m/s
 int ultra[2]={0};
 //void Obstacle_get_All_Distance (void)
 //{
@@ -33,7 +33,7 @@ int ultra[2]={0};
 //    if (Ultra_Distance[R_ULTRA] > PARKING_SPOT_LENGTH)
 //    {
 //        obstacle[R_OBSTACLE] = 0;///
-//        if (detecting_spot[R_ULTRA] == 0) //泥섏쓬 �깘吏�
+//        if (detecting_spot[R_ULTRA] == 0) //筌ｌ꼷�벉 占쎄튂筌욑옙
 //        {
 //            R_starttime = MODULE_STM0.TIM0.U;
 //            detecting_spot[R_ULTRA] = 1; //start
@@ -42,7 +42,7 @@ int ultra[2]={0};
 //        {
 //
 //            R_endtime = MODULE_STM0.TIM0.U;
-//            spotdistacne[R_ULTRA] += (float) (R_endtime - R_starttime) / IfxStm_getFrequency(&MODULE_STM0) * U8Curr_vel;//cm�떒�쐞
+//            spotdistacne[R_ULTRA] += (float) (R_endtime - R_starttime) / IfxStm_getFrequency(&MODULE_STM0) * U8Curr_vel;//cm占쎈뼊占쎌맄
 //            if (spotdistacne[R_ULTRA] > PARKING_SPOT_WIDTH)
 //            {
 //                parking_spot[R_ULTRA] = 1;
@@ -66,7 +66,7 @@ int ultra[2]={0};
 //    if (Ultra_Distance[L_ULTRA] > PARKING_SPOT_LENGTH)
 //    {
 //        obstacle[L_OBSTACLE] = 0;
-//        if (detecting_spot[L_ULTRA] == 0) //泥섏쓬 �깘吏�
+//        if (detecting_spot[L_ULTRA] == 0) //筌ｌ꼷�벉 占쎄튂筌욑옙
 //        {
 //            L_starttime = MODULE_STM0.TIM0.U;
 //            detecting_spot[L_ULTRA] = 1; //start
@@ -75,7 +75,7 @@ int ultra[2]={0};
 //        {
 //
 //            L_endtime = MODULE_STM0.TIM0.U;
-//            spotdistacne[L_ULTRA] += (float) (L_endtime - L_starttime) / IfxStm_getFrequency(&MODULE_STM0) * U8Curr_vel;//cm�떒�쐞
+//            spotdistacne[L_ULTRA] += (float) (L_endtime - L_starttime) / IfxStm_getFrequency(&MODULE_STM0) * U8Curr_vel;//cm占쎈뼊占쎌맄
 //            if (spotdistacne[L_ULTRA] > PARKING_SPOT_WIDTH)
 //            {
 //                parking_spot[L_ULTRA] = 1;
@@ -117,7 +117,7 @@ void Obstacle_get_All_Distance (void)
     if (Ultra_Distance[R_ULTRA] > PARKING_SPOT_LENGTH)
     {
         obstacle[R_OBSTACLE] = 0;///
-        if (detecting_spot[R_ULTRA] == 0) //泥섏쓬 �깘吏�
+        if (detecting_spot[R_ULTRA] == 0) //筌ｌ꼷�벉 占쎄튂筌욑옙
         {
             R_startdis=speed_pid.DisSum;
             detecting_spot[R_ULTRA] = 1; //start
@@ -130,6 +130,10 @@ void Obstacle_get_All_Distance (void)
             if (spotdistacne[R_ULTRA] > PARKING_SPOT_WIDTH)
             {
                 parking_spot[R_ULTRA] = 1;
+                R_startdis=0;
+                R_enddis=0;
+                //detecting_spot[R_ULTRA]=0;
+
             }
         }
     }
@@ -144,37 +148,37 @@ void Obstacle_get_All_Distance (void)
             obstacle[R_OBSTACLE] = 0;
 
     }
-    Ultra_Distance[L_ULTRA] = getDistance(L_ULTRA);
-    ultra[1]=Ultra_Distance[L_ULTRA];
-    if (Ultra_Distance[L_ULTRA] > PARKING_SPOT_LENGTH)
-    {
-        obstacle[L_OBSTACLE] = 0;
-        if (detecting_spot[L_ULTRA] == 0) //泥섏쓬 �깘吏�
-        {
-            L_startdis=speed_pid.DisSum;
-            detecting_spot[L_ULTRA] = 1; //start
-        }
-        else if (detecting_spot[L_ULTRA] == 1)
-        {
-
-            L_enddis=speed_pid.DisSum;
-            spotdistacne[L_ULTRA] = (float) (L_enddis-L_startdis)/10;
-            if (spotdistacne[L_ULTRA] > PARKING_SPOT_WIDTH)
-            {
-                parking_spot[L_ULTRA] = 1;
-            }
-        }
-    }
-    else
-    {
-        spotdistacne[L_ULTRA] = 0;
-        detecting_spot[L_ULTRA] = 0;
-        parking_spot[L_ULTRA] = 0;
-        if (Ultra_Distance[L_ULTRA] < RLOBSTACLE_WARNING)
-            obstacle[L_OBSTACLE] = (int)Ultra_Distance[L_ULTRA];
-        else
-            obstacle[L_OBSTACLE] = 0;
-    }
+//    Ultra_Distance[L_ULTRA] = getDistance(L_ULTRA);
+//    ultra[1]=Ultra_Distance[L_ULTRA];
+//    if (Ultra_Distance[L_ULTRA] > PARKING_SPOT_LENGTH)
+//    {
+//        obstacle[L_OBSTACLE] = 0;
+//        if (detecting_spot[L_ULTRA] == 0) //筌ｌ꼷�벉 占쎄튂筌욑옙
+//        {
+//            L_startdis=speed_pid.DisSum;
+//            detecting_spot[L_ULTRA] = 1; //start
+//        }
+//        else if (detecting_spot[L_ULTRA] == 1)
+//        {
+//
+//            L_enddis=speed_pid.DisSum;
+//            spotdistacne[L_ULTRA] = (float) (L_enddis-L_startdis)/10;
+//            if (spotdistacne[L_ULTRA] > PARKING_SPOT_WIDTH)
+//            {
+//                parking_spot[L_ULTRA] = 1;
+//            }
+//        }
+//    }
+//    else
+//    {
+//        spotdistacne[L_ULTRA] = 0;
+//        detecting_spot[L_ULTRA] = 0;
+//        parking_spot[L_ULTRA] = 0;
+//        if (Ultra_Distance[L_ULTRA] < RLOBSTACLE_WARNING)
+//            obstacle[L_OBSTACLE] = (int)Ultra_Distance[L_ULTRA];
+//        else
+//            obstacle[L_OBSTACLE] = 0;
+//    }
     ToF_get_All_Distance(); // put this code to task code ( work for synchronize recent distance data )
 //    Distance[TOF0]=10;
 //    Distance[TOF1]=20;
@@ -186,7 +190,7 @@ void Obstacle_get_All_Distance (void)
         obstacle[F_OBSTACLE] = Distance[TOF0]/10;  //cm
     else
         obstacle[F_OBSTACLE] = 0;
-    if ((Distance[TOF0]) < FBOBSTACLE_WARNING*10) // uart2 ToF Data
+    if ((Distance[TOF1]) < FBOBSTACLE_WARNING*10) // uart2 ToF Data
         obstacle[B_OBSTACLE] = Distance[TOF1]/10;  //cm
     else
         obstacle[B_OBSTACLE] = 0;
@@ -195,7 +199,7 @@ void Obstacle_get_All_Distance (void)
 
 double Cal_TTCD(double currvel) {
     double TTC;
-    if (currvel !=0) {
+    if (currvel !=0 || obstacle[F_OBSTACLE] !=0 ) {
         TTC = ((double)obstacle[F_OBSTACLE]/1000)/(currvel);
     }
     else TTC=0;
@@ -205,8 +209,8 @@ double Cal_TTCD(double currvel) {
 
 double Cal_TTCR(double currvel) {
     double TTC;
-    if (currvel !=0) {
-        TTC =((double)obstacle[F_OBSTACLE]/1000) / (currvel);
+    if (currvel !=0 || obstacle[R_OBSTACLE] !=0 ) {
+        TTC =((double)obstacle[R_OBSTACLE]/1000) / (currvel);
     }
     else TTC=0;
 

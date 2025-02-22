@@ -94,7 +94,7 @@ double v1;
 
 static uint32 prev_time =0;
 static uint32 now_time =0;
-
+static double prev_dis_sum = 0.0;  // 이전 거리 누적 값
 double steering_output=0;
 int IsWPTrackingFinish = 0;
 int Update_finished=0;
@@ -191,17 +191,8 @@ float gitstanley()
 
 float gitstanleytest()
 {
-    float deltaT =0;
-    prev_time=now_time;
-    now_time=MODULE_STM0.TIM0.U;
-
-    if(prev_time>now_time||prev_time==0)
-        deltaT=0.1;
-    else
-        {
-            deltaT=(float)(now_time-prev_time)/ (IfxStm_getFrequency(&MODULE_STM0) / 1000000);
-            deltaT=deltaT*0.001*0.001;///s단위
-        }
+    double delta_distance = speed_pid.DisSum - prev_dis_sum;  // 엔코더 변화량 계산
+    prev_dis_sum = speed_pid.DisSum;
 
 
     v1=(double)U8Curr_vel/1000; //현재 차속 m/s
@@ -224,6 +215,7 @@ float gitstanleytest()
     double dy = target_y - y;
     double distance_to_wp = sqrt(dx * dx + dy * dy);
 
+
     /* 경로 이탈 감지 */
     if (distance_to_wp > max_error) {
         exitg1 = true;
@@ -234,7 +226,7 @@ float gitstanleytest()
         current_wp_idx++;
         if(current_wp_idx!=num_waypoints) {
         target_x = waypointsT[current_wp_idx][0];
-        target_x = waypointsT[current_wp_idx][1];
+        target_y = waypointsT[current_wp_idx][1];
         }
     }
 
@@ -253,13 +245,16 @@ float gitstanleytest()
     /* 차량 위치 업데이트 */
 //    x += v1 * cos(theta) * 0.1;  // 100ms 간격 이동
 //    y += v1 * sin(theta) * 0.1;
-    x += v1 * cos(theta) * deltaT;  // 100ms 간격 이동
-    y += v1 * sin(theta) * deltaT;
+//    x += v1 * cos(theta) * deltaT;  // 100ms 간격 이동
+//    y += v1 * sin(theta) * deltaT;
 //    theta -= v1 / L * tan(steering_angle) * 0.1;
 //    wrapToPi(&theta);
+    // 엔코더 기반 위치 업데이트
+    x += delta_distance * cos(theta);
+    y += delta_distance * sin(theta);
 
     /* 종료 조건을 만족하면 조향 입력 0 */
-    if(x >= 0.5){
+    if(x >= 0.5 ){
         exitg1=1;
     }
     if (exitg1 || current_wp_idx >= num_waypoints ) {
