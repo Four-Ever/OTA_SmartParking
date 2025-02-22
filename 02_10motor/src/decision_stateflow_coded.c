@@ -61,6 +61,7 @@ double DMoveDis=0;
 int calDis=0;
 int First_Set = 1;
 int md_flag=0;
+int conering_dir_flag = 0;
 
 IsPrk IsPrk_LR = InitIsPrk;
 
@@ -133,28 +134,81 @@ void decision_stateflow_step_c(void)
 
                 break;
             case decision_stateflow_IN_CONERING:
-                U8RSPA=ModeOn;
                 U8Driver=ModeOff;
+                U8RSPA=ModeOn;
                 U8ConerState=InitConering;
+
 
                 switch (decision_stateflow_DW.is_CONERING)
                 {
+                    // 왼쪽(-30) 전진 적당히. 우 (30) 후진 적당히. 왼쪽 (-30)전진, 정렬 후 코너링 끝
+
                     case decision_stateflow_IN_CONER_D:
                         U8ConerState=Conering_Forward;
+                        U8Ref_vel= DInputVD;
+                        ToController_Prkstate = 1;
+
+                        if(conering_dir_flag == 0)
+                        {
+                            if(move_distance(310)== REACHED_TARGET_DIS)
+                            {
+                                DInputVD = 0;
+                                conering_dir_flag = 1;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_R;
+                            }
+
+                        }
+
+                        else if(conering_dir_flag ==2)
+                        {
+                            if(move_distance(70)== REACHED_TARGET_DIS)
+                            {
+                                DInputVD = 0;
+                                conering_dir_flag =3;
+
+                            }
+                        }
+                        else if(conering_dir_flag ==3)
+                        {
+                            if(move_distance(10)== REACHED_TARGET_DIS)
+                            {
+                                DInputVD = 0;
+                                conering_dir_flag =0;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_EXIT;
+                            }
+                        }
+
+
+
                         break;
 
                     case decision_stateflow_IN_CONER_R:
-                        U8ConerState=Conering_Backward;
-                    break;
+                        U8ConerState= Conering_Backward;
+                        U8Ref_vel= DInputVR;
+                        ToController_Prkstate = 2;
+                        if(conering_dir_flag == 1)
+                        {
+                            if(move_distance(-200)== REACHED_TARGET_DIS)
+                            {
+                                DInputVR = 0;
+                                conering_dir_flag = 2;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
+                            }
+
+                        }
+
+
+                        break;
 
                     case decision_stateflow_IN_CONER_EXIT:
                         U8ConerState=Conering_Finished;
                         D_RefRPM=0;
                         if (U8Curr_vel==0){
+                            U8IsConerline = 0;
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
                         }
-                    break;
+                        break;
 
                 }
 
@@ -448,7 +502,8 @@ void decision_stateflow_step_c(void)
                         if (U8IsConerline==1){
                             U8Ref_vel = 0;
                             if (U8Curr_vel==0){
-
+                                decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_CONERING;
+                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_CONER_D;
                             }
                         }
 

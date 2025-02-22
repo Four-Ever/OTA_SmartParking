@@ -54,7 +54,7 @@ void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 I
     }
 
 
-if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
+    if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVER_Mode){
 
        vehicle_status.transmission = U8IsTrButton;
 
@@ -169,7 +169,40 @@ if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_DRIVE
         }
     }
 
-    //모터 input
+    else if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_CONERING){
+        switch (U8ConerState) {
+            case InitConering:
+                break;
+            case Conering_Forward:
+                if(conering_dir_flag == 0)
+                {
+                    vehicle_status.steering_angle = -35;
+                    vehicle_status.ref_rpm = 2300;
+                }
+                else if(conering_dir_flag == 2)
+                {
+                    vehicle_status.steering_angle = -35;
+                    vehicle_status.ref_rpm = 2300;
+                }
+                else if(conering_dir_flag == 3)
+                {
+                    vehicle_status.steering_angle = 0;
+                    vehicle_status.ref_rpm = 1500;
+                }
+                break;
+            case Conering_Backward:
+                if(conering_dir_flag == 1)
+                {
+                    vehicle_status.steering_angle = 40;
+                    vehicle_status.ref_rpm = -1000;
+                }
+                break;
+            case Conering_Finished:
+                break;
+        }
+    }
+
+    // input
     setServoAngle(vehicle_status.steering_angle);
     RPM_CMD1=vehicle_status.ref_rpm;
 }
