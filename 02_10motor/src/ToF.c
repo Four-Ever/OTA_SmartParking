@@ -33,15 +33,41 @@ void IsrUart0RxHandler_tof(void)
     static unsigned char rxBuf[16] = {0};
 
     uint8 c = in_uart0();
+    static uint8 flag = 0;
+    static uint8 keep_receive = 0;
+    if(!keep_receive)
+    {
+        if(flag==0 && c == 0x57)
+        {
+            flag=1;
+        }
+        else if(flag==1 && c== 0x00)
+        {
+            flag=2;
+        }
+        else if(flag==2 && c==0xFF)
+        {
+//            flag=0;
+            keep_receive = 1;
+        }
+        else
+        {
+            return;
+        }
+    }
+
 
     rxBuf[rxBuf0Idx] = c;
     ++rxBuf0Idx;
+
 
     /* 버퍼가 꽉 차면, buf_tof에 복사 */
     if (rxBuf0Idx == TOF_length)
     {
         memcpy(gBuf0_tof, rxBuf, TOF_length);
         rxBuf0Idx = 0;
+        keep_receive = 0;
+        flag = 0;
     }
 }
 
@@ -52,7 +78,28 @@ void IsrUart1RxHandler_tof(void)
     static unsigned char rxBuf[16] = {0};
 
     uint8 c = in_uart1();
-
+    static uint8 flag = 0;
+    static uint8 keep_receive = 0;
+    if(!keep_receive)
+    {
+        if(flag==0 && c == 0x57)
+        {
+            flag=1;
+        }
+        else if(flag==1 && c== 0x00)
+        {
+            flag=2;
+        }
+        else if(flag==2 && c==0xFF)
+        {
+//            flag=0;
+            keep_receive = 1;
+        }
+        else
+        {
+            return;
+        }
+    }
     rxBuf[rxBuf1Idx] = c;
     ++rxBuf1Idx;
 
@@ -61,6 +108,8 @@ void IsrUart1RxHandler_tof(void)
     {
         memcpy(gBuf1_tof, rxBuf, TOF_length);
         rxBuf1Idx = 0;
+        keep_receive = 0;
+        flag = 0;
     }
 }
 
