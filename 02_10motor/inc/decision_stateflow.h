@@ -133,37 +133,28 @@ struct tag_RTM_decision_stateflow_T {
 
 /* Block states (default storage) */
 
-extern double initVel;
-extern Transmission U8IsTrButton;
-extern double U8Ref_vel;
-extern double DInputVD;
-extern double DInputVR;
-extern int IsRSPAButton;
-extern int U8IsWp_R;
-extern int U8IsStopline;
-extern int U8IsPrkFinished;
+/*global */
 extern DriverState U8DriverState;
 extern RSPAState U8RSPAState;
-extern int U8Driver;
-extern int U8RSPA;
-extern int U8Engine;
-extern ConerState U8ConerState;
 extern CAState U8FCAState;
 extern CAState U8RCAState;
-extern sint8 DSteeringinput;
+extern ConerState U8ConerState;
+extern IsPrk IsPrk_LR;
+extern int lanecheck_request;
 extern int U8PrkFinished;
-extern int ExitCAR_request;
-extern double D_Ref_vel;
 extern int CameraSwitchRequest;
 extern int First_Set;
-extern int lanecheck_request;
-extern IsPrk IsPrk_LR;
-extern int U8IsConerline;
-
-extern int ToController_Prkstate;
-extern int ToController_Exitstate;
 extern int md_flag;
 extern int conering_dir_flag;
+extern int ToController_Prkstate;
+extern int ToController_Exitstate;
+extern double U8Ref_vel;
+extern Transmission U8IsTrButton;
+extern int IsRSPAButton;
+extern int U8IsStopline;
+extern int U8IsConerline;
+extern int ExitCAR_request;
+extern double D_Ref_vel;
 
 
 /* Model entry point functions */

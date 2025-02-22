@@ -18,7 +18,6 @@
  */
 
 #include "decision_stateflow.h"
-
 #include "rtwtypes.h"
 #include "IfxGpt12_IncrEnc.h"
 
@@ -30,57 +29,49 @@ DW_decision_stateflow_T decision_stateflow_DW;
 RT_MODEL_decision_stateflow_T decision_stateflow_M_;
 RT_MODEL_decision_stateflow_T *const decision_stateflow_M = &decision_stateflow_M_;
 
+/*inputs*/
+Transmission U8IsTrButton = 0;
+int IsRSPAButton = 0;
+int U8IsStopline = 0;
+int U8IsConerline = 0;
+int ExitCAR_request=0;
+
+/*outputs*/
+  //main.c//
+int lanecheck_request=0;
+int U8PrkFinished=0;
+int CameraSwitchRequest=0;
+int First_Set = 1;
+int ToController_Prkstate=0;
+int ToController_Exitstate=0;
+  //updateinputs.c//
+int md_flag=-1;
+int conering_dir_flag = 0;
+double U8Ref_vel = 0;
+IsPrk IsPrk_LR = InitIsPrk;
+DriverState U8DriverState = InitDriverState;
+RSPAState U8RSPAState = InitRSPAState;
+CAState U8FCAState = InitCAState;
+CAState U8RCAState = InitCAState;
+ConerState U8ConerState = InitConering;
+
 /*variabls*/
 int ModeOff = 0;
 int ModeOn = 1;
-//char initState = '0';
-double initVel = 0;
-Transmission U8IsTrButton = 0;
-double U8Ref_vel = 0;
-double DInputVD = 0.1;
-double DInputVR = -0.1;
-int IsRSPAButton = 0;
-int U8IsWp_R = 0;
-int U8IsStopline = 0;
-int U8IsPrkFinished = 0;
-DriverState U8DriverState = InitDriverState;
-RSPAState U8RSPAState = InitRSPAState;
 int U8Driver = 0;
 int U8RSPA = 0;
 int U8Engine = 0;
 int U8Parkingfail=0;
-int U8PrkFinished=0;
-int ExitCAR_request=0;
-double D_Ref_vel=0;
-int lanecheck_request=0;
-
-int CameraSwitchRequest=0;
-int Isprkslot;
-sint8 DSteeringinput=0;
-double DMoveDis=0;
-int calDis=0;
-int First_Set = 1;
-int md_flag=-1;
-int conering_dir_flag = 0;
-
-IsPrk IsPrk_LR = InitIsPrk;
-
-int U8IsConerline = 0;
-ConerState U8ConerState=InitConering;
-
-CAState U8FCAState = InitCAState;
-CAState U8RCAState = InitCAState;
+double initVel = 0;
+double DInputVD = 0.1;
+double DInputVR = -0.1;
 double gainTTC=0.0;
-
-int ToController_Prkstate=0;
-int ToController_Exitstate=0;
-
+double D_Ref_vel=0;
 
 
 /* Model step function */
 void decision_stateflow_step_c(void)
 {
-
 
     /* Chart: '<Root>/decision' */
 

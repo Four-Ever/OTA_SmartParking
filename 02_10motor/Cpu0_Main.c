@@ -267,7 +267,7 @@ int core0_main (void)
                                 updateWaypoints(world_points);
                             }
                         }
-                        U8IsWp_R=camera_mode;
+                        //U8IsWp_R=camera_mode;
                     }
                 }
             }
