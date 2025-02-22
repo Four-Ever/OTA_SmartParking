@@ -140,14 +140,14 @@ int core0_main (void)
 
     init_LED_Buzzer();
 
-    alarm_request = 1;
+
     initStanley();
 
     initIMU();
     waitTime(100000000);
     //U8Driver=ModeOn;
-
-    IsRSPAButton = 1;
+    alarm_request =1;
+    //IsRSPAButton = 1;
 #ifdef motor_Test
     // motor_enable = 1;
     Kp_s = 1.55f;//1.75f;
@@ -181,7 +181,7 @@ int core0_main (void)
 
         }
         //占쎈퓦筌욑옙 ON
-//        if (vehicle_status.engine_state == ENGINE_ON)
+        if (vehicle_status.engine_state == ENGINE_ON)
         {
             //driver mode
             if (db_flag.CGW_Move_Flag == 1)
@@ -282,34 +282,34 @@ int core0_main (void)
         }
 
         //engine off
-//        else if (vehicle_status.engine_state == ENGINE_OFF)
-//        {
-//            if (db_flag.CGW_Off_Request_Flag==1)
-//            {
-//                db_flag.CGW_Off_Request_Flag=0;
-//
-//                //
-//                if (db_msg.CGW_Off_Request.alert_request==1)
-//                {
-//                    //find my car_LED/Sound
-//                    if (U8PrkFinished==1)
-//                    {
-//
-//                    }
-//                }
-//
-//                //�빊�뮇媛�
-//                if (db_msg.CGW_Off_Request.auto_exit_request==1)
-//                {
-//                    vehicle_status.engine_state = ENGINE_ON;
-//
-//                    if (U8PrkFinished==1)
-//                    {
-//                        ExitCAR_request=1;
-//                    }
-//                }
-//            }
-//        }
+        if (vehicle_status.engine_state == ENGINE_OFF)
+        {
+            if (db_flag.CGW_Off_Request_Flag==1)
+            {
+                db_flag.CGW_Off_Request_Flag=0;
+
+                //
+                if (db_msg.CGW_Off_Request.alert_request==1)
+                {
+                    //find my car_LED/Sound
+                    if (U8PrkFinished==1)
+                    {
+                        alarm_request=1;
+                    }
+                }
+
+                //�빊�뮇媛�
+                if (db_msg.CGW_Off_Request.auto_exit_request==1)
+                {
+                    vehicle_status.engine_state = ENGINE_ON;
+
+                    if (U8PrkFinished==1)
+                    {
+                        ExitCAR_request=1;
+                    }
+                }
+            }
+        }
 #endif
     }
 
@@ -432,6 +432,14 @@ void AppTask50ms (void)
     Obstacle_get_All_Distance();
     decision_stateflow_step_c();
 
+    if (U8RSPAState == Backward || U8DriverState == Reversing){
+        set_Buzzer_period(obstacle[B_OBSTACLE]);
+    }
+    else {
+        set_Buzzer_period(TURN_OFF_BUZZER);
+    }
+
+    Buzzer();
 }
 
 void AppTask100ms (void)
