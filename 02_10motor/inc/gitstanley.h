@@ -30,6 +30,7 @@ extern int Update_finished;
 extern float stanleytref_vel;
 //test
 extern double x, y;
+extern double waypoints[][2];
 extern const double waypointsT[][2];
 extern int current_wp_idx;
 
@@ -41,7 +42,7 @@ extern "C" {
 float gitstanley(void);
 float gitstanleytest(void);
 void initStanley(void);
-void updateWaypoints(float new_waypoints[][2]);
+void updateWaypoints(double new_waypoints[][2]);
 
 #ifdef __cplusplus
 }

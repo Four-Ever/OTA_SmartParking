@@ -113,18 +113,18 @@
 
  typedef struct // 6
  {
-         uint16 cordi_data_y1 : 11;
+         sint16 cordi_data_y1 : 11;
          sint16 cordi_data_x1 : 10;
-         uint16 cordi_data_y2 : 11;
+         sint16 cordi_data_y2 : 11;
          sint16 cordi_data_x2 : 10;
 
  } CCU_Cordi_data1_Msg;
 
  typedef struct // 6
  {
-         uint16 cordi_data_y3 : 11;
+         sint16 cordi_data_y3 : 11;
          sint16 cordi_data_x3 : 10;
-         uint16 cordi_data_y4 : 11;
+         sint16 cordi_data_y4 : 11;
          sint16 cordi_data_x4 : 10;
          uint8 using_camera : 2;
          uint8 trust_value : 6;

@@ -17,6 +17,7 @@
 #include <math.h>
 #include <string.h>
 #include "ASCLIN_Shell_UART.h"
+#include "Homo_Coordinate.h"
 #include "IfxStm.h"
 
 /* Function Definitions */
@@ -28,14 +29,16 @@
  */
 
 
-static const double waypoints[][2] = {
-    {0.0, -0.3},
-    {0.2, -0.25},
-    {0.4, -0.2},
-    {0.6, -0.1},
-    {0.8, 0},
-    {0.9, 0.1}
-};
+double waypoints[4][2]={0};
+
+//static const double waypoints[][2] = {
+//    {0.0, -0.3},
+//    {0.2, -0.25},
+//    {0.4, -0.2},
+//    {0.6, -0.1},
+//    {0.8, 0},
+//    {0.9, 0.1}
+//};
 
  const double waypointsT[][2] = {
 //    {0.0, 0.0},
@@ -46,18 +49,18 @@ static const double waypoints[][2] = {
 //    {0.5, 0.7}
 
 //        //전진 ok
-//        {0, 0},
-//        {0.15, 0},
-//        {0.3, 0},
-//        {0.45, 0},
-//        {0.6, 0}
+        {0, 0},
+        {0.15, 0},
+        {0.3, 0},
+        {0.45, 0},
+        {0.6, 0}
 
         //왼쪽 전진
-        {0, 0},
-        {0.15, 0.05},
-        {0.3, 0.15},
-        {0.4, 0.2},
-        {0.5, 0.22}
+//        {0, 0},
+//        {0.15, 0.05},
+//        {0.3, 0.15},
+//        {0.4, 0.2},
+//        {0.5, 0.22}
 
         //오른쪽 전진
 //        {0, 0},
@@ -67,11 +70,8 @@ static const double waypoints[][2] = {
 //        {0.5, -0.22}
 };
 
-
-
-
-static int num_waypoints = sizeof(waypointsT) / sizeof(waypointsT[0]);  //원래는 주석처리해야함
-
+//static int num_waypoints = sizeof(waypointsT) / sizeof(waypointsT[0]);  //원래는 주석처리해야함
+static int num_waypoints = 4;
 /* 차량 상태 변수 */
 double x, y, theta;
 //testing
@@ -92,8 +92,6 @@ double x, y, theta;
 double v;
 double v1;
 
-static uint32 prev_time =0;
-static uint32 now_time =0;
 static double prev_dis_sum = 0.0;  // 이전 거리 누적 값
 double steering_output=0;
 int IsWPTrackingFinish = 0;
@@ -114,25 +112,35 @@ void initStanley(void) {
     Update_finished=0;
 }
 
-void updateWaypoints(float new_waypoints[][2]) {
-    memcpy(waypoints, new_waypoints, sizeof(double) * 2 * 4);
+void updateWaypoints(double new_waypoints[4][2]) {
+    //memcpy(waypoints, new_waypoints, sizeof(double) * 2 * 4);
+    for(int i=0;i<4;i++)
+        for(int j=0;j<2;j++)
+            waypoints[i][j]=new_waypoints[i][j];
+
     Update_finished=1;
 }
 
 /* Stanley Controller 적용 함수 */
-float gitstanley()
+float gitstanley(void)
 {
-    if (Update_finished==1) {
-    v=(double)U8Curr_vel/1000; //현재 차속 m/s
-    theta=-stanelytheta*(PI/180);
+    double delta_distance = speed_pid.DisSum - prev_dis_sum;  // 엔코더 변화량 계산
+    prev_dis_sum = speed_pid.DisSum;
+
+
+        v1=(double)U8Curr_vel/1000; //현재 차속 m/s
+        if(v1 >= 0.1){
+            v1=0.1;
+        }
+        theta=-stanelytheta*(PI/180);
 
     /*종료 조건: 경로 이탈 또는 모든 Waypoint 도달 */
     if (exitg1) {
         return 0.0f;
     }
 
-    double target_x = waypoints[current_wp_idx][0];
-    double target_y = waypoints[current_wp_idx][1];
+    double target_x = world_points[current_wp_idx][0];
+    double target_y = world_points[current_wp_idx][1];
 
    /* 현재 목표 Waypoint와의 거리 계산 */
     double dx = target_x - x;
@@ -145,10 +153,12 @@ float gitstanley()
     }
 
     /* Waypoint 도달 여부 확인 후 다음 Waypoint로 이동 */
-    if (distance_to_wp < waypoint_tolerance && current_wp_idx + 1 < num_waypoints) {
+    if (distance_to_wp < waypoint_tolerance && current_wp_idx + 1 <= num_waypoints) {
         current_wp_idx++;
-        target_x = waypoints[current_wp_idx][0];
-        target_y = waypoints[current_wp_idx][1];
+        if(current_wp_idx!=num_waypoints) {
+        target_x = world_points[current_wp_idx][0];
+        target_y = world_points[current_wp_idx][1];
+        }
     }
 
     /* CTE(횡방향 오차) 계산 (embeddedStanley.m 방식 적용) */
@@ -158,37 +168,39 @@ float gitstanley()
     double cte = sin(heading_error) * distance_to_wp;
 
     /* Stanley Controller 조향각 계산 */
-    double steering_angle = atan2(Kstanley * cte, fabs(v)) - heading_error;
+    double steering_angle = atan2(Kstanley * cte, fabs(v1)) - heading_error;
+
 
     /* 조향각 제한 적용 */
     steering_angle = fmax(fmin(steering_angle, max_steer), -max_steer);
 
-    /* 차량 위치 업데이트 */
-    x += v * cos(theta) * 0.01;  // 100ms 간격 이동
-    y += v * sin(theta) * 0.01;
+    // 엔코더 기반 위치 업데이트
+    x += delta_distance * cos(theta);
+    y += delta_distance * sin(theta);
     //theta -= v / L * tan(steering_angle) * 0.01;
     //wrapToPi(&theta);
 
     /* 종료 조건을 만족하면 조향 입력 0 */
-    if (exitg1 || current_wp_idx >= num_waypoints) {
+    if(x >= world_points[3][0] ){
+        exitg1=1;
+    }
+    if (exitg1 || current_wp_idx >= num_waypoints ) {
         steering_output = 0;
         IsWPTrackingFinish = 1;
-
+        stanleytref_vel=0;
+//        flag=1;
     }
     else { //종료조건이 아니면 계산한 steering 값 넣어주기
         steering_output = round(steering_angle * (180.0 / PI));  // DEGREE 변환
-        if (steering_output >0){
-            steering_output=steering_output+2;
+        if (steering_output >0){  //왼쪽
+            steering_output=steering_output+4;  //직진 4
         }
-        else if (steering_output<0) {
-            steering_output=steering_output-2;
+        else if (steering_output<0) {  //오른쪽
+            steering_output=steering_output-2;  //직진 2
         }
+        stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
     }
-
-    }
-    return steering_output ;
 }
-
 float gitstanleytest()
 {
     double delta_distance = speed_pid.DisSum - prev_dis_sum;  // 엔코더 변화량 계산
