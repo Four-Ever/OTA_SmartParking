@@ -130,6 +130,10 @@ void Obstacle_get_All_Distance (void)
             if (spotdistacne[R_ULTRA] > PARKING_SPOT_WIDTH)
             {
                 parking_spot[R_ULTRA] = 1;
+                R_startdis=0;
+                R_enddis=0;
+                //detecting_spot[R_ULTRA]=0;
+
             }
         }
     }

@@ -167,10 +167,10 @@ int core0_main (void)
 
 
         AppScheduling();
-//        //stopstatus=Touch();
-//        //can msg �닔�떊
-//#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // �썒�슣�닗筌묕옙 占쎄턀�겫�뼔援�
-//        // �뿏吏� on/off
+        //stopstatus=Touch();
+        //can msg 占쎈땾占쎈뻿
+#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 占쎌뜏占쎌뒩占쎈떁嶺뚮쵓�삕 �뜝�럡��占쎄껀占쎈폇�뤃占�
+        // 占쎈퓦筌욑옙 on/off
         if (db_flag.CGW_Engine_Flag == 1)
         {
             db_flag.CGW_Engine_Flag = 0;
@@ -180,9 +180,9 @@ int core0_main (void)
            // }
 
         }
-        //�뿏吏� ON
-        //if (vehicle_status.engine_state == ENGINE_ON)
-        //{
+        //占쎈퓦筌욑옙 ON
+//        if (vehicle_status.engine_state == ENGINE_ON)
+        {
             //driver mode
             if (db_flag.CGW_Move_Flag == 1)
             {
@@ -221,7 +221,7 @@ int core0_main (void)
 
             //waypoint msg
             if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-                //筌뤴뫀諭� wp 筌롫뗄苑�筌욑옙�몴占� 占쎈땾占쎈뻿占쎈뻥占쎌뱽 占쎈르
+                //嶺뚮ㅄ維�獄�占� wp 嶺뚮∥�뾼�땻占썹춯�쉻�삕占쎈ご�뜝占� �뜝�럥�빢�뜝�럥六욕뜝�럥六ε뜝�럩諭� �뜝�럥瑜�
                 db_flag.CCU_Cordi_data1_Flag=0;
                 db_flag.CCU_Cordi_data2_Flag=0;
 
@@ -249,19 +249,19 @@ int core0_main (void)
 
                         if(First_Set==1){    //
                             initStanley();
-                            //initIMU_error();
+                            initIMU_error();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
                             }
+                            First_Set=0;
                             if (U8RSPAState==Searching){
                                 lanecheck_request=1;
                             }
-                            First_Set=0;
                         }
                         else if (IsWPTrackingFinish==1){    //
                             initStanley();
-                            //initIMU_error();
+                            initIMU_error();
                             transform_points(H, cam_points, world_points);
                             if (transform_finished==1){
                                 updateWaypoints(world_points);
@@ -279,38 +279,38 @@ int core0_main (void)
                 db_flag.CCU_RightAngle_detect_Flag = 0;
                 U8IsConerline = db_msg.CCU_RightAngle_detect.right_angle_lane_detected;
             }
-        //}
+        }
 
         //engine off
-        else if (vehicle_status.engine_state == ENGINE_OFF)
-        {
-            if (db_flag.CGW_Off_Request_Flag==1)
-            {
-                db_flag.CGW_Off_Request_Flag=0;
-
-                //
-                if (db_msg.CGW_Off_Request.alert_request==1)
-                {
-                    //find my car_LED/Sound
-                    if (U8PrkFinished==1)
-                    {
-
-                    }
-                }
-
-                //異쒖감
-                if (db_msg.CGW_Off_Request.auto_exit_request==1)
-                {
-                    vehicle_status.engine_state = ENGINE_ON;
-
-                    if (U8PrkFinished==1)
-                    {
-                        ExitCAR_request=1;
-                    }
-                }
-            }
-        }
-////#endif
+//        else if (vehicle_status.engine_state == ENGINE_OFF)
+//        {
+//            if (db_flag.CGW_Off_Request_Flag==1)
+//            {
+//                db_flag.CGW_Off_Request_Flag=0;
+//
+//                //
+//                if (db_msg.CGW_Off_Request.alert_request==1)
+//                {
+//                    //find my car_LED/Sound
+//                    if (U8PrkFinished==1)
+//                    {
+//
+//                    }
+//                }
+//
+//                //�빊�뮇媛�
+//                if (db_msg.CGW_Off_Request.auto_exit_request==1)
+//                {
+//                    vehicle_status.engine_state = ENGINE_ON;
+//
+//                    if (U8PrkFinished==1)
+//                    {
+//                        ExitCAR_request=1;
+//                    }
+//                }
+//            }
+//        }
+#endif
     }
 
     return 0;
