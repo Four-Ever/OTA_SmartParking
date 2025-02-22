@@ -10,7 +10,7 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     // 파라미터 선언
     // this->declare_parameter("mode", "driving");
     this->declare_parameter("mode", "offstate");                 // 실제 동작때.
-    this->declare_parameter("expected_lane_width", 500);         // Edit Param
+    this->declare_parameter("expected_lane_width", 600);         // Edit Param
     this->declare_parameter("expected_parking_lane_width", 500); // Edit Param
     this->declare_parameter("lane_request", false);
 
@@ -42,8 +42,6 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     // IPM 변환 행렬 파라미터 초기화
     std::vector<cv::Point2f> front_src_points = {
         cv::Point2f(0, 390), cv::Point2f(640, 390),
-        // cv::Point2f(110, 200), cv::Point2f(530, 200)
-        // rear : cv::Point2f(200, 0), cv::Point2f(440, 0)};
         cv::Point2f(175, 180), cv::Point2f(465, 180)};
     std::vector<cv::Point2f> rear_src_points = {
         cv::Point2f(0, 430), cv::Point2f(640, 430),
@@ -841,7 +839,7 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
 
                 // 선의 y좌표가 이미지 아래쪽에 있는지 확인 Edit Param
                 float y_avg = (line[1] + line[3]) / 2.0f;
-                if (std::abs(angle) < 5 && y_avg > IMG_HEIGHT * 2 / 3)
+                if (y_avg > IMG_HEIGHT * 2 / 3) // std::abs(angle) < 5 삭제
                 {
                     line_in_bottom = true;
                 }
