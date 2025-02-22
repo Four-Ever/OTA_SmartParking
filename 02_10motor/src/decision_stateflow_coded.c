@@ -463,7 +463,7 @@ void decision_stateflow_step_c(void)
                 {
                     case decision_stateflow_IN_RSPA_IS_SLOT:
                         U8RSPAState= Searching;
-                        U8Ref_vel=0.15;   //DInputVD
+                        U8Ref_vel=0.10;   //DInputVD
                         ToController_Prkstate=0;
 
 

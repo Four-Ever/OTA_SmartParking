@@ -11,7 +11,7 @@ int conersteering = -50;
 //int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
 /* 종횡제어 reference input */
 
-void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 INPUT 도 넣어야 함.
+void update_VCU_inputs_c(void) {
     RefRPM= ((float)U8Ref_vel)*(60*gear_ratio*1000) / circumference;
     if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_SAFE_RCA ){
 
@@ -33,7 +33,7 @@ void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 I
 
     //출차 요청
     if (decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_FIND_CAR){
-        vehicle_status.steering_angle = 0;
+        vehicle_status.steering_angle = 10;
         vehicle_status.ref_rpm = RefRPM;
     }
 
@@ -159,7 +159,7 @@ void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 I
 //                }
                 break;
             case Searching:  //차선인식 주차공간 탐색
-                stanelyAngle=gitstanley();
+                stanelyAngle=gitstanleytest();
                 //vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.steering_angle = stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;

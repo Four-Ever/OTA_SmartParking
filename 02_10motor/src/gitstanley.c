@@ -29,7 +29,12 @@
  */
 
 
-double waypoints[4][2]={0};
+double waypoints[4][2]={
+        {0, 0},
+        {0, 0},
+        {0, 0},
+        {0, 0}
+};
 
 //static const double waypoints[][2] = {
 //    {0.0, -0.3},
@@ -71,7 +76,11 @@ double waypoints[4][2]={0};
 };
 
 //static int num_waypoints = sizeof(waypointsT) / sizeof(waypointsT[0]);  //원래는 주석처리해야함
-static int num_waypoints = 4;
+int num_waypoints = 0;
+//리팩토링
+static double refactoredWaypoints[10][2];
+static int num_refactored_waypoints = 0;
+static bool waypointsRefactored = false; // waypoint 리
 /* 차량 상태 변수 */
 double x, y, theta;
 //testing
@@ -113,12 +122,63 @@ void initStanley(void) {
 }
 
 void updateWaypoints(double new_waypoints[4][2]) {
-    //memcpy(waypoints, new_waypoints, sizeof(double) * 2 * 4);
     for(int i=0;i<4;i++)
         for(int j=0;j<2;j++)
             waypoints[i][j]=new_waypoints[i][j];
 
     Update_finished=1;
+    waypointsRefactored = false;
+}
+
+void refactorWaypointsTo10cm(void) {
+    num_refactored_waypoints = 0;
+    int orig_wp_count = sizeof(waypoints) / sizeof(waypoints[0]);
+
+    for (int i = 0; i < orig_wp_count - 1; i++) {
+        double x0 = waypoints[i][0];
+        double y0 = waypoints[i][1];
+        double x1 = waypoints[i + 1][0];
+        double y1 = waypoints[i + 1][1];
+        double seg_dx = x1 - x0;
+        double seg_dy = y1 - y0;
+        double seg_length = sqrt(seg_dx * seg_dx + seg_dy * seg_dy);
+
+        if (i == 0) {
+            refactoredWaypoints[num_refactored_waypoints][0] = x0;
+            refactoredWaypoints[num_refactored_waypoints][1] = y0;
+            num_refactored_waypoints++;
+        }
+
+        int intervals = (int)(seg_length / 0.1);
+        for (int j = 1; j <= intervals; j++) {
+            double ratio = ((double)j * 0.1) / seg_length;
+            double new_x = x0 + ratio * seg_dx;
+            double new_y = y0 + ratio * seg_dy;
+
+            if (num_refactored_waypoints > 0) {
+                double last_x = refactoredWaypoints[num_refactored_waypoints - 1][0];
+                double last_y = refactoredWaypoints[num_refactored_waypoints - 1][1];
+                if (fabs(new_x - last_x) < 1e-6 && fabs(new_y - last_y) < 1e-6) {
+                    continue;
+                }
+            }
+            refactoredWaypoints[num_refactored_waypoints][0] = new_x;
+            refactoredWaypoints[num_refactored_waypoints][1] = new_y;
+            num_refactored_waypoints++;
+            if(num_refactored_waypoints >= 10)
+                break;
+        }
+
+        double last_x = refactoredWaypoints[num_refactored_waypoints - 1][0];
+        double last_y = refactoredWaypoints[num_refactored_waypoints - 1][1];
+        if (fabs(last_x - x1) > 1e-6 || fabs(last_y - y1) > 1e-6) {
+            refactoredWaypoints[num_refactored_waypoints][0] = x1;
+            refactoredWaypoints[num_refactored_waypoints][1] = y1;
+            num_refactored_waypoints++;
+        }
+    }
+    num_waypoints = num_refactored_waypoints;
+    waypointsRefactored = true;
 }
 
 /* Stanley Controller 적용 함수 */
@@ -200,9 +260,13 @@ float gitstanley(void)
         }
         stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
     }
+    return steering_output;
 }
 float gitstanleytest()
 {
+    if (!waypointsRefactored) {
+        refactorWaypointsTo10cm();
+    }
     double delta_distance = speed_pid.DisSum - prev_dis_sum;  // 엔코더 변화량 계산
     prev_dis_sum = speed_pid.DisSum;
 
@@ -219,8 +283,8 @@ float gitstanleytest()
         return 0.0f;
     }
 
-    double target_x = waypointsT[current_wp_idx][0];
-    double target_y = waypointsT[current_wp_idx][1];
+    double target_x =  refactoredWaypoints[current_wp_idx][0];
+    double target_y =  refactoredWaypoints[current_wp_idx][1];
 
    /* 현재 목표 Waypoint와의 거리 계산 */
     double dx = target_x - x;
@@ -237,8 +301,8 @@ float gitstanleytest()
     if (distance_to_wp < waypoint_tolerance && current_wp_idx + 1 <= num_waypoints) {
         current_wp_idx++;
         if(current_wp_idx!=num_waypoints) {
-        target_x = waypointsT[current_wp_idx][0];
-        target_y = waypointsT[current_wp_idx][1];
+        target_x =  refactoredWaypoints[current_wp_idx][0];
+        target_y =  refactoredWaypoints[current_wp_idx][1];
         }
     }
 
@@ -266,7 +330,7 @@ float gitstanleytest()
     y += delta_distance * sin(theta);
 
     /* 종료 조건을 만족하면 조향 입력 0 */
-    if(x >= 0.5 ){
+    if(x >= refactoredWaypoints[num_waypoints-1][0] ){
         exitg1=1;
     }
     if (exitg1 || current_wp_idx >= num_waypoints ) {
@@ -286,7 +350,7 @@ float gitstanleytest()
         stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
     }
 
-    return steering_output ;
+    return -steering_output ;
 }
 /*
  * File trailer for gitstanley.c
