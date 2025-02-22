@@ -82,11 +82,22 @@ void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 I
         switch (U8RSPAState) {
             case Parking_Complete:  //주차 완료
                 vehicle_status.steering_angle = 0;
+
                 vehicle_status.ref_rpm = 0.0f;
                 break;
             case Forward:  //하드코딩 전진
 
-                    if(md_flag == 0){
+                    if(IsPrk_LR != RIGHT){
+                        vehicle_status.steering_angle = 10;
+                        vehicle_status.ref_rpm = 1500;
+
+                    }
+
+                    else if(md_flag==-1){
+                        vehicle_status.steering_angle = 35;
+                        vehicle_status.ref_rpm = 2300;
+                    }
+                    else if(md_flag == 0){
                         vehicle_status.steering_angle = -35;
                         vehicle_status.ref_rpm = 2300;
                     }
@@ -94,7 +105,7 @@ void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 I
                         vehicle_status.steering_angle = -35;
                         vehicle_status.ref_rpm = 2300;
                     }
-                    else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7){
+                    else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7 || md_flag==10){
 
                         vehicle_status.steering_angle = 0;
                         vehicle_status.ref_rpm = 0;
@@ -123,10 +134,15 @@ void update_VCU_inputs_c(void) {   //종욱쨩의 수동조작 input변수/함수 넣고, 횡 I
                         vehicle_status.ref_rpm = -1000;
                     }
                     else if (md_flag==8){
-                        vehicle_status.steering_angle = 8;
+                        vehicle_status.steering_angle = 40;
                         vehicle_status.ref_rpm = -1000;
                     }
-                    else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7){
+                    else if (md_flag==9){
+                        vehicle_status.steering_angle = 10;
+                        vehicle_status.ref_rpm = -1000;
+
+                    }
+                    else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7 || md_flag==10){
 
                         vehicle_status.steering_angle = 0;
                         vehicle_status.ref_rpm = 0;

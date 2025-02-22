@@ -60,7 +60,7 @@ sint8 DSteeringinput=0;
 double DMoveDis=0;
 int calDis=0;
 int First_Set = 1;
-int md_flag=0;
+int md_flag=-1;
 int conering_dir_flag = 0;
 
 IsPrk IsPrk_LR = InitIsPrk;
@@ -489,7 +489,7 @@ void decision_stateflow_step_c(void)
 //
 //                        }
 
-                        if ( detecting_spot[R_ULTRA] == 1 )
+                        if ( parking_spot[R_ULTRA] == 1 )
                         {
                             U8Ref_vel = 0;
 
@@ -528,8 +528,16 @@ void decision_stateflow_step_c(void)
 //                        }
 
 
-                        if(md_flag==0){
-                            if(move_distance(320) == REACHED_TARGET_DIS) //100mm
+                        if(md_flag==-1){
+                            if(move_distance(200) == REACHED_TARGET_DIS) //100mm
+                            {
+                                DInputVD= 0;
+                                md_flag=0;
+                            }
+                        }
+
+                        else if(md_flag==0){
+                            if(move_distance(180) == REACHED_TARGET_DIS) //100mm
                             {
                                 DInputVD= 0;
                                 md_flag=1;
@@ -549,16 +557,7 @@ void decision_stateflow_step_c(void)
                             md_flag++;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
                         }
-                        else if (md_flag==8){
-                            if(move_distance(-250) == REACHED_TARGET_DIS){
-                                DInputVD= 0;
-                                md_flag=9;
-                            }
-                        }
-                        else if(md_flag==9) {
-                            md_flag++;
-                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
-                        }
+
 
                         break;
 
@@ -623,7 +622,7 @@ void decision_stateflow_step_c(void)
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                         }
                         else if (md_flag==6){
-                             if(move_distance(-200) == REACHED_TARGET_DIS){
+                             if(move_distance(-250) == REACHED_TARGET_DIS){
                                 DInputVR= 0;
                                 md_flag=7;
                                 //CameraSwitchRequest = 2;
@@ -631,7 +630,23 @@ void decision_stateflow_step_c(void)
                         }
                         else if(md_flag==7) {
                             md_flag++;
-                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+                            //decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+                        }
+                        else if (md_flag==8){
+                            if(move_distance(-300) == REACHED_TARGET_DIS){
+                                DInputVR= 0;
+                                md_flag=9;
+                            }
+                        }
+                        else if(md_flag==9) {
+
+                            if(move_distance(-100) == REACHED_TARGET_DIS){
+                                DInputVR= 0;
+                                md_flag=10;
+                            }                        }
+                        else if(md_flag==10) {
+                         md_flag++;
+                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
                         }
                         break;
 
