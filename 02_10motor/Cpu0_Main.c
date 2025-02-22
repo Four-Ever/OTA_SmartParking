@@ -98,6 +98,7 @@ float stanelytheta = 0.0f;
 int stopstatus = 0;
 //int md_flag=0;
 
+
 int core0_main (void)
 {
     // Initialize system
@@ -377,58 +378,7 @@ void initIMU_error (void)
         now_euler.yaw = 0;
     }
 }
-//
-//void parking_coded(void){
-//    if (md_flag==0) {
-//             if(move_distance(300)== REACHED_TARGET_DIS){
-//                 md_flag=1;
-//             }
-//     }
-//     else if (md_flag==2){
-//         if(move_distance(-300) == REACHED_TARGET_DIS){
-//             md_flag=3;
-//         }
-//
-//     }
-//     else if (md_flag==4){
-//         if(move_distance(180) == REACHED_TARGET_DIS){
-//             md_flag=5;
-//         }
-//
-//     }
-//
-//     else if (md_flag==6){
-//         if(move_distance(-200) == REACHED_TARGET_DIS){
-//             md_flag=7;
-//         }
-//
-//     }
-//     else if (md_flag==8){
-//         if(move_distance(-250) == REACHED_TARGET_DIS){
-//             md_flag=9;
-//         }
-//
-//     }
-//}
-//void parking_coded_input(void){
-//    if(md_flag == 0 || md_flag == 4) {
-//        setServoAngle(-35);
-//        RPM_CMD1=2300;  //600
-//    }
-//    else if(md_flag==1 || md_flag==3 || md_flag == 5 || md_flag == 7 ||md_flag == 9){
-//        setServoAngle(0);
-//        RPM_CMD1=0;
-//        md_flag++;
-//    }
-//    else if(md_flag==2 || md_flag==6){
-//        setServoAngle(+47);
-//        RPM_CMD1=-1000;
-//    }
-//    else if (md_flag == 8){
-//        setServoAngle(8);
-//        RPM_CMD1=-1000;
-//    }
-//}
+
 
 void AppTask1ms (void)
 {
@@ -490,7 +440,7 @@ void AppTask100ms (void)
     //parking_coded_input();
 
     update_VCU_inputs_c();
-//    setServoAngle(gitstanleytest());
+//    setServoAngle(gitstanley());
 //    RPM_CMD1 = stanleytref_vel;
 //    now_status.accel_x = x;
 //    now_status.accel_y = y;
