@@ -2,6 +2,9 @@
 #include "myWebsocket.h"
 #include "myDataHandle.h"
 
+// const char* ssid = "AndroidAPc752";
+// const char* password = "123321999";
+
 const char* ssid = "rapa_meetingroom-1";
 const char* password = "rapa6074";
 

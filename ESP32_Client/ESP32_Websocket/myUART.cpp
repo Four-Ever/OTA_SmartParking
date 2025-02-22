@@ -25,6 +25,7 @@ void uart_receive_task(void)
               // 여기에서 수신된 데이터 처리
               // Serial.printf("eventsize : %d\n",event.size);
               read_datas_from_TC275(uart2_rx_buffer);
+              uart_flush_input(UART_NUM);
               // uart_write_bytes(UART_NUM, "good", 4);
               break;
           case UART_FIFO_OVF:

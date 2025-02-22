@@ -11,7 +11,9 @@
 // uint8_t tx_buffer[BUFFER_SIZE] = {0xAA, 0xBB, 0xCC, 0xDD}; // 송신 데이터 (예제)
 
 void setup() {
+  // #ifdef DEBUG_PRINT
   Serial.begin(115200);
+  // #endif
   // SPI연결
   // init_spi();
 
