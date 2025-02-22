@@ -33,15 +33,41 @@ void IsrUart0RxHandler_tof(void)
     static unsigned char rxBuf[16] = {0};
 
     uint8 c = in_uart0();
+    static uint8 flag = 0;
+    static uint8 keep_receive = 0;
+    if(!keep_receive)
+    {
+        if(flag==0 && c == 0x57)
+        {
+            flag=1;
+        }
+        else if(flag==1 && c== 0x00)
+        {
+            flag=2;
+        }
+        else if(flag==2 && c==0xFF)
+        {
+//            flag=0;
+            keep_receive = 1;
+        }
+        else
+        {
+            return;
+        }
+    }
+
 
     rxBuf[rxBuf0Idx] = c;
     ++rxBuf0Idx;
+
 
     /* 버퍼가 꽉 차면, buf_tof에 복사 */
     if (rxBuf0Idx == TOF_length)
     {
         memcpy(gBuf0_tof, rxBuf, TOF_length);
         rxBuf0Idx = 0;
+        keep_receive = 0;
+        flag = 0;
     }
 }
 
@@ -52,7 +78,28 @@ void IsrUart1RxHandler_tof(void)
     static unsigned char rxBuf[16] = {0};
 
     uint8 c = in_uart1();
-
+    static uint8 flag = 0;
+    static uint8 keep_receive = 0;
+    if(!keep_receive)
+    {
+        if(flag==0 && c == 0x57)
+        {
+            flag=1;
+        }
+        else if(flag==1 && c== 0x00)
+        {
+            flag=2;
+        }
+        else if(flag==2 && c==0xFF)
+        {
+//            flag=0;
+            keep_receive = 1;
+        }
+        else
+        {
+            return;
+        }
+    }
     rxBuf[rxBuf1Idx] = c;
     ++rxBuf1Idx;
 
@@ -61,6 +108,8 @@ void IsrUart1RxHandler_tof(void)
     {
         memcpy(gBuf1_tof, rxBuf, TOF_length);
         rxBuf1Idx = 0;
+        keep_receive = 0;
+        flag = 0;
     }
 }
 
@@ -126,7 +175,12 @@ void ToF_get_All_Distance(){
     TOF_distance = buf_ToF[8] | (buf_ToF[9] << 8) | (buf_ToF[10] << 16);
 
 
-    if( buf_ToF[3] == TOF0)
+    if( buf_ToF[3] == TOF1)
+    {
+        Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
+        Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+    }
+    else if( buf_ToF[3] == TOF0)
     {
         Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
         Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
@@ -151,6 +205,11 @@ void ToF_get_All_Distance(){
     {
         Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
         Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+    }
+    else if( buf_ToF[3] == TOF0)
+    {
+        Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
+        Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
     }
 
     return;
