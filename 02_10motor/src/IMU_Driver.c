@@ -37,23 +37,23 @@ static float avg_rad = 0;
  float z_offset;
 
 /*
- initIMU �븿�닔
- MPU9250 IMU(媛��냽�룄, 媛곸냽�룄) + AK8963(吏��옄湲�) �꽭�똿
- �넻�떊�솗�씤�븯怨� 5踰덇퉴吏� �떆�룄
+ initIMU 占쎈맙占쎈땾
+ MPU9250 IMU(揶쏉옙占쎈꺗占쎈즲, 揶쏄낯�꺗占쎈즲) + AK8963(筌욑옙占쎌쁽疫뀐옙) 占쎄쉭占쎈샒
+ 占쎈꽰占쎈뻿占쎌넇占쎌뵥占쎈릭�⑨옙 5甕곕뜃�돱筌욑옙 占쎈뻻占쎈즲
  */
 void initIMU ()
 {
     uint8 readData = 0;
     uint8 trycnt = 0;
-    forceI2CBusReset();   // 踰꾩뒪 媛뺤젣 由ъ뀑
+    forceI2CBusReset();   // 甕곌쑴�뮞 揶쏅벡�젫 �뵳�딅��
     do
     {
         delay(100000);
         delay(100000);
-        initI2c();// I2C 珥덇린�솕
+        initI2c();// I2C �룯�뜃由곤옙�넅
         delay(1000000);
 
-        initAK8963();// AK8963(吏��옄湲�)珥덇린�솕
+        initAK8963();// AK8963(筌욑옙占쎌쁽疫뀐옙)�룯�뜃由곤옙�넅
         uint8 whoAmI = WHOAMI_REG;
         i2cWrite(MPU9250_ADDRESS, &whoAmI, 1);
         delay(10000);
@@ -67,9 +67,9 @@ void initIMU ()
 }
 
 /*
- initI2c �븿�닔
- MPU9250 IMU(媛��냽�룄, 媛곸냽�룄)瑜� �쐞�븳 I2C �꽭�똿
- 媛��냽�룄, 媛곸냽�룄 �룞�옉紐⑤뱶 �꽕�젙
+ initI2c 占쎈맙占쎈땾
+ MPU9250 IMU(揶쏉옙占쎈꺗占쎈즲, 揶쏄낯�꺗占쎈즲)�몴占� 占쎌맄占쎈립 I2C 占쎄쉭占쎈샒
+ 揶쏉옙占쎈꺗占쎈즲, 揶쏄낯�꺗占쎈즲 占쎈짗占쎌삂筌뤴뫀諭� 占쎄퐬占쎌젟
  */
 void initI2c (void)
 {
@@ -78,19 +78,19 @@ void initI2c (void)
     IfxI2c_I2c_Config i2cConfig;
 
 
-    //�궗�슜�븷 i2c�꽕�젙
+    //占쎄텢占쎌뒠占쎈막 i2c占쎄퐬占쎌젟
     IfxI2c_I2c_initConfig(&i2cConfig, &MODULE_I2C0);
     i2cConfig.pins = &i2cpinset;
-    i2cConfig.baudrate = 100000;   //�넻�떊 �냽�룄 100000;
+    i2cConfig.baudrate = 100000;   //占쎈꽰占쎈뻿 占쎈꺗占쎈즲 100000;
     IfxI2c_I2c_initModule(&g_i2cMaster, &i2cConfig);
     g_i2cSet.i2c = &g_i2cMaster;
     g_i2cSet.deviceAddress = (MPU9250_ADDRESS << 1);
 
-    uint8 initData[2] = {PWR_MGMT_1, 0x00}; //MPU�쟾�썝
-    i2cWrite(MPU9250_ADDRESS, initData, 2); //Sleep�뿉�꽌 源⑥�
+    uint8 initData[2] = {PWR_MGMT_1, 0x00}; //MPU占쎌읈占쎌뜚
+    i2cWrite(MPU9250_ADDRESS, initData, 2); //Sleep占쎈퓠占쎄퐣 繹먥뫁占�
     now13=6;
     delay(1000000);
-    //媛��냽�룄, 媛곸냽�룄 �룞�옉紐⑤뱶
+    //揶쏉옙占쎈꺗占쎈즲, 揶쏄낯�꺗占쎈즲 占쎈짗占쎌삂筌뤴뫀諭�
     uint8 initAccelData[2] = {ACCEL_CONFIG_REG, 0x00}; //+-2g
     i2cWrite(MPU9250_ADDRESS, initAccelData, 2);
     uint8 initGyroData[2] = {GYRO_CONFIG_REG, 0x00};  //+-250
@@ -98,9 +98,9 @@ void initI2c (void)
 }
 
 /*
- i2cWrite �븿�닔
- g_i2cSet i2c瑜� �넻�빐
- slave�뿉 write
+ i2cWrite 占쎈맙占쎈땾
+ g_i2cSet i2c�몴占� 占쎈꽰占쎈퉸
+ slave占쎈퓠 write
  */
 IfxI2c_I2c_Status i2cWrite (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 {
@@ -112,9 +112,9 @@ IfxI2c_I2c_Status i2cWrite (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 }
 
 /*
- i2cRead �븿�닔
- g_i2cSet i2c瑜� �넻�빐
- length留뚰겮 �씫�뼱 data�뿉 ���옣
+ i2cRead 占쎈맙占쎈땾
+ g_i2cSet i2c�몴占� 占쎈꽰占쎈퉸
+ length筌띾슦寃� 占쎌뵭占쎈선 data占쎈퓠 占쏙옙占쎌삢
  */
 void i2cRead (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 {
@@ -124,108 +124,122 @@ void i2cRead (uint8 slaveAddress, uint8 *data, Ifx_SizeT length)
 }
 
 /*
- imuRead �븿�닔
- imu媛� �씫�뼱���꽌 return�븯�뒗 �븿�닔
+ imuRead 占쎈맙占쎈땾
+ imu揶쏉옙 占쎌뵭占쎈선占쏙옙占쎄퐣 return占쎈릭占쎈뮉 占쎈맙占쎈땾
  */
 IMU imuRead ()
 {
     IMU now_imu={0,0,0,0,0,0,0,0,0,0};
-    // 媛��냽�룄, 媛곸냽�룄, 吏��옄湲곌컪 �젒洹� �젅吏��뒪�꽣
+    // 揶쏉옙占쎈꺗占쎈즲, 揶쏄낯�꺗占쎈즲, 筌욑옙占쎌쁽疫꿸퀗而� 占쎌젔域뱄옙 占쎌쟿筌욑옙占쎈뮞占쎄숲
     uint8 accelAddr = ACCEL_REG;
     uint8 gyroAddr = GYRO_REG;
     uint8 magAddr = MAG_REG;
 
-    // �꽱�꽌 �뜲�씠�꽣 踰꾪띁
-    uint8 accelData[6] = {0};      // 媛��냽�룄 �뜲�씠�꽣 踰꾪띁
-    uint8 gyroData[6] = {0};       // �옄�씠濡� �뜲�씠�꽣 踰꾪띁
-    uint8 magData[6] = {0};        // 吏��옄湲� �뜲�씠�꽣 踰꾪띁
+    // 占쎄쉽占쎄퐣 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
+    uint8 accelData[6] = {0};      // 揶쏉옙占쎈꺗占쎈즲 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
+    uint8 gyroData[6] = {0};       // 占쎌쁽占쎌뵠嚥∽옙 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
+    uint8 magData[6] = {0};        // 筌욑옙占쎌쁽疫뀐옙 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
 
-    // 痢≪젙 raw 媛�
-    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // 媛��냽�룄 媛� (16鍮꾪듃)
-    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // 媛곸냽�룄 媛� (16鍮꾪듃)
-    sint16 mag_x_raw, mag_y_raw, mag_z_raw;          // 吏��옄湲� 媛� (16鍮꾪듃)
+    // 筌β돦�젟 raw 揶쏉옙
+    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // 揶쏉옙占쎈꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
+    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // 揶쏄낯�꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
+    sint16 mag_x_raw, mag_y_raw, mag_z_raw;          // 筌욑옙占쎌쁽疫뀐옙 揶쏉옙 (16�뜮袁る뱜)
 
-    // 寃곌낵 媛�
-    float accel_x, accel_y, accel_z;    // 媛��냽�룄 媛� (16鍮꾪듃)
-    float gyro_x, gyro_y, gyro_z;       // 媛곸냽�룄 媛� (16鍮꾪듃)
-    float mag_x, mag_y, mag_z;          // 吏��옄湲� 媛� (16鍮꾪듃)
+    // 野껉퀗�궢 揶쏉옙
+    float accel_x, accel_y, accel_z;    // 揶쏉옙占쎈꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
+    float gyro_x, gyro_y, gyro_z;       // 揶쏄낯�꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
+    float mag_x, mag_y, mag_z;          // 筌욑옙占쎌쁽疫뀐옙 揶쏉옙 (16�뜮袁る뱜)
     float heading;
 
-
-
-
-    // 媛��냽�룄 �뜲�씠�꽣
-    i2cWrite(MPU9250_ADDRESS, &accelAddr, 1);
-    i2cRead(MPU9250_ADDRESS, accelData, 6);
-
-    // �옄�씠濡� �뜲�씠�꽣
-    i2cWrite(MPU9250_ADDRESS, &gyroAddr, 1);
-    i2cRead(MPU9250_ADDRESS, gyroData, 6);
-
-    now13=7;
-    // 吏��옄湲� setting
-
-     //stop condition
-    i2cStopCondition();
-    delay(1000);
-    i2cStartCondition();
-
-     //吏��옄湲� 媛� update�릱�뒗吏� check
-    uint8 status_reg = AK_UPDATE_REG;       //drdy�솗�씤 reg
-    i2cWrite(AK8963_ADDRESS, &status_reg, 1);
-    delay(10);
-    i2cRead(AK8963_ADDRESS, &status1_val, 1);
-
-     //stop condition
-    i2cStopCondition();
-    delay(10);
-    i2cStartCondition();
-    now13=8;
-    // 吏��옄湲� �뜲�씠�꽣
-    i2cWrite(AK8963_ADDRESS, &magAddr, 1);  // AK8963 I2C 二쇱냼
-    delay(10);
-    i2cRead(AK8963_ADDRESS, magData, 6);
-
-    now13=10;
-    // ak read
-    uint8 status2_reg = 0x09;
-    i2cWrite(AK8963_ADDRESS, &status2_reg, 1);
-    delay(10);
-    i2cRead(AK8963_ADDRESS, &status2_val, 1);
-    now13=11;
 
     //stop condition
     i2cStopCondition();
     delay(10);
     i2cStartCondition();
 
-    /// �떆�옉 -> �떒�쐞 泥댄겕 //////////////////////////////////////////////////////////////////////////////////////
-    // 媛��냽�룄 �뜲�씠�꽣 蹂��솚
+    // 揶쏉옙占쎈꺗占쎈즲 占쎈쑓占쎌뵠占쎄숲
+    i2cWrite(MPU9250_ADDRESS, &accelAddr, 1);
+    i2cRead(MPU9250_ADDRESS, accelData, 6);
+
+    //stop condition
+//    i2cStopCondition();
+//    delay(10);
+//    i2cStartCondition();
+
+
+    // 占쎌쁽占쎌뵠嚥∽옙 占쎈쑓占쎌뵠占쎄숲
+    i2cWrite(MPU9250_ADDRESS, &gyroAddr, 1);
+    i2cRead(MPU9250_ADDRESS, gyroData, 6);
+
+    now13=7;
+    // 筌욑옙占쎌쁽疫뀐옙 setting
+
+     //stop condition
+//    i2cStopCondition();
+//    delay(1000);
+//    i2cStartCondition();
+
+     //筌욑옙占쎌쁽疫뀐옙 揶쏉옙 update占쎈┗占쎈뮉筌욑옙 check
+//    uint8 status_reg = AK_UPDATE_REG;       //drdy占쎌넇占쎌뵥 reg
+//    i2cWrite(AK8963_ADDRESS, &status_reg, 1);
+//    delay(10);
+//    i2cRead(AK8963_ADDRESS, &status1_val, 1);
+//
+//     //stop condition
+//    i2cStopCondition();
+//    delay(10);
+//    i2cStartCondition();
+//    now13=8;
+//    // 筌욑옙占쎌쁽疫뀐옙 占쎈쑓占쎌뵠占쎄숲
+//    i2cWrite(AK8963_ADDRESS, &magAddr, 1);  // AK8963 I2C 雅뚯눘�꺖
+//    delay(10);
+//    i2cRead(AK8963_ADDRESS, magData, 6);
+//
+////    //stop condition
+////    i2cStopCondition();
+////    delay(10);
+////    i2cStartCondition();
+//
+//    now13=10;
+//    // ak read
+//    uint8 status2_reg = 0x09;
+//    i2cWrite(AK8963_ADDRESS, &status2_reg, 1);
+//    delay(10);
+//    i2cRead(AK8963_ADDRESS, &status2_val, 1);
+//    now13=11;
+
+    //stop condition
+    i2cStopCondition();
+    delay(10);
+    i2cStartCondition();
+
+    /// 占쎈뻻占쎌삂 -> 占쎈뼊占쎌맄 筌ｋ똾寃� //////////////////////////////////////////////////////////////////////////////////////
+    // 揶쏉옙占쎈꺗占쎈즲 占쎈쑓占쎌뵠占쎄숲 癰귨옙占쎌넎
     accel_x_raw = (sint16) (accelData[0] << 8) | accelData[1];
     accel_y_raw = (sint16) (accelData[2] << 8) | accelData[3];
     accel_z_raw = (sint16) (accelData[4] << 8) | accelData[5];
 
-    //媛먮룄 議곗젙 2g
+    //揶쏅Ŧ猷� 鈺곌퀣�젟 2g
     accel_x = ((float) accel_x_raw) / ACCEL_SEN - imu_offset.accel_x;
     accel_y = ((float) accel_y_raw) / ACCEL_SEN - imu_offset.accel_y;
     accel_z = ((float) accel_z_raw) / ACCEL_SEN - imu_offset.accel_z;
 
-    // �옄�씠濡� �뜲�씠�꽣 蹂��솚
+    // 占쎌쁽占쎌뵠嚥∽옙 占쎈쑓占쎌뵠占쎄숲 癰귨옙占쎌넎
     gyro_x_raw = (sint16) (gyroData[0] << 8) | gyroData[1];
     gyro_y_raw = (sint16) (gyroData[2] << 8) | gyroData[3];
     gyro_z_raw = (sint16) (gyroData[4] << 8) | gyroData[5];
 
-    //媛먮룄 議곗젙 250
+    //揶쏅Ŧ猷� 鈺곌퀣�젟 250
     gyro_x = ((float) gyro_x_raw) / GYRO_SEN - imu_offset.gyro_x;//* (M_PI / 180.0f)
     gyro_y = ((float) gyro_y_raw) / GYRO_SEN - imu_offset.gyro_y;
     gyro_z = ((float) gyro_z_raw) / GYRO_SEN - imu_offset.gyro_z;
 
-    // 吏��옄湲� �뜲�씠�꽣 蹂��솚
+    // 筌욑옙占쎌쁽疫뀐옙 占쎈쑓占쎌뵠占쎄숲 癰귨옙占쎌넎
     mag_x_raw = (sint16) (magData[1] << 8) | magData[0];
     mag_y_raw = (sint16) (magData[3] << 8) | magData[2];
     mag_z_raw = (sint16) (magData[5] << 8) | magData[4];
 
-    //媛먮룄 議곗젙
+    //揶쏅Ŧ猷� 鈺곌퀣�젟
     mag_x = ((float) mag_x_raw)* asa_x * MAG_SEN;
     mag_y = ((float) mag_y_raw)* asa_y * MAG_SEN;
     mag_z = ((float) mag_z_raw)* asa_z * MAG_SEN;
@@ -241,8 +255,8 @@ IMU imuRead ()
         magz_max=mag_z;
     if(mag_z<magz_min)
         magz_min=mag_z;
-    /////.h�뙆�씪 784
-    x_offset = (magx_max + magx_min) / 2;//�븘�몢�씠�끂�옉 �떎瑜닿쾶 �궃 �쐞�뿉�꽌 �씠誘� 援ы븿
+    /////.h占쎈솁占쎌뵬 784
+    x_offset = (magx_max + magx_min) / 2;//占쎈툡占쎈あ占쎌뵠占쎈걗占쎌삂 占쎈뼄�몴�떯苡� 占쎄텆 占쎌맄占쎈퓠占쎄퐣 占쎌뵠沃섓옙 �뤃�뗫맙
     y_offset = (magy_max + magy_min) / 2;
     z_offset = (magz_max + magz_min) / 2;
     float scale_x_diff = magx_max - magx_min;
@@ -253,7 +267,7 @@ IMU imuRead ()
     scale_y = avg_rad / scale_y_diff;
     scale_z = avg_rad / scale_z_diff;
 
-    //heading -> 遺곸そ 0, �삤瑜몄そ�쑝濡� +
+    //heading -> �겫怨멥걹 0, 占쎌궎�몴紐꾠걹占쎌몵嚥∽옙 +
 //    heading = atan2(mag_x, mag_y) *(180 / M_PI);
 //    if (heading < 0)
 //        heading += 360;
@@ -298,7 +312,7 @@ IMU imuRead ()
     //now_imu.mag_z = now_imu.mag_z;
 
 
-    //heading -> 遺곸そ 0, �삤瑜몄そ�쑝濡� +
+    //heading -> �겫怨멥걹 0, 占쎌궎�몴紐꾠걹占쎌몵嚥∽옙 +
 //    heading = atan2(now_imu.mag_x, now_imu.mag_y) * (180 / M_PI);
 //    if (heading < 0)
 //        heading += 360;
@@ -324,52 +338,52 @@ IMU initimuRead ()
 {
     now13=9;
     IMU now_imu={0,0,0,0,0,0,0,0,0,0};
-    // 媛��냽�룄, 媛곸냽�룄, 吏��옄湲곌컪 �젒洹� �젅吏��뒪�꽣
+    // 揶쏉옙占쎈꺗占쎈즲, 揶쏄낯�꺗占쎈즲, 筌욑옙占쎌쁽疫꿸퀗而� 占쎌젔域뱄옙 占쎌쟿筌욑옙占쎈뮞占쎄숲
     uint8 accelAddr = ACCEL_REG;
     uint8 gyroAddr = GYRO_REG;
 
-    // �꽱�꽌 �뜲�씠�꽣 踰꾪띁
-    uint8 accelData[6] = {0};      // 媛��냽�룄 �뜲�씠�꽣 踰꾪띁
-    uint8 gyroData[6] = {0};       // �옄�씠濡� �뜲�씠�꽣 踰꾪띁
+    // 占쎄쉽占쎄퐣 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
+    uint8 accelData[6] = {0};      // 揶쏉옙占쎈꺗占쎈즲 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
+    uint8 gyroData[6] = {0};       // 占쎌쁽占쎌뵠嚥∽옙 占쎈쑓占쎌뵠占쎄숲 甕곌쑵�쓠
 
-    // 痢≪젙 raw 媛�
-    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // 媛��냽�룄 媛� (16鍮꾪듃)
-    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // 媛곸냽�룄 媛� (16鍮꾪듃)
+    // 筌β돦�젟 raw 揶쏉옙
+    sint16 accel_x_raw, accel_y_raw, accel_z_raw;    // 揶쏉옙占쎈꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
+    sint16 gyro_x_raw, gyro_y_raw, gyro_z_raw;       // 揶쏄낯�꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
 
-    // 寃곌낵 媛�
-    float accel_x, accel_y, accel_z;    // 媛��냽�룄 媛� (16鍮꾪듃)
-    float gyro_x, gyro_y, gyro_z;       // 媛곸냽�룄 媛� (16鍮꾪듃)
+    // 野껉퀗�궢 揶쏉옙
+    float accel_x, accel_y, accel_z;    // 揶쏉옙占쎈꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
+    float gyro_x, gyro_y, gyro_z;       // 揶쏄낯�꺗占쎈즲 揶쏉옙 (16�뜮袁る뱜)
 
 
-    // 媛��냽�룄 �뜲�씠�꽣
+    // 揶쏉옙占쎈꺗占쎈즲 占쎈쑓占쎌뵠占쎄숲
     i2cWrite(MPU9250_ADDRESS, &accelAddr, 1);
     i2cRead(MPU9250_ADDRESS, accelData, 6);
 
-    // �옄�씠濡� �뜲�씠�꽣
+    // 占쎌쁽占쎌뵠嚥∽옙 占쎈쑓占쎌뵠占쎄숲
     i2cWrite(MPU9250_ADDRESS, &gyroAddr, 1);
     i2cRead(MPU9250_ADDRESS, gyroData, 6);
-    /// �떆�옉 -> �떒�쐞 泥댄겕 //////////////////////////////////////////////////////////////////////////////////////
-    // 媛��냽�룄 �뜲�씠�꽣 蹂��솚
+    /// 占쎈뻻占쎌삂 -> 占쎈뼊占쎌맄 筌ｋ똾寃� //////////////////////////////////////////////////////////////////////////////////////
+    // 揶쏉옙占쎈꺗占쎈즲 占쎈쑓占쎌뵠占쎄숲 癰귨옙占쎌넎
     accel_x_raw = (sint16) (accelData[0] << 8) | accelData[1];
     accel_y_raw = (sint16) (accelData[2] << 8) | accelData[3];
     accel_z_raw = (sint16) (accelData[4] << 8) | accelData[5];
 
-    //媛먮룄 議곗젙 2g
+    //揶쏅Ŧ猷� 鈺곌퀣�젟 2g
     accel_x = ((float) accel_x_raw) / ACCEL_SEN;
     accel_y = ((float) accel_y_raw) / ACCEL_SEN;
     accel_z = ((float) accel_z_raw) / ACCEL_SEN;
     //0
 
-    // �옄�씠濡� �뜲�씠�꽣 蹂��솚
+    // 占쎌쁽占쎌뵠嚥∽옙 占쎈쑓占쎌뵠占쎄숲 癰귨옙占쎌넎
     gyro_x_raw = (sint16) (gyroData[0] << 8) | gyroData[1];
     gyro_y_raw = (sint16) (gyroData[2] << 8) | gyroData[3];
     gyro_z_raw = (sint16) (gyroData[4] << 8) | gyroData[5];
 
-    //媛먮룄 議곗젙 250
+    //揶쏅Ŧ猷� 鈺곌퀣�젟 250
     gyro_x = ((float) gyro_x_raw) / GYRO_SEN;//* (M_PI / 180.0f);
     gyro_y = ((float) gyro_y_raw) / GYRO_SEN;//* (M_PI / 180.0f);
     gyro_z = ((float) gyro_z_raw) / GYRO_SEN;//* (M_PI / 180.0f);
-///0 -> �떒�쐞 議곗젙�� �굹以묒뿉�씤媛�
+///0 -> 占쎈뼊占쎌맄 鈺곌퀣�젟占쏙옙 占쎄돌餓λ쵐肉됵옙�뵥揶쏉옙
     now_imu.accel_x = accel_x;
     now_imu.accel_y = accel_y;
     now_imu.accel_z = accel_z;
@@ -377,14 +391,14 @@ IMU initimuRead ()
     now_imu.gyro_x = gyro_x;
     now_imu.gyro_y = gyro_y;
     now_imu.gyro_z = gyro_z;
-////init�븿�닔�뒗 臾몄젣 �뾾�뒗�벏!!!!
+////init占쎈맙占쎈땾占쎈뮉 �눧紐꾩젫 占쎈씨占쎈뮉占쎈쾹!!!!
     return now_imu;
 }
 
 
 /*
- initAK8963 �븿�닔
- AK8963(吏��옄湲�) �꽭�똿
+ initAK8963 占쎈맙占쎈땾
+ AK8963(筌욑옙占쎌쁽疫뀐옙) 占쎄쉭占쎈샒
  */
 
 void initAK8963 (void)
@@ -395,7 +409,7 @@ void initAK8963 (void)
 
     uint8 data[3];
 
-    // I2C master 鍮꾪솢�꽦�솕 -> MPU媛� 留덉뒪�꽣媛� �릺吏� �븡寃� �꽕�젙-> �궡媛� �옄泥댁쟻�쑝濡� �넻�떊�븷嫄곕씪
+    // I2C master �뜮袁れ넞占쎄쉐占쎌넅 -> MPU揶쏉옙 筌띾뜆�뮞占쎄숲揶쏉옙 占쎈┷筌욑옙 占쎈륫野껓옙 占쎄퐬占쎌젟-> 占쎄땀揶쏉옙 占쎌쁽筌ｋ똻�읅占쎌몵嚥∽옙 占쎈꽰占쎈뻿占쎈막椰꾧퀡�뵬
     uint8 bypass_reg1[2] = {0x6A, 0x00};
     i2cWrite(MPU9250_ADDRESS, bypass_reg1, 2);
     delay(10000);
@@ -404,13 +418,13 @@ void initAK8963 (void)
     i2cWrite(MPU9250_ADDRESS, bypass_reg2, 2);
     delay(10000);
 
-    // AK8963 珥덇린�솕
-    // Power down ->  ROM�뿉 �젒洹쇳븯�젮怨� 怨꾩냽 �옞源� �걚湲�
+    // AK8963 �룯�뜃由곤옙�넅
+    // Power down ->  ROM占쎈퓠 占쎌젔域뱀눛釉�占쎌젻�⑨옙 �④쑴�꺗 占쎌삛繹먲옙 占쎄콢疫뀐옙
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    uint8 mag_power_down[2] = {AK_CNTL1_REG, 0x00};     // CNTL1 �젅吏��뒪�꽣
+    uint8 mag_power_down[2] = {AK_CNTL1_REG, 0x00};     // CNTL1 占쎌쟿筌욑옙占쎈뮞占쎄숲
     i2cWrite(AK8963_ADDRESS, mag_power_down, 2);
     delay(10000);
 
@@ -418,11 +432,11 @@ void initAK8963 (void)
     delay(1000);
     i2cStartCondition();
 
-    uint8 mag_mode_check = AK_CNTL1_REG;                   //offmode �옒 �뱾�뼱媛붾뒗吏�
+    uint8 mag_mode_check = AK_CNTL1_REG;                   //offmode 占쎌삋 占쎈굶占쎈선揶쏅뗀�뮉筌욑옙
     i2cWrite(AK8963_ADDRESS, &mag_mode_check, 1);
     i2cRead(AK8963_ADDRESS, &mag_mode_valueoff, 1);
 
-    // Fuse ROM access mode-> ROM�뿉 �젒洹쇳빐�꽌 珥덇린 媛먮룄 �븣�븘�궡�젮怨�
+    // Fuse ROM access mode-> ROM占쎈퓠 占쎌젔域뱀눛鍮먲옙苑� �룯�뜃由� 揶쏅Ŧ猷� 占쎈르占쎈툡占쎄땀占쎌젻�⑨옙
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
@@ -431,35 +445,35 @@ void initAK8963 (void)
     i2cWrite(AK8963_ADDRESS, mag_rom_access, 2);
     delay(10000);
 
-    // 珥덇린 媛먮룄 �씫湲�
+    // �룯�뜃由� 揶쏅Ŧ猷� 占쎌뵭疫뀐옙
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    uint8 asa_reg = 0x10;  //媛먮룄 ���옣�맂嫄� �떆�옉 二쇱냼
+    uint8 asa_reg = 0x10;  //揶쏅Ŧ猷� 占쏙옙占쎌삢占쎈쭆椰꾬옙 占쎈뻻占쎌삂 雅뚯눘�꺖
     i2cWrite(AK8963_ADDRESS, &asa_reg, 1);
     delay(100);
     i2cRead(AK8963_ADDRESS, data, 3);
 
-    // 媛먮룄 議곗젙媛� ���옣
+    // 揶쏅Ŧ猷� 鈺곌퀣�젟揶쏉옙 占쏙옙占쎌삢
     asa_x = ((float) (data[0] - 128))/ 256.0f + 1.0f;
     asa_y = ((float) (data[1] - 128)) / 256.0f + 1.0f;
     asa_z = ((float) (data[2] - 128)) / 256.0f + 1.0f;
 
-    // Power down -> ROM�젒洹쇰え�뱶�뿉�꽌 �굹���꽌!!痢≪젙紐⑤뱶 �쟾�뿉 �븞�젙�솕�븯�젮怨�
+    // Power down -> ROM占쎌젔域뱀눖�걟占쎈굡占쎈퓠占쎄퐣 占쎄돌占쏙옙占쎄퐣!!筌β돦�젟筌뤴뫀諭� 占쎌읈占쎈퓠 占쎈툧占쎌젟占쎌넅占쎈릭占쎌젻�⑨옙
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
     i2cWrite(AK8963_ADDRESS, mag_power_down, 2);
     delay(10000);
 
-    // �뿰�냽痢≪젙紐⑤뱶 �떆�옉
+    // 占쎈염占쎈꺗筌β돦�젟筌뤴뫀諭� 占쎈뻻占쎌삂
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
     uint8 mag_continuous[2] = {AK_CNTL1_REG, 0x06};  //
 
-    ///1�� �븳踰� �븯怨� off
+    ///1占쏙옙 占쎈립甕곤옙 占쎈릭�⑨옙 off
     i2cWrite(AK8963_ADDRESS, mag_continuous, 2);
     //mag_mode_check = AK_CNTL1_REG;
     i2cStopCondition();
@@ -470,12 +484,12 @@ void initAK8963 (void)
 
     delay(10000);
 
-    //�뾽�뜲�씠�듃 �릱�뒗吏� �솗�씤
+    //占쎈씜占쎈쑓占쎌뵠占쎈뱜 占쎈┗占쎈뮉筌욑옙 占쎌넇占쎌뵥
     i2cStopCondition();
     delay(1000);
     i2cStartCondition();
 
-    //drdy�솗�씤 reg
+    //drdy占쎌넇占쎌뵥 reg
     uint8 status_reg = 0x02;
     i2cWrite(AK8963_ADDRESS, &status_reg, 1);
     delay(10);
@@ -484,19 +498,19 @@ void initAK8963 (void)
 }
 
 /*
- forceI2CBusReset �븿�닔
- Bus 珥덇린�솕
+ forceI2CBusReset 占쎈맙占쎈땾
+ Bus �룯�뜃由곤옙�넅
  */
 void forceI2CBusReset (void)
 {
-    // I2C 紐⑤뱢 鍮꾪솢�꽦�솕
+    // I2C 筌뤴뫀諭� �뜮袁れ넞占쎄쉐占쎌넅
     IfxI2c_disableModule(&MODULE_I2C0);
 
-    // SDA�� SCL�쓣 GPIO
+    // SDA占쏙옙 SCL占쎌뱽 GPIO
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputPushPullGeneral); // SDA
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputPushPullGeneral); // SCL
 
-    // �몮 �떎 high濡� �꽕�젙
+    // 占쎈ぎ 占쎈뼄 high嚥∽옙 占쎄퐬占쎌젟
     IfxPort_setPinHigh(&MODULE_P13, 1);
     IfxPort_setPinHigh(&MODULE_P13, 2);
     delay(10000);
@@ -510,7 +524,7 @@ void forceI2CBusReset (void)
         delay(1000);
     }
 
-    // STOP condition -> scl�씠 high�씪 �븣 sda low�뿉�꽌 high
+    // STOP condition -> scl占쎌뵠 high占쎌뵬 占쎈르 sda low占쎈퓠占쎄퐣 high
     IfxPort_setPinLow(&MODULE_P13, 1);   //sda
     delay(1000);
     IfxPort_setPinHigh(&MODULE_P13, 2);  //scl
@@ -518,22 +532,22 @@ void forceI2CBusReset (void)
     IfxPort_setPinHigh(&MODULE_P13, 1);  //sda
     delay(10000);
 
-    // �떎�떆 I2C ���쑝濡� �꽕�젙
+    // 占쎈뼄占쎈뻻 I2C 占쏙옙占쎌몵嚥∽옙 占쎄퐬占쎌젟
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputOpenDrainAlt6);
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputOpenDrainAlt6);
 }
 
 /*
- i2cStopCondition �븿�닔
- i2c stop condition �깮�꽦
+ i2cStopCondition 占쎈맙占쎈땾
+ i2c stop condition 占쎄문占쎄쉐
  */
 void i2cStopCondition (void)
 {
-    // I2C ���쓣 GPIO 紐⑤뱶濡�
+    // I2C 占쏙옙占쎌뱽 GPIO 筌뤴뫀諭뜻에占�
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputPushPullGeneral); // SDA
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputPushPullGeneral); // SCL
 
-    // STOP condition -> scl�씠 high�씪 �븣 sda low�뿉�꽌 high
+    // STOP condition -> scl占쎌뵠 high占쎌뵬 占쎈르 sda low占쎈퓠占쎄퐣 high
     IfxPort_setPinLow(&MODULE_P13, 1);  // SDA LOW
     delay(10);
     IfxPort_setPinHigh(&MODULE_P13, 2); // SCL HIGH
@@ -541,23 +555,23 @@ void i2cStopCondition (void)
     IfxPort_setPinHigh(&MODULE_P13, 1); // SDA HIGH (STOP)
     delay(10);
 
-    // �떎�떆 I2C 紐⑤뱶
+    // 占쎈뼄占쎈뻻 I2C 筌뤴뫀諭�
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputOpenDrainAlt6);
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputOpenDrainAlt6);
 }
 
 /*
- i2cStartCondition �븿�닔
- i2c start condition �깮�꽦
+ i2cStartCondition 占쎈맙占쎈땾
+ i2c start condition 占쎄문占쎄쉐
  */
 void i2cStartCondition (void)
 {
-    //  I2C ���쓣 GPIO 紐⑤뱶濡�
+    //  I2C 占쏙옙占쎌뱽 GPIO 筌뤴뫀諭뜻에占�
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputPushPullGeneral); // SDA
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputPushPullGeneral); // SCL
 
     // Start Condition
-    // SCL�쓣 HIGH濡� �꽕�젙
+    // SCL占쎌뱽 HIGH嚥∽옙 占쎄퐬占쎌젟
     IfxPort_setPinHigh(&MODULE_P13, 2); // SCL HIGH
     delay(10);
     IfxPort_setPinHigh(&MODULE_P13, 1); // SDA HIGH
@@ -565,34 +579,34 @@ void i2cStartCondition (void)
     IfxPort_setPinLow(&MODULE_P13, 1);  // SDA LOW
     delay(10);
 
-    // SCL�쓣 LOW濡� �꽕�젙 (�겢�윮 �떆�옉)
+    // SCL占쎌뱽 LOW嚥∽옙 占쎄퐬占쎌젟 (占쎄깻占쎌쑏 占쎈뻻占쎌삂)
     IfxPort_setPinLow(&MODULE_P13, 2);  // SCL LOW
     delay(10);
-    // I2C 紐⑤뱶濡� 蹂듦뎄
+    // I2C 筌뤴뫀諭뜻에占� 癰귣벀�럡
     IfxPort_setPinMode(&MODULE_P13, 1, IfxPort_Mode_outputOpenDrainAlt6);
     IfxPort_setPinMode(&MODULE_P13, 2, IfxPort_Mode_outputOpenDrainAlt6);
 }
 
 /*
- setDLPF �븿�닔
- low pass filter �꽕�젙
- -> �닔�젙�빐�빞�븿
+ setDLPF 占쎈맙占쎈땾
+ low pass filter 占쎄퐬占쎌젟
+ -> 占쎈땾占쎌젟占쎈퉸占쎈튊占쎈맙
  */
 void setDLPF (void)
 {
-    uint8 gyro_dlpf[2] = {0x1A, 0x03};  // �옄�씠濡� DLPF 41Hz �꽕�젙
+    uint8 gyro_dlpf[2] = {0x1A, 0x03};  // 占쎌쁽占쎌뵠嚥∽옙 DLPF 41Hz 占쎄퐬占쎌젟
     i2cWrite(MPU9250_ADDRESS, gyro_dlpf, 2);
     delay(10);
 
-    uint8 accel_dlpf[2] = {0x1D, 0x03};  // 媛��냽�룄 DLPF 21.2Hz �꽕�젙
+    uint8 accel_dlpf[2] = {0x1D, 0x03};  // 揶쏉옙占쎈꺗占쎈즲 DLPF 21.2Hz 占쎄퐬占쎌젟
     i2cWrite(MPU9250_ADDRESS, accel_dlpf, 2);
     delay(10);
 }
 
 /*
- checkoffset �븿�닔
- 珥덇린 �삤瑜� 蹂댁젙
- -> �닔�젙�빐�빞�븿
+ checkoffset 占쎈맙占쎈땾
+ �룯�뜃由� 占쎌궎�몴占� 癰귣똻�젟
+ -> 占쎈땾占쎌젟占쎈퉸占쎈튊占쎈맙
  */
 void checkoffset(void)
 {
@@ -614,7 +628,7 @@ void checkoffset(void)
 
     imu_offset.accel_x = now_statussum.accel_x/100;
     imu_offset.accel_y = now_statussum.accel_y/100;
-    imu_offset.accel_z = now_statussum.accel_z/100-1;//以묐젰 �쁺�뼢 �젣嫄�
+    imu_offset.accel_z = now_statussum.accel_z/100-1;//餓λ쵎�젾 占쎌겫占쎈샨 占쎌젫椰꾬옙
 
     imu_offset.gyro_x = now_statussum.gyro_x/100;
     imu_offset.gyro_y = now_statussum.gyro_y/100;

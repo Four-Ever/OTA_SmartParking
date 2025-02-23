@@ -119,6 +119,14 @@ int core0_main (void)
     // Install interrupt handlers
 //    IfxCpu_Irq_installInterruptHandler(&ISR_IncrIncZero, ISR_PRIORITY_INCRENC_ZERO);
     // Initialize peripherals
+    MODULE_SRC.I2C.I2C[0].BREQ.B.SRPN = 0xFF;
+    MODULE_SRC.I2C.I2C[0].BREQ.B.TOS = 0x0;
+    MODULE_SRC.I2C.I2C[0].BREQ.B.SRE = 0x1;
+
+//    IfxI2c0_SRC_BREQ.B.SRPN = 0xFF;  // 우선순위를 최대값으로
+//    IfxI2c0_SRC_BREQ.B.TOS = 0;      // CPU0에 할당
+//    IfxI2c0_SRC_BREQ.B.SRE = 1;      // 인터럽트 활성화
+
     initIncrEnc();
 
     initGtmATomPwm();
@@ -145,6 +153,7 @@ int core0_main (void)
 
     initIMU();
     waitTime(100000000);
+    speed_pid.reset((void *)&speed_pid); // initialize motor Enc
     //U8Driver=ModeOn;
     alarm_request =1;
     //IsRSPAButton = 1;
@@ -482,14 +491,14 @@ void AppTask100ms (void)
 
     update_VCU_inputs_c();
 //    setServoAngle(gitstanley());
-//    RPM_CMD1 = stanleytref_vel;
-//    now_status.accel_x = x;
-//    now_status.accel_y = y;
-//    now_status.accel_z = (float)current_wp_idx;
-//    now_status.gyro_x = waypointsT[current_wp_idx][0];
-//    now_status.gyro_y = waypointsT[current_wp_idx][1];
-//
-//    print_encimu(&now_status, &now_euler);
+    //RPM_CMD1 = stanleytref_vel;
+    now_status.accel_x = x;
+    now_status.accel_y = y;
+    now_status.accel_z = (float)current_wp_idx;
+    now_status.gyro_x = waypointsT[current_wp_idx][0];
+    now_status.gyro_y = waypointsT[current_wp_idx][1];
+
+    print_encimu(&now_status, &now_euler);
 //
 //
 

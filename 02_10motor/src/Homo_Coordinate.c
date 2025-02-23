@@ -110,7 +110,7 @@ int transform_finished=0;
                 world_points[i][1] = b / c;
             } else {
                 // 변환 실패 시 원본 좌표 그대로 유지
-                world_points[i][0] = world_points[i-1][0] + 0.106 ;
+                world_points[i][0] = world_points[i-1][0] + 0.66 ;
                 world_points[i][1] = world_points[i-1][1];
             }
         }

@@ -97,11 +97,11 @@ void update_VCU_inputs_c(void) {
 
                     else if(md_flag==-1){
                         vehicle_status.steering_angle = 35;
-                        vehicle_status.ref_rpm = 2300;
+                        vehicle_status.ref_rpm = 2000;
                     }
                     else if(md_flag == 0){
                         vehicle_status.steering_angle = -35;
-                        vehicle_status.ref_rpm = 2300;
+                        vehicle_status.ref_rpm = 2000;
                     }
                     else if (md_flag==4){
                         vehicle_status.steering_angle = -35;
@@ -159,7 +159,7 @@ void update_VCU_inputs_c(void) {
 //                }
                 break;
             case Searching:  //차선인식 주차공간 탐색
-                stanelyAngle=gitstanleytest();
+                stanelyAngle=gitstanley();
                 //vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;

@@ -166,9 +166,11 @@ void setServoAngle(sint8 angle)
 
     float dutyCycle = pulseWidth / SERVO_PERIOD_MS;
     //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
-    g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);
-    //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
 
+    if (dutyCycle != 0) {
+        g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);
+        //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
+    }
     //g_atomConfig_servo.dutyCycle = dutyCycle;                 /* Set duty cycle        */
     IfxGtm_Atom_Pwm_init(&g_atomDriver_servo, &g_atomConfig_servo); /* Re-initialize the PWM */
 }

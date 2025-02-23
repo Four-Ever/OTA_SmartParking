@@ -160,7 +160,7 @@ void decision_stateflow_step_c(void)
                     if (U8Curr_vel==0){
                         decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                         decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
-
+                        CameraSwitchRequest=1;
                         U8DriverState = InitDriverState;
                         First_Set=1;
                         IsRSPAButton = 0;
@@ -379,7 +379,7 @@ void decision_stateflow_step_c(void)
                 ToController_Prkstate=0;
                 //U8Engine=ModeOff;
 
-                U8DriverState = InitDriverState;
+                //U8DriverState = InitDriverState;
                 U8RSPAState = InitRSPAState;
 
                 switch (decision_stateflow_DW.is_DRIVER_Mode)
@@ -542,6 +542,7 @@ void decision_stateflow_step_c(void)
                             }
                         }
 
+
                         break;
 
                     case decision_stateflow_IN_RSPA_D:
@@ -564,7 +565,7 @@ void decision_stateflow_step_c(void)
 
 
                         if(md_flag==-1){
-                            if(move_distance(200) == REACHED_TARGET_DIS) //100mm
+                            if(move_distance(220) == REACHED_TARGET_DIS) //100mm
                             {
                                 md_flag=0;
                             }
@@ -663,13 +664,13 @@ void decision_stateflow_step_c(void)
                             //decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                         }
                         else if (md_flag==8){
-                            if(move_distance(-300) == REACHED_TARGET_DIS){
+                            if(move_distance(-280) == REACHED_TARGET_DIS){
                                 md_flag=9;
                             }
                         }
                         else if(md_flag==9) {
 
-                            if(move_distance(-100) == REACHED_TARGET_DIS){
+                            if(move_distance(-80) == REACHED_TARGET_DIS){
                                 md_flag=10;
                             }                        }
                         else if(md_flag==10) {
