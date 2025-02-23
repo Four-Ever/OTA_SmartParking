@@ -168,9 +168,9 @@ int core0_main (void)
 
         AppScheduling();
         //stopstatus=Touch();
-        //can msg 占쎈땾占쎈뻿
-#if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // 占쎌뜏占쎌뒩占쎈떁嶺뚮쵓�삕 �뜝�럡��占쎄껀占쎈폇�뤃占�
-        // 占쎈퓦筌욑옙 on/off
+        //can msg �뜝�럥�빢�뜝�럥六�
+//if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // �뜝�럩�쐪�뜝�럩�뮝�뜝�럥�뻶癲ル슢理볩옙�굲 占쎈쐻占쎈윞占쏙옙�뜝�럡猿��뜝�럥�룈占쎈쨨�뜝占�
+        // �뜝�럥�벀嶺뚯쉻�삕 on/off
         if (db_flag.CGW_Engine_Flag == 1)
         {
             db_flag.CGW_Engine_Flag = 0;
@@ -180,7 +180,7 @@ int core0_main (void)
            // }
 
         }
-        //占쎈퓦筌욑옙 ON
+        //�뜝�럥�벀嶺뚯쉻�삕 ON
         if (vehicle_status.engine_state == ENGINE_ON)
         {
             //driver mode
@@ -221,7 +221,7 @@ int core0_main (void)
 
             //waypoint msg
             if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-                //嶺뚮ㅄ維�獄�占� wp 嶺뚮∥�뾼�땻占썹춯�쉻�삕占쎈ご�뜝占� �뜝�럥�빢�뜝�럥六욕뜝�럥六ε뜝�럩諭� �뜝�럥瑜�
+                //癲ル슢�뀈泳�占썹뛾占썲뜝占� wp 癲ル슢�닪占쎈씔占쎈빝�뜝�뜾異�占쎌돸占쎌굲�뜝�럥�걫占쎈쐻�뜝占� 占쎈쐻占쎈윥占쎈묄占쎈쐻占쎈윥筌묒슃�쐻占쎈윥筌뫮듬쐻占쎈윪獄�占� 占쎈쐻占쎈윥�몴占�
                 db_flag.CCU_Cordi_data1_Flag=0;
                 db_flag.CCU_Cordi_data2_Flag=0;
 
@@ -303,6 +303,15 @@ int core0_main (void)
                 db_flag.CCU_RightAngle_detect_Flag = 0;
                 U8IsConerline = db_msg.CCU_RightAngle_detect.right_angle_lane_detected;
             }
+            if (db_flag.CCU_ParkingAngle_detect_Flag==1){
+                db_flag.CCU_ParkingAngle_detect_Flag=0;
+                U8Stoplineangle=db_msg.CCU_ParkingAngle_detect.parking_back_lane_angle;
+
+            }
+            if (db_flag.CCU_Parking_Complete_Flag == 1){
+                db_flag.CCU_Parking_Complete_Flag=0;
+                U8IsStopline=db_msg.CCU_Parking_Complete.parking_back_lane_detected;
+            }
         }
 
         //engine off
@@ -322,7 +331,7 @@ int core0_main (void)
                     }
                 }
 
-                //�빊�뮇媛�
+                //占쎈퉲占쎈츋揶쏉옙
                 if (db_msg.CGW_Off_Request.auto_exit_request==1)
                 {
                     vehicle_status.engine_state = ENGINE_ON;
@@ -334,7 +343,7 @@ int core0_main (void)
                 }
             }
         }
-#endif
+//#endif
     }
 
     return 0;

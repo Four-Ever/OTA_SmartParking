@@ -91,7 +91,7 @@ void update_VCU_inputs_c(void) {
 
                     if(IsPrk_LR != RIGHT){
                         vehicle_status.steering_angle = 10;
-                        vehicle_status.ref_rpm = 1500;
+                        vehicle_status.ref_rpm = 1000;
 
                     }
 

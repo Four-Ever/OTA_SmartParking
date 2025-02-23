@@ -30,43 +30,87 @@ RT_MODEL_decision_stateflow_T decision_stateflow_M_;
 RT_MODEL_decision_stateflow_T *const decision_stateflow_M = &decision_stateflow_M_;
 
 /*inputs*/
-Transmission U8IsTrButton = 0;
-int IsRSPAButton = 0;
-int U8IsStopline = 0;
-int U8IsConerline = 0;
-int ExitCAR_request=0;
+//Transmission U8IsTrButton = 0;
+//int IsRSPAButton = 0;
+//int U8IsStopline = 0;
+//int U8IsConerline = 0;
+//int ExitCAR_request=0;
+//
+///*outputs*/
+//  //main.c//
+//int lanecheck_request=0;
+//int U8PrkFinished=0;
+//int CameraSwitchRequest=0;
+//int First_Set = 1;
+//int ToController_Prkstate=0;
+//int ToController_Exitstate=0;
+//  //updateinputs.c//
+//int md_flag=-1;
+//int conering_dir_flag = 0;
+//double U8Ref_vel = 0;
+//IsPrk IsPrk_LR = InitIsPrk;
+//DriverState U8DriverState = InitDriverState;
+//RSPAState U8RSPAState = InitRSPAState;
+//CAState U8FCAState = InitCAState;
+//CAState U8RCAState = InitCAState;
+//ConerState U8ConerState = InitConering;
+//
+///*variabls*/
+//int ModeOff = 0;
+//int ModeOn = 1;
+//int U8Driver = 0;
+//int U8RSPA = 0;
+//int U8Engine = 0;
+//int U8Parkingfail=0;
+//double initVel = 0;
+//double DInputVD = 0.1;
+//double DInputVR = -0.1;
+//double gainTTC=0.0;
+//double D_Ref_vel=0;
 
-/*outputs*/
-  //main.c//
-int lanecheck_request=0;
-int U8PrkFinished=0;
-int CameraSwitchRequest=0;
-int First_Set = 1;
-int ToController_Prkstate=0;
-int ToController_Exitstate=0;
-  //updateinputs.c//
-int md_flag=-1;
-int conering_dir_flag = 0;
-double U8Ref_vel = 0;
-IsPrk IsPrk_LR = InitIsPrk;
-DriverState U8DriverState = InitDriverState;
-RSPAState U8RSPAState = InitRSPAState;
-CAState U8FCAState = InitCAState;
-CAState U8RCAState = InitCAState;
-ConerState U8ConerState = InitConering;
-
-/*variabls*/
 int ModeOff = 0;
 int ModeOn = 1;
+//char initState = '0';
+double initVel = 0;
+Transmission U8IsTrButton = 0;
+double U8Ref_vel = 0;
+double DInputVD = 0.1;
+double DInputVR = -0.1;
+int IsRSPAButton = 0;
+int U8IsWp_R = 0;
+int U8IsStopline = 0;
+int U8IsPrkFinished = 0;
+DriverState U8DriverState = InitDriverState;
+RSPAState U8RSPAState = InitRSPAState;
 int U8Driver = 0;
 int U8RSPA = 0;
 int U8Engine = 0;
 int U8Parkingfail=0;
-double initVel = 0;
-double DInputVD = 0.1;
-double DInputVR = -0.1;
-double gainTTC=0.0;
+int U8PrkFinished=0;
+int ExitCAR_request=0;
 double D_Ref_vel=0;
+int lanecheck_request=0;
+
+int CameraSwitchRequest=0;
+int Isprkslot;
+sint8 DSteeringinput=0;
+double DMoveDis=0;
+int calDis=0;
+int First_Set = 1;
+
+IsPrk IsPrk_LR = InitIsPrk;
+
+int U8IsConerline = 0;
+CAState U8FCAState = InitCAState;
+CAState U8RCAState = InitCAState;
+double gainTTC=0.0;
+
+int ToController_Prkstate=0;
+int ToController_Exitstate=0;
+int md_flag=-1;
+int conering_dir_flag=0;
+int U8Stoplineangle=0;
+ConerState U8ConerState = InitConering;
 
 
 /* Model step function */
@@ -97,7 +141,7 @@ void decision_stateflow_step_c(void)
                 ToController_Exitstate=0;
 
 
-                if (U8IsTrButton == ENGINE_ON && ExitCAR_request == 0 )
+                if ( vehicle_status.engine_state == ENGINE_ON && ExitCAR_request == 0 )
                 {
                     U8Engine=ModeOn;
 
@@ -143,7 +187,7 @@ void decision_stateflow_step_c(void)
                         {
                             if(move_distance(310)== REACHED_TARGET_DIS)
                             {
-                                DInputVD = 0;
+
                                 conering_dir_flag = 1;
                                 decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_R;
                             }
@@ -154,7 +198,7 @@ void decision_stateflow_step_c(void)
                         {
                             if(move_distance(70)== REACHED_TARGET_DIS)
                             {
-                                DInputVD = 0;
+
                                 conering_dir_flag =3;
 
                             }
@@ -163,7 +207,7 @@ void decision_stateflow_step_c(void)
                         {
                             if(move_distance(10)== REACHED_TARGET_DIS)
                             {
-                                DInputVD = 0;
+
                                 conering_dir_flag =0;
                                 decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_EXIT;
                             }
@@ -181,7 +225,7 @@ void decision_stateflow_step_c(void)
                         {
                             if(move_distance(-200)== REACHED_TARGET_DIS)
                             {
-                                DInputVR = 0;
+
                                 conering_dir_flag = 2;
                                 decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
                             }
@@ -249,7 +293,7 @@ void decision_stateflow_step_c(void)
                         break;
                     case decision_stateflow_IN_FCA_DECEL:
                         U8FCAState = Decel;
-                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCD(U8Curr_vel)+gainTTC));
+                        U8Ref_vel = U8Ref_vel*(Cal_TTCD(U8Curr_vel)+gainTTC);
 
                         if (((double)obstacle[F_OBSTACLE]/1000) == 0)
                         {
@@ -300,7 +344,7 @@ void decision_stateflow_step_c(void)
                         break;
                     case decision_stateflow_IN_RCA_DECEL:
                         U8RCAState = Decel;
-                        U8Ref_vel = U8Ref_vel-U8Ref_vel*(1/(Cal_TTCR(U8Curr_vel)+gainTTC));
+                        U8Ref_vel = U8Ref_vel * (Cal_TTCR(U8Curr_vel)+gainTTC);
 
                         if (((double)obstacle[B_OBSTACLE]/1000)==0)
                         {
@@ -522,7 +566,6 @@ void decision_stateflow_step_c(void)
                         if(md_flag==-1){
                             if(move_distance(200) == REACHED_TARGET_DIS) //100mm
                             {
-                                DInputVD= 0;
                                 md_flag=0;
                             }
                         }
@@ -530,7 +573,6 @@ void decision_stateflow_step_c(void)
                         else if(md_flag==0){
                             if(move_distance(180) == REACHED_TARGET_DIS) //100mm
                             {
-                                DInputVD= 0;
                                 md_flag=1;
                             }
                         }
@@ -540,7 +582,6 @@ void decision_stateflow_step_c(void)
                         }
                         else if (md_flag==4){
                              if(move_distance(180) == REACHED_TARGET_DIS){
-                                DInputVD= 0;
                                 md_flag=5;
                              }
                         }
@@ -604,7 +645,6 @@ void decision_stateflow_step_c(void)
                         if(md_flag==2){
                             if(move_distance(-310) == REACHED_TARGET_DIS) //100mm
                             {
-                                DInputVR= 0;
                                 md_flag=3;
                             }
                         }
@@ -614,7 +654,6 @@ void decision_stateflow_step_c(void)
                         }
                         else if (md_flag==6){
                              if(move_distance(-250) == REACHED_TARGET_DIS){
-                                DInputVR= 0;
                                 md_flag=7;
                                 //CameraSwitchRequest = 2;
                              }
@@ -625,14 +664,12 @@ void decision_stateflow_step_c(void)
                         }
                         else if (md_flag==8){
                             if(move_distance(-300) == REACHED_TARGET_DIS){
-                                DInputVR= 0;
                                 md_flag=9;
                             }
                         }
                         else if(md_flag==9) {
 
                             if(move_distance(-100) == REACHED_TARGET_DIS){
-                                DInputVR= 0;
                                 md_flag=10;
                             }                        }
                         else if(md_flag==10) {
@@ -660,7 +697,7 @@ void decision_stateflow_step_c(void)
 //
 //                        }
 
-                        if (U8IsStopline == 1 && IsWPTrackingFinish == 1)
+                        if (U8IsStopline == 1)
                         {
                             U8Ref_vel = 0;
                             if (U8Curr_vel==0){
@@ -668,7 +705,7 @@ void decision_stateflow_step_c(void)
                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
                             }
                         }
-                        else if (IsWPTrackingFinish == 1 && U8IsStopline == 0){
+                        else if (U8Stoplineangle >= 5 && U8IsStopline == 0){
                             U8Ref_vel= 0;
                             if (U8Curr_vel==0){
                                 U8Parkingfail=1;
@@ -689,6 +726,7 @@ void decision_stateflow_step_c(void)
                         U8RSPAState = Parking_Complete;
                         U8Ref_vel = initVel;
                         U8IsStopline=0;
+                        U8Stoplineangle=0;
                         lanecheck_request=0;
                         ToController_Prkstate=3;
 

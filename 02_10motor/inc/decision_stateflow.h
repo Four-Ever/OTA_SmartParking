@@ -155,6 +155,7 @@ extern int U8IsStopline;
 extern int U8IsConerline;
 extern int ExitCAR_request;
 extern double D_Ref_vel;
+extern U8Stoplineangle;
 
 
 /* Model entry point functions */
