@@ -23,6 +23,9 @@
 #include "ASCLIN_Shell_UART.h"
 #include "servo.h"
 #include "EncMotor.h"
+
+#include "Obstacle_Detection.h"
+#include "LED_BUZZER.h"
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -269,6 +272,15 @@ void AppTask10ms(void)
 void AppTask50ms(void){
     stTestCnt.u32nuCnt50ms++;
     Obstacle_get_All_Distance();
+
+    if (vehicle_status.transmission == REVERSE){
+        set_Buzzer_period(obstacle[B_OBSTACLE]);
+    }
+    else {
+        set_Buzzer_period(TURN_OFF_BUZZER);
+    }
+
+    Buzzer();
 }
 
 void AppTask100ms(void)

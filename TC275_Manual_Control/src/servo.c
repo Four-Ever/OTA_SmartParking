@@ -81,7 +81,7 @@ void IfxGtm_Servo_Atom_Pwm_initConfig(IfxGtm_Atom_Pwm_Config *config, Ifx_GTM *g
 void initServo(void)
 {
     IfxGtm_enable(&MODULE_GTM); /* Enable GTM */
-    // PWM 주파수 설정 (50Hz = 20ms)
+    // PWM 二쇳뙆�닔 �꽕�젙 (50Hz = 20ms)
     IfxGtm_Cmu_setClkFrequency(&MODULE_GTM, IfxGtm_Cmu_Clk_1, CLK_FREQ);
     IfxGtm_Cmu_enableClocks(&MODULE_GTM, IFXGTM_CMU_CLKEN_CLK1);                /* Enable the CMU clock 0           */
     IfxGtm_Servo_Atom_Pwm_initConfig(&g_atomConfig_servo, &MODULE_GTM);                     /* Initialize default parameters    */
@@ -122,7 +122,7 @@ void initServo(void)
 //void initServo(void)
 //{
 //    IfxGtm_enable(&MODULE_GTM); /* Enable GTM */
-//    // PWM 주파수 설정 (50Hz = 20ms)
+//    // PWM 二쇳뙆�닔 �꽕�젙 (50Hz = 20ms)
 //    IfxGtm_Cmu_setClkFrequency(&MODULE_GTM, IfxGtm_Cmu_Clk_0, CLK_FREQ);
 //    IfxGtm_Cmu_enableClocks(&MODULE_GTM, IFXGTM_CMU_CLKEN_CLK0);                /* Enable the CMU clock 0           */
 //    //IfxGtm_Tom_Pwm_initConfig(&g_atomConfig_servo);
@@ -139,10 +139,11 @@ void initServo(void)
 //    IfxGtm_Tom_Pwm_start(&g_tomDriver_servo, TRUE);                         /* Start the PWM                            */
 //}
 
-void setServoAngle(float32 angle)
+void setServoAngle(sint8 angle)
 {
-    // 서보 중간 위치 (unsigned int)(CLK_FREQ / 50 * 0.075);
+    // �꽌蹂� 以묎컙 �쐞移� (unsigned int)(CLK_FREQ / 50 * 0.075);
 
+    angle = angle + 1;
     if (angle < -MAX_ANGLE)
     {
         angle = -MAX_ANGLE;
@@ -165,9 +166,11 @@ void setServoAngle(float32 angle)
 
     float dutyCycle = pulseWidth / SERVO_PERIOD_MS;
     //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
-    g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);
-    //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
 
+    if (dutyCycle != 0) {
+        g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);
+        //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
+    }
     //g_atomConfig_servo.dutyCycle = dutyCycle;                 /* Set duty cycle        */
     IfxGtm_Atom_Pwm_init(&g_atomDriver_servo, &g_atomConfig_servo); /* Re-initialize the PWM */
 }
