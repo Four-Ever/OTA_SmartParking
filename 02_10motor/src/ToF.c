@@ -162,28 +162,37 @@ void ToF_get_All_Distance(){
     //     for (int i = 0; i < 16; i++) {
     //         my_printf("%.2X ", buf_ToF[i]);
     //     }
-
+    uint8 tof_flag =1;
     if (!verifyCheckSum(buf_ToF))
     {
-        return;
+        tof_flag =0;
+
     }
     if (!checkTofStrength(buf_ToF))
     {
-        return;
+        tof_flag =0;
+
     }
 
-    TOF_distance = buf_ToF[8] | (buf_ToF[9] << 8) | (buf_ToF[10] << 16);
+    if(tof_flag ){
+        TOF_distance = buf_ToF[8] | (buf_ToF[9] << 8) | (buf_ToF[10] << 16);
 
 
-    if( buf_ToF[3] == TOF1)
-    {
-        Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
-        Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+        if( buf_ToF[3] == TOF1)
+        {
+            Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
+            Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+        }
+        else if( buf_ToF[3] == TOF0)
+        {
+            Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
+            Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
+        }
+
+
     }
-    else if( buf_ToF[3] == TOF0)
-    {
-        Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
-        Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
+    else{
+        tof_flag = 1;
     }
 
 //    disableUartRxInterrupt();
@@ -192,27 +201,29 @@ void ToF_get_All_Distance(){
 
     if (!verifyCheckSum(buf_ToF))
     {
-        return;
+        tof_flag = 0;
+
     }
     if (!checkTofStrength(buf_ToF))
     {
-        return;
+        tof_flag = 0;
+
+    }
+    if(tof_flag ){
+        TOF_distance = buf_ToF[8] | (buf_ToF[9] << 8) | (buf_ToF[10] << 16);
+
+        if( buf_ToF[3] == TOF1)
+        {
+            Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
+            Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
+        }
+        else if( buf_ToF[3] == TOF0)
+        {
+            Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
+            Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
+        }
     }
 
-    TOF_distance = buf_ToF[8] | (buf_ToF[9] << 8) | (buf_ToF[10] << 16);
-
-    if( buf_ToF[3] == TOF1)
-    {
-        Distance[TOF1] = (TOF_distance + OFFSET) <0 ? 0: (TOF_distance + OFFSET);
-        Distance[TOF1]=B_getFilteredDistance(Distance[TOF1]);
-    }
-    else if( buf_ToF[3] == TOF0)
-    {
-        Distance[TOF0] = (TOF_distance + OFFSET) <0 ? 0:(TOF_distance + OFFSET);
-        Distance[TOF0]=F_getFilteredDistance(Distance[TOF0]);
-    }
-
-    return;
 }
 
 int getTofDistance()
