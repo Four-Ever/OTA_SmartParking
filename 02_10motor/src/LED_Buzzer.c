@@ -173,11 +173,11 @@ void set_Buzzer_period (int R_distance)
     // within 6cm : 300ms period
     // within 8cm : 400ms period
     // within 10cm : 500ms period
-    if (R_distance <= 5 && R_distance > 0)    //5cm보다 작으면
+    if (R_distance <= 5 && R_distance > 0)    //5cm蹂대떎 �옉�쑝硫�
     {
         period_50ms = 1;
     }
-    else if (period_50ms <= 100) // 10cm
+    else if (R_distance <= 10) // 10cm
     {
         period_50ms = (int) (R_distance);
     }
