@@ -177,7 +177,7 @@ void set_Buzzer_period (int R_distance)
     {
         period_50ms = 1;
     }
-    else if (period_50ms <= 100) // 10cm
+    else if (R_distance <= 10) // 10cm
     {
         period_50ms = (int) (R_distance);
     }

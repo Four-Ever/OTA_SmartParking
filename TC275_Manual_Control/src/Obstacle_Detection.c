@@ -16,7 +16,7 @@ void Obstacle_get_All_Distance (void)
         obstacle[F_OBSTACLE] = Distance[TOF0]/10;  //cm
     else
         obstacle[F_OBSTACLE] = 0;
-    if ((Distance[TOF0]) < FBOBSTACLE_WARNING*10) // uart2 ToF Data
+    if ((Distance[TOF1]) < FBOBSTACLE_WARNING*10) // uart2 ToF Data
         obstacle[B_OBSTACLE] = Distance[TOF1]/10;  //cm
     else
         obstacle[B_OBSTACLE] = 0;

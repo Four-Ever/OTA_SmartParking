@@ -48,6 +48,7 @@ typedef struct
     uint32 u32nuCnt10ms;
     uint32 u32nuCnt50ms;
     uint32 u32nuCnt100ms;
+    uint32 u32nuCnt500ms;
     uint32 u32nuCnt1000ms;
     uint32 u32nuCnt5000ms;
 } Taskcnt;
@@ -73,6 +74,7 @@ void AppTask1ms(void);
 void AppTask10ms(void);
 void AppTask50ms(void);
 void AppTask100ms(void);
+void AppTask500ms (void);
 void AppTask1000ms(void);
 void AppTask5000ms(void);
 /*********************************************************************************************************************/
@@ -110,6 +112,8 @@ int core0_main(void)
     initServo(); // D6
     Init_ToF();
     init_LED_Buzzer();
+
+    alarm_request = 1;
 
 #ifdef motor_Test
     // motor_enable = 1;  // 0:제동, 1:해제
@@ -150,7 +154,11 @@ int core0_main(void)
             {
                 db_flag.CGW_Move_Flag = 0;
 
-                vehicle_status.transmission = db_msg.CGW_Move.control_transmission;
+                if (vehicle_status.transmission != db_msg.CGW_Move.control_transmission)
+                {
+                    vehicle_status.ref_rpm = 0;
+                    vehicle_status.transmission = db_msg.CGW_Move.control_transmission;
+                }
                 vehicle_status.steering_angle = db_msg.CGW_Move.control_steering_angle;
 
                 // 수동 조작 모드로 전환
@@ -295,18 +303,26 @@ void AppTask100ms(void)
             if (vehicle_status.transmission == DRIVING)
             {
                 RPM_CMD1 = vehicle_status.ref_rpm;
+                setServoAngle(vehicle_status.steering_angle);
             }
             else if (vehicle_status.transmission == REVERSE)
             {
                 RPM_CMD1 = vehicle_status.ref_rpm * -1;
+                setServoAngle(vehicle_status.steering_angle);
             }
-            setServoAngle(vehicle_status.steering_angle);
         }
         make_can_message();
     }
 #endif
 }
 
+void AppTask500ms (void)
+{
+    stTestCnt.u32nuCnt500ms++;
+
+    FindCar_Plz();
+    cnt_alarm++;
+}
 
 void AppTask1000ms(void)
 {
@@ -342,6 +358,13 @@ void AppScheduling(void)
             stSchedulingInfo.u8nuScheduling100msFlag = 0u;
             AppTask100ms();
         }
+
+        if (stSchedulingInfo.u8nuScheduling500msFlag == 1u)
+        {
+            stSchedulingInfo.u8nuScheduling500msFlag = 0u;
+            AppTask500ms();
+        }
+
         if (stSchedulingInfo.u8nuScheduling1000msFlag == 1u)
         {
             stSchedulingInfo.u8nuScheduling1000msFlag = 0u;
