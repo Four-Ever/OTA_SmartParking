@@ -25,6 +25,7 @@ void uart_receive_task(void)
               // 여기에서 수신된 데이터 처리
               // Serial.printf("eventsize : %d\n",event.size);
               read_datas_from_TC275(uart2_rx_buffer);
+              uart_flush_input(UART_NUM);
               // uart_write_bytes(UART_NUM, "good", 4);
               break;
           case UART_FIFO_OVF:
@@ -48,7 +49,7 @@ void uart_receive_task(void)
 void init_uart2(void)
 {
     uart_config_t uart_config = {
-        .baud_rate = 115200,
+        .baud_rate = 921600,
         .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,

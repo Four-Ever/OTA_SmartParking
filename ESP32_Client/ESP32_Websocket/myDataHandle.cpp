@@ -5,6 +5,7 @@
 #include "myUART.h"
 #include "driver/uart.h"
 #include <string.h>
+#include <ctime>
 
 //  구조체 → 바이트 배열 변환 함수
 void structToByteArray(void *certain_msg, uint8_t *buffer, size_t size) {
@@ -32,6 +33,7 @@ void read_datas_from_TC275(uint8_t * rx_buffer)
   // delay(1000);
   switch (id)
   {
+    
     case ID_ENGINE_MSG:
     {
       #ifdef LOCKING
@@ -60,9 +62,11 @@ void read_datas_from_TC275(uint8_t * rx_buffer)
       pthread_mutex_unlock(&lock[LOCK_MOVE]);
       #endif
       flag.move_flag = 1;
-
+     
       #ifdef DEBUG_PRINT
-      Serial.printf("[UART_RECEIVE] MsgID - 0X%02X control_accel: %u, control_brake : %u, control_steering_angle : %d, control_transmission : %u", 
+      uint32_t  send_time = millis();
+      Serial.printf("[UART_RECEIVE] Time : %u,MsgID - 0X%02X control_accel: %u, control_brake : %u, control_steering_angle : %d, control_transmission : %u", 
+                     send_time,
                       msg.move_msg.msgId, msg.move_msg.signal.control_accel, msg.move_msg.signal.control_brake, 
                       msg.move_msg.signal.control_steering_angle, msg.move_msg.signal.control_transmission);
       Serial.println();
@@ -101,7 +105,7 @@ void read_datas_from_TC275(uint8_t * rx_buffer)
       pthread_mutex_unlock(&lock[LOCK_OTA_UDT_REQ]);
       #endif
       flag.ota_udt_cfm_flag = 1;
-
+     
       #ifdef DEBUG_PRINT
       Serial.printf("[UART_RECEIVE] MsgID: 0X%02X, ota_confirm: %u   \n", 
                       msg.ota_udt_cfm_msg.msgId, msg.ota_udt_cfm_msg.signal.ota_confirm);
@@ -140,14 +144,14 @@ void read_datas_from_Nano(uint8_t * rx_buffer, size_t length){
   uint8_t id = rx_buffer[0]; // id
 
   #ifdef DUBUG_NANO_RECEIVE
-  for(int i=0;i<32;i++)
-  {
-    Serial.printf("%d - 0X%02X\t",i,rx_buffer[i]);
-    if((i+1)%8 == 0)
-    {
-      Serial.println();
-    }
-  }
+  // for(int i=0;i<32;i++)
+  // {
+  //   Serial.printf("%d - 0X%02X\t",i,rx_buffer[i]);
+  //   if((i+1)%8 == 0)
+  //   {
+  //     Serial.println();
+  //   }
+  // }
   #endif
   // delay(1000);
   switch (id)
@@ -165,7 +169,7 @@ void read_datas_from_Nano(uint8_t * rx_buffer, size_t length){
       nano_flag.cgw_odt_udt_req_flag = 1;
       #ifdef DEBUG_PRINT
       Serial.printf("[WSC Received] MsgID: 0X%02X, ota_update_request:  %u  \n", 
-                    nano_msg.cgw_odt_udt_req_msg, nano_msg.cgw_odt_udt_req_msg.signal.ota_update_request);
+                    nano_msg.cgw_odt_udt_req_msg.msgId, nano_msg.cgw_odt_udt_req_msg.signal.ota_update_request);
       Serial.println();
       #endif 
       break;

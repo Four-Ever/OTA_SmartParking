@@ -194,6 +194,7 @@ struct CTRL_Move
     uint8_t control_brake:1;
     int8_t control_steering_angle:7;
     uint8_t control_transmission:2;
+    // uint32_t control_timer:32; //지울것
   }signal;
 };
 

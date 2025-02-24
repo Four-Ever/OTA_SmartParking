@@ -11,7 +11,9 @@
 // uint8_t tx_buffer[BUFFER_SIZE] = {0xAA, 0xBB, 0xCC, 0xDD}; // 송신 데이터 (예제)
 
 void setup() {
+  // #ifdef DEBUG_PRINT
   Serial.begin(115200);
+  // #endif
   // SPI연결
   // init_spi();
 
@@ -30,13 +32,13 @@ void setup() {
 
 void loop() {
   webSocket.loop(); // 웹소켓 루프 실행
-  
-  if (webSocket.isConnected()) {
+  uart_receive_task();
+  // if (webSocket.isConnected()) {
       send_datas_to_Nano();
       send_datas_to_TC275();
+      // delay(1);
+  // }
 
-  }
-  uart_receive_task();
   // dummy_send_datas_to_TC275();
   // delay(100);
 }
