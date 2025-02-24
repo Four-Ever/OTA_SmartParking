@@ -130,10 +130,15 @@ void AppTask100ms(void)
 #endif
 #ifdef PERIOD_VER
         Command[ORDER_ENGINE]();
-        Command[ORDER_MOVE]();
-        Command[ORDER_OFF_REQ]();
-        Command[ORDER_OTA_UDT_CFM]();
-        Command[ORDER_AUTO_PRK_REQ]();
+        if(msg.engine_msg.signal.control_engine == 1){
+            Command[ORDER_MOVE]();
+            Command[ORDER_OTA_UDT_CFM]();
+            Command[ORDER_AUTO_PRK_REQ]();
+        }
+        else
+        {
+            Command[ORDER_OFF_REQ]();
+        }
 #endif
 #ifndef PERIOD_VER
         if(msg.engine_msg.signal.control_engine == 1)

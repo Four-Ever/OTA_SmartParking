@@ -108,6 +108,10 @@ void Show_OTA_Confirm_State()
                     msg.ota_udt_cfm_msg.signal.ota_confirm = 1;
 #ifndef PERIOD_VER
                     Command[ORDER_OTA_UDT_CFM]();
+                    MicroSecDelay(1);
+                    Command[ORDER_OTA_UDT_CFM]();
+                    MicroSecDelay(1);
+                    Command[ORDER_OTA_UDT_CFM]();
 #endif
                     LCD1602_print("SERVICE LOADING");
                     g_current_ctrl_state = CTRL_OTA;

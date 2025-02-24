@@ -122,6 +122,8 @@ void Show_Drive_State()
                 msg.engine_msg.signal.control_engine = CTRL_OFF;
 #ifndef PERIOD_VER
                 Command[ORDER_ENGINE]();
+                MicroSecDelay(1);
+                Command[ORDER_ENGINE]();
 #endif
                 LCD1602_clear();
                 LCD1602_1stLine();
@@ -353,6 +355,8 @@ void Show_Auto_Parking_State()
     {
 //        sprintf(str, "");
 //        LCD1602_print(str);
+        msg.move_msg.signal.control_accel = 0;
+        msg.move_msg.signal.control_brake = 0;
         prev_BC_state = PARK_BC_NOTHING;
     }
     }

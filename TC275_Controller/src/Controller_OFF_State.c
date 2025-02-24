@@ -116,6 +116,7 @@ void Show_Off_State()
 
 #ifndef PERIOD_VER
             Command[ORDER_ENGINE]();
+            MicroSecDelay(1);
             Command[ORDER_ENGINE](); // 잘 안가는 것 같아 두번보내기
 #endif
             //********* 시동키면 P로 수정해야할수도 *************
@@ -134,8 +135,9 @@ void Show_Off_State()
 
         if(prev_state != OFF_FIND){
             prev_state = OFF_FIND;
-            //SPI송신
+            //명령 송신
             msg.off_req_msg.signal.alert_request = 1;
+//            msg.off_req_msg.signal.alert_request ^= 1;
 #ifndef PERIOD_VER
             Command[ORDER_OFF_REQ]();
             // 1 신호만 보내고 기본신호 0으로 변경,
@@ -167,6 +169,7 @@ void Show_Off_State()
 
                 //명령 송신
                 msg.off_req_msg.signal.auto_exit_request = DO_AUTO_EXITING;
+//                msg.off_req_msg.signal.auto_exit_request ^= 1;
 #ifndef PERIOD_VER
                 Command[ORDER_OFF_REQ]();
                 // 1 신호만 보내고 기본신호 0으로 변경,
