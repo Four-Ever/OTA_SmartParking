@@ -32,13 +32,13 @@ void setup() {
 
 void loop() {
   webSocket.loop(); // 웹소켓 루프 실행
-  
-  if (webSocket.isConnected()) {
+  uart_receive_task();
+  // if (webSocket.isConnected()) {
       send_datas_to_Nano();
       send_datas_to_TC275();
+      // delay(1);
+  // }
 
-  }
-  uart_receive_task();
   // dummy_send_datas_to_TC275();
   // delay(100);
 }
