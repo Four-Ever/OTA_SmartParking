@@ -13,7 +13,7 @@ CameraNode::CameraNode(const rclcpp::NodeOptions &options)
     this->declare_parameter("rear_camera_id", 1);
     this->declare_parameter("image_width", 640);
     this->declare_parameter("image_height", 480);
-    this->declare_parameter("fps", 20.0);
+    this->declare_parameter("fps", 8.0);
     this->declare_parameter("use_calibration", true);
 
     // 파라미터 가져오기

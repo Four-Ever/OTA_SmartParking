@@ -9,7 +9,7 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
 {
     // 파라미터 선언
     // this->declare_parameter("mode", "driving");
-    this->declare_parameter("mode", "offstate");                 // 실제 동작때.
+     this->declare_parameter("mode", "offstate");                 // 실제 동작때.
     this->declare_parameter("expected_lane_width", 600);         // Edit Param
     this->declare_parameter("expected_parking_lane_width", 500); // Edit Param
     this->declare_parameter("lane_request", false);
@@ -31,9 +31,12 @@ VisionNode::VisionNode(const rclcpp::NodeOptions &options)
     // 역변환
     front_debug_on_real_pub_ = this->create_publisher<sensor_msgs::msg::Image>("front_camera/debug_on_real_image", 10);
     rear_debug_on_real_pub_ = this->create_publisher<sensor_msgs::msg::Image>("rear_camera/debug_on_real_image", 10);
+    DEBUG_pub_ = this->create_publisher<sensor_msgs::msg::Image>("debug/pub", 10);
 
     front_waypoint_pub_ = this->create_publisher<std_msgs::msg::Int32MultiArray>("front_camera/waypoints", 10);
     rear_waypoint_pub_ = this->create_publisher<std_msgs::msg::Int32MultiArray>("rear_camera/waypoints", 10);
+
+
 
     // 변수 모니터링
     width_plot_pub_ = this->create_publisher<std_msgs::msg::Int32>("param/lane_width_plot", 10);
@@ -154,11 +157,11 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
         // sum_window_confidences 변경
         sum_window_confidences = sum_window_confidences * 10 - 30;
 
-        RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
-        RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
-        RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
-        RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
-        RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
+        // RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+        // RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+        // RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+        // RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+        // RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 #ifndef DEBUG_CGW
         // VCU로 전송
         auto msg1 = std::make_shared<CCU_Cordi_data1_Msg>();
@@ -173,11 +176,11 @@ void VisionNode::processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg)
         msg2->SetCordiY4(result_waypoints[3].y);
         msg2->SetCordiX4(result_waypoints[3].x);
 
-        RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
-        RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
-        RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
-        RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
-        RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
+        //RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+        //RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+        //RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+        //RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+        //RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 
         msg2->SetUsingCamera(1); // UsingCamera::Front
         msg2->SetTrustValue(static_cast<int>(sum_window_confidences));
@@ -245,11 +248,11 @@ void VisionNode::processRearImage(const sensor_msgs::msg::Image::SharedPtr msg)
         // sum_window_confidences 변경
         sum_window_confidences = sum_window_confidences * 10 - 30;
 
-        RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
-        RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
-        RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
-        RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
-        RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
+        // RCLCPP_INFO(this->get_logger(), "1 : y : %d, x : %d", result_waypoints[0].y, result_waypoints[0].x);
+        //RCLCPP_INFO(this->get_logger(), "2 : y : %d, x : %d", result_waypoints[1].y, result_waypoints[1].x);
+        //RCLCPP_INFO(this->get_logger(), "3 : y : %d, x : %d", result_waypoints[2].y, result_waypoints[2].x);
+        //RCLCPP_INFO(this->get_logger(), "4 : y : %d, x : %d", result_waypoints[3].y, result_waypoints[3].x);
+        //RCLCPP_INFO(this->get_logger(), "sum_window_confidences : %d", static_cast<int>(sum_window_confidences));
 #ifndef DEBUG_CGW
         // VCU로 전송
         auto msg1 = std::make_shared<CCU_Cordi_data1_Msg>();
@@ -303,8 +306,8 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
 
     // 흰색 차선 마스크 생성
     cv::Mat white_mask;
-    cv::inRange(hsv, cv::Scalar(0, 0, 160), // 흰색의 낮은 HSV 범위
-                cv::Scalar(180, 30, 255),   // 흰색의 높은 HSV 범위
+    cv::inRange(hsv, cv::Scalar(0, 0, 140), // 흰색의 낮은 HSV 범위
+                cv::Scalar(180, 45, 255),   // 흰색의 높은 HSV 범위
                 white_mask);
 
     // 원본 그레이스케일에 마스크 적용
@@ -325,7 +328,12 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
 
     // Canny 엣지 검출
     cv::Mat edges;
-    cv::Canny(masked_gray, edges, 50, 150);
+    cv::Canny(masked_gray, edges, 25, 150);
+
+    sensor_msgs::msg::Image::SharedPtr edges_msg  =
+    cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", edges).toImageMsg();
+    DEBUG_pub_->publish(*edges_msg); // 차선 폭
+
 
 // 디버그 이미지용
 #ifdef DEBUG_IMAGE
@@ -334,10 +342,10 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
     // 가로선(직각선) 검출 ------------------------------------------------------------------------
 
     // ROI 설정 - 이미지의 위쪽 절반만 사용
-    cv::Mat right_angle_roi = edges(cv::Rect(0, 0, IMG_WIDTH, IMG_HEIGHT / 2));
+    cv::Mat right_angle_roi = edges(cv::Rect(0, IMG_HEIGHT / 2, IMG_WIDTH, IMG_HEIGHT - IMG_HEIGHT / 2));
 
     std::vector<cv::Vec4i> horizontal_lines;
-    cv::HoughLinesP(right_angle_roi, horizontal_lines, 1, CV_PI / 180, 50, 50, 10);
+    cv::HoughLinesP(right_angle_roi, horizontal_lines, 1, CV_PI / 180, 20, 20, 5);
 
     bool right_angle_line_detected = false;
     float right_angle_line_angle = 0.0f;
@@ -351,7 +359,7 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
         float length = std::sqrt(dx * dx + dy * dy);
 
         // 수평에 가까운 선(-20도 ~ 20도)이고 충분히 긴 경우
-        if (std::abs(angle) < 20 && length > IMG_WIDTH / 2)
+        if (std::abs(angle) < 20 && length > IMG_WIDTH / 4)
         {
             // 주차선 발견
             right_angle_line_detected = true;
@@ -368,21 +376,35 @@ ResultVisionProcess VisionNode::detectDrivingLanes(const cv::Mat &img)
         }
     }
 
-    if (!right_angle_detected_flag && right_angle_line_detected) // 검출 플래그 꺼져있고, 라인찾음
+    // if (!right_angle_detected_flag && right_angle_line_detected) // 검출 플래그 꺼져있고, 라인찾음
+    if (right_angle_line_detected) // 검출 플래그 꺼져있고, 라인찾음
     {
-        right_angle_detected_flag = true;
+        // right_angle_detected_flag = true;
 #ifndef DEBUG_CGW
         // VCU로 전송
+	
+        RCLCPP_INFO(this->get_logger(), "detect!!!!!!!!!!!! ");
         // right_angle_lane_detected 0 : 미검출, 1: 검출
         auto msg = std::make_shared<CCU_RightAngle_detect_Msg>();
-        msg->SetRightAngleLaneDetected(static_cast<uint8_t>(right_angle_detected_flag));
+        // msg->SetRightAngleLaneDetected(static_cast<uint8_t>(right_angle_detected_flag));
+        msg->SetRightAngleLaneDetected(static_cast<uint8_t>(right_angle_line_detected));
         std::shared_ptr<IMessage> imsg = msg;
         CGW->can_socket_->async_send(imsg);
 #endif
     }
-    else if (right_angle_detected_flag && !right_angle_line_detected) // 검출 플래그 켜져있고, 라인못찾음
+    // else if (right_angle_detected_flag && !right_angle_line_detected) // 검출 플래그 켜져있고, 라인못찾음
+    else if (!right_angle_line_detected) // 검출 플래그 켜져있고, 라인못찾음
     {
-        right_angle_detected_flag = false;
+        // right_angle_detected_flag = false;
+        #ifndef DEBUG_CGW
+        // VCU로 전송
+        // right_angle_lane_detected 0 : 미검출, 1: 검출
+        auto msg = std::make_shared<CCU_RightAngle_detect_Msg>();
+        // msg->SetRightAngleLaneDetected(static_cast<uint8_t>(right_angle_detected_flag));
+        msg->SetRightAngleLaneDetected(static_cast<uint8_t>(right_angle_line_detected));
+        std::shared_ptr<IMessage> imsg = msg;
+        CGW->can_socket_->async_send(imsg);
+#endif
     }
 
     // CUDA 사용 버전
@@ -786,8 +808,8 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
 
     // 흰색 차선 마스크 생성
     cv::Mat white_mask;
-    cv::inRange(hsv, cv::Scalar(0, 0, 160), // 흰색의 낮은 HSV 범위
-                cv::Scalar(180, 30, 255),   // 흰색의 높은 HSV 범위
+    cv::inRange(hsv, cv::Scalar(0, 0, 140), // 흰색의 낮은 HSV 범위
+                cv::Scalar(180, 45, 255),   // 흰색의 높은 HSV 범위
                 white_mask);
 
     // 원본 그레이스케일에 마스크 적용
@@ -808,7 +830,7 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
 
     // Canny 엣지 검출
     cv::Mat edges;
-    cv::Canny(masked_gray, edges, 50, 150);
+    cv::Canny(masked_gray, edges, 30, 150);
 
 // 디버그 이미지용
 #ifdef DEBUG_IMAGE
@@ -823,7 +845,8 @@ ResultVisionProcess VisionNode::detectRearParkingLanes(const cv::Mat &img)
     if (lane_request_)
     {
         std::vector<cv::Vec4i> lines;
-        cv::HoughLinesP(full_roi, lines, 1, CV_PI / 180, 50, 50, 10);
+
+        cv::HoughLinesP(full_roi, lines, 1, CV_PI / 180, 20, 20, 5);
 
         for (const auto &line : lines)
         {

@@ -58,10 +58,12 @@ void MySocketCAN::on_receive_can(const can_frame& frame) {
         {
             if(Lane_Request == 0) // 요청 안함.
             {
+                vision_node->lane_request_ = false;   
                 vision_node->set_parameter(rclcpp::Parameter("lane_request", false));
             }
             else if(Lane_Request == 1) // 요청 함.
             {
+               vision_node->lane_request_= true;
                 vision_node->set_parameter(rclcpp::Parameter("lane_request", true));
             }
         }
@@ -84,14 +86,17 @@ void MySocketCAN::on_receive_can(const can_frame& frame) {
         {
             if(camera_num == 0)
             {
+                vision_node->mode_= Mode::OFF;
                 vision_node->set_parameter(rclcpp::Parameter("mode", "offstate"));
             }
             if(camera_num == 1)
             {
+                vision_node->mode_= Mode::DRIVING;
                 vision_node->set_parameter(rclcpp::Parameter("mode", "driving"));
             }
             else if(camera_num == 2)
             {
+                vision_node->mode_= Mode::PARKING;
                 vision_node->set_parameter(rclcpp::Parameter("mode", "parking"));
             }
         }

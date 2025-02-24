@@ -61,7 +61,7 @@ public:
       }
    }
 
-private:
+public:
    // 이미지 처리 콜백 함수
    void processFrontImage(const sensor_msgs::msg::Image::SharedPtr msg);
    void processRearImage(const sensor_msgs::msg::Image::SharedPtr msg);
@@ -106,6 +106,7 @@ private:
    
    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr front_debug_on_real_pub_;  
    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr rear_debug_on_real_pub_;
+   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr DEBUG_pub_;
 
    // 변수형 퍼블리셔
    rclcpp::Publisher<std_msgs::msg::Int32MultiArray>::SharedPtr front_waypoint_pub_;
