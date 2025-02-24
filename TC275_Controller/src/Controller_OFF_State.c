@@ -72,7 +72,10 @@ void Show_Off_State()
     LCD1602_1stLine();
 
 
-
+//    sprintf(str,"%d%d",
+//            local_udt_req_sig.ota_update_request,
+//            msg.cgw_ota_udt_req_msg.signal.ota_update_request);
+//    LCD1602_print(str);
     LCD1602_print("PWR");
     LCD1602_print_picture(PIC_ROTATED_LINE);
     LCD1602_print("VEHICLE FIND");
@@ -103,11 +106,6 @@ void Show_Off_State()
     {
         LCD1602_clear();
 
-
-        LCD1602_1stLine();
-        sprintf(str, "POWER ON");
-        LCD1602_print(str);
-        LCD1602_loading();
         if(prev_state != OFF_POWERON){
             prev_state = OFF_POWERON;
             //화면전환
@@ -118,13 +116,17 @@ void Show_Off_State()
 
 #ifndef PERIOD_VER
             Command[ORDER_ENGINE]();
+            MicroSecDelay(1);
+            Command[ORDER_ENGINE](); // 잘 안가는 것 같아 두번보내기
 #endif
             //********* 시동키면 P로 수정해야할수도 *************
             msg.move_msg.signal.control_transmission = DIR_P;
-
-
-
+            LCD1602_1stLine();
+            sprintf(str, "POWER ON");
+            LCD1602_print(str);
+            LCD1602_loading();
         }
+
         break;
     }
     case (OFF_FIND):
@@ -133,22 +135,23 @@ void Show_Off_State()
 
         if(prev_state != OFF_FIND){
             prev_state = OFF_FIND;
-            //SPI송신
+            //명령 송신
             msg.off_req_msg.signal.alert_request = 1;
+//            msg.off_req_msg.signal.alert_request ^= 1;
 #ifndef PERIOD_VER
             Command[ORDER_OFF_REQ]();
             // 1 신호만 보내고 기본신호 0으로 변경,
             // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
             msg.off_req_msg.signal.alert_request = 0;
 #endif
-
+            LCD1602_1stLine();
+            sprintf(str, "ALERT MY CAR");
+            LCD1602_print(str);
+            LCD1602_loading();
 
 
         }
-        LCD1602_1stLine();
-        sprintf(str, "ALERT MY CAR");
-        LCD1602_print(str);
-        LCD1602_loading();
+
 
         break;
     }
@@ -166,19 +169,20 @@ void Show_Off_State()
 
                 //명령 송신
                 msg.off_req_msg.signal.auto_exit_request = DO_AUTO_EXITING;
+//                msg.off_req_msg.signal.auto_exit_request ^= 1;
 #ifndef PERIOD_VER
                 Command[ORDER_OFF_REQ]();
                 // 1 신호만 보내고 기본신호 0으로 변경,
                 // Msg에 두개의 signal이 있어서 변경안해놓으면 신호겹칠듯
                 msg.off_req_msg.signal.auto_exit_request = DO_NOT_AUTO_EXITING;
 #endif
-
+                LCD1602_1stLine();
+                sprintf(str, "LEAVING MY CAR");
+                LCD1602_print(str);
+                LCD1602_2ndLine();
+                LCD1602_loading();
             }
-            LCD1602_1stLine();
-            sprintf(str, "LEAVING MY CAR");
-            LCD1602_print(str);
-            LCD1602_2ndLine();
-            LCD1602_loading();
+
 
             g_current_ctrl_state = CTRL_AUTO_EXIT;
         }

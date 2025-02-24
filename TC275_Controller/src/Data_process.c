@@ -30,10 +30,9 @@
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Data_process.h"
 #include "Controller_Logic.h"
-#include "ASCLIN_Shell_UART.h"
+//#include "ASCLIN_Shell_UART.h"
 #include "Message.h"
 #include "ASCLIN_UART.h"
-
 #include <string.h>
 /*********************************************************************************************************************/
 
@@ -77,6 +76,7 @@ void Engine_Command(void)
 
     Send_Message(txData,dlc+2);
 }
+
 void Move_Command(void)
 {
     uint8 txData[BUF_SIZE];

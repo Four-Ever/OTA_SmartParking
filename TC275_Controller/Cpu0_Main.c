@@ -32,7 +32,7 @@
 #include "Controller_Logic.h"
 //#include "SPI_CPU.h"
 #include "Driver_Stm.h"
-#include "ASCLIN_Shell_UART.h"
+//#include "ASCLIN_Shell_UART.h"
 #include "ASCLIN_UART.h"
 #include "Message.h"
 #include "Data_process.h"
@@ -130,10 +130,15 @@ void AppTask100ms(void)
 #endif
 #ifdef PERIOD_VER
         Command[ORDER_ENGINE]();
-        Command[ORDER_MOVE]();
-        Command[ORDER_OFF_REQ]();
-        Command[ORDER_OTA_UDT_CFM]();
-        Command[ORDER_AUTO_PRK_REQ]();
+        if(msg.engine_msg.signal.control_engine == 1){
+            Command[ORDER_MOVE]();
+            Command[ORDER_OTA_UDT_CFM]();
+            Command[ORDER_AUTO_PRK_REQ]();
+        }
+        else
+        {
+            Command[ORDER_OFF_REQ]();
+        }
 #endif
 #ifndef PERIOD_VER
         if(msg.engine_msg.signal.control_engine == 1)

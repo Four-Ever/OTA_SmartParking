@@ -29,6 +29,7 @@
 /*********************************************************************************************************************/
 /*-----------------------------------------------------Includes------------------------------------------------------*/
 #include "Controller_Logic.h"
+#include "Data_process.h"
 #include "TC275_LCD_16x2.h"
 #include "IfxFlash.h"
 #include <string.h>
@@ -104,6 +105,14 @@ void Show_OTA_Confirm_State()
                 if(now_cursor == OTA_CURSOR_LEFT)
                 {
                     //yes
+                    msg.ota_udt_cfm_msg.signal.ota_confirm = 1;
+#ifndef PERIOD_VER
+                    Command[ORDER_OTA_UDT_CFM]();
+                    MicroSecDelay(1);
+                    Command[ORDER_OTA_UDT_CFM]();
+                    MicroSecDelay(1);
+                    Command[ORDER_OTA_UDT_CFM]();
+#endif
                     LCD1602_print("SERVICE LOADING");
                     g_current_ctrl_state = CTRL_OTA;
                     g_isreq_reject = false;
@@ -111,7 +120,10 @@ void Show_OTA_Confirm_State()
                 else
                 {
                     //no
-
+                    msg.ota_udt_cfm_msg.signal.ota_confirm = 0;
+#ifndef PERIOD_VER
+                    Command[ORDER_OTA_UDT_CFM]();
+#endif
                     LCD1602_print("CANCEL SUBSCRIBE");
                     g_current_ctrl_state = CTRL_OFF;
                     g_isreq_reject = true;
