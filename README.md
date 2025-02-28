@@ -29,12 +29,12 @@
 
 ## 5.1 스마트 주차 시스템
 ![image](https://github.com/user-attachments/assets/969b0efd-dfb4-4c83-afb7-230a11b154cf)
-<div style="text-align: center;">
-  <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/wp.gif" width="auto" height="200" style="margin-right: 20px;" />
-  <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/parking.gif" width="auto" height="145" style="margin-right: 20px;" />
-  <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/exit.gif" width="auto" height="145" style="margin-right: 20px;" />
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/wp.gif" width="auto" height="200" />
+  <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/parking.gif" width="auto" height="145" />
+  <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/exit.gif" width="auto" height="145" />
   <img src="https://raw.githubusercontent.com/Four-Ever/auto-drivingPJT/main/images/CA.gif" width="auto" height="200" />
-</div>
+</p>
 
 ## 5.2 OTA를 통한 구독 서비스(펌웨어 업데이트)
 ![image](https://github.com/user-attachments/assets/d4c2f6ac-bba5-4dc5-a51a-34c209b5af4c)
