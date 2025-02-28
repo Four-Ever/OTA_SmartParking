@@ -1,0 +1,673 @@
+	; Module start
+	.compiler_version	"TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler v1.1r8 Build 22011964"
+	.compiler_invocation	"ctc -f C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\cc30796a --dep-file=src/rt_nonfinite.d -c99 --fp-model=3cflnrSTz -D__CPU__=tc27xd -D__CPU_TC27XD__ --core=tc1.6.x --fp-model=+float -D__CPU__=tc27xd -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Configurations -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Platform\\\\Tricore\\\\Compilers -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Infra\\\\Sfr\\\\TC27D\\\\_Reg -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\StdIf -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Bsp -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Comm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\SysSe\\\\Time -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\Service\\\\CpuGeneric\\\\_Utilities -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Asc -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Asclin\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\CStart -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Irq -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Cpu\\\\Trap -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12 -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12\\\\IncrEnc -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gpt12\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Atom -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Atom\\\\Pwm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Gtm\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Mtu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican\\\\Can -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Multican\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Port\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Scu\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Src\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\Stm\\\\Std -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Impl -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_Lib\\\\DataHandling -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\Libraries\\\\iLLD\\\\TC27D\\\\Tricore\\\\_PinMap -IC:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\inc -g2 -w544 -w557 -t4 --language=+volatile -N0 -O0 -Y0 -Z0 --compact-max-size=200 --misrac-version=2004 -o src/rt_nonfinite.src ../src/rt_nonfinite.c"
+	.compiler_name		"ctc"
+	;source	'../src/rt_nonfinite.c'
+
+	
+$TC16X
+	
+	.sdecl	'.text.rt_nonfinite.rtIsInf',code,cluster('rtIsInf')
+	.sect	'.text.rt_nonfinite.rtIsInf'
+	.align	2
+	
+	.global	rtIsInf
+; Function rtIsInf
+.L7:
+rtIsInf:	.type	func
+	call	_isinff
+.L60:
+	ne	d2,d2,#0
+.L72:
+	j	.L2
+.L2:
+	ret
+.L51:
+	
+__rtIsInf_function_end:
+	.size	rtIsInf,__rtIsInf_function_end-rtIsInf
+.L22:
+	; End of function
+	
+	.sdecl	'.text.rt_nonfinite.rtIsInfF',code,cluster('rtIsInfF')
+	.sect	'.text.rt_nonfinite.rtIsInfF'
+	.align	2
+	
+	.global	rtIsInfF
+; Function rtIsInfF
+.L9:
+rtIsInfF:	.type	func
+	call	_isinff
+.L61:
+	ne	d2,d2,#0
+.L77:
+	j	.L3
+.L3:
+	ret
+.L54:
+	
+__rtIsInfF_function_end:
+	.size	rtIsInfF,__rtIsInfF_function_end-rtIsInfF
+.L27:
+	; End of function
+	
+	.sdecl	'.text.rt_nonfinite.rtIsNaN',code,cluster('rtIsNaN')
+	.sect	'.text.rt_nonfinite.rtIsNaN'
+	.align	2
+	
+	.global	rtIsNaN
+; Function rtIsNaN
+.L11:
+rtIsNaN:	.type	func
+	call	_isnanf
+.L62:
+	ne	d2,d2,#0
+.L82:
+	j	.L4
+.L4:
+	ret
+.L56:
+	
+__rtIsNaN_function_end:
+	.size	rtIsNaN,__rtIsNaN_function_end-rtIsNaN
+.L32:
+	; End of function
+	
+	.sdecl	'.text.rt_nonfinite.rtIsNaNF',code,cluster('rtIsNaNF')
+	.sect	'.text.rt_nonfinite.rtIsNaNF'
+	.align	2
+	
+	.global	rtIsNaNF
+; Function rtIsNaNF
+.L13:
+rtIsNaNF:	.type	func
+	call	_isnanf
+.L63:
+	ne	d2,d2,#0
+.L87:
+	j	.L5
+.L5:
+	ret
+.L58:
+	
+__rtIsNaNF_function_end:
+	.size	rtIsNaNF,__rtIsNaNF_function_end-rtIsNaNF
+.L37:
+	; End of function
+	
+	.sdecl	'.data.rt_nonfinite.rtNaN',data,cluster('rtNaN')
+	.sect	'.data.rt_nonfinite.rtNaN'
+	.global	rtNaN
+	.align	2
+rtNaN:	.type	object
+	.size	rtNaN,4
+	.word	2143289344
+	.sdecl	'.data.rt_nonfinite.rtInf',data,cluster('rtInf')
+	.sect	'.data.rt_nonfinite.rtInf'
+	.global	rtInf
+	.align	2
+rtInf:	.type	object
+	.size	rtInf,4
+	.word	2139095040
+	.sdecl	'.data.rt_nonfinite.rtMinusInf',data,cluster('rtMinusInf')
+	.sect	'.data.rt_nonfinite.rtMinusInf'
+	.global	rtMinusInf
+	.align	2
+rtMinusInf:	.type	object
+	.size	rtMinusInf,4
+	.word	-8388608
+	.sdecl	'.data.rt_nonfinite.rtNaNF',data,cluster('rtNaNF')
+	.sect	'.data.rt_nonfinite.rtNaNF'
+	.global	rtNaNF
+	.align	2
+rtNaNF:	.type	object
+	.size	rtNaNF,4
+	.word	2143289344
+	.sdecl	'.data.rt_nonfinite.rtInfF',data,cluster('rtInfF')
+	.sect	'.data.rt_nonfinite.rtInfF'
+	.global	rtInfF
+	.align	2
+rtInfF:	.type	object
+	.size	rtInfF,4
+	.word	2139095040
+	.sdecl	'.data.rt_nonfinite.rtMinusInfF',data,cluster('rtMinusInfF')
+	.sect	'.data.rt_nonfinite.rtMinusInfF'
+	.global	rtMinusInfF
+	.align	2
+rtMinusInfF:	.type	object
+	.size	rtMinusInfF,4
+	.word	-8388608
+	.calls	'rtIsInf','_isinff'
+	.calls	'rtIsInfF','_isinff'
+	.calls	'rtIsNaN','_isnanf'
+	.calls	'rtIsNaNF','_isnanf'
+	.calls	'rtIsInf','',0
+	.calls	'rtIsInfF','',0
+	.calls	'rtIsNaN','',0
+	.extern	_isinff
+	.extern	_isnanf
+	.calls	'rtIsNaNF','',0
+	.sdecl	'.debug_info',debug
+	.sect	'.debug_info'
+.L15:
+	.word	570
+	.half	3
+	.word	.L16
+	.byte	4
+.L14:
+	.byte	1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L17
+.L50:
+	.byte	2
+	.byte	'_Bool',0,1,2
+.L52:
+	.byte	2
+	.byte	'float',0,4,4,2
+	.byte	'int',0,4,5,3
+	.byte	'_isinff',0,1,150,2,25
+	.word	216
+	.byte	1,1,1,1,4,1,150,2,51
+	.word	207
+	.byte	0,3
+	.byte	'_isnanf',0,1,153,2,25
+	.word	216
+	.byte	1,1,1,1,4,1,153,2,51
+	.word	207
+	.byte	0,5,1,6
+	.word	285
+	.byte	7
+	.byte	'__codeptr',0,2,1,1
+	.word	287
+	.byte	2
+	.byte	'char',0,1,6,7
+	.byte	'int8_T',0,3,41,21
+	.word	310
+	.byte	2
+	.byte	'unsigned char',0,1,8,7
+	.byte	'uint8_T',0,3,42,23
+	.word	333
+	.byte	2
+	.byte	'short int',0,2,5,7
+	.byte	'int16_T',0,3,43,15
+	.word	366
+	.byte	2
+	.byte	'unsigned short int',0,2,7,7
+	.byte	'uint16_T',0,3,44,24
+	.word	395
+	.byte	7
+	.byte	'int32_T',0,3,45,13
+	.word	216
+	.byte	2
+	.byte	'unsigned int',0,4,7,7
+	.byte	'uint32_T',0,3,46,22
+	.word	450
+	.byte	7
+	.byte	'real32_T',0,3,47,15
+	.word	207
+	.byte	7
+	.byte	'real64_T',0,3,48,16
+	.word	207
+	.byte	7
+	.byte	'real_T',0,3,55,16
+	.word	207
+	.byte	7
+	.byte	'boolean_T',0,3,57,14
+	.word	198
+	.byte	2
+	.byte	'char',0,1,6,7
+	.byte	'char_T',0,3,61,14
+	.word	550
+	.byte	0
+	.sdecl	'.debug_abbrev',debug
+	.sect	'.debug_abbrev'
+.L16:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,16,6,0,0,2,36,0,3,8,11,15,62,15,0,0,3,46,1,3,8,58,15,59,15,57,15
+	.byte	73,19,54,15,39,12,63,12,60,12,0,0,4,5,0,58,15,59,15,57,15,73,19,0,0,5,21,0,54,15,0,0,6,15,0,73,19,0,0
+	.byte	7,22,0,3,8,58,15,59,15,57,15,73,19,0,0,0
+	.sdecl	'.debug_line',debug
+	.sect	'.debug_line'
+.L17:
+	.word	.L65-.L64
+.L64:
+	.half	3
+	.word	.L67-.L66
+.L66:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1
+	.byte	'C:\\Infineon\\AURIX-Studio-1.10.6\\tools\\Compilers\\Tasking_1.1r8\\ctc\\include\\',0
+	.byte	'C:\\\\Users\\\\USER\\\\Desktop\\\\git_DK\\\\auto-drivingpjt\\\\02_10motor\\\\inc',0,0
+	.byte	'math.h',0,1,0,0
+	.byte	'../src/rt_nonfinite.c',0,0,0,0
+	.byte	'rtwtypes.h',0,2,0,0,0
+.L67:
+.L65:
+	.sdecl	'.debug_info',debug,cluster('rtIsInf')
+	.sect	'.debug_info'
+.L18:
+	.word	263
+	.half	3
+	.word	.L19
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L21,.L20
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtIsInf',0,1,40,11
+	.word	.L50
+	.byte	1,1,1
+	.word	.L7,.L51,.L6
+	.byte	4
+	.byte	'value',0,1,40,26
+	.word	.L52,.L53
+	.byte	5
+	.word	.L7,.L51
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtIsInf')
+	.sect	'.debug_abbrev'
+.L19:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtIsInf')
+	.sect	'.debug_line'
+.L20:
+	.word	.L69-.L68
+.L68:
+	.half	3
+	.word	.L71-.L70
+.L70:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rt_nonfinite.c',0,0,0,0,0
+.L71:
+	.byte	5,11,7,0,5,2
+	.word	.L7
+	.byte	3,41,1,5,24,9
+	.half	.L60-.L7
+	.byte	1,5,3,9
+	.half	.L72-.L60
+	.byte	1,5,1,9
+	.half	.L2-.L72
+	.byte	3,1,1,7,9
+	.half	.L22-.L2
+	.byte	0,1,1
+.L69:
+	.sdecl	'.debug_ranges',debug,cluster('rtIsInf')
+	.sect	'.debug_ranges'
+.L21:
+	.word	-1,.L7,0,.L22-.L7,0,0
+	.sdecl	'.debug_info',debug,cluster('rtIsInfF')
+	.sect	'.debug_info'
+.L23:
+	.word	264
+	.half	3
+	.word	.L24
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L26,.L25
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtIsInfF',0,1,50,11
+	.word	.L50
+	.byte	1,1,1
+	.word	.L9,.L54,.L8
+	.byte	4
+	.byte	'value',0,1,50,29
+	.word	.L52,.L55
+	.byte	5
+	.word	.L9,.L54
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtIsInfF')
+	.sect	'.debug_abbrev'
+.L24:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtIsInfF')
+	.sect	'.debug_line'
+.L25:
+	.word	.L74-.L73
+.L73:
+	.half	3
+	.word	.L76-.L75
+.L75:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rt_nonfinite.c',0,0,0,0,0
+.L76:
+	.byte	5,11,7,0,5,2
+	.word	.L9
+	.byte	3,51,1,5,32,9
+	.half	.L61-.L9
+	.byte	1,5,3,9
+	.half	.L77-.L61
+	.byte	1,5,1,9
+	.half	.L3-.L77
+	.byte	3,1,1,7,9
+	.half	.L27-.L3
+	.byte	0,1,1
+.L74:
+	.sdecl	'.debug_ranges',debug,cluster('rtIsInfF')
+	.sect	'.debug_ranges'
+.L26:
+	.word	-1,.L9,0,.L27-.L9,0,0
+	.sdecl	'.debug_info',debug,cluster('rtIsNaN')
+	.sect	'.debug_info'
+.L28:
+	.word	263
+	.half	3
+	.word	.L29
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L31,.L30
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtIsNaN',0,1,60,11
+	.word	.L50
+	.byte	1,1,1
+	.word	.L11,.L56,.L10
+	.byte	4
+	.byte	'value',0,1,60,26
+	.word	.L52,.L57
+	.byte	5
+	.word	.L11,.L56
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtIsNaN')
+	.sect	'.debug_abbrev'
+.L29:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtIsNaN')
+	.sect	'.debug_line'
+.L30:
+	.word	.L79-.L78
+.L78:
+	.half	3
+	.word	.L81-.L80
+.L80:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rt_nonfinite.c',0,0,0,0,0
+.L81:
+	.byte	5,11,7,0,5,2
+	.word	.L11
+	.byte	3,61,1,5,24,9
+	.half	.L62-.L11
+	.byte	1,5,3,9
+	.half	.L82-.L62
+	.byte	1,5,1,9
+	.half	.L4-.L82
+	.byte	3,1,1,7,9
+	.half	.L32-.L4
+	.byte	0,1,1
+.L79:
+	.sdecl	'.debug_ranges',debug,cluster('rtIsNaN')
+	.sect	'.debug_ranges'
+.L31:
+	.word	-1,.L11,0,.L32-.L11,0,0
+	.sdecl	'.debug_info',debug,cluster('rtIsNaNF')
+	.sect	'.debug_info'
+.L33:
+	.word	264
+	.half	3
+	.word	.L34
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1
+	.word	.L36,.L35
+	.byte	2
+	.word	.L14
+	.byte	3
+	.byte	'rtIsNaNF',0,1,70,11
+	.word	.L50
+	.byte	1,1,1
+	.word	.L13,.L58,.L12
+	.byte	4
+	.byte	'value',0,1,70,29
+	.word	.L52,.L59
+	.byte	5
+	.word	.L13,.L58
+	.byte	0,0
+	.sdecl	'.debug_abbrev',debug,cluster('rtIsNaNF')
+	.sect	'.debug_abbrev'
+.L34:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,85,6,16,6,0,0,2,61,0,24,16,0,0,3,46,1,3,8,58,15,59,15,57,15,73,16
+	.byte	54,15,39,12,63,12,17,1,18,1,64,6,0,0,4,5,0,3,8,58,15,59,15,57,15,73,16,2,6,0,0,5,11,0,17,1,18,1,0,0,0
+	.sdecl	'.debug_line',debug,cluster('rtIsNaNF')
+	.sect	'.debug_line'
+.L35:
+	.word	.L84-.L83
+.L83:
+	.half	3
+	.word	.L86-.L85
+.L85:
+	.byte	2,1,-4,9,10,0,1,1,1,1,0,0,0,1,0
+	.byte	'../src/rt_nonfinite.c',0,0,0,0,0
+.L86:
+	.byte	5,11,7,0,5,2
+	.word	.L13
+	.byte	3,199,0,1,5,32,9
+	.half	.L63-.L13
+	.byte	1,5,3,9
+	.half	.L87-.L63
+	.byte	1,5,1,9
+	.half	.L5-.L87
+	.byte	3,1,1,7,9
+	.half	.L37-.L5
+	.byte	0,1,1
+.L84:
+	.sdecl	'.debug_ranges',debug,cluster('rtIsNaNF')
+	.sect	'.debug_ranges'
+.L36:
+	.word	-1,.L13,0,.L37-.L13,0,0
+	.sdecl	'.debug_info',debug,cluster('rtInf')
+	.sect	'.debug_info'
+.L38:
+	.word	217
+	.half	3
+	.word	.L39
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L14
+	.byte	3
+	.byte	'rtInf',0,2,25,8
+	.word	.L52
+	.byte	1,5,3
+	.word	rtInf
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('rtInf')
+	.sect	'.debug_abbrev'
+.L39:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('rtMinusInf')
+	.sect	'.debug_info'
+.L40:
+	.word	222
+	.half	3
+	.word	.L41
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L14
+	.byte	3
+	.byte	'rtMinusInf',0,2,26,8
+	.word	.L52
+	.byte	1,5,3
+	.word	rtMinusInf
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('rtMinusInf')
+	.sect	'.debug_abbrev'
+.L41:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('rtNaN')
+	.sect	'.debug_info'
+.L42:
+	.word	217
+	.half	3
+	.word	.L43
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L14
+	.byte	3
+	.byte	'rtNaN',0,2,24,8
+	.word	.L52
+	.byte	1,5,3
+	.word	rtNaN
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('rtNaN')
+	.sect	'.debug_abbrev'
+.L43:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('rtInfF')
+	.sect	'.debug_info'
+.L44:
+	.word	218
+	.half	3
+	.word	.L45
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L14
+	.byte	3
+	.byte	'rtInfF',0,2,28,10
+	.word	.L52
+	.byte	1,5,3
+	.word	rtInfF
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('rtInfF')
+	.sect	'.debug_abbrev'
+.L45:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('rtMinusInfF')
+	.sect	'.debug_info'
+.L46:
+	.word	223
+	.half	3
+	.word	.L47
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L14
+	.byte	3
+	.byte	'rtMinusInfF',0,2,29,10
+	.word	.L52
+	.byte	1,5,3
+	.word	rtMinusInfF
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('rtMinusInfF')
+	.sect	'.debug_abbrev'
+.L47:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_info',debug,cluster('rtNaNF')
+	.sect	'.debug_info'
+.L48:
+	.word	218
+	.half	3
+	.word	.L49
+	.byte	4,1
+	.byte	'../src/rt_nonfinite.c',0
+	.byte	'TASKING VX-toolset for AURIX Development Studio (non-commercial): C compiler',0
+	.byte	'C:\\Users\\USER\\Desktop\\git_DK\\auto-drivingpjt\\02_10motor\\TriCore Debug (TASKING)\\',0,12,1,2
+	.word	.L14
+	.byte	3
+	.byte	'rtNaNF',0,2,27,10
+	.word	.L52
+	.byte	1,5,3
+	.word	rtNaNF
+	.byte	0
+	.sdecl	'.debug_abbrev',debug,cluster('rtNaNF')
+	.sect	'.debug_abbrev'
+.L49:
+	.byte	1,17,1,3,8,37,8,27,8,19,15,128,70,12,0,0,2,61,0,24,16,0,0,3,52,0,3,8,58,15,59,15,57,15,73,16,63,12,2,9
+	.byte	0,0,0
+	.sdecl	'.debug_loc',debug,cluster('rtIsInf')
+	.sect	'.debug_loc'
+.L6:
+	.word	-1,.L7,0,.L51-.L7
+	.half	2
+	.byte	138,0
+	.word	0,0
+.L53:
+	.word	-1,.L7,0,.L60-.L7
+	.half	1
+	.byte	84
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('rtIsInfF')
+	.sect	'.debug_loc'
+.L8:
+	.word	-1,.L9,0,.L54-.L9
+	.half	2
+	.byte	138,0
+	.word	0,0
+.L55:
+	.word	-1,.L9,0,.L61-.L9
+	.half	1
+	.byte	84
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('rtIsNaN')
+	.sect	'.debug_loc'
+.L10:
+	.word	-1,.L11,0,.L56-.L11
+	.half	2
+	.byte	138,0
+	.word	0,0
+.L57:
+	.word	-1,.L11,0,.L62-.L11
+	.half	1
+	.byte	84
+	.word	0,0
+	.sdecl	'.debug_loc',debug,cluster('rtIsNaNF')
+	.sect	'.debug_loc'
+.L12:
+	.word	-1,.L13,0,.L58-.L13
+	.half	2
+	.byte	138,0
+	.word	0,0
+.L59:
+	.word	-1,.L13,0,.L63-.L13
+	.half	1
+	.byte	84
+	.word	0,0
+	.sdecl	'.debug_frame',debug
+	.sect	'.debug_frame'
+.L88:
+	.word	48
+	.word	-1
+	.byte	3,0,2,1,27,12,26,0,8,26,8,27,8,30,8,29,8,28,8,16,8,17,8,24,8,25,8,31,8,32,8,33,8,34,8,35,8,36,8,37,8,38
+	.byte	8,39
+	.sdecl	'.debug_frame',debug,cluster('rtIsInf')
+	.sect	'.debug_frame'
+	.word	12
+	.word	.L88,.L7,.L51-.L7
+	.sdecl	'.debug_frame',debug,cluster('rtIsInfF')
+	.sect	'.debug_frame'
+	.word	12
+	.word	.L88,.L9,.L54-.L9
+	.sdecl	'.debug_frame',debug,cluster('rtIsNaN')
+	.sect	'.debug_frame'
+	.word	12
+	.word	.L88,.L11,.L56-.L11
+	.sdecl	'.debug_frame',debug,cluster('rtIsNaNF')
+	.sect	'.debug_frame'
+	.word	12
+	.word	.L88,.L13,.L58-.L13
+	; Module end
