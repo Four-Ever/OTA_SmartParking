@@ -1,0 +1,250 @@
+[0.000000] (-) TimerEvent: {}
+[0.000532] (lane_detection) JobQueued: {'identifier': 'lane_detection', 'dependencies': OrderedDict()}
+[0.002477] (lane_detection) JobStarted: {'identifier': 'lane_detection'}
+[0.067257] (lane_detection) JobProgress: {'identifier': 'lane_detection', 'progress': 'cmake'}
+[0.073427] (lane_detection) Command: {'cmd': ['/usr/bin/cmake', '/home/jetson/ros2_ws/src/lane_detection', '-DCMAKE_INSTALL_PREFIX=/home/jetson/ros2_ws/src/lane_detection/install/lane_detection'], 'cwd': '/home/jetson/ros2_ws/src/lane_detection/build/lane_detection', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('OPENBLAS_CORETYPE', 'ARMV8'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('PYTHONWARNINGS', 'ignore::DeprecationWarning'), ('USER', 'jetson'), ('LC_TIME', 'nl_NL.UTF-8'), ('SSH_AGENT_PID', '7443'), ('XDG_SESSION_TYPE', 'x11'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/local/cuda/lib64:/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/aarch64-linux-gnu:/opt/ros/foxy/lib:/usr/lib/aarch64-linux-gnu:/home/jetson/opencv-4.2.0/build/lib/'), ('HOME', '/home/jetson'), ('OLDPWD', '/home/jetson/ros2_ws/src'), ('DESKTOP_SESSION', 'ubuntu'), ('JETSON_L4T', '32.6.1'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('JETSON_MODEL', 'NVIDIA Jetson Nano Developer Kit'), ('LC_MONETARY', 'nl_NL.UTF-8'), ('MANAGERPID', '7242'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_colcon_cd_root', '/home/jetson/ros2_install'), ('MANDATORY_PATH', '/usr/share/gconf/ubuntu.mandatory.path'), ('IM_CONFIG_PHASE', '1'), ('COLCON_PREFIX_PATH', '/home/jetson/ros2_ws/install'), ('ROS_DISTRO', 'foxy'), ('LOGNAME', 'jetson'), ('JETSON_MODULE', 'NVIDIA Jetson Nano (4 GB ram)'), ('JETSON_SERIAL_NUMBER', '1423119020556'), ('JOURNAL_STREAM', '8:41038'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('JETSON_CODENAME', 'Porg'), ('XDG_SESSION_CLASS', 'user'), ('DEFAULTS_PATH', '/usr/share/gconf/ubuntu.default.path'), ('USERNAME', 'jetson'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('WINDOWPATH', '2'), ('PATH', '/opt/ros/foxy/bin:/usr/local/cuda/bin:/home/jetson/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('SESSION_MANAGER', 'local/nano:@/tmp/.ICE-unix/7479,unix/nano:/tmp/.ICE-unix/7479'), ('INVOCATION_ID', 'b49535ccc78e4507a03e06b71486b60b'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'nl_NL.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/0ce0899d_3505_4a5f_9d23_02661bfa03c8'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'nl_NL.UTF-8'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('JETSON_SOC', 'tegra210'), ('GNOME_TERMINAL_SERVICE', ':1.91'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/jetson/ros2_ws/install/lane_detection:/opt/ros/foxy'), ('SHELL', '/bin/bash'), ('LC_NAME', 'nl_NL.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('JETSON_BOARDIDS', 'p3448'), ('LC_MEASUREMENT', 'nl_NL.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('LC_IDENTIFICATION', 'nl_NL.UTF-8'), ('QT_IM_MODULE', 'ibus'), ('JETSON_CUDA_ARCH_BIN', '5.3'), ('PWD', '/home/jetson/ros2_ws/src/lane_detection/build/lane_detection'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('LC_NUMERIC', 'nl_NL.UTF-8'), ('LC_PAPER', 'nl_NL.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6003'), ('JETSON_JETPACK', '4.6'), ('CMAKE_PREFIX_PATH', '/home/jetson/ros2_ws/install/lane_detection:/opt/ros/foxy'), ('JETSON_P_NUMBER', 'p3448-0000')]), 'shell': False}
+[0.099077] (-) TimerEvent: {}
+[0.200058] (-) TimerEvent: {}
+[0.300742] (-) TimerEvent: {}
+[0.401495] (-) TimerEvent: {}
+[0.502165] (-) TimerEvent: {}
+[0.603105] (-) TimerEvent: {}
+[0.703827] (-) TimerEvent: {}
+[0.804546] (-) TimerEvent: {}
+[0.905274] (-) TimerEvent: {}
+[0.970584] (lane_detection) StdoutLine: {'line': b'-- The C compiler identification is GNU 8.4.0\n'}
+[1.008910] (-) TimerEvent: {}
+[1.109970] (-) TimerEvent: {}
+[1.210599] (-) TimerEvent: {}
+[1.311189] (-) TimerEvent: {}
+[1.411895] (-) TimerEvent: {}
+[1.446827] (lane_detection) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 8.4.0\n'}
+[1.476736] (lane_detection) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc\n'}
+[1.512063] (-) TimerEvent: {}
+[1.612724] (-) TimerEvent: {}
+[1.713440] (-) TimerEvent: {}
+[1.758987] (lane_detection) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc -- works\n'}
+[1.764310] (lane_detection) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.813712] (-) TimerEvent: {}
+[1.914411] (-) TimerEvent: {}
+[2.015159] (-) TimerEvent: {}
+[2.024534] (lane_detection) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[2.076574] (lane_detection) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[2.078953] (lane_detection) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[2.091790] (lane_detection) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++\n'}
+[2.115342] (-) TimerEvent: {}
+[2.216407] (-) TimerEvent: {}
+[2.317367] (-) TimerEvent: {}
+[2.416963] (lane_detection) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ -- works\n'}
+[2.417633] (-) TimerEvent: {}
+[2.423651] (lane_detection) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[2.517877] (-) TimerEvent: {}
+[2.618557] (-) TimerEvent: {}
+[2.719212] (-) TimerEvent: {}
+[2.722403] (lane_detection) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[2.778315] (lane_detection) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[2.781136] (lane_detection) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[2.819391] (-) TimerEvent: {}
+[2.920432] (-) TimerEvent: {}
+[3.021719] (-) TimerEvent: {}
+[3.122371] (-) TimerEvent: {}
+[3.223043] (-) TimerEvent: {}
+[3.323684] (-) TimerEvent: {}
+[3.424723] (-) TimerEvent: {}
+[3.525777] (-) TimerEvent: {}
+[3.626466] (-) TimerEvent: {}
+[3.727134] (-) TimerEvent: {}
+[3.828188] (-) TimerEvent: {}
+[3.929282] (-) TimerEvent: {}
+[4.030142] (-) TimerEvent: {}
+[4.130835] (-) TimerEvent: {}
+[4.231712] (-) TimerEvent: {}
+[4.332406] (-) TimerEvent: {}
+[4.433129] (-) TimerEvent: {}
+[4.533820] (-) TimerEvent: {}
+[4.634424] (-) TimerEvent: {}
+[4.735143] (-) TimerEvent: {}
+[4.835847] (-) TimerEvent: {}
+[4.936550] (-) TimerEvent: {}
+[5.037354] (-) TimerEvent: {}
+[5.138079] (-) TimerEvent: {}
+[5.238778] (-) TimerEvent: {}
+[5.339414] (-) TimerEvent: {}
+[5.440069] (-) TimerEvent: {}
+[5.540694] (-) TimerEvent: {}
+[5.641294] (-) TimerEvent: {}
+[5.741982] (-) TimerEvent: {}
+[5.842623] (-) TimerEvent: {}
+[5.943270] (-) TimerEvent: {}
+[6.043983] (-) TimerEvent: {}
+[6.144616] (-) TimerEvent: {}
+[6.245278] (-) TimerEvent: {}
+[6.345979] (-) TimerEvent: {}
+[6.416151] (lane_detection) StdoutLine: {'line': b'-- The CUDA compiler identification is NVIDIA 10.2.300\n'}
+[6.446149] (-) TimerEvent: {}
+[6.546853] (-) TimerEvent: {}
+[6.558355] (lane_detection) StdoutLine: {'line': b'-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc\n'}
+[6.647023] (-) TimerEvent: {}
+[6.754631] (-) TimerEvent: {}
+[6.855724] (-) TimerEvent: {}
+[6.956827] (-) TimerEvent: {}
+[7.057895] (-) TimerEvent: {}
+[7.158698] (-) TimerEvent: {}
+[7.259715] (-) TimerEvent: {}
+[7.360572] (-) TimerEvent: {}
+[7.461278] (-) TimerEvent: {}
+[7.562383] (-) TimerEvent: {}
+[7.665674] (-) TimerEvent: {}
+[7.766415] (-) TimerEvent: {}
+[7.869786] (-) TimerEvent: {}
+[7.970482] (-) TimerEvent: {}
+[8.071433] (-) TimerEvent: {}
+[8.188028] (-) TimerEvent: {}
+[8.290396] (-) TimerEvent: {}
+[8.391076] (-) TimerEvent: {}
+[8.491755] (-) TimerEvent: {}
+[8.592450] (-) TimerEvent: {}
+[8.693229] (-) TimerEvent: {}
+[8.793962] (-) TimerEvent: {}
+[8.894540] (-) TimerEvent: {}
+[8.995209] (-) TimerEvent: {}
+[9.095981] (-) TimerEvent: {}
+[9.129521] (lane_detection) StdoutLine: {'line': b'-- Check for working CUDA compiler: /usr/local/cuda/bin/nvcc -- works\n'}
+[9.133803] (lane_detection) StdoutLine: {'line': b'-- Detecting CUDA compiler ABI info\n'}
+[9.196148] (-) TimerEvent: {}
+[9.296934] (-) TimerEvent: {}
+[9.397693] (-) TimerEvent: {}
+[9.498355] (-) TimerEvent: {}
+[9.599002] (-) TimerEvent: {}
+[9.699653] (-) TimerEvent: {}
+[9.800362] (-) TimerEvent: {}
+[9.906446] (-) TimerEvent: {}
+[10.007199] (-) TimerEvent: {}
+[10.108728] (-) TimerEvent: {}
+[10.209401] (-) TimerEvent: {}
+[10.310580] (-) TimerEvent: {}
+[10.411584] (-) TimerEvent: {}
+[10.512634] (-) TimerEvent: {}
+[10.613953] (-) TimerEvent: {}
+[10.714655] (-) TimerEvent: {}
+[10.815382] (-) TimerEvent: {}
+[10.916050] (-) TimerEvent: {}
+[11.016809] (-) TimerEvent: {}
+[11.117610] (-) TimerEvent: {}
+[11.218350] (-) TimerEvent: {}
+[11.318988] (-) TimerEvent: {}
+[11.340362] (lane_detection) StdoutLine: {'line': b'-- Detecting CUDA compiler ABI info - done\n'}
+[11.419201] (-) TimerEvent: {}
+[11.499702] (lane_detection) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[11.519380] (-) TimerEvent: {}
+[11.620331] (-) TimerEvent: {}
+[11.646098] (lane_detection) StdoutLine: {'line': b'-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") \n'}
+[11.646935] (lane_detection) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /usr/bin/python3\n'}
+[11.720493] (-) TimerEvent: {}
+[11.825612] (-) TimerEvent: {}
+[11.926481] (-) TimerEvent: {}
+[12.027124] (-) TimerEvent: {}
+[12.127793] (-) TimerEvent: {}
+[12.228444] (-) TimerEvent: {}
+[12.329424] (-) TimerEvent: {}
+[12.430670] (-) TimerEvent: {}
+[12.531590] (-) TimerEvent: {}
+[12.632279] (-) TimerEvent: {}
+[12.733244] (-) TimerEvent: {}
+[12.833940] (-) TimerEvent: {}
+[12.934811] (-) TimerEvent: {}
+[13.035813] (-) TimerEvent: {}
+[13.136858] (-) TimerEvent: {}
+[13.245616] (-) TimerEvent: {}
+[13.295108] (lane_detection) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[13.345853] (-) TimerEvent: {}
+[13.447849] (-) TimerEvent: {}
+[13.548566] (-) TimerEvent: {}
+[13.649264] (-) TimerEvent: {}
+[13.750200] (-) TimerEvent: {}
+[13.787483] (lane_detection) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[13.850375] (-) TimerEvent: {}
+[13.920008] (lane_detection) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[13.950545] (-) TimerEvent: {}
+[14.051264] (-) TimerEvent: {}
+[14.151897] (-) TimerEvent: {}
+[14.252582] (-) TimerEvent: {}
+[14.353250] (-) TimerEvent: {}
+[14.453970] (-) TimerEvent: {}
+[14.554927] (-) TimerEvent: {}
+[14.655646] (-) TimerEvent: {}
+[14.756323] (-) TimerEvent: {}
+[14.857289] (-) TimerEvent: {}
+[14.958150] (-) TimerEvent: {}
+[14.998055] (lane_detection) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "1.1.1f")  \n'}
+[15.058418] (-) TimerEvent: {}
+[15.130417] (lane_detection) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/foxy/include  \n'}
+[15.158633] (-) TimerEvent: {}
+[15.259339] (-) TimerEvent: {}
+[15.360046] (-) TimerEvent: {}
+[15.460746] (-) TimerEvent: {}
+[15.561742] (-) TimerEvent: {}
+[15.566414] (lane_detection) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[15.661912] (-) TimerEvent: {}
+[15.763996] (-) TimerEvent: {}
+[15.864652] (-) TimerEvent: {}
+[15.912045] (lane_detection) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[15.921265] (lane_detection) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[15.927613] (lane_detection) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[15.964823] (-) TimerEvent: {}
+[16.065560] (-) TimerEvent: {}
+[16.166249] (-) TimerEvent: {}
+[16.244478] (lane_detection) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[16.250508] (lane_detection) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[16.266425] (-) TimerEvent: {}
+[16.367452] (-) TimerEvent: {}
+[16.468364] (-) TimerEvent: {}
+[16.532180] (lane_detection) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed\n'}
+[16.534953] (lane_detection) StdoutLine: {'line': b'-- Looking for pthread_create in pthreads\n'}
+[16.568530] (-) TimerEvent: {}
+[16.669403] (-) TimerEvent: {}
+[16.770421] (-) TimerEvent: {}
+[16.796994] (lane_detection) StdoutLine: {'line': b'-- Looking for pthread_create in pthreads - not found\n'}
+[16.797734] (lane_detection) StdoutLine: {'line': b'-- Looking for pthread_create in pthread\n'}
+[16.870599] (-) TimerEvent: {}
+[16.971273] (-) TimerEvent: {}
+[17.072045] (-) TimerEvent: {}
+[17.089246] (lane_detection) StdoutLine: {'line': b'-- Looking for pthread_create in pthread - found\n'}
+[17.093226] (lane_detection) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[17.172217] (-) TimerEvent: {}
+[17.272963] (-) TimerEvent: {}
+[17.373668] (-) TimerEvent: {}
+[17.474341] (-) TimerEvent: {}
+[17.575368] (-) TimerEvent: {}
+[17.676012] (-) TimerEvent: {}
+[17.776821] (-) TimerEvent: {}
+[17.882511] (-) TimerEvent: {}
+[17.963873] (lane_detection) StdoutLine: {'line': b'-- Found sensor_msgs: 2.0.5 (/opt/ros/foxy/share/sensor_msgs/cmake)\n'}
+[17.982700] (-) TimerEvent: {}
+[18.084090] (-) TimerEvent: {}
+[18.185304] (-) TimerEvent: {}
+[18.286397] (-) TimerEvent: {}
+[18.387379] (-) TimerEvent: {}
+[18.488042] (-) TimerEvent: {}
+[18.588647] (lane_detection) StdoutLine: {'line': b'-- Found cv_bridge: 3.0.7 (/opt/ros/foxy/share/cv_bridge/cmake)\n'}
+[18.589304] (-) TimerEvent: {}
+[18.689978] (-) TimerEvent: {}
+[18.702136] (lane_detection) StdoutLine: {'line': b'-- Found CUDA: /usr/local/cuda (found suitable exact version "10.2") \n'}
+[18.790143] (-) TimerEvent: {}
+[18.889742] (lane_detection) StderrLine: {'line': b'CMake Error at /usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake:146 (message):\n'}
+[18.890398] (-) TimerEvent: {}
+[18.891060] (lane_detection) StderrLine: {'line': b'  Could NOT find OpenCV (missing: cudafeatures2d cudaimgproc) (found suitable\n'}
+[18.891529] (lane_detection) StderrLine: {'line': b'  version "4.2.0", minimum required is "4.2")\n'}
+[18.891911] (lane_detection) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[18.892304] (lane_detection) StderrLine: {'line': b'  /usr/share/cmake-3.16/Modules/FindPackageHandleStandardArgs.cmake:393 (_FPHSA_FAILURE_MESSAGE)\n'}
+[18.892683] (lane_detection) StderrLine: {'line': b'  /usr/lib/aarch64-linux-gnu/cmake/opencv4/OpenCVConfig.cmake:328 (find_package_handle_standard_args)\n'}
+[18.893054] (lane_detection) StderrLine: {'line': b'  CMakeLists.txt:31 (find_package)\n'}
+[18.893421] (lane_detection) StderrLine: {'line': b'\n'}
+[18.893933] (lane_detection) StderrLine: {'line': b'\n'}
+[18.905851] (lane_detection) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[18.906515] (lane_detection) StdoutLine: {'line': b'See also "/home/jetson/ros2_ws/src/lane_detection/build/lane_detection/CMakeFiles/CMakeOutput.log".\n'}
+[18.907001] (lane_detection) StdoutLine: {'line': b'See also "/home/jetson/ros2_ws/src/lane_detection/build/lane_detection/CMakeFiles/CMakeError.log".\n'}
+[18.948434] (lane_detection) CommandEnded: {'returncode': 1}
+[18.990620] (-) TimerEvent: {}
+[19.049840] (lane_detection) JobEnded: {'identifier': 'lane_detection', 'rc': 1}
+[19.061384] (-) EventReactorShutdown: {}

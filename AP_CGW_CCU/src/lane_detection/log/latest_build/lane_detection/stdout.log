@@ -1,0 +1,5 @@
+-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Configuring incomplete, errors occurred!
+See also "/home/jetson/ros2_ws/src/lane_detection/build/lane_detection/CMakeFiles/CMakeOutput.log".
+See also "/home/jetson/ros2_ws/src/lane_detection/build/lane_detection/CMakeFiles/CMakeError.log".
