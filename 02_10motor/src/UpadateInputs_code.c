@@ -8,8 +8,8 @@ int steeringInputL=-40;
 int steeringInputR=40;
 int conersteering = -50;
 
-//int IsPrk_LR; //1이면 왼쪽이 빈 주차칸 2면 오른쪽
-/* 종횡제어 reference input */
+//int IsPrk_LR;
+/*reference input */
 
 void update_VCU_inputs_c(void) {
     RefRPM= ((float)U8Ref_vel)*(60*gear_ratio*1000) / circumference;
@@ -31,7 +31,6 @@ void update_VCU_inputs_c(void) {
         }
     }
 
-    //출차 요청
     if (decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_FIND_CAR){
         vehicle_status.steering_angle = 10;
         vehicle_status.ref_rpm = RefRPM;
@@ -82,12 +81,12 @@ void update_VCU_inputs_c(void) {
     }
     else if(decision_stateflow_DW.is_c3_decision_stateflow == decision_stateflow_IN_RSPA_Mode){
         switch (U8RSPAState) {
-            case Parking_Complete:  //주차 완료
+            case Parking_Complete:
                 vehicle_status.steering_angle = 0;
 
                 vehicle_status.ref_rpm = 0.0f;
                 break;
-            case Forward:  //하드코딩 전진
+            case Forward:
 
                     if(IsPrk_LR != RIGHT){
                         vehicle_status.steering_angle = 10;
@@ -97,15 +96,23 @@ void update_VCU_inputs_c(void) {
 
                     else if(md_flag==-1){
                         vehicle_status.steering_angle = 35;
-                        vehicle_status.ref_rpm = 2000;
+                        vehicle_status.ref_rpm = 1500; //2000
                     }
                     else if(md_flag == 0){
                         vehicle_status.steering_angle = -35;
-                        vehicle_status.ref_rpm = 2000;
+                        vehicle_status.ref_rpm = 1500; //2000
                     }
                     else if (md_flag==4){
                         vehicle_status.steering_angle = -35;
-                        vehicle_status.ref_rpm = 2300;
+                        vehicle_status.ref_rpm = 1500;
+                    }
+                    else if (md_flag==8){
+                            vehicle_status.steering_angle = -35;
+                            vehicle_status.ref_rpm = 1500;
+                        }
+                    else if (md_flag==9){
+                        vehicle_status.steering_angle = 40;
+                        vehicle_status.ref_rpm = 1800;
                     }
                     else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7 || md_flag==10){
 
@@ -115,9 +122,9 @@ void update_VCU_inputs_c(void) {
 
 
                 break;
-            case Forward_Assist:  //주차중 전진, 이때는 그냥 임의의 조향값 넣기, 튜닝안되면 차선기반
+            case Forward_Assist:
                 if (IsPrk_LR==LEFT){
-                    vehicle_status.steering_angle = 10;  // 예: 조향값
+                    vehicle_status.steering_angle = 10;
                 }
                 else if (IsPrk_LR==RIGHT){
                     vehicle_status.steering_angle = -10;
@@ -126,7 +133,6 @@ void update_VCU_inputs_c(void) {
                 break;
             case Backward:
 
-               //오른쪽이 빈 주차칸
                     if(md_flag==2){
                         vehicle_status.steering_angle = 40;
                         vehicle_status.ref_rpm = -1000;
@@ -135,16 +141,17 @@ void update_VCU_inputs_c(void) {
                         vehicle_status.steering_angle = 40;
                         vehicle_status.ref_rpm = -1000;
                     }
-                    else if (md_flag==8){
-                        vehicle_status.steering_angle = 40;
-                        vehicle_status.ref_rpm = -1000;
-                    }
-                    else if (md_flag==9){
+//                    else if (md_flag==8){
+//                        vehicle_status.steering_angle = 25;
+//                        vehicle_status.ref_rpm = -1000;
+//                    }
+
+                    else if (md_flag==10){
                         vehicle_status.steering_angle = 10;
                         vehicle_status.ref_rpm = -1000;
 
                     }
-                    else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7 || md_flag==10){
+                    else if (md_flag==1 || md_flag==3 || md_flag==5 || md_flag==7 || md_flag==11){
 
                         vehicle_status.steering_angle = 0;
                         vehicle_status.ref_rpm = 0;
@@ -158,20 +165,19 @@ void update_VCU_inputs_c(void) {
 //
 //                }
                 break;
-            case Searching:  //차선인식 주차공간 탐색
+            case Searching:
                 stanelyAngle=gitstanley();
-                //vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
+                //vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = RefRPM;
                 break;
-            case Backward_Assist:  //차선인식 후진 RA
+            case Backward_Assist:
                 stanelyAngle=gitstanleytest();
                 vehicle_status.steering_angle = (sint8)stanelyAngle;  //
                 vehicle_status.ref_rpm = -RefRPM;
                 break;
 
             case InitRSPAState:
-                //초기상태
                 break;
         }
     }
@@ -181,30 +187,86 @@ void update_VCU_inputs_c(void) {
             case InitConering:
                 break;
             case Conering_Forward:
-                if(conering_dir_flag == 0)
+                if(conering_dir_flag == -2)
+                {
+                    vehicle_status.steering_angle = 0;
+                    vehicle_status.ref_rpm = 1200;
+
+                }
+                else if(conering_dir_flag == -1)
+                {
+                    vehicle_status.steering_angle = 35;
+                    vehicle_status.ref_rpm = 1800;
+
+                }
+                else if(conering_dir_flag == 0)
                 {
                     vehicle_status.steering_angle = -35;
-                    vehicle_status.ref_rpm = 2300;
+                    vehicle_status.ref_rpm = 1800;
                 }
                 else if(conering_dir_flag == 2)
                 {
-                    vehicle_status.steering_angle = -35;
-                    vehicle_status.ref_rpm = 2300;
+                    vehicle_status.steering_angle = -30;
+                    vehicle_status.ref_rpm = 1800;
                 }
-                else if(conering_dir_flag == 3)
+                else if(conering_dir_flag == 4)
                 {
-                    vehicle_status.steering_angle = 0;
-                    vehicle_status.ref_rpm = 1500;
+                    vehicle_status.steering_angle = -35;
+                    vehicle_status.ref_rpm = 1800;
                 }
+
+                else if(conering_dir_flag == 6)
+                {
+                    vehicle_status.steering_angle = 20;
+                   vehicle_status.ref_rpm = 1800;
+                }
+                else if(conering_dir_flag  == 7)
+                {
+                    vehicle_status.steering_angle = -35;
+                   vehicle_status.ref_rpm = 1800;
+                }
+                else if(conering_dir_flag  == 9)
+                {
+                    vehicle_status.steering_angle = -35;
+                   vehicle_status.ref_rpm = 1800;
+                }
+                else if(conering_dir_flag  == 11)
+                {
+                    vehicle_status.steering_angle = -35;
+                   vehicle_status.ref_rpm = 1800;
+                }
+
                 break;
             case Conering_Backward:
                 if(conering_dir_flag == 1)
                 {
-                    vehicle_status.steering_angle = 40;
-                    vehicle_status.ref_rpm = -1000;
+                    vehicle_status.steering_angle = 30;
+                    vehicle_status.ref_rpm = -1500;
+                }
+                else if(conering_dir_flag == 3)
+                {
+                    vehicle_status.steering_angle = 25;
+                    vehicle_status.ref_rpm = -1500;
+                }
+                else if(conering_dir_flag == 5)
+                {
+                    vehicle_status.steering_angle = 35;
+                    vehicle_status.ref_rpm = -1500;
+                }
+                else if(conering_dir_flag == 8)
+                {
+                    vehicle_status.steering_angle = 35;
+                    vehicle_status.ref_rpm = -1500;
+                }
+                else if(conering_dir_flag == 10)
+                {
+                    vehicle_status.steering_angle = 30;
+                    vehicle_status.ref_rpm = -1500;
                 }
                 break;
             case Conering_Finished:
+                vehicle_status.steering_angle = 8;
+                vehicle_status.ref_rpm = 550;
                 break;
         }
     }

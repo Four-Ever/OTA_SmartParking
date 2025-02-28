@@ -78,7 +78,7 @@ double waypoints[4][2]={
 //static int num_waypoints = sizeof(waypointsT) / sizeof(waypointsT[0]);  //원래는 주석처리해야함
 int num_waypoints = 0;
 //리팩토링
-static double refactoredWaypoints[10][2];
+double refactoredWaypoints[10][2];
 static int num_refactored_waypoints = 0;
 static bool waypointsRefactored = false; // waypoint 리
 /* 차량 상태 변수 */
@@ -96,7 +96,6 @@ static const double Kstanley = 0.6; // Stanley Controller 이득 값
 static const double PI = 3.14159265358979323846; // M_PI 대신 사용
 extern float stanelytheta;
 /* 전역변수 정의 */
-//double waypoints[4][2];
 double x=0, y=0 , theta=0;
 double v;
 double v1;
@@ -184,12 +183,9 @@ void refactorWaypointsTo10cm(void) {
 /* Stanley Controller 적용 함수 */
 float gitstanley(void)
 {
-
-//    double delta_distance = speed_pid.DisSum - prev_dis_sum;  // 엔코더 변화량 계산
-//    if(prev_dis_sum==0)//
-//        delta_distance=0;//나중에 여러번 추종하면 추종 끄탄ㄹ떄마다 prev_dis_sum=0 초기화
-//    prev_dis_sum = speed_pid.DisSum;
-    num_waypoints=4;
+    if (!waypointsRefactored) {
+        refactorWaypointsTo10cm();
+    }
 
         v1=(double)U8Curr_vel/1000; //현재 차속 m/s
         if(v1 >= 0.1){
@@ -202,8 +198,8 @@ float gitstanley(void)
         return 0.0f;
     }
 
-    double target_x = waypointsT[current_wp_idx][0];
-    double target_y = waypointsT[current_wp_idx][1];
+    double target_x = refactoredWaypoints[current_wp_idx][0];
+    double target_y = refactoredWaypoints[current_wp_idx][1];
 
    /* 현재 목표 Waypoint와의 거리 계산 */
     double dx = target_x - x;
@@ -219,8 +215,8 @@ float gitstanley(void)
     if (distance_to_wp < waypoint_tolerance && current_wp_idx + 1 <= num_waypoints) {
         current_wp_idx++;
         if(current_wp_idx!=num_waypoints) {
-        target_x = waypointsT[current_wp_idx][0];
-        target_y = waypointsT[current_wp_idx][1];
+        target_x = refactoredWaypoints[current_wp_idx][0];
+        target_y = refactoredWaypoints[current_wp_idx][1];
         }
     }
 
@@ -238,15 +234,11 @@ float gitstanley(void)
     steering_angle = fmax(fmin(steering_angle, max_steer), -max_steer);
 
     // 엔코더 기반 위치 업데이트
-//    x += delta_distance * cos(theta);
-//    y += delta_distance * sin(theta);
     x += v1 * cos(theta) * 0.1;  // 100ms 간격 이동
     y += v1 * sin(theta) * 0.1;
-    //theta -= v / L * tan(steering_angle) * 0.01;
-    //wrapToPi(&theta);
 
     /* 종료 조건을 만족하면 조향 입력 0 */
-    if(x >= 0.6 ){
+    if(x >= refactoredWaypoints[num_waypoints-1][0]){
         exitg1=1;
     }
     if (exitg1 || current_wp_idx >= num_waypoints ) {
@@ -261,13 +253,8 @@ float gitstanley(void)
         steering_output = round(steering_angle * (180.0 / PI));  // DEGREE 변환
         if (steering_output >0){  //왼쪽
             steering_output=steering_output+12;  //직진 4
-           // steering_output;
-//            if(steering_output <0) {
-//                steering_output=0;
-//            }
         }
         else if (steering_output<0) {  //오른쪽
-            //steering_output=steering_output-4;  //직진 2
         }
         stanleytref_vel=(0.1*(60*gear_ratio*1000)) / circumference;
     }

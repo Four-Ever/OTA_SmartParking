@@ -45,8 +45,8 @@
 
 /*********************************************************************************************************************/
 /*--------------------------------------------Private Variables/Constants--------------------------------------------*/
-IfxGtm_Atom_Pwm_Config g_atomConfig_servo;
-IfxGtm_Atom_Pwm_Driver g_atomDriver_servo;
+static IfxGtm_Atom_Pwm_Config g_atomConfig_servo={0};
+static IfxGtm_Atom_Pwm_Driver g_atomDriver_servo={0};
 /*********************************************************************************************************************/
 
 /*********************************************************************************************************************/
@@ -165,11 +165,15 @@ void setServoAngle(sint8 angle)
     }
 
     float dutyCycle = pulseWidth / SERVO_PERIOD_MS;
-    //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
+    g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
 
     if (dutyCycle != 0) {
         g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);
         //g_atomConfig_servo.dutyCycle = (unsigned int)(CLK_FREQ / 50 * dutyCycle);                 /* Set duty cycle        */
+    }
+    else
+    {
+        g_atomConfig_servo.dutyCycle=1500;
     }
     //g_atomConfig_servo.dutyCycle = dutyCycle;                 /* Set duty cycle        */
     IfxGtm_Atom_Pwm_init(&g_atomDriver_servo, &g_atomConfig_servo); /* Re-initialize the PWM */

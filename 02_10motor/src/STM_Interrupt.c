@@ -69,6 +69,7 @@ float32 RPM_max = 5000, RPM_min = -5000;
 sint32 Enc_count;
 
 double U8Curr_vel;
+double value;
 /*********************************************************************************************************************/
 /*------------------------------------------------Function Prototypes------------------------------------------------*/
 /*********************************************************************************************************************/
@@ -140,7 +141,8 @@ void RPM_cal(void)
         Enc_count_diff = (float32)(Enc_count_new - Enc_count_old);
     }
     speed_pid.DisSum += Enc_count_diff * tick_dis;
-    s32_DisSum = (sint32)(speed_pid.DisSum * 10000);
+//    s32_DisSum = (sint32)(speed_pid.DisSum * 10000);
+    s32_DisSum = (sint32)(speed_pid.DisSum);
 
     //s32_DisSum = (sint32)(Enc_count_new);
 
@@ -148,11 +150,12 @@ void RPM_cal(void)
     s32_motor_speed_rpm = (sint32)motor_speed_rpm;
 
     U8Curr_vel = getFilteredVel((s32_motor_speed_rpm * circumference) / (60 * gear_ratio));
+    value = (s32_motor_speed_rpm * circumference) / (60 * gear_ratio);
 
     sint16 s16_velocity;
     uint16 u16_velocity;
 
-    s16_velocity = round_to_integer(U8Curr_vel/10);
+    s16_velocity = round_to_integer(value/10);
     u16_velocity = s16_velocity >= 0  ? s16_velocity : (s16_velocity * -1);
     u16_velocity = u16_velocity > 100 ? 100 : u16_velocity;
 

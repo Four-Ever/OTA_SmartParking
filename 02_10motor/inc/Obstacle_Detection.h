@@ -15,10 +15,10 @@
 #include "TOF.h"
 #define OBSTACLE_NUM 4
 
-#define PARKING_SPOT_WIDTH 15.0f
+#define PARKING_SPOT_WIDTH 13.0f
 #define FBOBSTACLE_WARNING 12.0f
 #define RLOBSTACLE_WARNING 4.0f
-#define PARKING_SPOT_LENGTH 25.0f
+#define PARKING_SPOT_LENGTH 30.0f  //25f
 
 typedef enum
 {

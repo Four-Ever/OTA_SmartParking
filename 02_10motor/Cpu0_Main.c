@@ -97,7 +97,8 @@ volatile float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;  // quaternion of sen
 float stanelytheta = 0.0f;
 int stopstatus = 0;
 //int md_flag=0;
-
+uint32 startime = 0;
+uint32 endtime = 0;
 
 int core0_main (void)
 {
@@ -123,10 +124,6 @@ int core0_main (void)
     MODULE_SRC.I2C.I2C[0].BREQ.B.TOS = 0x0;
     MODULE_SRC.I2C.I2C[0].BREQ.B.SRE = 0x1;
 
-//    IfxI2c0_SRC_BREQ.B.SRPN = 0xFF;  // 우선순위를 최대값으로
-//    IfxI2c0_SRC_BREQ.B.TOS = 0;      // CPU0에 할당
-//    IfxI2c0_SRC_BREQ.B.SRE = 1;      // 인터럽트 활성화
-
     initIncrEnc();
 
     initGtmATomPwm();
@@ -139,7 +136,7 @@ int core0_main (void)
     Driver_Stm_Init();
 
     initServo(); // D6
-    initIMU();
+    //initIMU();
     //initGPIO();
 
     //ToF user manual !
@@ -177,9 +174,6 @@ int core0_main (void)
 
         AppScheduling();
         //stopstatus=Touch();
-        //can msg �뜝�럥�빢�뜝�럥六�
-//if !defined(motor_Test) && !defined(tuning_Test) && !defined(putty_Test) // �뜝�럩�쐪�뜝�럩�뮝�뜝�럥�뻶癲ル슢理볩옙�굲 占쎈쐻占쎈윞占쏙옙�뜝�럡猿��뜝�럥�룈占쎈쨨�뜝占�
-        // �뜝�럥�벀嶺뚯쉻�삕 on/off
         if (db_flag.CGW_Engine_Flag == 1)
         {
             db_flag.CGW_Engine_Flag = 0;
@@ -189,7 +183,6 @@ int core0_main (void)
            // }
 
         }
-        //�뜝�럥�벀嶺뚯쉻�삕 ON
         if (vehicle_status.engine_state == ENGINE_ON)
         {
             //driver mode
@@ -230,7 +223,6 @@ int core0_main (void)
 
             //waypoint msg
             if (db_flag.CCU_Cordi_data1_Flag == 1 && db_flag.CCU_Cordi_data2_Flag == 1) {
-                //癲ル슢�뀈泳�占썹뛾占썲뜝占� wp 癲ル슢�닪占쎈씔占쎈빝�뜝�뜾異�占쎌돸占쎌굲�뜝�럥�걫占쎈쐻�뜝占� 占쎈쐻占쎈윥占쎈묄占쎈쐻占쎈윥筌묒슃�쐻占쎈윥筌뫮듬쐻占쎈윪獄�占� 占쎈쐻占쎈윥�몴占�
                 db_flag.CCU_Cordi_data1_Flag=0;
                 db_flag.CCU_Cordi_data2_Flag=0;
 
@@ -310,7 +302,10 @@ int core0_main (void)
             if (db_flag.CCU_RightAngle_detect_Flag == 1)
             {
                 db_flag.CCU_RightAngle_detect_Flag = 0;
-                U8IsConerline = db_msg.CCU_RightAngle_detect.right_angle_lane_detected;
+
+                if (db_msg.CCU_RightAngle_detect.right_angle_lane_detected==1){
+                    U8IsConerline = 1;
+                }
             }
             if (db_flag.CCU_ParkingAngle_detect_Flag==1){
                 db_flag.CCU_ParkingAngle_detect_Flag=0;
@@ -334,21 +329,17 @@ int core0_main (void)
                 if (db_msg.CGW_Off_Request.alert_request==1)
                 {
                     //find my car_LED/Sound
-                    if (U8PrkFinished==1)
-                    {
                         alarm_request=1;
-                    }
                 }
 
-                //占쎈퉲占쎈츋揶쏉옙
                 if (db_msg.CGW_Off_Request.auto_exit_request==1)
                 {
                     vehicle_status.engine_state = ENGINE_ON;
 
-                    if (U8PrkFinished==1)
-                    {
+                    //if (U8PrkFinished==1)
+                    //{
                         ExitCAR_request=1;
-                    }
+                    //}
                 }
             }
         }
@@ -432,6 +423,12 @@ void AppTask10ms (void)
     stTestCnt.u32nuCnt10ms++;
     now_status = imuRead();
     stanelytheta = now_euler.yaw;
+    /////
+    endtime = MODULE_STM0.TIM0.U;
+    if(startime!=0)
+        now_status.heading += (float)now_status.gyro_z*0.01;
+    startime=endtime;
+
     /*if (stopstatus == 1)
      {
      q0 = 1;
@@ -472,6 +469,8 @@ void AppTask50ms (void)
 {
     stTestCnt.u32nuCnt50ms++;
     Obstacle_get_All_Distance();
+    TTC_D=Cal_TTCD(U8Curr_vel);
+    TTC_R=Cal_TTCR(U8Curr_vel);
     decision_stateflow_step_c();
 
     if (U8RSPAState == Backward || U8DriverState == Reversing){
@@ -480,7 +479,6 @@ void AppTask50ms (void)
     else {
         set_Buzzer_period(TURN_OFF_BUZZER);
     }
-
     Buzzer();
 }
 
@@ -498,7 +496,7 @@ void AppTask100ms (void)
     now_status.gyro_x = waypointsT[current_wp_idx][0];
     now_status.gyro_y = waypointsT[current_wp_idx][1];
 
-    print_encimu(&now_status, &now_euler);
+//    print_encimu(&now_status, &now_euler);
 //
 //
 

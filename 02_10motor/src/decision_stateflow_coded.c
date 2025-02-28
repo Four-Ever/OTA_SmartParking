@@ -97,6 +97,7 @@ sint8 DSteeringinput=0;
 double DMoveDis=0;
 int calDis=0;
 int First_Set = 1;
+int isconerfinished;
 
 IsPrk IsPrk_LR = InitIsPrk;
 
@@ -108,14 +109,24 @@ double gainTTC=0.0;
 int ToController_Prkstate=0;
 int ToController_Exitstate=0;
 int md_flag=-1;
-int conering_dir_flag=0;
+int conering_dir_flag=-2;
 int U8Stoplineangle=0;
 ConerState U8ConerState = InitConering;
 
+double TTC_D=0;
+double TTC_R=0;
+
+static uint32 timer = 0;
 
 /* Model step function */
 void decision_stateflow_step_c(void)
 {
+
+
+    if(isconerfinished >0)
+    {
+        timer++;
+    }
 
     /* Chart: '<Root>/decision' */
 
@@ -151,7 +162,7 @@ void decision_stateflow_step_c(void)
 
                 }
 
-                if (vehicle_status.engine_state == ENGINE_OFF && ExitCAR_request==1){
+                if (ExitCAR_request==1){
                     decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_FIND_CAR;
                 }
 
@@ -173,19 +184,37 @@ void decision_stateflow_step_c(void)
                 U8RSPA=ModeOn;
                 U8ConerState=InitConering;
 
-
                 switch (decision_stateflow_DW.is_CONERING)
                 {
-                    // 왼쪽(-30) 전진 적당히. 우 (30) 후진 적당히. 왼쪽 (-30)전진, 정렬 후 코너링 끝
 
                     case decision_stateflow_IN_CONER_D:
                         U8ConerState=Conering_Forward;
                         U8Ref_vel= DInputVD;
-                        ToController_Prkstate = 1;
+                        //ToController_Prkstate = 1;
 
-                        if(conering_dir_flag == 0)
+                        if(conering_dir_flag == -2)
                         {
-                            if(move_distance(310)== REACHED_TARGET_DIS)
+                            if(move_distance(270)== REACHED_TARGET_DIS)
+                            {
+
+                                conering_dir_flag = -1;
+
+                            }
+
+                        }
+                        else if(conering_dir_flag == -1)
+                        {
+                            if(move_distance(180)== REACHED_TARGET_DIS)
+                            {
+
+                                conering_dir_flag = 0;
+
+                            }
+
+                        }
+                        else if(conering_dir_flag == 0)
+                        {
+                            if(move_distance(220)== REACHED_TARGET_DIS)
                             {
 
                                 conering_dir_flag = 1;
@@ -196,37 +225,110 @@ void decision_stateflow_step_c(void)
 
                         else if(conering_dir_flag ==2)
                         {
-                            if(move_distance(70)== REACHED_TARGET_DIS)
+                            if(move_distance(200)== REACHED_TARGET_DIS)
                             {
 
                                 conering_dir_flag =3;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_R;
 
                             }
                         }
-                        else if(conering_dir_flag ==3)
+                        else if(conering_dir_flag ==4)
                         {
-                            if(move_distance(10)== REACHED_TARGET_DIS)
+                            if(move_distance(180)== REACHED_TARGET_DIS)
                             {
 
-                                conering_dir_flag =0;
+                                conering_dir_flag =5;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_R;
+                            }
+                        }
+                        else if(conering_dir_flag ==6)
+                        {
+                            if(move_distance(120)== REACHED_TARGET_DIS)
+                            {
+
+                                conering_dir_flag =7;
+                            }
+                        }
+                        else if(conering_dir_flag ==7)
+                        {
+                            if(move_distance(280)== REACHED_TARGET_DIS)
+                            {
+
+                                conering_dir_flag =8;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_R;
+                            }
+                        }
+                        else if(conering_dir_flag == 9)
+                        {
+                            if(move_distance(150)== REACHED_TARGET_DIS)
+                            {
+
+                                conering_dir_flag =10;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_R;
+                            }
+                        }
+                        else if(conering_dir_flag == 11)
+                        {
+                            if(move_distance(130)== REACHED_TARGET_DIS)
+                            {
+
+                                conering_dir_flag =12;
                                 decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_EXIT;
                             }
                         }
-
-
-
                         break;
 
                     case decision_stateflow_IN_CONER_R:
                         U8ConerState= Conering_Backward;
                         U8Ref_vel= DInputVR;
-                        ToController_Prkstate = 2;
+                        //ToController_Prkstate = 2;
                         if(conering_dir_flag == 1)
                         {
-                            if(move_distance(-200)== REACHED_TARGET_DIS)
+                            if(move_distance(-140)== REACHED_TARGET_DIS) //-200
                             {
 
                                 conering_dir_flag = 2;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
+                            }
+
+                        }
+                        else if(conering_dir_flag == 3)
+                        {
+                            if(move_distance(-60)== REACHED_TARGET_DIS) //-200
+                            {
+
+                                conering_dir_flag = 4;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
+                            }
+
+                        }
+                        else if(conering_dir_flag == 5)
+                        {
+                            if(move_distance(-170)== REACHED_TARGET_DIS) //-200
+                            {
+
+                                conering_dir_flag = 6;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
+                            }
+
+                        }
+                        else if(conering_dir_flag == 8)
+                        {
+                            if(move_distance(-180)== REACHED_TARGET_DIS) //-200
+                            {
+
+                                conering_dir_flag = 9;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
+                            }
+
+                        }
+                        else if(conering_dir_flag == 10)
+                        {
+                            if(move_distance(-160)== REACHED_TARGET_DIS) //-200
+                            {
+
+                                conering_dir_flag = 11;
                                 decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
                             }
 
@@ -237,9 +339,12 @@ void decision_stateflow_step_c(void)
 
                     case decision_stateflow_IN_CONER_EXIT:
                         U8ConerState=Conering_Finished;
+                        isconerfinished++;
+
                         D_RefRPM=0;
                         if (U8Curr_vel==0){
                             U8IsConerline = 0;
+                            conering_dir_flag=-2;
                             decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_RSPA_Mode;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_IS_SLOT;
                         }
@@ -293,7 +398,7 @@ void decision_stateflow_step_c(void)
                         break;
                     case decision_stateflow_IN_FCA_DECEL:
                         U8FCAState = Decel;
-                        U8Ref_vel = U8Ref_vel*(Cal_TTCD(U8Curr_vel)+gainTTC);
+                        U8Ref_vel = U8Ref_vel*(TTC_D+gainTTC);
 
                         if (((double)obstacle[F_OBSTACLE]/1000) == 0)
                         {
@@ -344,7 +449,7 @@ void decision_stateflow_step_c(void)
                         break;
                     case decision_stateflow_IN_RCA_DECEL:
                         U8RCAState = Decel;
-                        U8Ref_vel = U8Ref_vel * (Cal_TTCR(U8Curr_vel)+gainTTC);
+                        U8Ref_vel = U8Ref_vel * (TTC_R+gainTTC);
 
                         if (((double)obstacle[B_OBSTACLE]/1000)==0)
                         {
@@ -405,12 +510,12 @@ void decision_stateflow_step_c(void)
                         U8Ref_vel = D_Ref_vel;
 
 //
-//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
-//                        {
-//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-//                        }
-//                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+                        if(TTC_D > 0 && TTC_D <= 1.3)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+                        }
+//                        else if(TTC_D < 3.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
@@ -452,13 +557,13 @@ void decision_stateflow_step_c(void)
                         U8Ref_vel = D_Ref_vel;
 
 
-//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        if(TTC_R > 0 && TTC_R <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;
 //
 //                        }
-//                        else if(Cal_TTCR(U8Curr_vel) < 3.0)
+//                        else if(TTC_R < 3.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_DECEL;
@@ -511,13 +616,13 @@ void decision_stateflow_step_c(void)
                         ToController_Prkstate=0;
 
 
-//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
-//                        {
-//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-//
-//                        }
-//                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
+                        if(TTC_D > 0 && TTC_D <= 1.3)
+                        {
+                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+
+                        }
+                        //else if(Cal_TTCD(U8Curr_vel) < 2.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
 //                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_DECEL;
@@ -534,11 +639,13 @@ void decision_stateflow_step_c(void)
                             }
                         }
 
-                        if (U8IsConerline==1){
+                        if (U8IsConerline==1 && (isconerfinished==0 ||timer >= 40)){
                             U8Ref_vel = 0;
+                            timer = 0;
+
                             if (U8Curr_vel==0){
                                 decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_CONERING;
-                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_CONER_D;
+                                decision_stateflow_DW.is_CONERING = decision_stateflow_IN_CONER_D;
                             }
                         }
 
@@ -549,7 +656,7 @@ void decision_stateflow_step_c(void)
                         U8RSPAState=Forward;
                         U8Ref_vel=DInputVD;
                         ToController_Prkstate=1;
-//
+////
 //                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
@@ -565,7 +672,7 @@ void decision_stateflow_step_c(void)
 
 
                         if(md_flag==-1){
-                            if(move_distance(220) == REACHED_TARGET_DIS) //100mm
+                            if(move_distance(190) == REACHED_TARGET_DIS) //100mm
                             {
                                 md_flag=0;
                             }
@@ -582,7 +689,7 @@ void decision_stateflow_step_c(void)
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
                         }
                         else if (md_flag==4){
-                             if(move_distance(180) == REACHED_TARGET_DIS){
+                             if(move_distance(160) == REACHED_TARGET_DIS){
                                 md_flag=5;
                              }
                         }
@@ -590,6 +697,18 @@ void decision_stateflow_step_c(void)
                             md_flag++;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
                         }
+                        else if (md_flag==8){
+                         if(move_distance(100)== REACHED_TARGET_DIS){
+                                 md_flag=9;
+                                 decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
+                                 }
+                             }
+//                        else if(md_flag==9) {
+//                            if(move_distance(40) == REACHED_TARGET_DIS){
+//                                md_flag=10;
+//                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
+//                             }
+//                        }
 
 
                         break;
@@ -598,12 +717,12 @@ void decision_stateflow_step_c(void)
                         U8RSPAState=Forward_Assist;
                         ToController_Prkstate=1;
                         U8Ref_vel=DInputVD;
-////                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
-////                        {
-////                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
-////                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
-////
-////                        }
+//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        {
+//                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
+//                            decision_stateflow_DW.is_SAFE_FCA = decision_stateflow_IN_FCA_EMERGENCY;
+//
+//                        }
 ////                        else if(Cal_TTCD(U8Curr_vel) < 3.0)
 ////                        {
 ////                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_FCA;
@@ -654,26 +773,35 @@ void decision_stateflow_step_c(void)
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
                         }
                         else if (md_flag==6){
-                             if(move_distance(-250) == REACHED_TARGET_DIS){
+                             if(move_distance(-100) == REACHED_TARGET_DIS){
                                 md_flag=7;
                                 //CameraSwitchRequest = 2;
                              }
                         }
                         else if(md_flag==7) {
                             md_flag++;
-                            //decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+                            decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
                         }
-                        else if (md_flag==8){
-                            if(move_distance(-280) == REACHED_TARGET_DIS){
-                                md_flag=9;
-                            }
-                        }
+//                        else if (md_flag==8){
+//                            if(move_distance(-250)== REACHED_TARGET_DIS){
+//                                md_flag=9;
+//                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_D;
+//                            }
+//                        }
+
                         else if(md_flag==9) {
+                            if(move_distance(60) == REACHED_TARGET_DIS){
+                                md_flag=10;
+                                decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_R;
+                             }
+                        }
+                        else if(md_flag==10) {
 
                             if(move_distance(-80) == REACHED_TARGET_DIS){
-                                md_flag=10;
-                            }                        }
-                        else if(md_flag==10) {
+                                md_flag=11;
+                            }
+                        }
+                        else if(md_flag==11) {
                          md_flag++;
                             decision_stateflow_DW.is_RSPA_Mode = decision_stateflow_IN_RSPA_P;
                         }
@@ -685,7 +813,7 @@ void decision_stateflow_step_c(void)
                         U8Ref_vel=DInputVR;
                         U8Parkingfail=0;
 
-//                        if(Cal_TTCD(U8Curr_vel) > 0 && Cal_TTCD(U8Curr_vel) <= 1.0)
+//                        if(Cal_TTCR(U8Curr_vel) > 0 && Cal_TTCR(U8Curr_vel) <= 1.0)
 //                        {
 //                            decision_stateflow_DW.is_c3_decision_stateflow = decision_stateflow_IN_SAFE_RCA;
 //                            decision_stateflow_DW.is_SAFE_RCA = decision_stateflow_IN_RCA_EMERGENCY;

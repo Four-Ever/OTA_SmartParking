@@ -69,9 +69,10 @@ void RX_Int0Handler(void)
     IfxCpu_enableInterrupts();
 
     IfxMultican_Message readmsg;
-    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}// 占쎈땾占쎈뻿 占쏙옙疫뀐옙
+    //    while (!IfxMultican_Can_MsgObj_isRxPending(&canMsgObjRx)){}
     if (IfxMultican_Can_MsgObj_readMessage(&canMsgObjRx, &readmsg) == IfxMultican_Status_newData)
     {
+
         switch (readmsg.id)
         {
             case CGW_OTA_File_Size_ID:
@@ -243,7 +244,7 @@ void RX_Int0Handler(void)
             break;
         }
     }
-    //IfxCpu_restoreInterrupts(interruptState);  // 占쎌뵠占쎌읈 占쎌뵥占쎄숲占쎌쓦占쎈뱜 占쎄맒占쎄묶 癰귣벊�뜚
+    //IfxCpu_restoreInterrupts(interruptState);
 }
 void initCanDB(void)
 {
@@ -332,7 +333,7 @@ void output_message(void *msg, uint32 msgID)
 //            Serialize_CCU_Cordi_data1_Msg(&serialized, out_msg);
 //            //memcpy(&send_data[0],&serialized,4);
 //            //memcpy(&send_data[1],((uint32*)&serialized)+1,2);
-//            memcpy(send_data, &serialized, 6); // 占쎈릭占쎌맄 6獄쏅뗄�뵠占쎈뱜 癰귣벊沅�
+//            memcpy(send_data, &serialized, 6);
 //            IfxMultican_Message_init(&tx_msg, CCU_Cordi_data1_ID, send_data[0], send_data[1], CCU_Cordi_data1_Size);
 //            break;
 //        }
@@ -348,17 +349,17 @@ void output_message(void *msg, uint32 msgID)
 
 void initCan(void)
 {
-    // CAN 筌뤴뫀諭� �룯�뜃由곤옙�넅
+    // CAN
     IfxMultican_Can_Config canConfig;
     IfxMultican_Can_initModuleConfig(&canConfig, &MODULE_CAN);
 
-    //     CAN0 占쎌뵥占쎄숲占쎌쓦占쎈뱜 占쎌넞占쎄쉐占쎌넅
+    //     CAN0
     canConfig.nodePointer[TC275_CAN0].priority = 101;
     canConfig.nodePointer[TC275_CAN0].typeOfService = IfxSrc_Tos_cpu0;
 
     IfxMultican_Can_initModule(&can, &canConfig);
 
-    // CAN 占쎈걗占쎈굡 �룯�뜃由곤옙�넅
+    // CAN
     IfxMultican_Can_NodeConfig canNodeConfig;
     IfxMultican_Can_Node_initConfig(&canNodeConfig, &can);
     canNodeConfig.nodeId = IfxMultican_NodeId_0;
@@ -368,23 +369,22 @@ void initCan(void)
     canNodeConfig.txPinMode = IfxPort_OutputMode_pushPull;
     IfxMultican_Can_Node_init(&canNode, &canNodeConfig);
 
-    // Tx 筌롫뗄�뻻筌욑옙 揶쏆빘猿� �룯�뜃由곤옙�넅
+    // Tx
     IfxMultican_Can_MsgObjConfig canMsgObjConfig;
     IfxMultican_Can_MsgObj_initConfig(&canMsgObjConfig, &canNode);
-    canMsgObjConfig.msgObjId = 0; // 筌롫뗄�뻻筌욑옙 揶쏆빘猿� ID
+    canMsgObjConfig.msgObjId = 0;
     canMsgObjConfig.messageId = CAN_TX_MESSAGE_ID;
     canMsgObjConfig.frame = IfxMultican_Frame_transmit;
     canMsgObjConfig.control.extendedFrame = FALSE;
     IfxMultican_Can_MsgObj_init(&canMsgObjTx, &canMsgObjConfig);
 
-    // Rx 筌롫뗄�뻻筌욑옙 揶쏆빘猿� �룯�뜃由곤옙�넅
-    canMsgObjConfig.msgObjId = 1; // 筌롫뗄�뻻筌욑옙 揶쏆빘猿� ID
+    // Rx
+    canMsgObjConfig.msgObjId = 1;
     canMsgObjConfig.messageId = CAN_RX_MESSAGE_ID;
-    canMsgObjConfig.acceptanceMask = 0x0; // �뜮袁㏉꺍 占쎈툧占쎈맙, 占쎌읈�겫占� 占쎈땾占쎈뻿
+    canMsgObjConfig.acceptanceMask = 0x0;
     canMsgObjConfig.frame = IfxMultican_Frame_receive;
     canMsgObjConfig.control.extendedFrame = FALSE;
 
-    // 占쎌뵥占쎄숲占쎌쓦占쎈뱜 占쎌넞占쎄쉐占쎌넅
     canMsgObjConfig.rxInterrupt.enabled = TRUE;
     canMsgObjConfig.rxInterrupt.srcId = TC275_CAN0;
 

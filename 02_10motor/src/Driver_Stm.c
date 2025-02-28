@@ -95,7 +95,8 @@ void STM_Int1Handler(void)
         stSchedulingInfo.u8nuScheduling5000msFlag = 1u;
     }
 
-    if(u32nuCounter1ms >= 10000000 ){
+
+if(u32nuCounter1ms >= 10000000 ){
         u32nuCounter1ms = 0;
     }
 }
